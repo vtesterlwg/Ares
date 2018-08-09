@@ -1,0 +1,5 @@
+name: Arena
+main: com.playares.arena.Arenas
+version: 1.0.0
+depend: [ProtocolLib]
+api-version: 1.13

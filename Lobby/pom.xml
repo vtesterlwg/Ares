@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>Ares</artifactId>
+        <groupId>com.playares</groupId>
+        <version>1.13</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>Lobby</artifactId>
+
+    <build>
+        <plugins>
+            <!-- Maven Shade -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.playares:Bukkit</include>
+                                    <include>com.playares:Profiles</include>
+                                    <include>com.playares:Ranks</include>
+                                    <include>com.playares:CustomEvents</include>
+                                    <include>com.playares:Essentials</include>
+                                    <include>com.playares:Humbug</include>
+                                    <include>com.playares:Punishments</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <!-- Spigot Repo, Eventually, we will be moving over to the Ares 1.13 Build -->
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+
+        <!-- ProtocolLib -->
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Spigot API -->
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.13-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Bukkit API -->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.13-R0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Bukkit Commons -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Bukkit</artifactId>
+            <version>1.13</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Ranks Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Ranks</artifactId>
+            <version>1.13</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Profiles Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Profiles</artifactId>
+            <version>1.13</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Custom Event Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>CustomEvents</artifactId>
+            <version>1.13</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Essentials Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Essentials</artifactId>
+            <version>1.13</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- ProtocolLib -->
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib-API</artifactId>
+            <version>4.3.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Ares Humbug Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Humbug</artifactId>
+            <version>1.13</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Punishments Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Punishments</artifactId>
+            <version>1.13</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+</project>

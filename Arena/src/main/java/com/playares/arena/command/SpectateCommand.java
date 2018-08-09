@@ -1,0 +1,46 @@
+package com.playares.arena.command;
+
+import co.aikar.commands.BaseCommand;
+import co.aikar.commands.annotation.CommandAlias;
+import co.aikar.commands.annotation.Description;
+import co.aikar.commands.annotation.Syntax;
+import com.playares.arena.Arenas;
+import com.playares.arena.player.ArenaPlayer;
+import com.playares.commons.base.promise.SimplePromise;
+import lombok.Getter;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
+import javax.annotation.Nonnull;
+
+public final class SpectateCommand extends BaseCommand {
+    @Getter
+    public final Arenas plugin;
+
+    public SpectateCommand(Arenas plugin) {
+        this.plugin = plugin;
+    }
+
+    @CommandAlias("spectate|spec")
+    @Description("Spectate matches")
+    @Syntax("<player>")
+    public void onSpectate(Player player, String name) {
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+        final ArenaPlayer target = plugin.getPlayerManager().getPlayer(name);
+
+        if (target == null) {
+            player.sendMessage(ChatColor.RED + "Player not found");
+            return;
+        }
+
+        plugin.getSpectatorHandler().startSpectating(profile, target, new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+}

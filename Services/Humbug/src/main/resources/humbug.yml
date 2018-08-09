@@ -1,0 +1,59 @@
+modules:
+    oldpotions:
+        enabled: true
+    anti-grief:
+        enabled: true
+        disable-fire-spread: true
+        disable-entity-grief: true
+        disable-cobble-generators: true
+        disable-mob-spawner-breaking: true
+        spawn-nether-portal-platform: true
+    old-item-velocity:
+        enabled: true
+        pearl-velocity: 1.4
+    old-sword-swing:
+        enabled: true
+        hit-delay-ticks: 10
+    old-regen:
+        enabled: true
+    old-item-values:
+        enabled: true
+    meme-items:
+        enabled: true
+        disable-chorus-fruit-teleportation: true
+        disable-ender-chest: true
+        disable-fishing-players: true
+        disable-dolphins-grace: true
+    anti-glitch:
+        enabled: true
+        disable-pearl-clipping: true
+        disable-elytra-clipping: true
+    xp-bonuses:
+        enabled: true
+        multipliers:
+          looting: 3.0
+          fortune: 3.0
+          bottle: 5.0
+    custom-recipes:
+        enabled: true
+        xp-bottle-enabled: true
+        horse-armor-enabled: true
+        saddle-enabled: true
+        glist-melon-enabled: true
+    elevators:
+      enabled: true
+    mob-stacking:
+        enabled: true
+        tag-prefix: '&ax'
+        stack-interval: 5
+        max-stack-size: 100
+        breed-cooldown: 30
+        stack-types:
+            - 'ZOMBIE'
+            - 'SKELETON'
+            - 'SPIDER'
+            - 'CAVE_SPIDER'
+            - 'COW'
+            - 'CHICKEN'
+            - 'PIG'
+            - 'RABBIT'
