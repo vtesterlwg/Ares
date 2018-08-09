@@ -78,6 +78,7 @@ public final class HumbugService implements AresService {
 
         this.modules.forEach(module ->{
             if (module.isEnabled()) {
+                module.loadValues();
                 module.start();
                 Logger.print("Humbug: Started module '" + module.getName() + "'");
             }
