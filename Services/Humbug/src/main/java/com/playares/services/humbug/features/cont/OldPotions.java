@@ -50,13 +50,12 @@ public final class OldPotions implements HumbugModule, Listener {
 
         for (PotionEffect effect : player.getActivePotionEffects()) {
             if (effect.getType().equals(PotionEffectType.INCREASE_DAMAGE)) {
-                damage += (effect.getAmplifier() + 1) * 1.3;
-                damage += 3 << effect.getAmplifier();
+                damage += (effect.getAmplifier() * 1.3);
                 continue;
             }
 
             if (effect.getType().equals(PotionEffectType.WEAKNESS)) {
-                damage += (effect.getAmplifier() + 1) * -0.5;
+                damage += (effect.getAmplifier() * -0.5);
             }
         }
 
