@@ -63,6 +63,10 @@ public final class EssentialsService implements AresService {
             final List<String> potions = Lists.newArrayList();
 
             for (PotionEffectType type : PotionEffectType.values()) {
+                if (type == null) {
+                    continue;
+                }
+
                 potions.add(type.getName().toLowerCase());
             }
 
@@ -73,7 +77,7 @@ public final class EssentialsService implements AresService {
            final List<String> enchants = Lists.newArrayList();
 
            for (Enchantment enchant : Enchantment.values()) {
-               enchants.add(enchant.getKey().getKey());
+               enchants.add(enchant.getKey().getKey().toLowerCase());
            }
 
            return ImmutableList.copyOf(enchants);
@@ -87,7 +91,7 @@ public final class EssentialsService implements AresService {
                    continue;
                }
 
-               items.add(material.name());
+               items.add(material.name().toLowerCase());
            }
 
            return ImmutableList.copyOf(items);
