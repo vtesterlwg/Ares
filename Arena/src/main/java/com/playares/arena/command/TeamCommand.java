@@ -133,6 +133,6 @@ public final class TeamCommand extends BaseCommand {
 
     @Subcommand("kick")
     public void onKick(Player player, String name) {
-
+        // TODO: Team kick command
     }
 }
