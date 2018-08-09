@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -105,7 +106,7 @@ public final class PlayerListener implements Listener {
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
 
         if (profile.getStatus().equals(PlayerStatus.INGAME)) {
-            if (player.getInventory().getHeldItemSlot() == 1) {
+            if (player.getInventory().getHeldItemSlot() == 0) {
                 player.sendMessage(ChatColor.RED + "You can not drop items in your 1 slot");
                 event.setCancelled(true);
             }
@@ -144,7 +145,7 @@ public final class PlayerListener implements Listener {
     }
 
     @EventHandler
-    public void onBlockPlace(BlockBreakEvent event) {
+    public void onBlockPlace(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
 
