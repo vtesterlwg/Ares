@@ -77,8 +77,9 @@ public final class HumbugService implements AresService {
         registerHumbugModule(new MobStacking(this));
 
         this.modules.forEach(module ->{
+            module.loadValues();
+
             if (module.isEnabled()) {
-                module.loadValues();
                 module.start();
                 Logger.print("Humbug: Started module '" + module.getName() + "'");
             }

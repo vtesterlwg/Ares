@@ -54,50 +54,48 @@ public final class OldSwordSwing implements HumbugModule, Listener {
     public void start() {
         this.humbug.getOwner().registerListener(this);
 
-        if (this.humbug.getOwner().getProtocol() != null) {
-            this.humbug.getOwner().getProtocol().addPacketListener(new PacketAdapter(this.humbug.getOwner(), ListenerPriority.LOWEST, PacketType.Play.Client.USE_ENTITY) {
-                @Override
-                public void onPacketReceiving(PacketEvent event) {
-                    if (!isEnabled()) {
-                        return;
-                    }
-
-                    final PacketContainer packet = event.getPacket();
-                    final Player damager = event.getPlayer();
-                    final Entity entity = event.getPacket().getEntityModifier(event).read(0);
-
-                    if (entity == null) {
-                        return;
-                    }
-
-                    if (!packet.getEntityUseActions().read(0).equals(EnumWrappers.EntityUseAction.ATTACK)) {
-                        return;
-                    }
-
-                    if (entity instanceof LivingEntity) {
-                        event.setCancelled(true);
-
-                        new Scheduler(humbug.getOwner()).sync(() -> {
-                            final LivingEntity damaged = (LivingEntity)entity;
-
-                            if (damaged.isDead() || damaged.getNoDamageTicks() > 0) {
-                                return;
-                            }
-
-                            double init = ((CraftPlayer)damager).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
-
-                            if (!damager.isOnGround() && damager.getVelocity().getY() < 0) {
-                                init *= 1.5;
-                                Worlds.spawnParticle(damaged.getLocation().add(0, 1.0, 0), Particle.CRIT, 8);
-                            }
-
-                            damaged.damage(init, damager);
-                            damaged.setNoDamageTicks(hitDelayTicks);
-                        }).run();
-                    }
+        this.humbug.getOwner().getProtocol().addPacketListener(new PacketAdapter(this.humbug.getOwner(), ListenerPriority.LOWEST, PacketType.Play.Client.USE_ENTITY) {
+            @Override
+            public void onPacketReceiving(PacketEvent event) {
+                if (!isEnabled()) {
+                    return;
                 }
-            });
-        }
+
+                final PacketContainer packet = event.getPacket();
+                final Player damager = event.getPlayer();
+                final Entity entity = event.getPacket().getEntityModifier(event).read(0);
+
+                if (entity == null) {
+                    return;
+                }
+
+                if (!packet.getEntityUseActions().read(0).equals(EnumWrappers.EntityUseAction.ATTACK)) {
+                    return;
+                }
+
+                if (entity instanceof LivingEntity) {
+                    event.setCancelled(true);
+
+                    new Scheduler(humbug.getOwner()).sync(() -> {
+                        final LivingEntity damaged = (LivingEntity)entity;
+
+                        if (damaged.isDead() || damaged.getNoDamageTicks() > 0) {
+                            return;
+                        }
+
+                        double init = ((CraftPlayer)damager).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
+
+                        if (!damager.isOnGround() && damager.getVelocity().getY() < 0) {
+                            init *= 1.5;
+                            Worlds.spawnParticle(damaged.getLocation().add(0, 1.0, 0), Particle.CRIT, 8);
+                        }
+
+                        damaged.damage(init, damager);
+                        damaged.setNoDamageTicks(hitDelayTicks);
+                    }).run();
+                }
+            }
+        });
     }
 
     @Override
