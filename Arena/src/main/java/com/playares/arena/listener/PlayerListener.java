@@ -43,7 +43,7 @@ public final class PlayerListener implements Listener {
         plugin.getPlayerHandler().giveLobbyItems(arenaPlayer);
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOW)
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
