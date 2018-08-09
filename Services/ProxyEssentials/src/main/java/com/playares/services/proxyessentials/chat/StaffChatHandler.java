@@ -23,6 +23,10 @@ public final class StaffChatHandler implements Listener {
         final ProxiedPlayer sender = (ProxiedPlayer)event.getSender();
         final String message = event.getMessage();
 
+        if (message.startsWith("/")) {
+            return;
+        }
+
         if (service.getStaffChatManager().isInStaffChat(sender)) {
             event.setCancelled(true);
 
