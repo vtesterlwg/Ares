@@ -116,7 +116,7 @@ public final class SpectatorHandler {
                     final DuelMatch duel = (DuelMatch)match;
 
                     duel.getOpponents().forEach(opponent -> {
-                        if (opponent.getPlayer() != null) {
+                        if (opponent.getPlayer() != null && !match.getStatus().equals(MatchStatus.ENDGAME)) {
                             opponent.getPlayer().hidePlayer(plugin, viewer.getPlayer());
                         }
                     });
@@ -127,7 +127,7 @@ public final class SpectatorHandler {
 
                     teamfight.getOpponents().forEach(team -> team.getMembers().forEach(member -> {
                         if (member.getStatus().equals(PlayerStatus.INGAME)) {
-                            if (member.getPlayer() != null) {
+                            if (member.getPlayer() != null && !match.getStatus().equals(MatchStatus.ENDGAME)) {
                                 member.getPlayer().hidePlayer(plugin, viewer.getPlayer());
                             }
                         }

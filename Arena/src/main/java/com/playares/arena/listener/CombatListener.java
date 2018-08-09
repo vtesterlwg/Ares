@@ -188,8 +188,6 @@ public final class CombatListener implements Listener {
 
             profile.setStatus(PlayerStatus.INGAME_DEAD);
 
-            plugin.getSpectatorHandler().updateSpectators(profile);
-
             if (match instanceof DuelMatch) {
                 final DuelMatch duel = (DuelMatch)match;
                 final ArenaPlayer winner = duel.getWinner();
@@ -201,6 +199,8 @@ public final class CombatListener implements Listener {
                 }
 
                 if (winner == null) {
+                    plugin.getSpectatorHandler().updateSpectators(profile);
+
                     for (ItemStack contents : player.getInventory().getContents()) {
                         player.getWorld().dropItem(player.getLocation(), contents);
                     }
@@ -227,6 +227,8 @@ public final class CombatListener implements Listener {
                 }
 
                 if (winner == null) {
+                    plugin.getSpectatorHandler().updateSpectators(profile);
+                    
                     for (ItemStack contents : player.getInventory().getContents()) {
                         player.getWorld().dropItem(player.getLocation(), contents);
                     }
