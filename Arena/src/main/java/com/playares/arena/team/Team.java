@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.player.PlayerStatus;
+import com.playares.arena.scoreboard.ArenaScoreboard;
 import com.playares.arena.stats.StatisticHolder;
 import com.playares.arena.stats.TeamStatisticHolder;
 import lombok.Getter;
@@ -25,6 +26,9 @@ public final class Team implements StatisticHolder, TeamStatisticHolder {
 
     @Getter @Setter
     public TeamStatus status;
+
+    @Getter
+    public final ArenaScoreboard scoreboard;
 
     @Getter
     public final Set<ArenaPlayer> members;
@@ -50,10 +54,12 @@ public final class Team implements StatisticHolder, TeamStatisticHolder {
         this.uniqueId = UUID.randomUUID();
         this.leader = player;
         this.status = TeamStatus.LOBBY;
+        this.scoreboard = new ArenaScoreboard();
         this.members = Sets.newConcurrentHashSet();
         this.invites = Sets.newConcurrentHashSet();
         this.open = false;
         this.members.add(player);
+        this.scoreboard.getFriendlyTeam().addEntry(player.getUsername());
     }
 
     @Override

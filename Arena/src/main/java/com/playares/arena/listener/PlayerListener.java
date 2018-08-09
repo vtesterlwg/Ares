@@ -39,7 +39,7 @@ public final class PlayerListener implements Listener {
         Players.sendTablist(plugin.getProtocol(), player, ChatColor.DARK_RED + "Ares Network", "");
 
         player.teleport(plugin.getPlayerHandler().getLobby().getBukkit());
-        player.sendTitle(ChatColor.DARK_RED + "Welcome to the Arena!", ChatColor.WHITE + "Good luck and have fun!", 5, 40, 5);
+        player.sendTitle(ChatColor.DARK_RED + "Welcome to the Arena!", ChatColor.GOLD + "Good luck and have fun!", 5, 40, 5);
 
         plugin.getPlayerHandler().giveLobbyItems(arenaPlayer);
     }

@@ -10,6 +10,7 @@ import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import org.bukkit.Bukkit;
 
 public final class TeamHandler {
     @Getter
@@ -31,7 +32,9 @@ public final class TeamHandler {
         }
 
         final Team team = new Team(player);
+
         player.setTeam(team);
+        player.getPlayer().setScoreboard(team.getScoreboard().getScoreboard());
 
         promise.success(team);
     }
@@ -45,8 +48,10 @@ public final class TeamHandler {
         }
 
         team.getMembers().remove(player);
+        team.getScoreboard().getFriendlyTeam().removeEntry(player.getUsername());
         team.sendMessage(ChatColor.AQUA + player.getUsername() + ChatColor.YELLOW + " has left the team");
 
+        player.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
         player.setTeam(null);
 
         if (team.getLeader().equals(player)) {
@@ -73,10 +78,8 @@ public final class TeamHandler {
         team.sendMessage(ChatColor.RED + "Team has been disbanded");
         team.getMembers().forEach(member -> {
             member.setTeam(null);
-
-            if (team.getStatus().equals(TeamStatus.LOBBY)) {
-                plugin.getPlayerHandler().giveLobbyItems(member);
-            }
+            member.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+            plugin.getPlayerHandler().giveLobbyItems(member);
         });
 
         plugin.getTeamManager().getTeams().remove(team);
@@ -206,9 +209,11 @@ public final class TeamHandler {
 
         team.getInvites().remove(player);
         team.getMembers().add(player);
+        team.getScoreboard().getFriendlyTeam().addEntry(player.getUsername());
         team.sendMessage(ChatColor.AQUA + player.getUsername() + ChatColor.YELLOW + " joined the team");
 
         player.setTeam(team);
+        player.getPlayer().setScoreboard(team.getScoreboard().getScoreboard());
         plugin.getPlayerHandler().giveLobbyItems(player);
 
         promise.success();

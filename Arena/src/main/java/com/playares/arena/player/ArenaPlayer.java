@@ -1,6 +1,7 @@
 package com.playares.arena.player;
 
 import com.playares.arena.match.Match;
+import com.playares.arena.scoreboard.ArenaScoreboard;
 import com.playares.arena.stats.ArcherStatisticHolder;
 import com.playares.arena.stats.StatisticHolder;
 import com.playares.arena.team.Team;
@@ -28,6 +29,9 @@ public final class ArenaPlayer implements StatisticHolder, ArcherStatisticHolder
     public PlayerStatus status;
 
     @Getter @Setter
+    public ArenaScoreboard scoreboard;
+
+    @Getter @Setter
     public int hits;
 
     @Getter @Setter
@@ -48,6 +52,7 @@ public final class ArenaPlayer implements StatisticHolder, ArcherStatisticHolder
         this.team = null;
         this.match = null;
         this.status = PlayerStatus.LOBBY;
+        this.scoreboard = null;
     }
 
     public Player getPlayer() {
@@ -87,5 +92,12 @@ public final class ArenaPlayer implements StatisticHolder, ArcherStatisticHolder
         }
 
         return ((double)(arrowHits / totalArrowsFired) * 100.0);
+    }
+
+    public void deleteScoreboard() {
+        scoreboard.getFriendlyTeam().getEntries().forEach(entry -> scoreboard.getFriendlyTeam().removeEntry(entry));
+        scoreboard.getEnemyTeam().getEntries().forEach(entry -> scoreboard.getEnemyTeam().removeEntry(entry));
+        getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+        setScoreboard(null);
     }
 }

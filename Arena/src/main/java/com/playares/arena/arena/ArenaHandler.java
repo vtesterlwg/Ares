@@ -12,6 +12,7 @@ import com.playares.arena.match.cont.DuelMatch;
 import com.playares.arena.match.cont.TeamMatch;
 import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.player.PlayerStatus;
+import com.playares.arena.scoreboard.ArenaScoreboard;
 import com.playares.arena.team.Team;
 import com.playares.arena.team.TeamStatus;
 import com.playares.commons.base.promise.FailablePromise;
@@ -70,12 +71,24 @@ public final class ArenaHandler {
                 final ArenaPlayer opponent = opponents.get(i);
 
                 Players.resetHealth(opponent.getPlayer());
+
                 opponent.getPlayer().setGameMode(GameMode.SURVIVAL);
                 opponent.getPlayer().teleport(spawn.getBukkit());
                 opponent.setStatus(PlayerStatus.INGAME);
                 opponent.setMatch(match);
+                opponent.setScoreboard(new ArenaScoreboard());
+                opponent.getPlayer().setScoreboard(opponent.getScoreboard().getScoreboard());
+                opponent.getScoreboard().getFriendlyTeam().addEntry(opponent.getUsername());
 
                 timer.addPlayer(opponent.getPlayer());
+
+                for (ArenaPlayer enemy : opponents) {
+                    if (enemy.getUniqueId().equals(opponent.getUniqueId())) {
+                        continue;
+                    }
+
+                    opponent.getScoreboard().getEnemyTeam().addEntry(enemy.getUsername());
+                }
             }
         }
 
@@ -90,13 +103,21 @@ public final class ArenaHandler {
                 opponent.teleport(spawn.getBukkit());
                 opponent.setStatuses(PlayerStatus.INGAME);
                 opponent.getMembers().forEach(member -> {
-                    member.setMatch(match);
                     Players.resetHealth(member.getPlayer());
+                    member.setMatch(match);
                     member.getPlayer().setGameMode(GameMode.SURVIVAL);
                 });
 
                 for (ArenaPlayer player : opponent.getMembers()) {
                     timer.addPlayer(player.getPlayer());
+                }
+
+                for (Team enemy : opponents) {
+                    if (enemy.getUniqueId().equals(opponent.getUniqueId())) {
+                        continue;
+                    }
+
+                    enemy.getMembers().forEach(enemyMember -> opponent.getScoreboard().getEnemyTeam().addEntry(enemyMember.getUsername()));
                 }
             }
         }
@@ -238,18 +259,22 @@ public final class ArenaHandler {
 
             if (match instanceof DuelMatch) {
                 final DuelMatch duel = (DuelMatch)match;
+
                 viewers.addAll(duel.getViewers());
+
+                duel.getOpponents().forEach(ArenaPlayer::deleteScoreboard);
             }
 
             if (match instanceof TeamMatch) {
                 final TeamMatch teamfight = (TeamMatch)match;
 
+                viewers.addAll(teamfight.getViewers());
+
                 teamfight.getOpponents().forEach(team -> {
                     team.setStatus(TeamStatus.LOBBY);
                     team.resetStats();
+                    team.getScoreboard().clearEnemyTeam();
                 });
-
-                viewers.addAll(teamfight.getViewers());
             }
 
             viewers.forEach(viewer -> {
