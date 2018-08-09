@@ -6,7 +6,6 @@ import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -88,11 +87,6 @@ public final class OldItemValues implements HumbugModule, Listener {
         double enchantDamage = getDamageByEnchantment(event.getEntityType(), player.getItemInHand(), init);
         double divided = enchantDamage / weaponValues.getOrDefault(hand.getType(), 1.0);
         double postDamage = getDamageByArmor(damaged.getInventory().getArmorContents(), divided);
-
-        Bukkit.broadcastMessage("init: " + init);
-        Bukkit.broadcastMessage("enchants: " + enchantDamage);
-        Bukkit.broadcastMessage("divided: " + divided);
-        Bukkit.broadcastMessage("protected: " + postDamage);
 
         if (postDamage < 0) {
             postDamage = 0;
