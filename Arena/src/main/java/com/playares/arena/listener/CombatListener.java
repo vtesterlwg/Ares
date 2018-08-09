@@ -167,7 +167,7 @@ public final class CombatListener implements Listener {
         final Player player = (Player)event.getEntity();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
         final Match match = profile.getMatch();
-        final double damage = event.getDamage();
+        final double damage = event.getFinalDamage();
 
         if (match == null || !profile.getStatus().equals(PlayerStatus.INGAME)) {
             event.setCancelled(true);
@@ -228,7 +228,7 @@ public final class CombatListener implements Listener {
 
                 if (winner == null) {
                     plugin.getSpectatorHandler().updateSpectators(profile);
-                    
+
                     for (ItemStack contents : player.getInventory().getContents()) {
                         player.getWorld().dropItem(player.getLocation(), contents);
                     }
