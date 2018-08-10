@@ -1,5 +1,6 @@
 package com.playares.services.humbug.features.cont;
 
+import com.destroystokyo.paper.event.entity.PreCreatureSpawnEvent;
 import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
@@ -7,10 +8,12 @@ import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
@@ -35,6 +38,9 @@ public final class MemeItems implements HumbugModule, Listener {
     @Getter @Setter
     public boolean dolphinsGraceDisabled;
 
+    @Getter @Setter
+    public boolean naturalPhantomsDisabled;
+
     public MemeItems(HumbugService humbug) {
         this.humbug = humbug;
     }
@@ -46,6 +52,7 @@ public final class MemeItems implements HumbugModule, Listener {
         this.enderchestDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-ender-chest");
         this.fishingPlayersDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-fishing-players");
         this.dolphinsGraceDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-dolphins-grace");
+        this.naturalPhantomsDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-natural-phantom-spawning");
     }
 
     @Override
@@ -118,6 +125,17 @@ public final class MemeItems implements HumbugModule, Listener {
 
             event.setCancelled(true);
 
+        }
+    }
+
+    @EventHandler
+    public void onCreatureSpawn(PreCreatureSpawnEvent event) {
+        if (!isEnabled() || !isNaturalPhantomsDisabled()) {
+            return;
+        }
+
+        if (event.getReason().equals(CreatureSpawnEvent.SpawnReason.NATURAL) && event.getType().equals(EntityType.PHANTOM)) {
+            event.setCancelled(true);
         }
     }
 }

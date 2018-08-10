@@ -24,6 +24,7 @@ modules:
         disable-ender-chest: true
         disable-fishing-players: true
         disable-dolphins-grace: true
+        disable-natural-phantom-spawning: true
     anti-glitch:
         enabled: true
         disable-pearl-clipping: true
