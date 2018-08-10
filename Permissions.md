@@ -1,5 +1,6 @@
 rank.create - Ability to use /rank create  
 rank.delete - Ability to use /rank delete  
+rank.configure - Configure ranks
 chat.ignorebypass - Bypass being ignored/disabled private messages
 
 essentials.gamemode - Change gamemodes
@@ -36,6 +37,7 @@ proxyessentials.notifications - Receive join/leave notifications
 proxyessentials.staffchat - Enter/leave & view staff chat
 proxyessentials.reports.view - View reports
 proxyessentials.requests.view - View requests
+proxyessentials.broadcast - Global Broadcast
 
 arena.create - Create arenas
 arena.list - List arenas
