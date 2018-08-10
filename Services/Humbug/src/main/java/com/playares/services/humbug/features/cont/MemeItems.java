@@ -1,6 +1,7 @@
 package com.playares.services.humbug.features.cont;
 
 import com.destroystokyo.paper.event.entity.PreCreatureSpawnEvent;
+import com.google.common.collect.Lists;
 import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
@@ -9,15 +10,24 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Evoker;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.List;
+import java.util.Random;
 
 public final class MemeItems implements HumbugModule, Listener {
     @Getter
@@ -41,6 +51,15 @@ public final class MemeItems implements HumbugModule, Listener {
     @Getter @Setter
     public boolean naturalPhantomsDisabled;
 
+    @Getter @Setter
+    public boolean disableFireworkElytra;
+
+    @Getter @Setter
+    public boolean lowerTotemDropChances;
+
+    @Getter @Setter
+    public double totemDropChance;
+
     public MemeItems(HumbugService humbug) {
         this.humbug = humbug;
     }
@@ -53,6 +72,9 @@ public final class MemeItems implements HumbugModule, Listener {
         this.fishingPlayersDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-fishing-players");
         this.dolphinsGraceDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-dolphins-grace");
         this.naturalPhantomsDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-natural-phantom-spawning");
+        this.disableFireworkElytra = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-firework-elytra");
+        this.lowerTotemDropChances = humbug.getHumbugConfig().getBoolean("modules.meme-items.lower-totem-drop-chances.enabled");
+        this.totemDropChance = humbug.getHumbugConfig().getDouble("modules.meme-items.lower-totem-drop-chances.chances");
     }
 
     @Override
@@ -71,6 +93,7 @@ public final class MemeItems implements HumbugModule, Listener {
         EntityPotionEffectEvent.getHandlerList().unregister(this);
         PlayerFishEvent.getHandlerList().unregister(this);
         PlayerTeleportEvent.getHandlerList().unregister(this);
+        PlayerInteractEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler
@@ -136,6 +159,59 @@ public final class MemeItems implements HumbugModule, Listener {
 
         if (event.getReason().equals(CreatureSpawnEvent.SpawnReason.NATURAL) && event.getType().equals(EntityType.PHANTOM)) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (!isEnabled() || !isDisableFireworkElytra()) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final ItemStack hand = event.getItem();
+        final Action action = event.getAction();
+
+        if (hand == null || !hand.getType().equals(Material.FIREWORK_ROCKET)) {
+            return;
+        }
+
+        if (!player.isGliding()) {
+            return;
+        }
+
+        if (!action.equals(Action.RIGHT_CLICK_AIR) && !action.equals(Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onEntityDeath(EntityDeathEvent event) {
+        if (!isEnabled() || !isLowerTotemDropChances()) {
+            return;
+        }
+
+        final LivingEntity entity = event.getEntity();
+
+        if (!(entity instanceof Evoker)) {
+            return;
+        }
+
+        final List<ItemStack> drops = event.getDrops();
+        final double roll = Math.abs(new Random().nextDouble());
+
+        if (roll > totemDropChance) {
+            final List<ItemStack> toRemove = Lists.newArrayList();
+
+            for (ItemStack drop : drops) {
+                if (drop.getType().equals(Material.TOTEM_OF_UNDYING)) {
+                    toRemove.add(drop);
+                }
+            }
+
+            drops.removeAll(toRemove);
         }
     }
 }
