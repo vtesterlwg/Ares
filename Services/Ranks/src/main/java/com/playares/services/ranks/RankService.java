@@ -1,5 +1,6 @@
 package com.playares.services.ranks;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.AresPlugin;
@@ -38,6 +39,20 @@ public final class RankService implements AresService, Listener {
     }
 
     public void start() {
+        getOwner().getCommandManager().getCommandCompletions().registerAsyncCompletion("ranks", c -> {
+            final List<String> rankNames = Lists.newArrayList();
+
+            for (AresRank rank : ranks) {
+                if (rank.getName() == null) {
+                    continue;
+                }
+
+                rankNames.add(rank.getName());
+            }
+
+            return ImmutableList.copyOf(rankNames);
+        });
+
         registerCommand(new RankCommand(this));
         registerListener(this);
 
