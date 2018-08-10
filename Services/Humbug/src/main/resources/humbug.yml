@@ -32,9 +32,9 @@ modules:
     xp-bonuses:
         enabled: true
         multipliers:
-          looting: 3.0
-          fortune: 3.0
-          bottle: 5.0
+            looting: 3.0
+            fortune: 3.0
+            bottle: 5.0
     custom-recipes:
         enabled: true
         xp-bottle-enabled: true
@@ -42,7 +42,9 @@ modules:
         saddle-enabled: true
         glist-melon-enabled: true
     elevators:
-      enabled: true
+        enabled: true
+    infinite-repair:
+        enabled: true
     mob-stacking:
         enabled: true
         tag-prefix: '&ax'
