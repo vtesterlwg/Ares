@@ -9,7 +9,9 @@ import com.playares.arena.match.cont.DuelMatch;
 import com.playares.arena.match.cont.TeamMatch;
 import com.playares.arena.mode.Mode;
 import com.playares.arena.player.ArenaPlayer;
+import com.playares.arena.player.PlayerStatus;
 import com.playares.arena.team.Team;
+import com.playares.arena.team.TeamStatus;
 import com.playares.commons.base.promise.FailablePromise;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.util.Scheduler;
@@ -29,6 +31,16 @@ public final class ChallengeHandler {
     }
 
     public void sendChallenge(ArenaPlayer challenger, ArenaPlayer challenged, Mode mode, SimplePromise promise) {
+        if (challenger.getTeam() != null || challenger.getMatch() != null || !challenger.getStatus().equals(PlayerStatus.LOBBY)) {
+            promise.failure("You must be in the lobby to perform this action");
+            return;
+        }
+
+        if (challenged.getTeam() != null || challenged.getMatch() != null || !challenged.getStatus().equals(PlayerStatus.LOBBY)) {
+            promise.failure("This player is no longer in the lobby");
+            return;
+        }
+
         if (plugin.getChallengeManager().hasPendingDuel(challenger, challenged, mode)) {
             promise.failure("Please wait a moment before trying to send this player another duel request");
             return;
@@ -58,6 +70,16 @@ public final class ChallengeHandler {
     }
 
     public void sendChallenge(Team challenger, Team challenged, Mode mode, SimplePromise promise) {
+        if (!challenger.getStatus().equals(TeamStatus.LOBBY)) {
+            promise.failure("You must be in the lobby to perform this action");
+            return;
+        }
+
+        if (!challenged.getStatus().equals(TeamStatus.LOBBY)) {
+            promise.failure("This player is no longer in the lobby");
+            return;
+        }
+
         if (plugin.getChallengeManager().hasPendingTeamfight(challenger, challenged, mode)) {
             promise.failure("Please wait a moment before trying to send this player another duel request");
             return;
@@ -92,6 +114,14 @@ public final class ChallengeHandler {
     }
 
     public void acceptChallenge(ArenaPlayer playerA, ArenaPlayer playerB, Mode mode) {
+        if (playerA.getTeam() != null || playerA.getMatch() != null || !playerA.getStatus().equals(PlayerStatus.LOBBY)) {
+            return;
+        }
+
+        if (playerB.getTeam() != null || playerB.getMatch() != null || !playerB.getStatus().equals(PlayerStatus.LOBBY)) {
+            return;
+        }
+
         final DuelMatch match = new DuelMatch(playerA, playerB, mode);
 
         plugin.getArenaHandler().startArena(match, new FailablePromise<Arena>() {
@@ -118,6 +148,10 @@ public final class ChallengeHandler {
     }
 
     public void acceptChallenge(Team teamA, Team teamB, Mode mode) {
+        if (!teamA.getStatus().equals(TeamStatus.LOBBY) || !teamB.getStatus().equals(TeamStatus.LOBBY)) {
+            return;
+        }
+
         final TeamMatch match = new TeamMatch(teamA, teamB, mode);
 
         plugin.getArenaHandler().startArena(match, new FailablePromise<Arena>() {

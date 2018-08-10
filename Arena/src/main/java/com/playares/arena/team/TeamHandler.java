@@ -156,8 +156,8 @@ public final class TeamHandler {
             return;
         }
 
-        if (team.getMembers().contains(invited)) {
-            promise.failure("This player is already on your team");
+        if (invited.getTeam() != null) {
+            promise.failure("This player is already on a team");
             return;
         }
 
@@ -189,6 +189,11 @@ public final class TeamHandler {
 
         if (!player.getStatus().equals(PlayerStatus.LOBBY)) {
             promise.failure("You must be in the lobby to perform this action");
+            return;
+        }
+
+        if (player.getTeam() != null) {
+            promise.failure("You are already on a team");
             return;
         }
 
