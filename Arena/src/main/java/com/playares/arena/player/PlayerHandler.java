@@ -3,6 +3,7 @@ package com.playares.arena.player;
 import com.playares.arena.Arenas;
 import com.playares.arena.items.CreateTeamItem;
 import com.playares.arena.items.LeaveTeamItem;
+import com.playares.arena.items.TeamStatusItem;
 import com.playares.arena.items.ViewTeamItem;
 import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.logger.Logger;
@@ -56,6 +57,7 @@ public final class PlayerHandler {
 
         new Scheduler(plugin).sync(() -> {
             if (player.getTeam() != null) {
+                customItemService.getItem(TeamStatusItem.class).ifPresent(item -> bukkit.getInventory().setItem(0, item.getItem()));
                 customItemService.getItem(ViewTeamItem.class).ifPresent(item -> bukkit.getInventory().setItem(4, item.getItem()));
                 customItemService.getItem(LeaveTeamItem.class).ifPresent(item -> bukkit.getInventory().setItem(8, item.getItem()));
 

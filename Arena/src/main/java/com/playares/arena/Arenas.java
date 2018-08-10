@@ -7,10 +7,7 @@ import com.playares.arena.arena.ArenaManager;
 import com.playares.arena.challenge.ChallengeHandler;
 import com.playares.arena.challenge.ChallengeManager;
 import com.playares.arena.command.*;
-import com.playares.arena.items.CreateTeamItem;
-import com.playares.arena.items.ExitSpectatorItem;
-import com.playares.arena.items.LeaveTeamItem;
-import com.playares.arena.items.ViewTeamItem;
+import com.playares.arena.items.*;
 import com.playares.arena.listener.CombatListener;
 import com.playares.arena.listener.DataListener;
 import com.playares.arena.listener.LoadoutListener;
@@ -138,5 +135,6 @@ public final class Arenas extends AresPlugin {
         customItemService.registerNewItem(new LeaveTeamItem(this));
         customItemService.registerNewItem(new ViewTeamItem(this));
         customItemService.registerNewItem(new ExitSpectatorItem(this));
+        customItemService.registerNewItem(new TeamStatusItem(this));
     }
 }
