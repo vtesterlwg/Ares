@@ -36,8 +36,8 @@ public final class TeamStatusItem implements CustomItem {
     @Override
     public List<String> getLore() {
         final List<String> lore = Lists.newArrayList();
-        lore.add(ChatColor.YELLOW + "Right-click while holding this item");
-        lore.add(ChatColor.YELLOW + "to view info about your current team");
+        lore.add(ChatColor.GRAY + "Right-click while holding this item");
+        lore.add(ChatColor.GRAY + "to view info about your current team");
         return lore;
     }
 
