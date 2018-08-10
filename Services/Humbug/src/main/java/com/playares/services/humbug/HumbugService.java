@@ -12,36 +12,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.Set;
 
-/**
- * TODO:
- * LogBlock - Will be it's own service
- * Disable Enderchests - Done
- * Disable Shulker Boxes - We'll only disable them outside faction claims
- * Disable Entity Block Greifing - Done
- * Disable placing boats on land - Not needed
- * Disable Cobblestone Generators - Done
- * Disable Fire Spread - Done
- * Disable breaking Mob Spawners - Done
- * Disable chorus fruit teleportation - Done
- * Disable attack cooldowns - Done
- * Fix item velocity being random as fuck - Done
- * Disable Fishing Rods attaching to players - Done
- * Toggleable 1.5 Potion Values - Done
- * Toggleable 1.8 Armor/Weapon Values - Done
- * Toggleable 1.8 Enderpearl Velocity - Done
- * Toggleable 1.8 Health Regeneration - Done
- * Toggleable XP Bonus when Mining ores with Fortune and Killing mobs with Looting - Done
- * Set base movement speed for horses
- * Fix players clipping through blocks when logging out on a vehicle - No longer an issue in 1.13
- * Add crafting recipe for XP bottles - Done
- * Add crafting recipe for Glistening Melons - Done
- * Add crafting recipe for Horse Armor - Done
- * Add crafting recipe for Saddles - Done
- * Add minecart elevators - Done
- * Spawn obsidian platform when entering the nether - Done
- * Remove nether portal packets after using a nether portal - Not needed
- * Fix splash potions by removing ticksLived check in EntityProjectile class (need to repull paper) - Done
- */
 public final class HumbugService implements AresService {
     @Getter
     public final AresPlugin owner;
