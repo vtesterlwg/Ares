@@ -1,6 +1,5 @@
 package com.playares.services.humbug.features.cont;
 
-import com.destroystokyo.paper.event.entity.PreCreatureSpawnEvent;
 import com.google.common.collect.Lists;
 import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
@@ -9,6 +8,7 @@ import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Evoker;
 import org.bukkit.entity.LivingEntity;
@@ -152,14 +152,20 @@ public final class MemeItems implements HumbugModule, Listener {
     }
 
     @EventHandler
-    public void onCreatureSpawn(PreCreatureSpawnEvent event) {
+    public void onCreatureSpawn(CreatureSpawnEvent event) {
         if (!isEnabled() || !isNaturalPhantomsDisabled()) {
             return;
         }
 
-        if (event.getReason().equals(CreatureSpawnEvent.SpawnReason.NATURAL) && event.getType().equals(EntityType.PHANTOM)) {
-            event.setCancelled(true);
+        if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.NATURAL) && !event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.DEFAULT)) {
+            return;
         }
+
+        if (!event.getEntityType().equals(EntityType.PHANTOM)) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -201,8 +207,17 @@ public final class MemeItems implements HumbugModule, Listener {
 
         final List<ItemStack> drops = event.getDrops();
         final double roll = Math.abs(new Random().nextDouble());
+        double chance = getTotemDropChance();
 
-        if (roll > totemDropChance) {
+        if (entity.getKiller() != null) {
+            final Player killer = entity.getKiller();
+
+            if (killer.getItemInHand() != null && killer.getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+                chance += (killer.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) * 0.1);
+            }
+        }
+
+        if (roll > chance) {
             final List<ItemStack> toRemove = Lists.newArrayList();
 
             for (ItemStack drop : drops) {
