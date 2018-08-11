@@ -36,7 +36,7 @@ public final class PlayerListener implements Listener {
         final ArenaPlayer arenaPlayer = plugin.getPlayerManager().getPlayer(player.getUniqueId());
 
         Players.resetHealth(player);
-        Players.sendTablist(plugin.getProtocol(), player, ChatColor.DARK_RED + "Ares Network", "");
+        Players.sendTablist(plugin.getProtocol(), player, ChatColor.GOLD + "" + ChatColor.BOLD + "Ares Network", ChatColor.GOLD + "playares.com");
 
         player.teleport(plugin.getPlayerHandler().getLobby().getBukkit());
         player.sendTitle(ChatColor.DARK_RED + "Welcome to the Arena!", ChatColor.GOLD + "Good luck and have fun!", 5, 40, 5);
