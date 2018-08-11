@@ -41,6 +41,11 @@ public final class LoadoutHandler {
             return;
         }
 
+        plugin.getModeManager().getModes().stream().filter(mode -> mode.getLoadouts().contains(loadout)).forEach(mode -> {
+            mode.getLoadouts().remove(loadout);
+            plugin.getModeManager().saveMode(mode);
+        });
+
         plugin.getLoadoutManager().getLoadouts().remove(loadout);
         plugin.getLoadoutManager().deleteLoadout(loadout);
 
