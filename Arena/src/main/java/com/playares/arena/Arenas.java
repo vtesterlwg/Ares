@@ -100,6 +100,7 @@ public final class Arenas extends AresPlugin {
         registerCommand(new SpectateCommand(this));
         registerCommand(new SetLobbyCommand(this));
         registerCommand(new TeamCommand(this));
+        registerCommand(new PingCommand());
 
         registerService(new CustomEventService(this));
         registerService(new CustomItemService(this));
