@@ -26,9 +26,9 @@ modules:
         disable-dolphins-grace: true
         disable-natural-phantom-spawning: true
         disable-firework-elytra: true
-        modules.meme-items.lower-totem-drop-chances:
+        lower-totem-drop-chances:
             enabled: true
-            chances: 0.2
+            chances: 0.04
     anti-glitch:
         enabled: true
         disable-pearl-clipping: true
@@ -46,8 +46,6 @@ modules:
         saddle-enabled: true
         glist-melon-enabled: true
     elevators:
-        enabled: true
-    infinite-repair:
         enabled: true
     mob-stacking:
         enabled: true
