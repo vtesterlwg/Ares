@@ -2,9 +2,12 @@ package com.playares.arena.loadout;
 
 import com.google.common.collect.Sets;
 import com.playares.arena.Arenas;
+import com.playares.arena.loadout.cont.ClassLoadout;
 import com.playares.arena.loadout.cont.StandardLoadout;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.serialize.InventorySerializer;
+import com.playares.services.classes.ClassService;
+import com.playares.services.classes.data.classes.*;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -30,6 +33,37 @@ public final class LoadoutManager {
             final ItemStack[] contents = InventorySerializer.decodeItemStacks(config.getString("loadouts." + loadoutName + ".contents"));
             final ItemStack[] armor = InventorySerializer.decodeItemStacks(config.getString("loadouts." + loadoutName + ".armor"));
 
+            if (config.get("loadouts." + loadoutName + ".class-type") != null) {
+                final ClassService classService = (ClassService)plugin.getService(ClassService.class);
+
+                if (classService == null) {
+                    Logger.error("Skipping loadout '" + loadoutName + "' because it is class-based and the service can not be found");
+                    continue;
+                }
+
+                final String className = config.getString("loadouts." + loadoutName + ".class-type");
+                AresClass type = null;
+
+                if (className.equalsIgnoreCase("archer")) {
+                    type = classService.getClass(ArcherClass.class);
+                } else if (className.equalsIgnoreCase("rogue")) {
+                    type = classService.getClass(RogueClass.class);
+                } else if (className.equalsIgnoreCase("bard")) {
+                    type = classService.getClass(BardClass.class);
+                } else if (className.equalsIgnoreCase("diver")) {
+                    type = classService.getClass(DiverClass.class);
+                }
+
+                if (type == null) {
+                    Logger.error("Failed to find class type for loadout '" + loadoutName + "'");
+                    continue;
+                }
+
+                final ClassLoadout classLoadout = new ClassLoadout(plugin, loadoutName, contents, armor, type);
+                loadouts.add(classLoadout);
+                continue;
+            }
+
             final StandardLoadout loadout = new StandardLoadout(loadoutName, contents, armor);
             loadouts.add(loadout);
         }
@@ -44,6 +78,14 @@ public final class LoadoutManager {
     public void saveLoadout(Loadout loadout) {
         config.set("loadouts." + loadout.getName() + ".contents", InventorySerializer.encodeItemStacksToString(loadout.getContents()));
         config.set("loadouts." + loadout.getName() + ".armor", InventorySerializer.encodeItemStacksToString(loadout.getArmor()));
+
+        if (loadout instanceof ClassLoadout) {
+            final ClassLoadout classLoadout = (ClassLoadout)loadout;
+            final String represented = classLoadout.getClassType().getName().toLowerCase();
+
+            config.set("loadouts." + loadout.getName() + ".class-type", represented);
+        }
+
         plugin.saveConfig("loadouts", config);
     }
 

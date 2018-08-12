@@ -21,10 +21,28 @@ public final class LoadoutCommand extends BaseCommand {
 
     @Subcommand("create")
     @CommandPermission("arena.loadout.create")
-    @Syntax("/loadout create <name>")
+    @Syntax("<name>")
     @Description("Create a new loadout")
     public void onCreate(Player player, String name) {
-        plugin.getLoadoutHandler().createLoadout(player.getInventory().getContents(), player.getInventory().getArmorContents(), name, new SimplePromise() {
+        plugin.getLoadoutHandler().createStandardLoadout(player.getInventory().getContents(), player.getInventory().getArmorContents(), name, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Loadout created");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("create")
+    @CommandPermission("arena.loadout.create")
+    @Syntax("<name> <type>")
+    @Description("Create a new class-based loadout")
+    public void onCreate(Player player, String name, String typeName) {
+        plugin.getLoadoutHandler().createClassLoadout(player.getInventory().getContents(), player.getInventory().getArmorContents(), name, typeName, new SimplePromise() {
             @Override
             public void success() {
                 player.sendMessage(ChatColor.GREEN + "Loadout created");

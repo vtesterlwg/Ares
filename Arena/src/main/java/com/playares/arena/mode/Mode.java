@@ -27,7 +27,7 @@ public interface Mode {
         who.getInventory().setArmorContents(null);
 
         for (int i = 0; i < getLoadouts().size(); i++) {
-            final Loadout loadout = getLoadouts().get(0);
+            final Loadout loadout = getLoadouts().get(i);
             who.getInventory().setItem(i, loadout.getAsBook());
         }
     }

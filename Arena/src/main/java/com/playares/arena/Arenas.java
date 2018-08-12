@@ -8,10 +8,7 @@ import com.playares.arena.challenge.ChallengeHandler;
 import com.playares.arena.challenge.ChallengeManager;
 import com.playares.arena.command.*;
 import com.playares.arena.items.*;
-import com.playares.arena.listener.CombatListener;
-import com.playares.arena.listener.DataListener;
-import com.playares.arena.listener.LoadoutListener;
-import com.playares.arena.listener.PlayerListener;
+import com.playares.arena.listener.*;
 import com.playares.arena.loadout.LoadoutHandler;
 import com.playares.arena.loadout.LoadoutManager;
 import com.playares.arena.match.MatchHandler;
@@ -27,6 +24,7 @@ import com.playares.arena.team.TeamManager;
 import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
+import com.playares.services.classes.ClassService;
 import com.playares.services.customevents.CustomEventService;
 import com.playares.services.customitems.CustomItemService;
 import com.playares.services.essentials.EssentialsService;
@@ -61,6 +59,24 @@ public final class Arenas extends AresPlugin {
     public void onEnable() {
         this.mainConfig = getConfig("config");
 
+        final PaperCommandManager commandManager = new PaperCommandManager(this);
+        commandManager.getCommandCompletions().registerCompletion("arenalist", c -> this.arenaManager.getArenaList());
+        registerCommandManager(commandManager);
+
+        registerMongo(new MongoDB("mongodb://localhost"));
+        registerProtocol(ProtocolLibrary.getProtocolManager());
+        getMongo().openConnection();
+
+        registerService(new CustomEventService(this));
+        registerService(new CustomItemService(this));
+        registerService(new HumbugService(this));
+        registerService(new EssentialsService(this));
+        registerService(new PunishmentService(this));
+        registerService(new ProfileService(this));
+        registerService(new RankService(this));
+        registerService(new ClassService(this));
+        startServices();
+
         this.matchManager = new MatchManager(this);
         this.matchHandler = new MatchHandler(this);
         this.playerManager = new PlayerManager(this);
@@ -78,18 +94,11 @@ public final class Arenas extends AresPlugin {
         this.challengeManager = new ChallengeManager(this);
         this.spectatorHandler = new SpectatorHandler(this);
 
-        final PaperCommandManager commandManager = new PaperCommandManager(this);
-        commandManager.getCommandCompletions().registerCompletion("arenalist", c -> this.arenaManager.getArenaList());
-        registerCommandManager(commandManager);
-
-        registerMongo(new MongoDB("mongodb://localhost"));
-        registerProtocol(ProtocolLibrary.getProtocolManager());
-        getMongo().openConnection();
-
         registerListener(new CombatListener(this));
         registerListener(new DataListener(this));
         registerListener(new PlayerListener(this));
         registerListener(new LoadoutListener(this));
+        registerListener(new ClassListener(this));
 
         registerCommand(new ModeCommand(this));
         registerCommand(new LoadoutCommand(this));
@@ -102,15 +111,6 @@ public final class Arenas extends AresPlugin {
         registerCommand(new TeamCommand(this));
         registerCommand(new PingCommand());
 
-        registerService(new CustomEventService(this));
-        registerService(new CustomItemService(this));
-        registerService(new HumbugService(this));
-        registerService(new EssentialsService(this));
-        registerService(new PunishmentService(this));
-        registerService(new ProfileService(this));
-        registerService(new RankService(this));
-        startServices();
-
         setupItems();
     }
 
@@ -122,6 +122,12 @@ public final class Arenas extends AresPlugin {
         this.teamManager.getTeams().clear();
         this.modeManager.getModes().clear();
         this.loadoutManager.getLoadouts().clear();
+
+        stopServices();
+
+        if (getMongo() != null) {
+            getMongo().closeConnection();
+        }
     }
 
     private void setupItems() {

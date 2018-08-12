@@ -35,6 +35,7 @@
                                     <include>com.playares:Essentials</include>
                                     <include>com.playares:Humbug</include>
                                     <include>com.playares:Punishments</include>
+                                    <include>com.playares:Classes</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -151,6 +152,14 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>CustomItems</artifactId>
+            <version>1.13</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- AresClass Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Classes</artifactId>
             <version>1.13</version>
             <scope>compile</scope>
         </dependency>

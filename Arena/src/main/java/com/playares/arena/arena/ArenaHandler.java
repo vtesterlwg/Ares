@@ -262,7 +262,10 @@ public final class ArenaHandler {
 
                 viewers.addAll(duel.getViewers());
 
-                duel.getOpponents().forEach(ArenaPlayer::deleteScoreboard);
+                duel.getOpponents().forEach(opponent -> {
+                    opponent.deleteScoreboard();
+                    opponent.getClassCooldowns().clear();
+                });
             }
 
             if (match instanceof TeamMatch) {
@@ -274,6 +277,7 @@ public final class ArenaHandler {
                     team.setStatus(TeamStatus.LOBBY);
                     team.resetStats();
                     team.getScoreboard().clearEnemyTeam();
+                    team.getMembers().forEach(member -> member.getClassCooldowns().clear());
                 });
             }
 
