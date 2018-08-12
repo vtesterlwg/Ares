@@ -308,6 +308,10 @@ public final class CombatListener implements Listener {
 
     @EventHandler
     public void onTeleport(PlayerTeleportEvent event) {
+        if (!event.getCause().equals(PlayerTeleportEvent.TeleportCause.ENDER_PEARL)) {
+            return;
+        }
+
         final Player player = event.getPlayer();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
 
