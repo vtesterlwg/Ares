@@ -213,7 +213,7 @@ public final class ClassService implements AresService, Listener {
 
                 if (affected.getUniqueId().equals(player.getUniqueId())) {
                     player.sendMessage(ChatColor.AQUA + StringUtils.capitaliseAllWords(consumable.getEffect().getType().getName().toLowerCase().replace("_", " ")) +
-                            " " + (consumable.getEffect().getAmplifier() +1) + ChatColor.YELLOW + " applied to " + ChatColor.AQUA + bardEvent.getAffectedEntities().size() + ChatColor.YELLOW +
+                            " " + (consumable.getEffect().getAmplifier() + 1) + ChatColor.YELLOW + " applied to " + ChatColor.AQUA + bardEvent.getAffectedEntities().size() + ChatColor.YELLOW +
                             " players");
                 } else {
                     player.sendMessage(
