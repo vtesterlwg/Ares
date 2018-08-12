@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.LivingEntity;
 
 import javax.annotation.Nonnull;
 
@@ -29,13 +29,13 @@ public class PLocatable implements Locatable, MongoDocument<PLocatable> {
     @Getter @Setter
     float pitch;
 
-    public PLocatable(@Nonnull Player player) {
-        this.worldName = player.getLocation().getWorld().getName();
-        this.x = player.getLocation().getX();
-        this.y = player.getLocation().getY();
-        this.z = player.getLocation().getZ();
-        this.yaw = player.getLocation().getYaw();
-        this.pitch = player.getLocation().getPitch();
+    public PLocatable(@Nonnull LivingEntity entity) {
+        this.worldName = entity.getLocation().getWorld().getName();
+        this.x = entity.getLocation().getX();
+        this.y = entity.getLocation().getY();
+        this.z = entity.getLocation().getZ();
+        this.yaw = entity.getLocation().getYaw();
+        this.pitch = entity.getLocation().getPitch();
     }
 
     public PLocatable(@Nonnull String worldName, double x, double y, double z, float yaw, float pitch) {
