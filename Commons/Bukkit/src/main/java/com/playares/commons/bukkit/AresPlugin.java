@@ -79,6 +79,10 @@ public abstract class AresPlugin extends JavaPlugin {
     }
 
     public AresService getService(Class<? extends AresService> clazz) {
+        if (!services.containsKey(clazz)) {
+            return null;
+        }
+
         return services.get(clazz);
     }
 
