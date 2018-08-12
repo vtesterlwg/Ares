@@ -50,7 +50,7 @@ public final class MenuHandler {
                         ChatColor.GOLD + "Health" + ChatColor.YELLOW + ": " + (report.getHealth() / 2),
                         ChatColor.GOLD + "Remaining Health Potions" + ChatColor.YELLOW + ": " + report.getRemainingHealthPotions(),
                         ChatColor.GOLD + "Hits" + ChatColor.YELLOW + ": " + report.getHits(),
-                        ChatColor.GOLD + "Damage" + ChatColor.YELLOW + ": " + report.getDamage(),
+                        ChatColor.GOLD + "Damage" + ChatColor.YELLOW + ": " + Math.round(report.getDamage()),
                         ChatColor.GOLD + "Longest Shot" + ChatColor.YELLOW + ": " + Math.round(report.getLongestShot()),
                         ChatColor.GOLD + "Arrows Hit" + ChatColor.YELLOW + ": " + report.getArrowsHit(),
                         ChatColor.GOLD + "Total Arrows" + ChatColor.YELLOW + ": " + report.getArrowsFired(),
@@ -92,7 +92,7 @@ public final class MenuHandler {
                 .setName(ChatColor.GREEN + "Team Statistics")
                 .addLore(Arrays.asList(
                         ChatColor.GOLD + "Hits" + ChatColor.YELLOW + ": " + report.getHits(),
-                        ChatColor.GOLD + "Total Damage" + ChatColor.YELLOW + ": " + report.getDamage(),
+                        ChatColor.GOLD + "Total Damage" + ChatColor.YELLOW + ": " + Math.round(report.getDamage()),
                         ChatColor.GOLD + "Used Health Potions" + ChatColor.YELLOW + ": " + report.getUsedHealthPotions()
                 ))
                 .build();
