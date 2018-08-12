@@ -23,6 +23,7 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.timer.BossTimer;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.commons.bukkit.util.Scheduler;
+import com.playares.services.classes.ClassService;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -142,6 +143,7 @@ public final class ArenaHandler {
 
     public void finishArena(Match match) {
         final Arena arena = match.getArena();
+        final ClassService classService = (ClassService)getPlugin().getService(ClassService.class);
 
         match.setStatus(MatchStatus.ENDGAME);
 
@@ -155,6 +157,10 @@ public final class ArenaHandler {
                 final Collection<ArenaPlayer> viewers = duel.getViewers();
 
                 winner.setStatus(PlayerStatus.INGAME_DEAD);
+
+                if (classService != null && classService.getPlayerClass(winner.getPlayer()) != null) {
+                    classService.removeFromClass(winner.getPlayer());
+                }
 
                 match.getPlayerReports().add(report);
                 match.sendTitle(viewers, ChatColor.GOLD + winner.getUsername() + " Wins!", "", 10, 40, 10);
@@ -207,6 +213,10 @@ public final class ArenaHandler {
                     teamfight.getPlayerReports().add(report);
 
                     alive.setStatus(PlayerStatus.INGAME_DEAD);
+
+                    if (classService != null && classService.getPlayerClass(alive.getPlayer()) != null) {
+                        classService.removeFromClass(alive.getPlayer());
+                    }
                 });
 
                 teamfight.getOpponents().forEach(opponent -> {
