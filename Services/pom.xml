@@ -22,5 +22,6 @@
         <module>Humbug</module>
         <module>Punishments</module>
         <module>ProxyEssentials</module>
+        <module>Classes</module>
     </modules>
 </project>
