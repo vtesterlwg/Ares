@@ -27,6 +27,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -302,6 +303,23 @@ public final class CombatListener implements Listener {
             }
 
             plugin.getArenaHandler().finishArena(match);
+        }
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event) {
+        final Player player = event.getPlayer();
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            player.sendMessage(ChatColor.RED + "Failed to obtain your profile");
+            event.setCancelled(true);
+            return;
+        }
+
+        if (profile.getMatch() == null || !profile.getStatus().equals(PlayerStatus.INGAME)) {
+            event.setCancelled(true);
+            return;
         }
     }
 }
