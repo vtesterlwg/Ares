@@ -51,7 +51,8 @@ public final class CombatListener implements Listener {
                 arenaPlayerA == null ||
                 arenaPlayerA.getMatch() == null ||
                 !arenaPlayerA.getMatch().getStatus().equals(MatchStatus.IN_PROGRESS) ||
-                arenaPlayerA.getMatch().getSpectators().contains(arenaPlayerA)) {
+                arenaPlayerA.getMatch().getSpectators().contains(arenaPlayerA) ||
+                !arenaPlayerA.getStatus().equals(PlayerStatus.INGAME)) {
 
             event.setCancelled(true);
             return;
