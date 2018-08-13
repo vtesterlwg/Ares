@@ -144,6 +144,7 @@ public final class MemeItems implements HumbugModule, Listener {
         }
 
         if (event.getAction().equals(EntityPotionEffectEvent.Action.ADDED) &&
+                event.getCause().equals(EntityPotionEffectEvent.Cause.DOLPHIN) &&
                 event.getNewEffect().getType().equals(PotionEffectType.DOLPHINS_GRACE)) {
 
             event.setCancelled(true);
