@@ -42,6 +42,8 @@ public final class PlayerListener implements Listener {
         player.sendTitle(ChatColor.DARK_RED + "Welcome to the Arena!", ChatColor.GOLD + "Good luck and have fun!", 5, 40, 5);
 
         plugin.getPlayerHandler().giveLobbyItems(arenaPlayer);
+
+        event.setJoinMessage(null);
     }
 
     @EventHandler (priority = EventPriority.LOW)
@@ -62,6 +64,8 @@ public final class PlayerListener implements Listener {
         if (profile.getMatch() != null) {
             profile.getMatch().getSpectators().remove(profile);
         }
+
+        event.setQuitMessage(null);
     }
 
     @EventHandler
