@@ -113,7 +113,7 @@ public final class ArenaPlayer implements StatisticHolder, ArcherStatisticHolder
             return 0.0;
         }
 
-        return ((double)(arrowHits / totalArrowsFired) * 100.0);
+        return (double)((arrowHits * 100.0f) / totalArrowsFired);
     }
 
     public void deleteScoreboard() {

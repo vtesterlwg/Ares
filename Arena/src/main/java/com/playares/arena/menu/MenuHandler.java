@@ -54,7 +54,7 @@ public final class MenuHandler {
                         ChatColor.GOLD + "Longest Shot" + ChatColor.YELLOW + ": " + Math.round(report.getLongestShot()),
                         ChatColor.GOLD + "Arrows Hit" + ChatColor.YELLOW + ": " + report.getArrowsHit(),
                         ChatColor.GOLD + "Total Arrows" + ChatColor.YELLOW + ": " + report.getArrowsFired(),
-                        ChatColor.GOLD + "Bow Accuracy" + ChatColor.YELLOW + ": " + Math.round(report.getAccuracy()) + "%"
+                        ChatColor.GOLD + "Bow Accuracy" + ChatColor.YELLOW + ": " + String.format("%.2f", report.getAccuracy()) + "%"
                 ))
                 .build();
 
