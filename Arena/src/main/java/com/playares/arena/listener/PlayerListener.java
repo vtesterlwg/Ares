@@ -15,10 +15,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.*;
 
 import javax.annotation.Nonnull;
 
@@ -66,6 +63,11 @@ public final class PlayerListener implements Listener {
         }
 
         event.setQuitMessage(null);
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        event.setRespawnLocation(plugin.getPlayerHandler().getLobby().getBukkit());
     }
 
     @EventHandler
