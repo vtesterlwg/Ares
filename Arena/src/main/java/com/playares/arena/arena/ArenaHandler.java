@@ -300,6 +300,7 @@ public final class ArenaHandler {
                     plugin.getSpectatorHandler().updateSpectators(viewer);
                     plugin.getPlayerHandler().giveLobbyItems(viewer);
                     viewer.getPlayer().teleport(plugin.getPlayerHandler().getLobby().getBukkit());
+                    viewer.getPlayer().setGameMode(GameMode.SURVIVAL);
                 }
             });
 
