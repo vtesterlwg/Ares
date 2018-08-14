@@ -9,7 +9,6 @@ import com.playares.commons.base.promise.SimplePromise;
 import com.playares.services.punishments.PunishmentService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
@@ -25,8 +24,6 @@ public final class UnbanCommand extends BaseCommand {
     @Description("Unban a player")
     @Syntax("<player>")
     public void onUnban(CommandSender sender, String name) {
-        Bukkit.broadcastMessage("Command ran!");
-
         service.getPunishmentHandler().unban(sender, name, new SimplePromise() {
             @Override
             public void success() {
