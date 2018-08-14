@@ -30,6 +30,7 @@ public final class BardEffectEvent extends PlayerEvent implements Cancellable {
         this.consumable = consumable;
         this.affectedEntities = Lists.newArrayList();
 
+        // TODO: Make bard search radius configurable
         for (LivingEntity nearby : getPlayer().getWorld().getNearbyLivingEntities(getPlayer().getLocation(), 16)) {
             if (!(nearby instanceof Player)) {
                 continue;

@@ -38,6 +38,7 @@ public final class ArcherHitEvent extends PlayerEvent implements Cancellable {
         return floorA.distance(floorB);
     }
 
+    // TODO: Make archer damage scaling configurable
     public double getDamage() {
         return ((getDistance() / 5.0) * 0.2) + getInitialDamage();
     }
