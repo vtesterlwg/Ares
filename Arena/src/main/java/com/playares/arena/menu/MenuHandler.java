@@ -47,7 +47,7 @@ public final class MenuHandler {
                 .setMaterial(Material.PAPER)
                 .setName(ChatColor.GREEN + "Match Statistics")
                 .addLore(Arrays.asList(
-                        ChatColor.GOLD + "Health" + ChatColor.YELLOW + ": " + (report.getHealth() / 2),
+                        ChatColor.GOLD + "Health" + ChatColor.YELLOW + ": " + Math.round((report.getHealth() / 2) * 2) / 2.0,
                         ChatColor.GOLD + "Remaining Health Potions" + ChatColor.YELLOW + ": " + report.getRemainingHealthPotions(),
                         ChatColor.GOLD + "Hits" + ChatColor.YELLOW + ": " + report.getHits(),
                         ChatColor.GOLD + "Damage" + ChatColor.YELLOW + ": " + Math.round(report.getDamage()),
