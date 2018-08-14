@@ -269,13 +269,12 @@ public final class ClassService implements AresService, Listener {
         }
 
         final double archerDamage = archerEvent.getDamage();
+        final double difference = archerDamage - damage;
 
         event.setDamage(archerDamage);
 
-        player.sendMessage(
-                ChatColor.BLUE + "" + ChatColor.BOLD + "Archer Multiplier" + ChatColor.RESET + " " + ChatColor.YELLOW +
-                Math.round(damage) + ChatColor.RED + " -> " + ChatColor.YELLOW + Math.round(archerDamage) + ChatColor.RESET + " " +
-                ChatColor.GOLD + "[" + ChatColor.YELLOW + Math.round(archerEvent.getDistance()) + " blocks" + ChatColor.GOLD + "]");
+        player.sendMessage(ChatColor.BLUE + "Archer Multiplier" + ChatColor.YELLOW + ": Damage increased " +
+                String.format("%.2f", difference) + ChatColor.RED + " (" + Math.round(archerEvent.getDistance()) + " blocks)");
     }
 
     @EventHandler
