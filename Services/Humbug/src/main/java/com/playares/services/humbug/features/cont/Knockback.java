@@ -12,6 +12,7 @@ import lombok.Setter;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -62,6 +63,10 @@ public final class Knockback implements HumbugModule, Listener {
 
     @EventHandler
     public void onPlayerVelocity(PlayerVelocityEvent event) {
+        if (!isEnabled() || event.isCancelled()) {
+            return;
+        }
+
         final Player player = event.getPlayer();
         final EntityDamageEvent lastDamage = player.getLastDamageCause();
 
@@ -76,8 +81,12 @@ public final class Knockback implements HumbugModule, Listener {
         }
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerDamagePlayer(PlayerDamagePlayerEvent event) {
+        if (!isEnabled() || event.isCancelled()) {
+            return;
+        }
+
         final Player damaged = event.getDamaged();
         final Player damager = event.getDamager();
 
