@@ -20,8 +20,11 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
@@ -60,6 +63,9 @@ public final class MemeItems implements HumbugModule, Listener {
     @Getter @Setter
     public double totemDropChance;
 
+    @Getter @Setter
+    public boolean unbalancedOffhandDisabled;
+
     public MemeItems(HumbugService humbug) {
         this.humbug = humbug;
     }
@@ -75,6 +81,7 @@ public final class MemeItems implements HumbugModule, Listener {
         this.disableFireworkElytra = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-firework-elytra");
         this.lowerTotemDropChances = humbug.getHumbugConfig().getBoolean("modules.meme-items.lower-totem-drop-chances.enabled");
         this.totemDropChance = humbug.getHumbugConfig().getDouble("modules.meme-items.lower-totem-drop-chances.chances");
+        this.unbalancedOffhandDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-unbalanced-offhand");
     }
 
     @Override
@@ -94,6 +101,8 @@ public final class MemeItems implements HumbugModule, Listener {
         PlayerFishEvent.getHandlerList().unregister(this);
         PlayerTeleportEvent.getHandlerList().unregister(this);
         PlayerInteractEvent.getHandlerList().unregister(this);
+        PlayerSwapHandItemsEvent.getHandlerList().unregister(this);
+        InventoryDragEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler
@@ -229,5 +238,71 @@ public final class MemeItems implements HumbugModule, Listener {
 
             drops.removeAll(toRemove);
         }
+    }
+
+    @EventHandler
+    public void onHandSwap(PlayerSwapHandItemsEvent event) {
+        if (!isEnabled() || !isUnbalancedOffhandDisabled()) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final ItemStack item = event.getOffHandItem();
+
+        if (item == null || (!item.getType().equals(Material.BOW) && !item.getType().equals(Material.TRIDENT))) {
+            return;
+        }
+
+        event.setCancelled(true);
+        player.sendMessage(ChatColor.RED + "This item can not be moved to your off-hand");
+        return;
+    }
+
+    @EventHandler
+    public void onInventoryDrag(InventoryDragEvent event) {
+        if (!isEnabled() || !isUnbalancedOffhandDisabled()) {
+            return;
+        }
+
+        if (!(event.getWhoClicked() instanceof Player)) {
+            return;
+        }
+
+        final Player player = (Player)event.getWhoClicked();
+
+        for (Integer i : event.getNewItems().keySet()) {
+            final ItemStack item = event.getNewItems().get(i);
+
+            if (i == 45 && (item.getType().equals(Material.BOW) || item.getType().equals(Material.TRIDENT))) {
+                event.setCancelled(true);
+                player.sendMessage(ChatColor.RED + "This item can not be moved to your off-hand");
+                return;
+            }
+        }
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (!isEnabled() || !isUnbalancedOffhandDisabled()) {
+            return;
+        }
+
+        if (!(event.getWhoClicked() instanceof Player)) {
+            return;
+        }
+
+        final Player player = (Player)event.getWhoClicked();
+        final ItemStack cursor = event.getCursor();
+
+        if (cursor == null || (!cursor.getType().equals(Material.BOW) && !cursor.getType().equals(Material.TRIDENT))) {
+            return;
+        }
+
+        if (event.getRawSlot() != 45) {
+            return;
+        }
+
+        player.sendMessage(ChatColor.RED + "This item can not be moved to your off-hand");
+        event.setCancelled(true);
     }
 }

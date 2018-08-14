@@ -29,6 +29,7 @@ modules:
         disable-dolphins-grace: true
         disable-natural-phantom-spawning: true
         disable-firework-elytra: true
+        disable-unbalanced-offhand: true
         lower-totem-drop-chances:
             enabled: true
             chances: 0.04
