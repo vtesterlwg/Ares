@@ -164,9 +164,6 @@ public final class BardClass implements AresClass {
         final List<PotionEffect> effect = Lists.newArrayList();
 
         effect.add(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
-        effect.add(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 1));
-        effect.add(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 3));
-        effect.add(new PotionEffect(PotionEffectType.WEAKNESS, Integer.MAX_VALUE, 3));
 
         return effect;
     }
