@@ -62,3 +62,47 @@ modules:
             - 'CHICKEN'
             - 'PIG'
             - 'RABBIT'
+    kit-limits:
+        enabled: true
+        enchantments:
+            enabled: true
+            THORNS:
+                disabled: true
+                max-level: 0
+            KNOCKBACK:
+                disabled: true
+                max-level: 0
+            ARROW_KNOCKBACK:
+                disabled: true
+                max-level: 0
+            RIPTIDE:
+                disabled: true
+                max-level: 0
+            CHANNELING:
+                disabled: true
+                max-level: 0
+            SWEEPING_EDGE:
+                disabled: true
+                max-level: 0
+        potions:
+            enabled: true
+            INCREASE_DAMAGE:
+                disabled: false
+                amplifiable: false
+                extendable: true
+            REGENERATION:
+                disabled: false
+                amplifiable: false
+                extendable: true
+            SLOW:
+                disabled: false
+                amplifiable: false
+                extendable: false
+            WEAKNESS:
+                disabled: false
+                amplifiable: false
+                extendable: false
+            HARM:
+                disabled: true
+                amplifiable: false
+                extendable: false
