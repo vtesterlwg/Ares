@@ -62,7 +62,7 @@ public final class BardClass implements AresClass {
 
             @Override
             public PotionEffect getEffect() {
-                return new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 3 * 20, 2);
+                return new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 3 * 20, 1);
             }
 
             @Override
@@ -101,7 +101,7 @@ public final class BardClass implements AresClass {
 
             @Override
             public int getCooldown() {
-                return 30;
+                return 60;
             }
         });
 
@@ -118,7 +118,7 @@ public final class BardClass implements AresClass {
 
             @Override
             public int getCooldown() {
-                return 300;
+                return 120;
             }
         });
 
@@ -135,7 +135,7 @@ public final class BardClass implements AresClass {
 
             @Override
             public int getCooldown() {
-                return 180;
+                return 120;
             }
         });
 

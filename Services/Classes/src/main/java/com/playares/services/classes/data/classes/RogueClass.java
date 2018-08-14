@@ -85,7 +85,7 @@ public final class RogueClass implements AresClass {
 
             @Override
             public int getCooldown() {
-                return 300;
+                return 120;
             }
         });
 
@@ -102,7 +102,7 @@ public final class RogueClass implements AresClass {
 
             @Override
             public int getCooldown() {
-                return 180;
+                return 120;
             }
         });
 
