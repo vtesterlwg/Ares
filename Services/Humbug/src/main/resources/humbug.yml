@@ -47,6 +47,10 @@ modules:
         glist-melon-enabled: true
     elevators:
         enabled: true
+    knockback:
+        enabled: true
+        horizontal-multiplier: 1.0
+        vertical-multiplier: 1.0
     mob-stacking:
         enabled: true
         tag-prefix: '&ax'
