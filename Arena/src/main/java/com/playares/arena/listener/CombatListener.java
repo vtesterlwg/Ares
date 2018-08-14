@@ -12,15 +12,14 @@ import com.playares.arena.team.Team;
 import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
 import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.util.Players;
+import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.commons.bukkit.util.Worlds;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
-import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -124,10 +123,6 @@ public final class CombatListener implements Listener {
 
     @EventHandler
     public void onProjectileLaunch(ProjectileLaunchEvent event) {
-        if (!(event.getEntity() instanceof Arrow) && !(event.getEntity() instanceof ThrownPotion)) {
-            return;
-        }
-
         final Projectile projectile = event.getEntity();
         final ProjectileSource shooter = projectile.getShooter();
 
@@ -137,6 +132,11 @@ public final class CombatListener implements Listener {
 
         final Player player = (Player)shooter;
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (projectile instanceof EnderPearl) {
+            new Scheduler(plugin).sync(() -> player.setCooldown(Material.ENDER_PEARL, (16 * 20))).delay(1L).run();
+            return;
+        }
 
         if (projectile instanceof Arrow) {
             profile.addArrowFired();
