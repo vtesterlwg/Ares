@@ -1,6 +1,9 @@
 modules:
     oldpotions:
-        enabled: true
+        enabled: false
+        old-health-enabled: true
+        old-strength-enabled: true
+        old-regen-enabled: true
     anti-grief:
         enabled: true
         disable-fire-spread: true

@@ -21,6 +21,15 @@ public final class OldPotions implements HumbugModule, Listener {
     public final HumbugService humbug;
 
     @Getter @Setter
+    public boolean oldHealthEnabled;
+
+    @Getter @Setter
+    public boolean oldStrengthEnabled;
+
+    @Getter @Setter
+    public boolean oldRegenEnabled;
+
+    @Getter @Setter
     public boolean enabled;
 
     public OldPotions(HumbugService humbug) {
@@ -30,6 +39,9 @@ public final class OldPotions implements HumbugModule, Listener {
     @Override
     public void loadValues() {
         this.enabled = humbug.getHumbugConfig().getBoolean("modules.oldpotions.enabled");
+        this.oldHealthEnabled = humbug.getHumbugConfig().getBoolean("modules.oldpotions.old-health-enabled");
+        this.oldStrengthEnabled = humbug.getHumbugConfig().getBoolean("modules.oldpotions.old-strength-enabled");
+        this.oldRegenEnabled = humbug.getHumbugConfig().getBoolean("modules.oldpotions.old-regen-enabled");
     }
 
     public String getName() {
@@ -64,7 +76,7 @@ public final class OldPotions implements HumbugModule, Listener {
 
     @EventHandler (priority = EventPriority.NORMAL)
     public void onPlayerDamagePlayer(EntityDamageByEntityEvent event) {
-        if (!isEnabled()) {
+        if (!isEnabled() || !isOldStrengthEnabled()) {
             return;
         }
 
@@ -79,7 +91,7 @@ public final class OldPotions implements HumbugModule, Listener {
 
     @EventHandler
     public void onEntityRegainHealth(EntityRegainHealthEvent event) {
-        if (!isEnabled()) {
+        if (!isEnabled() || (!isOldRegenEnabled() && !isOldHealthEnabled())) {
             return;
         }
 
@@ -99,12 +111,12 @@ public final class OldPotions implements HumbugModule, Listener {
         final EntityRegainHealthEvent.RegainReason reason = event.getRegainReason();
         final double amount = event.getAmount();
 
-        if (reason.equals(EntityRegainHealthEvent.RegainReason.MAGIC) && amount > 1.0 && level >= 0) {
+        if (isOldHealthEnabled() && reason.equals(EntityRegainHealthEvent.RegainReason.MAGIC) && amount > 1.0 && level >= 0) {
             event.setAmount(amount * 1.5);
             return;
         }
 
-        if (reason.equals(EntityRegainHealthEvent.RegainReason.MAGIC_REGEN) && amount == 1.0 && level > 0) {
+        if (isOldRegenEnabled() && reason.equals(EntityRegainHealthEvent.RegainReason.MAGIC_REGEN) && amount == 1.0 && level > 0) {
             new Scheduler(getHumbug().getOwner()).sync(() -> {
                 if (entity.isDead()) {
                     return;
