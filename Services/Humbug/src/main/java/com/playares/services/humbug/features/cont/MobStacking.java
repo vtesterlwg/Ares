@@ -232,6 +232,10 @@ public final class MobStacking implements HumbugModule, Listener {
         }
     }
 
+    public boolean isStacked(LivingEntity entity) {
+        return entity.getCustomName() != null && entity.getCustomName().startsWith(tagPrefix);
+    }
+
     public long getBreedingCooldown(Player player) {
         return breedCooldowns.getOrDefault(player.getUniqueId(), 0L);
     }
@@ -241,7 +245,7 @@ public final class MobStacking implements HumbugModule, Listener {
         final LivingEntity entity = event.getEntity();
         final int stackSize = getStackSize(entity);
 
-        if (stackSize == 1) {
+        if (!isStacked(entity)) {
             return;
         }
 
@@ -280,9 +284,13 @@ public final class MobStacking implements HumbugModule, Listener {
             return;
         }
 
+        if (!(event.getRightClicked() instanceof LivingEntity)) {
+            return;
+        }
+
         final Player player = event.getPlayer();
         final UUID uniqueId = player.getUniqueId();
-        final Entity entity = event.getRightClicked();
+        final LivingEntity entity = (LivingEntity)event.getRightClicked();
         final ItemStack hand = player.getInventory().getItemInMainHand();
 
         if (!breedMaterials.containsKey(entity.getType())) {
@@ -293,10 +301,13 @@ public final class MobStacking implements HumbugModule, Listener {
             return;
         }
 
+        if (!isStacked(entity)) {
+            return;
+        }
+
         event.setCancelled(true);
 
-        final LivingEntity livingEntity = (LivingEntity)entity;
-        final int stackSize = getStackSize(livingEntity);
+        final int stackSize = getStackSize(entity);
 
         if (stackSize <= 1) {
             player.sendMessage(ChatColor.RED + "Stack size must be at least 2 to begin breeding");
@@ -312,14 +323,14 @@ public final class MobStacking implements HumbugModule, Listener {
             return;
         }
 
-        final LivingEntity baby = (LivingEntity)livingEntity.getWorld().spawnEntity(livingEntity.getLocation(), livingEntity.getType());
+        final LivingEntity baby = (LivingEntity)entity.getWorld().spawnEntity(entity.getLocation(), entity.getType());
 
         if (baby instanceof Ageable) {
             ((Ageable)baby).setBaby();
         }
 
         if (baby instanceof Colorable) {
-            final Colorable parent = (Colorable)livingEntity;
+            final Colorable parent = (Colorable)entity;
             final Colorable colorable = (Colorable)baby;
 
             colorable.setColor(parent.getColor());
@@ -331,7 +342,7 @@ public final class MobStacking implements HumbugModule, Listener {
             hand.setAmount(hand.getAmount() - 1);
         }
 
-        Worlds.spawnParticle(livingEntity.getEyeLocation(), Particle.HEART, 10, 1.0);
+        Worlds.spawnParticle(entity.getEyeLocation(), Particle.HEART, 10, 1.0);
 
         breedCooldowns.put(player.getUniqueId(), (Time.now() + (breedCooldown * 1000L)));
         new Scheduler(getHumbug().getOwner()).sync(() -> breedCooldowns.remove(uniqueId)).delay(breedCooldown * 20L).run();
