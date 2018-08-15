@@ -153,7 +153,7 @@ public final class ArenaHandler {
 
             if (winner != null) {
                 final ArenaPlayer loser = duel.getLoser(winner);
-                final PlayerReport report = new PlayerReport(winner, match.getUniqueId(), winner.getPlayer().getHealth());
+                final PlayerReport report = new PlayerReport(winner, match.getUniqueId(), null, winner.getPlayer().getHealth());
                 final Collection<ArenaPlayer> viewers = duel.getViewers();
 
                 winner.setStatus(PlayerStatus.INGAME_DEAD);
@@ -209,7 +209,7 @@ public final class ArenaHandler {
                 final Team loser = teamfight.getLoser(winner);
 
                 winner.getAlive().forEach(alive -> {
-                    final PlayerReport report = new PlayerReport(alive, match.getUniqueId(), alive.getPlayer().getHealth());
+                    final PlayerReport report = new PlayerReport(alive, match.getUniqueId(), alive.getTeam().getUniqueId(), alive.getPlayer().getHealth());
                     teamfight.getPlayerReports().add(report);
 
                     alive.setStatus(PlayerStatus.INGAME_DEAD);

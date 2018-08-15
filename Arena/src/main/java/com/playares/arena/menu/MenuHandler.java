@@ -3,6 +3,7 @@ package com.playares.arena.menu;
 import com.playares.arena.Arenas;
 import com.playares.arena.aftermatch.PlayerReport;
 import com.playares.arena.aftermatch.TeamReport;
+import com.playares.arena.match.Match;
 import com.playares.arena.menu.cont.DuelModeView;
 import com.playares.arena.menu.cont.TeamModeView;
 import com.playares.arena.menu.cont.TeamView;
@@ -84,6 +85,7 @@ public final class MenuHandler {
     }
 
     public void openTeamReport(Player viewer, TeamReport report) {
+        final Match match = plugin.getMatchManager().getMatchById(report.getUniqueId());
         final Menu menu = new Menu(plugin, viewer, report.getName(), 6);
         int slot = 0;
 
@@ -97,8 +99,13 @@ public final class MenuHandler {
                 ))
                 .build();
 
-        for (UUID memberId : report.getRoster().keySet()) {
-            final String memberName = report.getRoster().get(memberId);
+        for (PlayerReport playerReport : match.getPlayerReports()) {
+            if (playerReport.getTeamId() == null || !playerReport.getTeamId().equals(report.getUniqueId())) {
+                continue;
+            }
+
+            final UUID memberId = playerReport.getUniqueId();
+            final String memberName = playerReport.getUsername();
             final ItemStack icon = new ItemStack(Material.PLAYER_HEAD);
             final SkullMeta meta = (SkullMeta)icon.getItemMeta();
 

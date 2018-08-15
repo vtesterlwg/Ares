@@ -177,7 +177,7 @@ public final class CombatListener implements Listener {
         }
 
         if ((player.getHealth() - damage) <= 0.0) {
-            final PlayerReport report = new PlayerReport(profile, match.getUniqueId(), 0.0);
+            final PlayerReport report = new PlayerReport(profile, match.getUniqueId(), (profile.getTeam() != null ? profile.getTeam().getUniqueId() : null), 0.0);
             match.getPlayerReports().add(report);
 
             Worlds.playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE);
@@ -259,8 +259,7 @@ public final class CombatListener implements Listener {
 
         profile.setStatus(PlayerStatus.INGAME_DEAD);
 
-        final PlayerReport report = new PlayerReport(profile, match.getUniqueId(), 0.0);
-
+        final PlayerReport report = new PlayerReport(profile, match.getUniqueId(), (profile.getTeam() != null ? profile.getTeam().getUniqueId() : null), 0.0);
         match.getPlayerReports().add(report);
 
         if (match instanceof DuelMatch) {
@@ -324,7 +323,6 @@ public final class CombatListener implements Listener {
 
         if (profile.getMatch() == null || !profile.getStatus().equals(PlayerStatus.INGAME)) {
             event.setCancelled(true);
-            return;
         }
     }
 }

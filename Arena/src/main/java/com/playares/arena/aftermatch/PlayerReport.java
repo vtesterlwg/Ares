@@ -14,10 +14,13 @@ public final class PlayerReport implements AftermatchReport {
     public final UUID uniqueId;
 
     @Getter
+    public final String username;
+
+    @Getter
     public final UUID matchId;
 
     @Getter
-    public final String username;
+    public final UUID teamId;
 
     @Getter
     public final int hits;
@@ -46,10 +49,11 @@ public final class PlayerReport implements AftermatchReport {
     @Getter
     public final ItemStack[] armor;
 
-    public PlayerReport(ArenaPlayer player, UUID matchId, double health) {
+    public PlayerReport(ArenaPlayer player, UUID matchId, UUID teamId, double health) {
         this.uniqueId = player.getUniqueId();
-        this.matchId = matchId;
         this.username = player.getUsername();
+        this.matchId = matchId;
+        this.teamId = teamId;
         this.hits = player.getHits();
         this.damage = player.getDamage();
         this.health = health;
