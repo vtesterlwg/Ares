@@ -85,7 +85,13 @@ public final class MenuHandler {
     }
 
     public void openTeamReport(Player viewer, TeamReport report) {
-        final Match match = plugin.getMatchManager().getMatchById(report.getUniqueId());
+        final Match match = plugin.getMatchManager().getMatchById(report.getMatchId());
+
+        if (match == null) {
+            viewer.sendMessage(ChatColor.RED + "Match not found");
+            return;
+        }
+
         final Menu menu = new Menu(plugin, viewer, report.getName(), 6);
         int slot = 0;
 
