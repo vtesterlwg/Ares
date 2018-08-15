@@ -48,7 +48,7 @@ public final class HumbugService implements AresService {
         registerHumbugModule(new KitLimits(this));
         registerHumbugModule(new Knockback(this));
 
-        this.modules.forEach(module ->{
+        this.modules.forEach(module -> {
             module.loadValues();
 
             if (module.isEnabled()) {
@@ -64,6 +64,7 @@ public final class HumbugService implements AresService {
 
     public void reload() {
         this.humbugConfig = owner.getConfig("humbug");
+        this.modules.forEach(HumbugModule::loadValues);
     }
 
     public String getName() {
