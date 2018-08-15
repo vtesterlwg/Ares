@@ -193,7 +193,7 @@ public final class ClassService implements AresService, Listener {
 
             for (Player affected : bardEvent.getAffectedEntities()) {
                 if (affected.hasPotionEffect(consumable.getEffect().getType())) {
-                    final PotionEffect storedEffect = player.getPotionEffect(consumable.getEffect().getType());
+                    final PotionEffect storedEffect = affected.getPotionEffect(consumable.getEffect().getType());
                     final AresClass storedClass = getPlayerClass(affected);
 
                     affected.removePotionEffect(consumable.getEffect().getType());
@@ -205,7 +205,7 @@ public final class ClassService implements AresService, Listener {
                             return;
                         }
 
-                        player.addPotionEffect(storedEffect);
+                        affected.addPotionEffect(storedEffect);
                     }).delay(consumable.getEffect().getDuration() + 1L).run();
                 }
 
@@ -216,7 +216,7 @@ public final class ClassService implements AresService, Listener {
                             " " + (consumable.getEffect().getAmplifier() + 1) + ChatColor.YELLOW + " applied to " + ChatColor.AQUA + bardEvent.getAffectedEntities().size() + ChatColor.YELLOW +
                             " players");
                 } else {
-                    player.sendMessage(
+                    affected.sendMessage(
                             ChatColor.YELLOW + "Received " + ChatColor.AQUA +
                             StringUtils.capitaliseAllWords(consumable.getEffect().getType().getName().toLowerCase().replace("_", " ")) +
                             " " + (consumable.getEffect().getAmplifier() + 1) + ChatColor.YELLOW + " for " + ChatColor.AQUA + (consumable.getEffect().getDuration() / 20) +
