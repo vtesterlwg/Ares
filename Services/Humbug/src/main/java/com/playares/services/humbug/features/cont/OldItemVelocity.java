@@ -34,8 +34,8 @@ public final class OldItemVelocity implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.old-item-velocity.enabled");
-        this.pearlVelocity = humbug.getHumbugConfig().getDouble("modules.old-item-velocity.pearl-velocity");
+        this.enabled = humbug.getHumbugConfig().getBoolean("old-item-velocity.enabled");
+        this.pearlVelocity = humbug.getHumbugConfig().getDouble("old-item-velocity.pearl-velocity");
     }
 
     @Override

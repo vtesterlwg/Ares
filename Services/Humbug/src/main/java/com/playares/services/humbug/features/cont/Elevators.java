@@ -28,7 +28,7 @@ public final class Elevators implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.elevators.enabled");
+        this.enabled = humbug.getHumbugConfig().getBoolean("elevators.enabled");
     }
 
     @Override

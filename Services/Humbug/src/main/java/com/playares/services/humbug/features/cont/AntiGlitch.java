@@ -37,9 +37,9 @@ public final class AntiGlitch implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.anti-glitch.enabled");
-        this.disablePearlClipping = humbug.getHumbugConfig().getBoolean("modules.anti-glitch.disable-pearl-clipping");
-        this.disableElytraClipping = humbug.getHumbugConfig().getBoolean("modules.anti-glitch.disable-elytra-clipping");
+        this.enabled = humbug.getHumbugConfig().getBoolean("anti-glitch.enabled");
+        this.disablePearlClipping = humbug.getHumbugConfig().getBoolean("anti-glitch.disable-pearl-clipping");
+        this.disableElytraClipping = humbug.getHumbugConfig().getBoolean("anti-glitch.disable-elytra-clipping");
     }
 
     @Override

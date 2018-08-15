@@ -1,116 +1,145 @@
-modules:
-    oldpotions:
-        enabled: false
-        old-health-enabled: true
-        old-strength-enabled: true
-        old-regen-enabled: true
-    anti-grief:
+# Enabling Old Potions reverts Health, Strength and Regeneration potions back to pre-1.6 values
+oldpotions:
+    enabled: false
+    old-health-enabled: true
+    old-strength-enabled: true
+    old-regen-enabled: true
+
+# Enabling Anti Grief adds preventative methods of stopping grief
+anti-grief:
+    enabled: true
+    disable-fire-spread: true
+    disable-entity-grief: true
+    disable-cobble-generators: true
+    disable-mob-spawner-breaking: true
+    spawn-nether-portal-platform: true
+
+# Enabling Old Item Velocity adds the ability to revert item velocity to pre-1.9 values
+# Enabling will automatically correct thrown splash potions, to correct pearl velocity is must be changed with the pearl-velocity field
+old-item-velocity:
+    enabled: true
+    pearl-velocity: 1.4
+
+# Enabling Old Sword Swinging removes the attack cooldowns and fixes the swing animation by manipulating packets
+# When this feature is enabled, held item durability will <italic>sometimes</italic> be broken
+# Setting hit-delay-ticks changes how fast (in ticks) a player can take damage
+old-sword-swing:
+    enabled: true
+    hit-delay-ticks: 10
+
+# Enabling Old Regen reverts health regeneration to pre-1.9 values
+old-regen:
+    enabled: true
+
+# Enabling Old Item Values
+old-item-values:
+    enabled: true
+
+# Enabling Meme Items adds the ability to toggle off some unbalanced or unfavorable 1.9+ mechanics as well as some other
+# mechanics that just aren't favorable for PvP servers
+meme-items:
+    enabled: true
+    disable-chorus-fruit-teleportation: true
+    disable-ender-chest: true
+    disable-fishing-players: true
+    disable-dolphins-grace: true
+    disable-natural-phantom-spawning: true
+    disable-firework-elytra: true
+    disable-unbalanced-offhand: true
+    lower-totem-drop-chances:
         enabled: true
-        disable-fire-spread: true
-        disable-entity-grief: true
-        disable-cobble-generators: true
-        disable-mob-spawner-breaking: true
-        spawn-nether-portal-platform: true
-    old-item-velocity:
-        enabled: true
-        pearl-velocity: 1.4
-    old-sword-swing:
-        enabled: true
-        hit-delay-ticks: 10
-    old-regen:
-        enabled: true
-    old-item-values:
-        enabled: true
-    meme-items:
-        enabled: true
-        disable-chorus-fruit-teleportation: true
-        disable-ender-chest: true
-        disable-fishing-players: true
-        disable-dolphins-grace: true
-        disable-natural-phantom-spawning: true
-        disable-firework-elytra: true
-        disable-unbalanced-offhand: true
-        lower-totem-drop-chances:
-            enabled: true
-            chances: 0.04
-    anti-glitch:
-        enabled: true
-        disable-pearl-clipping: true
-        disable-elytra-clipping: true
-    xp-bonuses:
-        enabled: true
-        multipliers:
-            looting: 3.0
-            fortune: 3.0
-            bottle: 5.0
-    custom-recipes:
-        enabled: true
-        xp-bottle-enabled: true
-        horse-armor-enabled: true
-        saddle-enabled: true
-        glist-melon-enabled: true
-    elevators:
-        enabled: true
-    knockback:
-        enabled: true
-        horizontal-multiplier: 1.0
-        vertical-multiplier: 1.0
-    mob-stacking:
-        enabled: true
-        tag-prefix: '&ax'
-        stack-interval: 5
-        max-stack-size: 100
-        breed-cooldown: 30
-        stack-types:
-            - 'ZOMBIE'
-            - 'SKELETON'
-            - 'SPIDER'
-            - 'CAVE_SPIDER'
-            - 'COW'
-            - 'CHICKEN'
-            - 'PIG'
-            - 'RABBIT'
-    kit-limits:
-        enabled: true
-        enchantments:
-            enabled: true
-            THORNS:
-                disabled: true
-                max-level: 0
-            KNOCKBACK:
-                disabled: true
-                max-level: 0
-            ARROW_KNOCKBACK:
-                disabled: true
-                max-level: 0
-            RIPTIDE:
-                disabled: true
-                max-level: 0
-            CHANNELING:
-                disabled: true
-                max-level: 0
-            SWEEPING_EDGE:
-                disabled: true
-                max-level: 0
-        potions:
-            enabled: true
-            INCREASE_DAMAGE:
-                disabled: false
-                amplifiable: false
-                extendable: true
-            REGENERATION:
-                disabled: false
-                amplifiable: false
-                extendable: true
-            SLOW:
-                disabled: false
-                amplifiable: false
-                extendable: false
-            WEAKNESS:
-                disabled: false
-                amplifiable: false
-                extendable: false
-            HARM:
-                disabled: true
-                amplifiable: false
-                extendable: false
+        chances: 0.04
+
+# Enabling Anti Glitch adds preventative measures to keep players from clipping through blocks using vanilla game mechanics
+anti-glitch:
+    enabled: true
+    disable-pearl-clipping: true
+    disable-elytra-clipping: true
+
+# Enabling XP Bonuses allows for additional experience multipliers by using enchantments such as Fortune and Looting
+xp-bonuses:
+    enabled: true
+    multipliers:
+        looting: 3.0
+        fortune: 3.0
+        bottle: 5.0
+
+# Enabling Custom Recipes adds crafting recipes for items that are difficult to obtain
+custom-recipes:
+    enabled: true
+    xp-bottle-enabled: true
+    horse-armor-enabled: true
+    saddle-enabled: true
+    glist-melon-enabled: true
+
+# Enabling Elevators adds a new game mechanic which allows players to "warp" upwards upon existing a Minecart
+elevators:
+    enabled: true
+
+# Enabling Knockback adds the ability to override vanilla knockback and replace it with our own
+knockback:
+    enabled: true
+    horizontal-multiplier: 1.0
+    vertical-multiplier: 1.0
+
+# Enabling Mob Stacking adds the ability to lower server strain by stacking common mobs that are standing nearby eachother
+# This is extremely useful for servers that use mob grinders
+mob-stacking:
+    enabled: true
+    tag-prefix: '&ax'
+    stack-interval: 5
+    max-stack-size: 100
+    breed-cooldown: 30
+    stack-types:
+        - 'ZOMBIE'
+        - 'SKELETON'
+        - 'SPIDER'
+        - 'CAVE_SPIDER'
+        - 'COW'
+        - 'CHICKEN'
+        - 'PIG'
+        - 'RABBIT'
+
+# Enabling Kit Limits prevents players from obtaining certain Potions/Enchantments
+kit-limits:
+    enabled: true
+    enchantments:
+        THORNS:
+            disabled: true
+            max-level: 0
+        KNOCKBACK:
+            disabled: true
+            max-level: 0
+        ARROW_KNOCKBACK:
+            disabled: true
+            max-level: 0
+        RIPTIDE:
+            disabled: true
+            max-level: 0
+        CHANNELING:
+            disabled: true
+            max-level: 0
+        SWEEPING_EDGE:
+            disabled: true
+            max-level: 0
+    potions:
+        INCREASE_DAMAGE:
+            disabled: false
+            amplifiable: false
+            extendable: true
+        REGENERATION:
+            disabled: false
+            amplifiable: false
+            extendable: true
+        SLOW:
+            disabled: false
+            amplifiable: false
+            extendable: false
+        WEAKNESS:
+            disabled: false
+            amplifiable: false
+            extendable: false
+        HARM:
+            disabled: true
+            amplifiable: false
+            extendable: false

@@ -77,12 +77,12 @@ public final class MobStacking implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.mob-stacking.enabled");
-        this.tagPrefix = ChatColor.translateAlternateColorCodes('&', humbug.getHumbugConfig().getString("modules.mob-stacking.tag-prefix"));
-        this.stackInterval = humbug.getHumbugConfig().getInt("modules.mob-stacking.stack-interval");
-        this.maxStackSize = humbug.getHumbugConfig().getInt("modules.mob-stacking.max-stack-size");
-        this.breedCooldown = humbug.getHumbugConfig().getInt("modules.mob-stacking.breed-cooldown");
-        this.stackTypes = humbug.getHumbugConfig().getStringList("modules.mob-stacking.stack-types");
+        this.enabled = humbug.getHumbugConfig().getBoolean("mob-stacking.enabled");
+        this.tagPrefix = ChatColor.translateAlternateColorCodes('&', humbug.getHumbugConfig().getString("mob-stacking.tag-prefix"));
+        this.stackInterval = humbug.getHumbugConfig().getInt("mob-stacking.stack-interval");
+        this.maxStackSize = humbug.getHumbugConfig().getInt("mob-stacking.max-stack-size");
+        this.breedCooldown = humbug.getHumbugConfig().getInt("mob-stacking.breed-cooldown");
+        this.stackTypes = humbug.getHumbugConfig().getStringList("mob-stacking.stack-types");
     }
 
     @Override

@@ -41,8 +41,8 @@ public final class OldSwordSwing implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.old-sword-swing.enabled");
-        this.hitDelayTicks = humbug.getHumbugConfig().getInt("modules.old-sword-swing.hit-delay-ticks");
+        this.enabled = humbug.getHumbugConfig().getBoolean("old-sword-swing.enabled");
+        this.hitDelayTicks = humbug.getHumbugConfig().getInt("old-sword-swing.hit-delay-ticks");
     }
 
     @Override

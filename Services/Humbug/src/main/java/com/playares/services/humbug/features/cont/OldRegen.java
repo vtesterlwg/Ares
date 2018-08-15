@@ -32,7 +32,7 @@ public final class OldRegen implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.old-regen.enabled");
+        this.enabled = humbug.getHumbugConfig().getBoolean("old-regen.enabled");
     }
 
     @Override

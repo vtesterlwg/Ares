@@ -35,11 +35,11 @@ public final class CustomRecipes implements HumbugModule {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.custom-recipes.enabled");
-        this.xpBottleEnabled = humbug.getHumbugConfig().getBoolean("modules.custom-recipes.xp-bottle-enabled");
-        this.horseArmorEnabled = humbug.getHumbugConfig().getBoolean("modules.custom-recipes.horse-armor-enabled");
-        this.saddleEnabled = humbug.getHumbugConfig().getBoolean("modules.custom-recipes.saddle-enabled");
-        this.glistMelonEnabled = humbug.getHumbugConfig().getBoolean("modules.custom-recipes.glist-melon-enabled");
+        this.enabled = humbug.getHumbugConfig().getBoolean("custom-recipes.enabled");
+        this.xpBottleEnabled = humbug.getHumbugConfig().getBoolean("custom-recipes.xp-bottle-enabled");
+        this.horseArmorEnabled = humbug.getHumbugConfig().getBoolean("custom-recipes.horse-armor-enabled");
+        this.saddleEnabled = humbug.getHumbugConfig().getBoolean("custom-recipes.saddle-enabled");
+        this.glistMelonEnabled = humbug.getHumbugConfig().getBoolean("custom-recipes.glist-melon-enabled");
     }
 
     @Override

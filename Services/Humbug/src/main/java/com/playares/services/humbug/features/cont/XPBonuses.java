@@ -38,10 +38,10 @@ public final class XPBonuses implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.xp-bonuses.enabled");
-        this.lootingMultiplier = humbug.getHumbugConfig().getDouble("modules.xp-bonuses.multipliers.looting");
-        this.fortuneMutliplier = humbug.getHumbugConfig().getDouble("modules.xp-bonuses.multipliers.fortune");
-        this.bottleMultiplier = humbug.getHumbugConfig().getDouble("modules.xp-bonuses.multipliers.bottle");
+        this.enabled = humbug.getHumbugConfig().getBoolean("xp-bonuses.enabled");
+        this.lootingMultiplier = humbug.getHumbugConfig().getDouble("xp-bonuses.multipliers.looting");
+        this.fortuneMutliplier = humbug.getHumbugConfig().getDouble("xp-bonuses.multipliers.fortune");
+        this.bottleMultiplier = humbug.getHumbugConfig().getDouble("xp-bonuses.multipliers.bottle");
     }
 
     @Override

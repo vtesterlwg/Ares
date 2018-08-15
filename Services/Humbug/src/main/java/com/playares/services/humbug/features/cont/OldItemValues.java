@@ -36,7 +36,7 @@ public final class OldItemValues implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.old-item-values.enabled");
+        this.enabled = humbug.getHumbugConfig().getBoolean("old-item-values.enabled");
     }
 
     @Override

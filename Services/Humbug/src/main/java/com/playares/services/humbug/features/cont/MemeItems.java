@@ -72,16 +72,16 @@ public final class MemeItems implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.enabled");
-        this.chorusFruitTeleportDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-chorus-fruit-teleportation");
-        this.enderchestDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-ender-chest");
-        this.fishingPlayersDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-fishing-players");
-        this.dolphinsGraceDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-dolphins-grace");
-        this.naturalPhantomsDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-natural-phantom-spawning");
-        this.disableFireworkElytra = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-firework-elytra");
-        this.lowerTotemDropChances = humbug.getHumbugConfig().getBoolean("modules.meme-items.lower-totem-drop-chances.enabled");
-        this.totemDropChance = humbug.getHumbugConfig().getDouble("modules.meme-items.lower-totem-drop-chances.chances");
-        this.unbalancedOffhandDisabled = humbug.getHumbugConfig().getBoolean("modules.meme-items.disable-unbalanced-offhand");
+        this.enabled = humbug.getHumbugConfig().getBoolean("meme-items.enabled");
+        this.chorusFruitTeleportDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-chorus-fruit-teleportation");
+        this.enderchestDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-ender-chest");
+        this.fishingPlayersDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-fishing-players");
+        this.dolphinsGraceDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-dolphins-grace");
+        this.naturalPhantomsDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-natural-phantom-spawning");
+        this.disableFireworkElytra = humbug.getHumbugConfig().getBoolean("meme-items.disable-firework-elytra");
+        this.lowerTotemDropChances = humbug.getHumbugConfig().getBoolean("meme-items.lower-totem-drop-chances.enabled");
+        this.totemDropChance = humbug.getHumbugConfig().getDouble("meme-items.lower-totem-drop-chances.chances");
+        this.unbalancedOffhandDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-unbalanced-offhand");
     }
 
     @Override

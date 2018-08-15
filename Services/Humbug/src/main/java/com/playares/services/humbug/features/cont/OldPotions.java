@@ -38,10 +38,10 @@ public final class OldPotions implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.oldpotions.enabled");
-        this.oldHealthEnabled = humbug.getHumbugConfig().getBoolean("modules.oldpotions.old-health-enabled");
-        this.oldStrengthEnabled = humbug.getHumbugConfig().getBoolean("modules.oldpotions.old-strength-enabled");
-        this.oldRegenEnabled = humbug.getHumbugConfig().getBoolean("modules.oldpotions.old-regen-enabled");
+        this.enabled = humbug.getHumbugConfig().getBoolean("oldpotions.enabled");
+        this.oldHealthEnabled = humbug.getHumbugConfig().getBoolean("oldpotions.old-health-enabled");
+        this.oldStrengthEnabled = humbug.getHumbugConfig().getBoolean("oldpotions.old-strength-enabled");
+        this.oldRegenEnabled = humbug.getHumbugConfig().getBoolean("oldpotions.old-regen-enabled");
     }
 
     public String getName() {

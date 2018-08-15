@@ -45,9 +45,9 @@ public final class Knockback implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.knockback.enabled");
-        this.horizontal = humbug.getHumbugConfig().getDouble("modules.knockback.horizontal-multiplier");
-        this.vertical = humbug.getHumbugConfig().getDouble("modules.knockback.vertical-multiplier");
+        this.enabled = humbug.getHumbugConfig().getBoolean("knockback.enabled");
+        this.horizontal = humbug.getHumbugConfig().getDouble("knockback.horizontal-multiplier");
+        this.vertical = humbug.getHumbugConfig().getDouble("knockback.vertical-multiplier");
     }
 
     @Override

@@ -48,12 +48,12 @@ public final class AntiGrief implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("modules.anti-grief.enabled");
-        this.fireSpreadDisabled = humbug.getHumbugConfig().getBoolean("modules.anti-grief.disable-fire-spread");
-        this.entityGriefDisabled = humbug.getHumbugConfig().getBoolean("modules.anti-grief.disable-entity-grief");
-        this.cobblestoneGeneratorDisabled = humbug.getHumbugConfig().getBoolean("modules.anti-grief.disable-cobble-generators");
-        this.destroyingMobSpawnsDisabled = humbug.getHumbugConfig().getBoolean("modules.anti-grief.disable-mob-spawner-breaking");
-        this.spawnNetherPortalPlatform = humbug.getHumbugConfig().getBoolean("modules.anti-grief.spawn-nether-portal-platform");
+        this.enabled = humbug.getHumbugConfig().getBoolean("anti-grief.enabled");
+        this.fireSpreadDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-fire-spread");
+        this.entityGriefDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-entity-grief");
+        this.cobblestoneGeneratorDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-cobble-generators");
+        this.destroyingMobSpawnsDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-mob-spawner-breaking");
+        this.spawnNetherPortalPlatform = humbug.getHumbugConfig().getBoolean("anti-grief.spawn-nether-portal-platform");
     }
 
     @Override
