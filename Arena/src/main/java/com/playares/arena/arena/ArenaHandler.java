@@ -30,6 +30,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
@@ -275,6 +276,10 @@ public final class ArenaHandler {
                 duel.getOpponents().forEach(opponent -> {
                     opponent.deleteScoreboard();
                     opponent.getClassCooldowns().clear();
+
+                    if (opponent.getPlayer() != null) {
+                        opponent.getPlayer().setCooldown(Material.ENDER_PEARL, 0);
+                    }
                 });
             }
 
@@ -287,7 +292,14 @@ public final class ArenaHandler {
                     team.setStatus(TeamStatus.LOBBY);
                     team.resetStats();
                     team.getScoreboard().clearEnemyTeam();
-                    team.getMembers().forEach(member -> member.getClassCooldowns().clear());
+
+                    team.getMembers().forEach(member -> {
+                        member.getClassCooldowns().clear();
+
+                        if (member.getPlayer() != null) {
+                            member.getPlayer().setCooldown(Material.ENDER_PEARL, 0);
+                        }
+                    });
                 });
             }
 
