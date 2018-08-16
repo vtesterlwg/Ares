@@ -24,6 +24,6 @@ public final class PlayerManager {
     }
 
     public ArenaPlayer getPlayer(String username) {
-        return players.stream().filter(player -> player.getUsername().equals(username)).findFirst().orElse(null);
+        return players.stream().filter(player -> player.getUsername().equalsIgnoreCase(username)).findFirst().orElse(null);
     }
 }
