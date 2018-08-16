@@ -45,7 +45,7 @@ public final class DiverClass implements AresClass {
 
             @Override
             public PotionEffect getEffect() {
-                return new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 5 * 20, 0);
+                return new PotionEffect(PotionEffectType.DOLPHINS_GRACE, 3 * 20, 0);
             }
 
             @Override

@@ -50,7 +50,7 @@ public final class BardClass implements AresClass {
 
             @Override
             public int getCooldown() {
-                return 30;
+                return 60;
             }
         });
 
@@ -101,7 +101,7 @@ public final class BardClass implements AresClass {
 
             @Override
             public int getCooldown() {
-                return 60;
+                return 30;
             }
         });
 
@@ -164,6 +164,8 @@ public final class BardClass implements AresClass {
         final List<PotionEffect> effect = Lists.newArrayList();
 
         effect.add(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
+        effect.add(new PotionEffect(PotionEffectType.REGENERATION, Integer.MAX_VALUE, 0));
+        effect.add(new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, Integer.MAX_VALUE, 0));
 
         return effect;
     }

@@ -112,7 +112,7 @@ public final class ArcherClass implements AresClass {
     public List<PotionEffect> getPassiveEffects() {
         final List<PotionEffect> effects = Lists.newArrayList();
 
-        effects.add(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 1));
+        effects.add(new PotionEffect(PotionEffectType.SPEED, Integer.MAX_VALUE, 2));
 
         return effects;
     }
