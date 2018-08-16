@@ -44,6 +44,11 @@ public final class CombatListener implements Listener {
     public void onPlayerAttackPlayer(PlayerDamagePlayerEvent event) {
         final Player damager = event.getDamager();
         final Player damaged = event.getDamaged();
+
+        if (damager.getUniqueId().equals(damaged.getUniqueId())) {
+            return;
+        }
+
         final ArenaPlayer arenaPlayerA = plugin.getPlayerManager().getPlayer(damager.getUniqueId());
 
         if (
