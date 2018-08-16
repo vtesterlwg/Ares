@@ -122,11 +122,14 @@ public final class ChallengeHandler {
             return;
         }
 
+        plugin.getChallengeManager().clearPendingDuels(playerA);
+        plugin.getChallengeManager().clearPendingDuels(playerB);
+
         final DuelMatch match = new DuelMatch(playerA, playerB, mode);
 
         plugin.getArenaHandler().startArena(match, new FailablePromise<Arena>() {
             @Override
-            public void success(Arena arena) {
+            public void success(@Nonnull Arena arena) {
                 final String nowPlaying = ChatColor.YELLOW + "You are now playing " + ChatColor.AQUA + arena.getName() +
                         ChatColor.YELLOW + " by " + ChatColor.AQUA + Joiner.on(ChatColor.YELLOW + ", " + ChatColor.AQUA).join(arena.getAuthors());
 
@@ -151,6 +154,9 @@ public final class ChallengeHandler {
         if (!teamA.getStatus().equals(TeamStatus.LOBBY) || !teamB.getStatus().equals(TeamStatus.LOBBY)) {
             return;
         }
+
+        plugin.getChallengeManager().clearPendingTeamfights(teamA);
+        plugin.getChallengeManager().clearPendingTeamfights(teamB);
 
         final TeamMatch match = new TeamMatch(teamA, teamB, mode);
 

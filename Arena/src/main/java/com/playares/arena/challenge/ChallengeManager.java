@@ -28,6 +28,20 @@ public final class ChallengeManager {
         return challenges.stream().filter(challenge -> challenge.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
+    public void clearPendingDuels(ArenaPlayer player) {
+        challenges.stream()
+                .filter(challenge -> challenge instanceof DuelChallenge)
+                .filter(challenge -> ((DuelChallenge) challenge).getChallenger().equals(player))
+                .forEach(challenges::remove);
+    }
+
+    public void clearPendingTeamfights(Team team) {
+        challenges.stream()
+                .filter(challenge -> challenge instanceof TeamChallenge)
+                .filter(challenge -> ((TeamChallenge) challenge).getChallenger().equals(team))
+                .forEach(challenges::remove);
+    }
+
     public boolean hasPendingTeamfight(Team sender, Team receiver, Mode mode) {
         for (Challenge challenge : challenges) {
             if (!(challenge instanceof TeamChallenge)) {
