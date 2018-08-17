@@ -24,6 +24,7 @@ import com.playares.commons.bukkit.timer.BossTimer;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.services.classes.ClassService;
+import com.playares.services.essentials.EssentialsService;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -55,6 +56,7 @@ public final class ArenaHandler {
             return;
         }
 
+        final EssentialsService essentials = (EssentialsService)plugin.getService(EssentialsService.class);
         final MainArena arena = (MainArena)plugin.getArenaManager().getRandomArena();
         final BossTimer timer = new BossTimer(plugin, ChatColor.GOLD + "Match Starting...", BarColor.RED, BarStyle.SEGMENTED_6, BossTimer.BossTimerDuration.FIVE_SECONDS);
 
@@ -79,6 +81,10 @@ public final class ArenaHandler {
                 opponent.setScoreboard(new ArenaScoreboard());
                 opponent.getPlayer().setScoreboard(opponent.getScoreboard().getScoreboard());
                 opponent.getScoreboard().getFriendlyTeam().addEntry(opponent.getUsername());
+
+                if (essentials != null) {
+                    essentials.getVanishHandler().showPlayer(opponent.getPlayer(), true);
+                }
 
                 timer.addPlayer(opponent.getPlayer());
 
@@ -105,6 +111,10 @@ public final class ArenaHandler {
 
                     member.setMatch(match);
                     member.getPlayer().setGameMode(GameMode.SURVIVAL);
+
+                    if (essentials != null) {
+                        essentials.getVanishHandler().showPlayer(member.getPlayer(), true);
+                    }
                 });
 
                 opponent.getMembers().forEach(member -> timer.addPlayer(member.getPlayer()));
