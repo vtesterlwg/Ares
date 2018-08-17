@@ -20,6 +20,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.annotation.Nonnull;
+import java.util.Comparator;
 import java.util.List;
 
 public final class TeamView extends Menu implements Listener {
@@ -39,6 +40,8 @@ public final class TeamView extends Menu implements Listener {
             clearInventory();
 
             final List<Team> teams = arenas.getTeamManager().getAvailableTeams();
+
+            teams.sort(Comparator.comparingInt(t -> t.getMembers().size()));
 
             for (int i = 0; i < teams.size(); i++) {
                 if (i >= 53) {
