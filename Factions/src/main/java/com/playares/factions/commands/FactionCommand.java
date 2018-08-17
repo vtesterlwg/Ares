@@ -181,4 +181,16 @@ public final class FactionCommand extends BaseCommand {
     public void onDisband(Player player) {
 
     }
+
+    @Subcommand("rally|r")
+    @Description("Update your factions rallypoint")
+    public void onRally(Player player) {
+
+    }
+
+    @Subcommand("help")
+    @Description("View a list of commands")
+    public void onHelp(Player player) {
+
+    }
 }
