@@ -52,6 +52,7 @@ public final class PlayerHandler {
         }
 
         Players.resetHealth(bukkit);
+
         bukkit.getInventory().clear();
         bukkit.getInventory().setArmorContents(null);
 
@@ -60,7 +61,6 @@ public final class PlayerHandler {
                 customItemService.getItem(TeamStatusItem.class).ifPresent(item -> bukkit.getInventory().setItem(0, item.getItem()));
                 customItemService.getItem(ViewTeamItem.class).ifPresent(item -> bukkit.getInventory().setItem(4, item.getItem()));
                 customItemService.getItem(LeaveTeamItem.class).ifPresent(item -> bukkit.getInventory().setItem(8, item.getItem()));
-
                 return;
             }
 

@@ -55,8 +55,6 @@ public final class ArenaHandler {
             return;
         }
 
-        // For now, we will just use MainArenas since we don't plan on any other arena types
-        // In the future we will want to perform a check here though
         final MainArena arena = (MainArena)plugin.getArenaManager().getRandomArena();
         final BossTimer timer = new BossTimer(plugin, ChatColor.GOLD + "Match Starting...", BarColor.RED, BarStyle.SEGMENTED_6, BossTimer.BossTimerDuration.FIVE_SECONDS);
 
@@ -84,13 +82,10 @@ public final class ArenaHandler {
 
                 timer.addPlayer(opponent.getPlayer());
 
-                for (ArenaPlayer enemy : opponents) {
-                    if (enemy.getUniqueId().equals(opponent.getUniqueId())) {
-                        continue;
-                    }
-
-                    opponent.getScoreboard().getEnemyTeam().addEntry(enemy.getUsername());
-                }
+                opponents
+                        .stream()
+                        .filter(p -> !p.getUniqueId().equals(opponent.getUniqueId()))
+                        .forEach(enemy -> opponent.getScoreboard().getEnemyTeam().addEntry(enemy.getUsername()));
             }
         }
 
@@ -104,23 +99,22 @@ public final class ArenaHandler {
 
                 opponent.teleport(spawn.getBukkit());
                 opponent.setStatuses(PlayerStatus.INGAME);
+
                 opponent.getMembers().forEach(member -> {
                     Players.resetHealth(member.getPlayer());
+
                     member.setMatch(match);
                     member.getPlayer().setGameMode(GameMode.SURVIVAL);
                 });
 
-                for (ArenaPlayer player : opponent.getMembers()) {
-                    timer.addPlayer(player.getPlayer());
-                }
+                opponent.getMembers().forEach(member -> timer.addPlayer(member.getPlayer()));
 
-                for (Team enemy : opponents) {
-                    if (enemy.getUniqueId().equals(opponent.getUniqueId())) {
-                        continue;
-                    }
-
-                    enemy.getMembers().forEach(enemyMember -> opponent.getScoreboard().getEnemyTeam().addEntry(enemyMember.getUsername()));
-                }
+                opponents
+                        .stream()
+                        .filter(o -> !o.getUniqueId().equals(opponent.getUniqueId()))
+                        .forEach(enemy ->
+                                enemy.getMembers()
+                                .forEach(member -> opponent.getScoreboard().getEnemyTeam().addEntry(member.getUsername())));
             }
         }
 

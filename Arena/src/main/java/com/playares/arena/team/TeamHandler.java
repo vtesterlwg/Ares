@@ -219,6 +219,7 @@ public final class TeamHandler {
 
         player.setTeam(team);
         player.getPlayer().setScoreboard(team.getScoreboard().getScoreboard());
+
         plugin.getPlayerHandler().giveLobbyItems(player);
 
         promise.success();

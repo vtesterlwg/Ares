@@ -80,14 +80,13 @@ public final class SpectatorHandler {
 
         viewer.setStatus(PlayerStatus.LOBBY);
         viewer.setMatch(null);
+        viewer.getPlayer().teleport(plugin.getPlayerHandler().getLobby().getBukkit());
 
         match.getSpectators().remove(viewer);
 
         updateSpectators(viewer);
 
         plugin.getPlayerHandler().giveLobbyItems(viewer);
-
-        viewer.getPlayer().teleport(plugin.getPlayerHandler().getLobby().getBukkit());
 
         promise.success();
     }
@@ -106,32 +105,30 @@ public final class SpectatorHandler {
             final Match match = viewer.getMatch();
 
             if (match != null) {
-                match.getSpectators().forEach(spectator -> {
-                    if (spectator.getPlayer() != null) {
-                        viewer.getPlayer().showPlayer(plugin, spectator.getPlayer());
-                    }
-                });
+                match.getSpectators()
+                        .stream()
+                        .filter(s -> s.getPlayer() != null)
+                        .forEach(spectator -> viewer.getPlayer().showPlayer(plugin, spectator.getPlayer()));
 
                 if (match instanceof DuelMatch) {
                     final DuelMatch duel = (DuelMatch)match;
 
-                    duel.getOpponents().forEach(opponent -> {
-                        if (opponent.getPlayer() != null && !match.getStatus().equals(MatchStatus.ENDGAME)) {
-                            opponent.getPlayer().hidePlayer(plugin, viewer.getPlayer());
-                        }
-                    });
+                    if (!match.getStatus().equals(MatchStatus.ENDGAME)) {
+                        duel.getOpponents()
+                                .stream()
+                                .filter(o -> o.getPlayer() != null)
+                                .forEach(opponent -> opponent.getPlayer().hidePlayer(plugin, viewer.getPlayer()));
+                    }
                 }
 
                 else if (match instanceof TeamMatch) {
                     final TeamMatch teamfight = (TeamMatch)match;
 
-                    teamfight.getOpponents().forEach(team -> team.getMembers().forEach(member -> {
-                        if (member.getStatus().equals(PlayerStatus.INGAME)) {
-                            if (member.getPlayer() != null && !match.getStatus().equals(MatchStatus.ENDGAME)) {
-                                member.getPlayer().hidePlayer(plugin, viewer.getPlayer());
-                            }
-                        }
-                    }));
+                    teamfight.getOpponents().forEach(team -> team.getMembers()
+                            .stream()
+                            .filter(m -> m.getStatus().equals(PlayerStatus.INGAME))
+                            .filter(m -> m.getPlayer() != null)
+                            .forEach(member -> member.getPlayer().hidePlayer(plugin, viewer.getPlayer())));
                 }
             }
 
@@ -142,11 +139,10 @@ public final class SpectatorHandler {
             final Match match = viewer.getMatch();
 
             if (match != null) {
-                match.getSpectators().forEach(spectator -> {
-                    if (spectator.getPlayer() != null) {
-                        viewer.getPlayer().hidePlayer(plugin, spectator.getPlayer());
-                    }
-                });
+                match.getSpectators()
+                        .stream()
+                        .filter(s -> s.getPlayer() != null)
+                        .forEach(spectator -> viewer.getPlayer().hidePlayer(plugin, spectator.getPlayer()));
             }
         }
     }
