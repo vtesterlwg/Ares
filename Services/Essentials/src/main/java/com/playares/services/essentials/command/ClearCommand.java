@@ -7,8 +7,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-@CommandAlias("clear")
 public final class ClearCommand extends BaseCommand {
+    @CommandAlias("clear")
     @Description("Clear your inventory")
     @CommandPermission("essentials.clear")
     public void onCommand(Player player) {
@@ -18,6 +18,7 @@ public final class ClearCommand extends BaseCommand {
         player.sendMessage(ChatColor.GREEN + "Your inventory has been cleared");
     }
 
+    @CommandAlias("clear")
     @Description("Clear a players inventory")
     @CommandPermission("essentials.clear.other")
     @CommandCompletion("@players")
