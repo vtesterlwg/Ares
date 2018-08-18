@@ -13,6 +13,18 @@ public abstract class Timer {
     @Getter
     public boolean frozen;
 
+    public Timer(int seconds) {
+        this.expire = Time.now() + (seconds * 1000);
+        this.frozenTime = 0L;
+        this.frozen = false;
+    }
+
+    public Timer(long milliseconds) {
+        this.expire = Time.now() + milliseconds;
+        this.frozenTime = 0L;
+        this.frozen = false;
+    }
+
     public long getExpire() {
         return frozen ? frozenTime + Time.now() : expire;
     }
