@@ -15,19 +15,28 @@ public class PLocatable implements Locatable, MongoDocument<PLocatable> {
     public String worldName;
 
     @Getter @Setter
-    double x;
+    public double x;
 
     @Getter @Setter
-    double y;
+    public double y;
 
     @Getter @Setter
-    double z;
+    public double z;
 
     @Getter @Setter
-    float yaw;
+    public float yaw;
 
     @Getter @Setter
-    float pitch;
+    public float pitch;
+
+    public PLocatable() {
+        this.worldName = null;
+        this.x = 0;
+        this.y = 0;
+        this.z = 0;
+        this.yaw = 0;
+        this.pitch = 0;
+    }
 
     public PLocatable(@Nonnull LivingEntity entity) {
         this.worldName = entity.getLocation().getWorld().getName();
