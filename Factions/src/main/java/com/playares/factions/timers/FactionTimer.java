@@ -1,0 +1,25 @@
+package com.playares.factions.timers;
+
+import com.playares.commons.bukkit.timer.Timer;
+import com.playares.factions.factions.PlayerFaction;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+public abstract class FactionTimer extends Timer {
+    @Getter
+    public PlayerFaction owner;
+
+    @Getter
+    public final FactionTimerType type;
+
+    public FactionTimer(PlayerFaction owner, FactionTimerType type, int seconds) {
+        super(seconds);
+        this.owner = owner;
+        this.type = type;
+    }
+
+    @AllArgsConstructor
+    public enum FactionTimerType {
+        FREEZE;
+    }
+}

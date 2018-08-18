@@ -1,0 +1,93 @@
+database: 'mongodb://localhost'
+
+server-state: 'SOTW' # Determines how the server should act, can be set to SOTW|NORMAL|EOTW
+
+factions:
+  member-cap: 30 # Max amount of players a faction can have
+  ally-cap: 1 # Max amount of allies a faction can have
+  reinvites: 5 # Reinvites a faction receives after each Palace
+  home-height-cap: 100 # Max height a home can be set at
+  max-dtr: 7.0 # Max DTR a faction can obtain
+  tick-interval: 180 # Time (in seconds) between each tick
+  tick-subtract-per-player: 5 # Time (in seconds) to subtract from each tick interval based on online players
+  per-player-dtr-value: 0.4 # How much DTR a player is worth, this determines Max DTR
+  naming:
+    min: 3 # Minimum name length
+    max: 16 # Maximum name length
+    # Banned faction names
+    blocked-names:
+      - 'admin'
+      - 'mod'
+      - 'administrator'
+      - 'moderator'
+      - 'owner'
+      - 'palace'
+      - 'citadel'
+
+claims:
+  min-size: 10 # Minimum size (L*W) a claim can be
+  max-claims: 3 # Max amount of claims a faction can have
+  block-value: 10.0 # How much each individual block costs in a claim
+  # Buffers determine how far a faction must be from anothers claim, distance is in blocks
+  buffers:
+    player: 16.0
+    server: 250.0
+
+timers:
+  player:
+    combat-tag:
+      attacker: 60
+      attacked: 5
+    protection: 1800
+    enderpearl: 16
+    totem: 7200
+    gapple: 3600
+    crapple: 10
+    home: 10
+    stuck: 180
+  faction:
+    freeze: 3600
+    rally: 600
+
+lives:
+  enabled: true # If disabled, all deathbans must be waited out
+  # Determines how many lives you should receive upon receiving a rank or logging in to a new map for the first time
+  ranks:
+    Basic: 2
+    Premium: 6
+    Ultra: 10
+    Partner: 10
+
+crowbars:
+  enabled: true # If disabled, Crowbars will still be obtainable but can not be used
+  # Determines which spawners are allowed to be broken by a crowbar
+  allowed-spawner-types:
+    - 'ZOMBIE'
+    - 'SKELETON'
+    - 'SPIDER'
+    - 'CAVE_SPIDER'
+
+deathbans:
+  enabled: true # If disabled, players will respawn normally upon dying
+  minimum-duration: 300 # Minimum time (in seconds) a deathban can be
+  maximum-duration: 86400 # Maximum time (in seconds) a deathban can be
+
+economy:
+  starting-balance: 100.0 # Given upon a player logging in to the map for the first time
+
+mining:
+  enabled: true # If disabled ores will not spawn
+  # Determines min and max vein sizes
+  vein-size:
+    min: 2
+    max: 8
+  # Determines the rate at which each ore will spawn
+  spawnrates:
+    coal: 0.010
+    iron: 0.008
+    redstone: 0.008
+    lapis: 0.008
+    gold: 0.006
+    diamond: 0.004
+    emerald: 0.001
+    glowstone: 0.002

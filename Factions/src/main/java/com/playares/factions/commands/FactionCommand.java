@@ -2,14 +2,48 @@ package com.playares.factions.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import com.playares.commons.base.promise.SimplePromise;
+import com.playares.factions.Factions;
+import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
+
+/*
+Buffer
+*/
 @CommandAlias("factions|faction|f|teams|team|t")
 public final class FactionCommand extends BaseCommand {
+    @Getter
+    public final Factions plugin;
+
+    public FactionCommand(Factions plugin) {
+        this.plugin = plugin;
+    }
+
     @Subcommand("create")
     @Description("Create a faction")
     @Syntax("<name>")
     public void onCreate(Player player, @Single String name) {
+        plugin.getFactionManager().getCreateHandler().createFaction(player, name, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Your faction has been created");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("create")
+    @Description("Create a faction")
+    @Syntax("[server] <name>")
+    @CommandPermission("factions.create.server")
+    public void onCreate(Player player, @Flags("server") String server, @Single String name) {
 
     }
 
@@ -122,6 +156,15 @@ public final class FactionCommand extends BaseCommand {
 
     }
 
+    @Subcommand("claim")
+    @Description("Begin the claiming process for your faction")
+    @Syntax("[faction]")
+    @CommandPermission("factions.claim.others")
+    @CommandCompletion("@factions")
+    public void onClaim(Player player, String faction) {
+
+    }
+
     @Subcommand("subclaim")
     @Description("Subclaim the chest you are looking at")
     public void onSubclaim(Player player) {
@@ -131,6 +174,15 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("sethome")
     @Description("Update your factions home location to your current location")
     public void onSetHome(Player player) {
+
+    }
+
+    @Subcommand("sethome")
+    @Description("Update your factions home location to your current location")
+    @Syntax("[faction]")
+    @CommandPermission("factions.sethome.others")
+    @CommandCompletion("@factions")
+    public void onSetHome(Player player, String faction) {
 
     }
 
@@ -176,9 +228,27 @@ public final class FactionCommand extends BaseCommand {
 
     }
 
+    @Subcommand("rename")
+    @Description("Rename your faction")
+    @Syntax("[faction] <name>")
+    @CommandPermission("factions.rename.others")
+    @CommandCompletion("@factions")
+    public void onRename(Player player, String faction, String name) {
+
+    }
+
     @Subcommand("disband")
     @Description("Disband your faction")
     public void onDisband(Player player) {
+
+    }
+
+    @Subcommand("disband")
+    @Description("Disband your faction")
+    @Syntax("[faction]")
+    @CommandPermission("factions.disband.others")
+    @CommandCompletion("@factions")
+    public void onDisband(Player player, String faction) {
 
     }
 
