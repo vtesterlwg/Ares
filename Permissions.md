@@ -47,3 +47,11 @@ arena.loadout.delete - Delete loadouts
 arena.loadout.list - List loadouts
 arena.setlobby - Update arena lobby location
 arena.admin - Admin access to Arena
+
+factions.admin - Access all of the factions plugin
+factions.mod - Basic moderation commands for factions
+factions.create.server - Create a server faction
+factions.claim.others - Claim land for others
+factions.sethome.others - Set others homes
+factions.rename.others - Rename others factions
+factions.disband.others - Disband others factions
