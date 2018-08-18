@@ -51,7 +51,17 @@ public final class FactionCommand extends BaseCommand {
     @Description("Accept an invitation")
     @Syntax("<factionName/playerName>")
     public void onAccept(Player player, String name) {
+        plugin.getFactionManager().getCreateHandler().acceptInvite(player, name, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "You have joined the faction");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("leave")
