@@ -129,11 +129,17 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
 
         setNextTick(next);
 
-        if (getOnlineMembers().isEmpty() || isFrozen() || getDeathsTilRaidable() >= getMaxDTR()) {
+        if (getOnlineMembers().isEmpty() || isFrozen() || getDeathsTilRaidable() >= getMaxDTR() || getDeathsTilRaidable() >= getMaxDTR()) {
             return;
         }
 
-        setDeathsTilRaidable(getDeathsTilRaidable() + 0.01);
+        double newDTR = getDeathsTilRaidable() + 0.01;
+
+        if (newDTR > getMaxDTR()) {
+            newDTR = getMaxDTR();
+        }
+
+        setDeathsTilRaidable(newDTR);
 
         if (getDeathsTilRaidable() >= getMaxDTR()) {
             new Scheduler(plugin).sync(() -> sendMessage(ChatColor.GREEN + "Your faction is now at max DTR")).run();

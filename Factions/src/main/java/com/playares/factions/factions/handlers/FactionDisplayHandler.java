@@ -82,7 +82,7 @@ public final class FactionDisplayHandler {
         final String dtr = String.format("%.2f", pf.getDeathsTilRaidable());
         String formattedDTR;
 
-        if (pf.getDeathsTilRaidable() >= manager.getPlugin().getFactionConfig().getFactionMaxDTR()) {
+        if (pf.getDeathsTilRaidable() >= pf.getMaxDTR()) {
             formattedDTR = ChatColor.GREEN + dtr + " (Max)";
         } else if (pf.isRaidable()) {
             formattedDTR = ChatColor.DARK_RED + dtr + " (Raid-able)";
@@ -122,6 +122,7 @@ public final class FactionDisplayHandler {
         }
 
         viewer.sendMessage(spacer + ChatColor.GOLD + "Re-invites" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getReinvites());
+        viewer.sendMessage(spacer + ChatColor.GOLD + "Online" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getOnlineMembers().size() + ChatColor.YELLOW + " / " + ChatColor.BLUE + pf.getMembers().size());
 
         new Scheduler(manager.getPlugin()).async(() -> {
             final Map<PlayerFaction.FactionRank, List<String>> namesByRank = Maps.newHashMap();
