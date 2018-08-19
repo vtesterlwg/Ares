@@ -103,6 +103,22 @@ public final class ProfileService implements AresService, Listener {
         }).run();
     }
 
+    public AresProfile getProfileBlocking(UUID uniqueId) {
+        if (getProfile(uniqueId) != null) {
+            return getProfile(uniqueId);
+        }
+
+        return AresProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("id", uniqueId));
+    }
+
+    public AresProfile getProfileBlocking(String username) {
+        if (getProfile(username) != null) {
+            return getProfile(username);
+        }
+
+        return AresProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("username", username));
+    }
+
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerLogin(AsyncPlayerPreLoginEvent event) {
         final UUID uniqueId = event.getUniqueId();
