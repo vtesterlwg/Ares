@@ -56,3 +56,4 @@ factions.sethome.others - Set others homes
 factions.rename.others - Rename others factions
 factions.disband.others - Disband others factions
 factions.freeze.others - Freeze others factions
+factions.dtr.others - Set others faction DTR
