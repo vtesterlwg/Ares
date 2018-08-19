@@ -33,6 +33,25 @@ public final class FactionDisplayHandler {
         this.manager = manager;
     }
 
+    public void updateRally(Player player, SimplePromise promise) {
+        final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
+        final boolean mod = player.hasPermission("factions.mod");
+
+        if (faction == null) {
+            promise.failure("You are not in a faction");
+            return;
+        }
+
+        if (faction.getMember(player.getUniqueId()).getRank().equals(PlayerFaction.FactionRank.MEMBER) && !mod) {
+            promise.failure("Members are not able to perform this action");
+            return;
+        }
+
+        faction.updateRally(player);
+
+        promise.success();
+    }
+
     public void prepareFactionInfo(Player viewer, String name, SimplePromise promise) {
         final Player foundPlayer = Bukkit.getPlayer(name);
 

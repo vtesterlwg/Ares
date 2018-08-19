@@ -349,7 +349,17 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("rally|r")
     @Description("Update your factions rallypoint")
     public void onRally(Player player) {
+        plugin.getFactionManager().getDisplayHandler().updateRally(player, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Rally updated to your location");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("freeze")
