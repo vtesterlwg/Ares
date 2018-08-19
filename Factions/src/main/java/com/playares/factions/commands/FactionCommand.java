@@ -11,7 +11,12 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nonnull;
 
 /*
-Buffer
+/f buffer <faction> <buffer>
+/f reinvite restock <all/faction>
+/f tag <faction> <tag>
+/f freeze <faction> <duration>
+/f unfreeze <faction>
+/f setdtr <faction>
 */
 @CommandAlias("factions|faction|f|teams|team|t")
 public final class FactionCommand extends BaseCommand {
@@ -111,11 +116,33 @@ public final class FactionCommand extends BaseCommand {
     }
 
     @Subcommand("show|who")
+    @Description("View your faction about page")
+    public void onShow(Player player) {
+        plugin.getFactionManager().getDisplayHandler().prepareFactionInfo(player, player.getName(), new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("show|who")
     @Description("View a factions about page")
     @Syntax("<player/faction>")
     @CommandCompletion("@players")
     public void onShow(Player player, String name) {
+        plugin.getFactionManager().getDisplayHandler().prepareFactionInfo(player, name, new SimplePromise() {
+            @Override
+            public void success() {}
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("map")

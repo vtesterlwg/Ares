@@ -33,6 +33,8 @@ public final class Factions extends AresPlugin {
         this.factionConfig.loadValues();
 
         registerMongo(new MongoDB(factionConfig.getDatabaseURI()));
+        getMongo().openConnection();
+
         registerProtocol(ProtocolLibrary.getProtocolManager());
 
         this.factionManager = new FactionManager(this);

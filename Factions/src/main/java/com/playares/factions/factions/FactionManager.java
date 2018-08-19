@@ -7,6 +7,7 @@ import com.playares.commons.base.promise.Promise;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.factions.handlers.FactionCreationHandler;
+import com.playares.factions.factions.handlers.FactionDisplayHandler;
 import com.playares.services.profiles.ProfileService;
 import lombok.Getter;
 import org.bukkit.scheduler.BukkitTask;
@@ -23,6 +24,9 @@ public final class FactionManager {
     public final FactionCreationHandler createHandler;
 
     @Getter
+    public final FactionDisplayHandler displayHandler;
+
+    @Getter
     public final BukkitTask factionTicker;
 
     @Getter
@@ -31,6 +35,7 @@ public final class FactionManager {
     public FactionManager(Factions plugin) {
         this.plugin = plugin;
         this.createHandler = new FactionCreationHandler(this);
+        this.displayHandler = new FactionDisplayHandler(this);
         this.factionRepository = Sets.newConcurrentHashSet();
 
         this.factionTicker = new Scheduler(plugin)
