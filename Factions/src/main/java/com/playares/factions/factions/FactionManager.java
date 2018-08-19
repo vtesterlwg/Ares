@@ -10,6 +10,7 @@ import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.factions.handlers.FactionCreationHandler;
 import com.playares.factions.factions.handlers.FactionDisplayHandler;
+import com.playares.factions.factions.handlers.FactionManageHandler;
 import com.playares.factions.factions.handlers.FactionStaffHandler;
 import com.playares.services.profiles.ProfileService;
 import lombok.Getter;
@@ -30,6 +31,9 @@ public final class FactionManager {
     public final FactionDisplayHandler displayHandler;
 
     @Getter
+    public final FactionManageHandler manageHandler;
+
+    @Getter
     public final FactionStaffHandler staffHandler;
 
     @Getter
@@ -43,6 +47,7 @@ public final class FactionManager {
 
         this.createHandler = new FactionCreationHandler(this);
         this.displayHandler = new FactionDisplayHandler(this);
+        this.manageHandler = new FactionManageHandler(this);
         this.staffHandler = new FactionStaffHandler(this);
 
         this.factionRepository = Sets.newConcurrentHashSet();

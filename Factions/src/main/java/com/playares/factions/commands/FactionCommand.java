@@ -279,7 +279,17 @@ public final class FactionCommand extends BaseCommand {
     @Description("Rename your faction")
     @Syntax("<name>")
     public void onRename(Player player, @Single String name) {
+        plugin.getFactionManager().getManageHandler().rename(player, name, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction name updated");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("rename")
@@ -288,7 +298,17 @@ public final class FactionCommand extends BaseCommand {
     @CommandPermission("factions.rename.others")
     @CommandCompletion("@factions")
     public void onRename(Player player, String faction, String name) {
+        plugin.getFactionManager().getManageHandler().renameOther(player, faction, name, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction name updated");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("disband")

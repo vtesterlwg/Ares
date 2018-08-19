@@ -16,14 +16,12 @@ public final class FactionCreationHandler {
     @Getter
     public final FactionManager manager;
 
-    private final String nameRegex = "^[A-Za-z0-9_.]+$";
-
     public FactionCreationHandler(FactionManager manager) {
         this.manager = manager;
     }
 
     public void createFaction(Player player, String name, SimplePromise promise) {
-        if (!name.matches(nameRegex)) {
+        if (!name.matches("^[A-Za-z0-9_.]+$")) {
             promise.failure("Faction names must only contain characters A-Z, 0-9");
             return;
         }
