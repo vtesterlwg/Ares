@@ -430,6 +430,14 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         public String getDisplayName() {
             return StringUtils.capitaliseAllWords(this.name().toLowerCase().replace("_", "-"));
         }
+
+        public boolean isHigher(FactionRank other) {
+            return this.getWeight() > other.getWeight();
+        }
+
+        public boolean isHigherOrEqual(FactionRank other) {
+            return this.getWeight() >= other.getWeight();
+        }
     }
 
     @AllArgsConstructor

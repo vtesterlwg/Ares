@@ -211,7 +211,17 @@ public final class FactionCommand extends BaseCommand {
     @Description("Kick a player from your faction")
     @Syntax("<player>")
     public void onKick(Player player, String username) {
+        plugin.getFactionManager().getDisbandHandler().kick(player, username, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Player has been kicked");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("claim")
