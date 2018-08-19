@@ -69,7 +69,17 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("leave")
     @Description("Leave your faction")
     public void onLeave(Player player) {
+        plugin.getFactionManager().getDisbandHandler().leave(player, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "You have left the faction");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("home")
