@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.playares.commons.base.promise.Promise;
+import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.factions.handlers.FactionCreationHandler;
@@ -39,8 +40,8 @@ public final class FactionManager {
         this.factionRepository = Sets.newConcurrentHashSet();
 
         this.factionTicker = new Scheduler(plugin)
-                .async(() -> getPlayerFactions().forEach(PlayerFaction::tick))
-                .repeat(0L,plugin.getFactionConfig().getFactionTickInterval() * 20L)
+                .async(() -> getPlayerFactions().stream().filter(f -> f.getNextTick() <= Time.now()).forEach(PlayerFaction::tick))
+                .repeat(0L,5 * 20L)
                 .run();
     }
 

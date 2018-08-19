@@ -133,7 +133,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
             return;
         }
 
-        setDeathsTilRaidable(getDeathsTilRaidable() + 0.1);
+        setDeathsTilRaidable(getDeathsTilRaidable() + 0.01);
 
         if (getDeathsTilRaidable() >= getMaxDTR()) {
             new Scheduler(plugin).sync(() -> sendMessage(ChatColor.GREEN + "Your faction is now at max DTR")).run();

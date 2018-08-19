@@ -8,8 +8,8 @@ factions:
   reinvites: 5 # Reinvites a faction receives after each Palace
   home-height-cap: 100 # Max height a home can be set at
   max-dtr: 7.0 # Max DTR a faction can obtain
-  tick-interval: 180 # Time (in seconds) between each tick
-  tick-subtract-per-player: 5 # Time (in seconds) to subtract from each tick interval based on online players
+  tick-interval: 60 # Time (in seconds) between each tick
+  tick-subtract-per-player: 1 # Time (in seconds) to subtract from each tick interval based on online players
   per-player-dtr-value: 0.4 # How much DTR a player is worth, this determines Max DTR
   naming:
     min: 3 # Minimum name length
