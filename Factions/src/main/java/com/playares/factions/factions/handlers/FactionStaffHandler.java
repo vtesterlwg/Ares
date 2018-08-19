@@ -66,4 +66,20 @@ public final class FactionStaffHandler {
 
         promise.success();
     }
+
+    public void updateDTR(Player player, String name, double dtr, SimplePromise promise) {
+        final PlayerFaction faction = manager.getPlayerFactionByName(name);
+
+        if (faction == null) {
+            promise.failure("Faction not found");
+            return;
+        }
+
+        faction.setDeathsTilRaidable(dtr);
+        faction.sendMessage(ChatColor.GOLD + "Your DTR has been updated to " + ChatColor.YELLOW + String.format("%.2f", dtr));
+
+        Logger.print(player.getName() + " updated " + faction.getName() + "'s DTR to " + dtr);
+
+        promise.success();
+    }
 }

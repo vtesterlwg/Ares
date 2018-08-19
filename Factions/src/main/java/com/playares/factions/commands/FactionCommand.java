@@ -14,7 +14,6 @@ import javax.annotation.Nonnull;
 /f buffer <faction> <buffer>
 /f reinvite restock <all/faction>
 /f tag <faction> <tag>
-/f setdtr <faction>
 */
 @CommandAlias("factions|faction|f|teams|team|t")
 public final class FactionCommand extends BaseCommand {
@@ -342,6 +341,25 @@ public final class FactionCommand extends BaseCommand {
             @Override
             public void success() {
                 player.sendMessage(ChatColor.GREEN + "Faction regeneration has been thawed");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("setdtr")
+    @Description("Update a factions DTR")
+    @Syntax("<faction> <value>")
+    @CommandPermission("factions.dtr.others")
+    @CommandCompletion("@factions")
+    public void onSetDTR(Player player, String name, double dtr) {
+        plugin.getFactionManager().getStaffHandler().updateDTR(player, name, dtr, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction DTR has been updated");
             }
 
             @Override
