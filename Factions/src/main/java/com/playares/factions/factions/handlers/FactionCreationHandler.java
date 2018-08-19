@@ -52,6 +52,7 @@ public final class FactionCreationHandler {
         final PlayerFaction faction = new PlayerFaction(manager.getPlugin(), name);
 
         faction.addMember(player.getUniqueId(), PlayerFaction.FactionRank.LEADER);
+        faction.registerFriendly(player);
 
         manager.getFactionRepository().add(faction);
 
@@ -112,7 +113,7 @@ public final class FactionCreationHandler {
         }
 
         faction.addMember(player.getUniqueId(), PlayerFaction.FactionRank.MEMBER);
-        faction.getScoreboard().getTeam("friendly").addEntry(player.getName());
+        faction.registerFriendly(player);
         faction.getPendingInvites().remove(player.getUniqueId());
 
         if (faction.isReinvited(player.getUniqueId())) {

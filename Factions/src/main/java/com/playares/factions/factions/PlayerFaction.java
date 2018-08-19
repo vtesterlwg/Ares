@@ -258,6 +258,48 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         getOnlineMembers().forEach(online -> timer.addPlayer(Bukkit.getPlayer(online.getUniqueId())));
     }
 
+    public void registerFriendly(Player player) {
+        if (this.scoreboard == null) {
+            return;
+        }
+
+        if (this.scoreboard.getTeam("friendly").hasEntry(player.getName())) {
+            return;
+        }
+
+        this.scoreboard.getTeam("friendly").addEntry(player.getName());
+    }
+
+    public void registerAlly(Player player) {
+        if (this.scoreboard == null) {
+            return;
+        }
+
+        if (this.scoreboard.getTeam("ally").hasEntry(player.getName())) {
+            return;
+        }
+
+        this.scoreboard.getTeam("ally").addEntry(player.getName());
+    }
+
+    public void unregister() {
+        if (this.scoreboard == null) {
+            return;
+        }
+
+        this.scoreboard.getTeam("friendly").unregister();
+        this.scoreboard.getTeam("ally").unregister();
+    }
+
+    public void unregister(Player player) {
+        if (this.scoreboard == null) {
+            return;
+        }
+
+        this.scoreboard.getTeam("friendly").removeEntry(player.getName());
+        this.scoreboard.getTeam("ally").removeEntry(player.getName());
+    }
+
     public void configureScoreboard() {
         if (this.scoreboard != null) {
             return;
