@@ -14,8 +14,6 @@ import javax.annotation.Nonnull;
 /f buffer <faction> <buffer>
 /f reinvite restock <all/faction>
 /f tag <faction> <tag>
-/f freeze <faction> <duration>
-/f unfreeze <faction>
 /f setdtr <faction>
 */
 @CommandAlias("factions|faction|f|teams|team|t")
@@ -325,6 +323,25 @@ public final class FactionCommand extends BaseCommand {
             @Override
             public void success() {
                 player.sendMessage(ChatColor.GREEN + "Faction regeneration has been frozen");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("unfreeze|thaw")
+    @Description("Unfreeze a factions DTR")
+    @Syntax("<faction>")
+    @CommandPermission("factions.freeze.others")
+    @CommandCompletion("@factions")
+    public void onUnfreeze(Player player, String faction) {
+        plugin.getFactionManager().getStaffHandler().unfreeze(player, faction, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction regeneration has been thawed");
             }
 
             @Override
