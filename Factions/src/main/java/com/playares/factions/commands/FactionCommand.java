@@ -143,14 +143,34 @@ public final class FactionCommand extends BaseCommand {
     @Syntax("<player>")
     @CommandCompletion("@players")
     public void onInvite(Player player, String username) {
+        plugin.getFactionManager().getCreateHandler().sendInvite(player, username, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Invitation sent");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("uninvite|uninv")
     @Description("Revoke a players invitation to your faction")
     @Syntax("<player>")
     public void onUninvite(Player player, String username) {
+        plugin.getFactionManager().getCreateHandler().revokeInvite(player, username, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Invitation has been revoked");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("kick")

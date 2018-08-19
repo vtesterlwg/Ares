@@ -8,6 +8,7 @@ import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.timer.BossTimer;
+import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.stats.Statistics;
 import com.playares.factions.timers.FactionTimer;
@@ -135,7 +136,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         setDeathsTilRaidable(getDeathsTilRaidable() + 0.1);
 
         if (getDeathsTilRaidable() >= getMaxDTR()) {
-            sendMessage(ChatColor.GREEN + "Your faction is now at max DTR");
+            new Scheduler(plugin).sync(() -> sendMessage(ChatColor.GREEN + "Your faction is now at max DTR")).run();
         }
     }
 

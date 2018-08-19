@@ -1,12 +1,17 @@
 package com.playares.factions.factions;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.playares.commons.base.promise.Promise;
+import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.factions.handlers.FactionCreationHandler;
 import com.playares.services.profiles.ProfileService;
 import lombok.Getter;
+import org.bukkit.scheduler.BukkitTask;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -18,12 +23,20 @@ public final class FactionManager {
     public final FactionCreationHandler createHandler;
 
     @Getter
+    public final BukkitTask factionTicker;
+
+    @Getter
     public final Set<Faction> factionRepository;
 
     public FactionManager(Factions plugin) {
         this.plugin = plugin;
         this.createHandler = new FactionCreationHandler(this);
         this.factionRepository = Sets.newConcurrentHashSet();
+
+        this.factionTicker = new Scheduler(plugin)
+                .async(() -> getPlayerFactions().forEach(PlayerFaction::tick))
+                .repeat(0L,plugin.getFactionConfig().getFactionTickInterval() * 20L)
+                .run();
     }
 
     public Faction getFactionById(UUID uniqueId) {
@@ -95,5 +108,27 @@ public final class FactionManager {
                 .filter(sf -> sf.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public ImmutableList<PlayerFaction> getPlayerFactions() {
+        final List<PlayerFaction> result = Lists.newArrayList();
+
+        factionRepository.stream().filter(f -> f instanceof PlayerFaction).forEach(pf -> {
+            final PlayerFaction faction = (PlayerFaction)pf;
+            result.add(faction);
+        });
+
+        return ImmutableList.copyOf(result);
+    }
+
+    public ImmutableList<ServerFaction> getServerFactions() {
+        final List<ServerFaction> result = Lists.newArrayList();
+
+        factionRepository.stream().filter(f -> f instanceof ServerFaction).forEach(sf -> {
+            final ServerFaction faction = (ServerFaction)sf;
+            result.add(faction);
+        });
+
+        return ImmutableList.copyOf(result);
     }
 }
