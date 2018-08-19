@@ -264,7 +264,17 @@ public final class FactionCommand extends BaseCommand {
     @Description("Send an announcement to all members in the faction")
     @Syntax("<message>")
     public void onAnnouncement(Player player, String message) {
+        plugin.getFactionManager().getDisplayHandler().updateAnnouncement(player, message, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction announcement has been updated");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("promote")
