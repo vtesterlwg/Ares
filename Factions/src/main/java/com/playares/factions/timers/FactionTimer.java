@@ -12,6 +12,12 @@ public abstract class FactionTimer extends Timer {
     @Getter
     public final FactionTimerType type;
 
+    public FactionTimer(PlayerFaction owner, FactionTimerType type, long milliseconds) {
+        super(milliseconds);
+        this.owner = owner;
+        this.type = type;
+    }
+
     public FactionTimer(PlayerFaction owner, FactionTimerType type, int seconds) {
         super(seconds);
         this.owner = owner;

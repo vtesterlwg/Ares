@@ -315,6 +315,25 @@ public final class FactionCommand extends BaseCommand {
 
     }
 
+    @Subcommand("freeze")
+    @Description("Freeze a factions DTR")
+    @Syntax("<faction> <time>")
+    @CommandPermission("factions.freeze.others")
+    @CommandCompletion("@factions")
+    public void onFreeze(Player player, String faction, String time) {
+        plugin.getFactionManager().getStaffHandler().freeze(player, faction, time, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction regeneration has been frozen");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
     @Subcommand("help")
     @Description("View a list of commands")
     public void onHelp(Player player) {

@@ -5,6 +5,10 @@ import com.playares.factions.timers.FactionTimer;
 import org.bukkit.ChatColor;
 
 public final class DTRFreezeTimer extends FactionTimer {
+    public DTRFreezeTimer(PlayerFaction owner, long milliseconds) {
+        super(owner, FactionTimerType.FREEZE, milliseconds);
+    }
+
     public DTRFreezeTimer(PlayerFaction owner, int seconds) {
         super(owner, FactionTimerType.FREEZE, seconds);
     }

@@ -58,6 +58,7 @@ public final class FactionDisplayHandler {
     public void displayFactionInfo(Player viewer, Faction faction) {
         final ProfileService profileService = (ProfileService)manager.getPlugin().getService(ProfileService.class);
         final String spacer = ChatColor.RESET + " " + ChatColor.RESET + " " + ChatColor.YELLOW + " - " + ChatColor.RESET;
+        final boolean mod = viewer.hasPermission("factions.mod");
 
         if (faction instanceof ServerFaction) {
             final ServerFaction sf = (ServerFaction)faction;
@@ -92,6 +93,18 @@ public final class FactionDisplayHandler {
         }
 
         viewer.sendMessage(ChatColor.YELLOW + "--------------------" + ChatColor.GOLD + "[ " + ChatColor.WHITE + faction.getName() + ChatColor.GOLD + " ]" + ChatColor.YELLOW + "--------------------");
+
+        if (pf.getAnnouncement() != null && (pf.isMember(viewer.getUniqueId()) || mod)) {
+            viewer.sendMessage(spacer + ChatColor.GOLD + "Announcement" + ChatColor.YELLOW + ": " + ChatColor.LIGHT_PURPLE + pf.getAnnouncement());
+        }
+
+        if (pf.getRally() != null && (pf.isMember(viewer.getUniqueId()) || mod)) {
+            viewer.sendMessage(spacer + ChatColor.GOLD + "Rally" + ChatColor.YELLOW + ": " +
+                    ChatColor.BLUE + (int)(Math.round(pf.getRally().getX())) + ChatColor.YELLOW + ", " +
+                    ChatColor.BLUE + (int)(Math.round(pf.getRally().getY())) + ChatColor.YELLOW + ", " +
+                    ChatColor.BLUE + (int)(Math.round(pf.getRally().getZ())) + ChatColor.YELLOW + ", " +
+                    ChatColor.BLUE + StringUtils.capitaliseAllWords(pf.getRally().getBukkit().getWorld().getEnvironment().name().toLowerCase().replace("_", " ")));
+        }
 
         if (pf.getHome() != null) {
             viewer.sendMessage(spacer + ChatColor.GOLD + "Home" + ChatColor.YELLOW + ": " +

@@ -5,10 +5,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.playares.commons.base.promise.Promise;
 import com.playares.commons.base.util.Time;
+import com.playares.commons.bukkit.timer.Timer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.factions.handlers.FactionCreationHandler;
 import com.playares.factions.factions.handlers.FactionDisplayHandler;
+import com.playares.factions.factions.handlers.FactionStaffHandler;
 import com.playares.services.profiles.ProfileService;
 import lombok.Getter;
 import org.bukkit.scheduler.BukkitTask;
@@ -28,6 +30,9 @@ public final class FactionManager {
     public final FactionDisplayHandler displayHandler;
 
     @Getter
+    public final FactionStaffHandler staffHandler;
+
+    @Getter
     public final BukkitTask factionTicker;
 
     @Getter
@@ -35,14 +40,26 @@ public final class FactionManager {
 
     public FactionManager(Factions plugin) {
         this.plugin = plugin;
+
         this.createHandler = new FactionCreationHandler(this);
         this.displayHandler = new FactionDisplayHandler(this);
+        this.staffHandler = new FactionStaffHandler(this);
+
         this.factionRepository = Sets.newConcurrentHashSet();
 
         this.factionTicker = new Scheduler(plugin)
-                .async(() -> getPlayerFactions().stream().filter(f -> f.getNextTick() <= Time.now()).forEach(PlayerFaction::tick))
-                .repeat(0L,5 * 20L)
-                .run();
+                .async(() -> getPlayerFactions().forEach(faction -> {
+                    if (faction.getNextTick() <= Time.now()) {
+                        faction.tick();
+                    }
+
+                    if (!faction.getTimers().isEmpty()) {
+                        faction.getTimers().stream().filter(Timer::isExpired).forEach(expired -> {
+                            expired.onFinish();
+                            faction.getTimers().remove(expired);
+                        });
+                    }
+                })).repeat(0L, 20L).run();
     }
 
     public Faction getFactionById(UUID uniqueId) {

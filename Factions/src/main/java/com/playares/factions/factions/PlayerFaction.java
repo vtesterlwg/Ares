@@ -42,7 +42,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
     @Getter @Setter
     public String name;
 
-    @Setter
+    @Getter
     public String announcement;
 
     @Getter
@@ -253,10 +253,41 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
                 player.getLocation().getBlockX() + " " + player.getLocation().getBlockY() + " " + player.getLocation().getBlockZ() + " " +
                 StringUtils.capitaliseAllWords(player.getLocation().getWorld().getEnvironment().name().toLowerCase().replace("_", " "));
 
-        final BossTimer timer = new BossTimer(plugin, text, BarColor.BLUE, BarStyle.SEGMENTED_10, BossTimer.BossTimerDuration.TEN_SECONDS);
-
         sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " updated your faction rally");
+
+        final BossTimer timer = new BossTimer(plugin, text, BarColor.BLUE, BarStyle.SEGMENTED_10, BossTimer.BossTimerDuration.TEN_SECONDS);
         getOnlineMembers().forEach(online -> timer.addPlayer(Bukkit.getPlayer(online.getUniqueId())));
+        timer.start();
+    }
+
+    public void updateAnnouncement(String message) {
+        this.announcement = message;
+
+        sendMessage(ChatColor.BLUE + "Faction Announcement" + ChatColor.AQUA + ": " + message);
+
+        final BossTimer timer = new BossTimer(plugin, ChatColor.GOLD + "New faction announcement", BarColor.GREEN, BarStyle.SEGMENTED_10, BossTimer.BossTimerDuration.FIVE_SECONDS);
+        getOnlineMembers().forEach(online -> timer.addPlayer(Bukkit.getPlayer(online.getUniqueId())));
+        timer.start();
+    }
+
+    public void addTimer(FactionTimer timer) {
+        final FactionTimer existing = getTimer(timer.getType());
+
+        if (existing != null) {
+            getTimers().remove(existing);
+        }
+
+        getTimers().add(timer);
+    }
+
+    public void removeTimer(FactionTimer.FactionTimerType type) {
+        final FactionTimer timer = getTimer(type);
+
+        if (timer == null) {
+            return;
+        }
+
+        getTimers().remove(timer);
     }
 
     public void registerFriendly(Player player) {
