@@ -106,6 +106,7 @@ public final class FactionDisbandHandler {
                 kickedPlayer.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
             }
 
+            faction.sendMessage(ChatColor.YELLOW + kickedProfile.getUsername() + ChatColor.GOLD + " has been " + ChatColor.RED + "kicked" + ChatColor.GOLD + " from the faction by " + ChatColor.YELLOW + player.getName());
             faction.getMembers().remove(kicked);
 
             Logger.print(player.getName() + " kicked " + kickedProfile.getUsername() + " from " + faction.getName());
