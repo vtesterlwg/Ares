@@ -255,9 +255,11 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
     public void updateRally(Player player) {
         this.rally = new PLocatable(player);
 
-        final String text = ChatColor.GOLD + "RALLY" + ChatColor.YELLOW + ": " + ChatColor.BLUE +
-                player.getLocation().getBlockX() + " " + player.getLocation().getBlockY() + " " + player.getLocation().getBlockZ() + " " +
-                StringUtils.capitaliseAllWords(player.getLocation().getWorld().getEnvironment().name().toLowerCase().replace("_", " "));
+        final String text = ChatColor.GOLD + "Rally at " +
+                ChatColor.LIGHT_PURPLE + "X: " + player.getLocation().getBlockX() + ChatColor.YELLOW + ", " +
+                ChatColor.LIGHT_PURPLE + "Y: " + player.getLocation().getBlockY() + ChatColor.YELLOW + ", " +
+                ChatColor.LIGHT_PURPLE + "Z: " + player.getLocation().getBlockZ() + ChatColor.YELLOW + ", " +
+                ChatColor.LIGHT_PURPLE + "World: " + StringUtils.capitaliseAllWords(player.getLocation().getWorld().getEnvironment().name().toLowerCase().replace("_", " "));
 
         sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " updated your faction rally");
 
