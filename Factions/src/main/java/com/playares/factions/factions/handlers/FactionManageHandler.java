@@ -1,10 +1,12 @@
 package com.playares.factions.factions.handlers;
 
 import com.playares.commons.base.promise.SimplePromise;
+import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
+import com.playares.factions.factions.ServerFaction;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -69,7 +71,7 @@ public final class FactionManageHandler {
         promise.success();
     }
 
-    public void renameOther(Player player, String factionName, String name, SimplePromise promise) {
+    public void rename(Player player, String factionName, String name, SimplePromise promise) {
         final Faction faction = manager.getFactionByName(factionName);
 
         if (faction == null) {
@@ -111,6 +113,55 @@ public final class FactionManageHandler {
             pf.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " has updated the faction name to " + ChatColor.YELLOW + name);
         }
 
+        promise.success();
+    }
+
+    public void setHome(Player player, SimplePromise promise) {
+        final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
+        final boolean mod = player.hasPermission("factions.mod");
+
+        if (faction == null) {
+            promise.failure("You are not in a faction");
+            return;
+        }
+
+        if (faction.getMember(player.getUniqueId()).getRank().equals(PlayerFaction.FactionRank.MEMBER) && !mod) {
+            promise.failure("Members are not able to perform this action");
+            return;
+        }
+
+        if (player.getLocation().getY() >= manager.getPlugin().getFactionConfig().getFactionHomeCap()) {
+            promise.failure("Location is too high");
+            return;
+        }
+
+        // TODO: Check if location is inside owned claims, cancel if not
+
+        faction.updateHome(player);
+
+        promise.success();
+    }
+
+    public void setHome(Player player, String factionName, SimplePromise promise) {
+        final Faction faction = manager.getFactionByName(factionName);
+
+        if (faction == null) {
+            promise.failure("Faction not found");
+            return;
+        }
+
+        // TODO: Check if location is inside owned claims, cancel if not
+
+        if (faction instanceof ServerFaction) {
+            final ServerFaction sf = (ServerFaction)faction;
+            sf.setLocation(new PLocatable(player));
+            Logger.print(player.getName() + " updated location for " + sf.getName());
+            promise.success();
+            return;
+        }
+
+        final PlayerFaction pf = (PlayerFaction)faction;
+        pf.updateHome(player);
         promise.success();
     }
 }
