@@ -129,7 +129,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
 
         setNextTick(next);
 
-        if (getOnlineMembers().isEmpty() || isFrozen() || getDeathsTilRaidable() >= getMaxDTR() || getDeathsTilRaidable() >= getMaxDTR()) {
+        if (getOnlineMembers().isEmpty() || isFrozen() || getDeathsTilRaidable() == getMaxDTR()) {
             return;
         }
 
@@ -262,16 +262,6 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " updated your faction rally");
 
         final BossTimer timer = new BossTimer(plugin, text, BarColor.BLUE, BarStyle.SEGMENTED_10, BossTimer.BossTimerDuration.TEN_SECONDS);
-        getOnlineMembers().forEach(online -> timer.addPlayer(Bukkit.getPlayer(online.getUniqueId())));
-        timer.start();
-    }
-
-    public void updateAnnouncement(String message) {
-        this.announcement = message;
-
-        sendMessage(ChatColor.BLUE + "Faction Announcement" + ChatColor.AQUA + ": " + message);
-
-        final BossTimer timer = new BossTimer(plugin, ChatColor.GOLD + "New faction announcement", BarColor.GREEN, BarStyle.SEGMENTED_10, BossTimer.BossTimerDuration.FIVE_SECONDS);
         getOnlineMembers().forEach(online -> timer.addPlayer(Bukkit.getPlayer(online.getUniqueId())));
         timer.start();
     }
