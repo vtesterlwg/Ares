@@ -22,6 +22,13 @@ public class BLocatable implements Locatable, MongoDocument<BLocatable> {
     @Getter @Setter
     double z;
 
+    public BLocatable(@Nonnull Block block) {
+        this.worldName = block.getWorld().getName();
+        this.x = block.getX();
+        this.y = block.getY();
+        this.z = block.getZ();
+    }
+
     public BLocatable(@Nonnull String worldName, double x, double y, double z) {
         this.worldName = worldName;
         this.x = x;
