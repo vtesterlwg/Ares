@@ -2,6 +2,7 @@ package com.playares.factions.factions;
 
 import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.bukkit.location.PLocatable;
+import com.playares.factions.Factions;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -10,6 +11,9 @@ import org.bukkit.ChatColor;
 import java.util.UUID;
 
 public final class ServerFaction implements Faction, MongoDocument<ServerFaction> {
+    @Getter
+    public final Factions plugin;
+
     @Getter
     public UUID uniqueId;
 
@@ -25,20 +29,27 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
     @Getter @Setter
     public FactionFlag flag;
 
-    public ServerFaction() {
+    @Getter @Setter
+    public double buffer;
+
+    public ServerFaction(Factions plugin) {
+        this.plugin = plugin;
         this.uniqueId = UUID.randomUUID();
         this.name = null;
         this.displayName = null;
         this.location = null;
         this.flag = null;
+        this.buffer = plugin.getFactionConfig().getDefaultServerClaimBuffer();
     }
 
-    public ServerFaction(String name) {
+    public ServerFaction(Factions plugin, String name) {
+        this.plugin = plugin;
         this.uniqueId = UUID.randomUUID();
         this.name = name;
         this.displayName = name;
         this.location = null;
-        this.flag = null;
+        this.flag = FactionFlag.SAFEZONE;
+        this.buffer = plugin.getFactionConfig().getDefaultServerClaimBuffer();
     }
 
     @Override
@@ -55,6 +66,8 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
         this.flag = (document.get("flag") != null) ?
                 FactionFlag.valueOf(document.getString("flag")) : null;
 
+        this.buffer = document.getDouble("buffer");
+
         return this;
     }
 
@@ -65,7 +78,8 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
                 .append("name", name)
                 .append("displayName", displayName)
                 .append("location", (location != null) ? location.toDocument() : null)
-                .append("flag", (flag != null) ? flag.toString() : null);
+                .append("flag", (flag != null) ? flag.toString() : null)
+                .append("buffer", buffer);
     }
 
     public enum FactionFlag {
