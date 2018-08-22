@@ -155,7 +155,15 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("map")
     @Description("View a map of all nearby factions")
     public void onMap(Player player) {
+        plugin.getClaimManager().getMapHandler().renderMap(player, new SimplePromise() {
+            @Override
+            public void success() {}
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("list")
@@ -227,17 +235,27 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("claim")
     @Description("Begin the claiming process for your faction")
     public void onClaim(Player player) {
+        plugin.getClaimManager().getCreationHandler().startClaiming(player, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GOLD + "You have been given a Claiming Stick");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
-    @Subcommand("claim")
+    /*@Subcommand("claim")
     @Description("Begin the claiming process for your faction")
     @Syntax("[faction]")
     @CommandPermission("factions.claim.others")
     @CommandCompletion("@factions")
     public void onClaim(Player player, String faction) {
 
-    }
+    }*/
 
     @Subcommand("subclaim")
     @Description("Subclaim the chest you are looking at")

@@ -1,8 +1,13 @@
 package com.playares.factions.players;
 
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.factions.addons.stats.Statistics;
+import com.playares.factions.claims.pillars.ClaimPillar;
+import com.playares.factions.claims.pillars.MapPillar;
+import com.playares.factions.claims.pillars.Pillar;
 import com.playares.factions.factions.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +15,8 @@ import org.bson.Document;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public final class FactionPlayer implements MongoDocument<FactionPlayer> {
@@ -26,6 +33,9 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     public PlayerFaction faction;
 
     @Getter
+    public Set<Pillar> pillars;
+
+    @Getter
     public Statistics stats;
 
     public FactionPlayer() {
@@ -33,6 +43,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = null;
         this.balance = 0.0;
         this.faction = null;
+        this.pillars = Sets.newHashSet();
         this.stats = null;
     }
 
@@ -41,6 +52,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = player.getName();
         this.balance = 0.0; // TODO: Get from economyconfig
         this.faction = null;
+        this.pillars = Sets.newHashSet();
         this.stats = new Statistics();
     }
 
@@ -64,6 +76,33 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         if (getPlayer() != null) {
             Players.sendActionBar(getPlayer(), text);
         }
+    }
+
+    public void hideAllPillars() {
+        pillars.forEach(Pillar::hide);
+        pillars.clear();
+    }
+
+    public void hideAllClaimPillars() {
+        final List<Pillar> toRemove = Lists.newArrayList();
+
+        pillars.stream().filter(pillar -> pillar instanceof ClaimPillar).forEach(claimPillar -> {
+            claimPillar.hide();
+            toRemove.add(claimPillar);
+        });
+
+        pillars.removeAll(toRemove);
+    }
+
+    public void hideAllMapPillars() {
+        final List<Pillar> toRemove = Lists.newArrayList();
+
+        pillars.stream().filter(pillar -> pillar instanceof MapPillar).forEach(mapPillar -> {
+            mapPillar.hide();
+            toRemove.add(mapPillar);
+        });
+
+        pillars.removeAll(toRemove);
     }
 
     @Override
