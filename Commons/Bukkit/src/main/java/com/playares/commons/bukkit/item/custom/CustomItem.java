@@ -40,7 +40,7 @@ public interface CustomItem {
             getLore().add(ChatColor.RED + "Unrepairable");
         }
 
-        if (!isSoulbound()) {
+        if (isSoulbound()) {
             getLore().add(ChatColor.RED + "Soulbound");
         }
 
