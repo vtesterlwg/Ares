@@ -6,7 +6,6 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.timers.FactionTimer;
-import com.playares.factions.timers.FactionTimerFactory;
 import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -36,7 +35,7 @@ public final class FactionStaffHandler {
             return;
         }
 
-        faction.addTimer(FactionTimerFactory.createFreezeTimer(faction, ms));
+        faction.addTimer(new DTRFreezeTimer(faction, ms));
         faction.sendMessage(ChatColor.RED + "Your power has been frozen for " + ChatColor.YELLOW + Time.convertToRemaining(ms));
 
         Logger.print(player.getName() + " froze " + faction.getName() + "'s power for " + Time.convertToRemaining(ms));
