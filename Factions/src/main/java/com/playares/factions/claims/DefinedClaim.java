@@ -9,6 +9,7 @@ import com.playares.commons.bukkit.location.Locatable;
 import com.playares.factions.Factions;
 import com.playares.factions.factions.Faction;
 import lombok.Getter;
+import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -27,13 +28,13 @@ public final class DefinedClaim implements Claimable, MongoDocument<DefinedClaim
     @Getter
     public UUID ownerId;
 
-    @Getter
+    @Getter @Setter
     public double x1, y1, z1;
 
-    @Getter
+    @Getter @Setter
     public double x2, y2, z2;
 
-    @Getter
+    @Getter @Setter
     public String worldName;
 
     public DefinedClaim(Factions plugin) {

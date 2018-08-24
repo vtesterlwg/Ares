@@ -185,6 +185,9 @@ public final class DefinedClaimBuilder {
                 }
 
                 pf.setBalance(pf.getBalance() - calculateValue());
+
+                claim.setY1(0);
+                claim.setY2(256);
             }
 
             new Scheduler(plugin).sync(() -> promise.success(claim)).run();
