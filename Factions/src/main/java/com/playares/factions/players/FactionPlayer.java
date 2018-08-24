@@ -9,6 +9,7 @@ import com.playares.factions.claims.pillars.ClaimPillar;
 import com.playares.factions.claims.pillars.MapPillar;
 import com.playares.factions.claims.pillars.Pillar;
 import com.playares.factions.factions.PlayerFaction;
+import com.playares.factions.timers.PlayerTimer;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -33,6 +34,9 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     public PlayerFaction faction;
 
     @Getter
+    public Set<PlayerTimer> timers;
+
+    @Getter
     public Set<Pillar> pillars;
 
     @Getter
@@ -43,6 +47,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = null;
         this.balance = 0.0;
         this.faction = null;
+        this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.stats = null;
     }
@@ -52,6 +57,17 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = player.getName();
         this.balance = 0.0; // TODO: Get from economyconfig
         this.faction = null;
+        this.timers = Sets.newConcurrentHashSet();
+        this.pillars = Sets.newHashSet();
+        this.stats = new Statistics();
+    }
+
+    public FactionPlayer(UUID uniqueId, String username) {
+        this.uniqueId = uniqueId;
+        this.username = username;
+        this.balance = 0.0;
+        this.faction = null;
+        this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.stats = new Statistics();
     }
