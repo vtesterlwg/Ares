@@ -8,6 +8,7 @@ import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.timer.Timer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
+import com.playares.factions.players.handlers.PlayerFactionHandler;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
@@ -21,6 +22,9 @@ public final class PlayerManager {
     public final Factions plugin;
 
     @Getter
+    public final PlayerFactionHandler factionHandler;
+
+    @Getter
     public final Set<FactionPlayer> playerRepository;
 
     @Getter
@@ -31,6 +35,7 @@ public final class PlayerManager {
 
     public PlayerManager(Factions plugin) {
         this.plugin = plugin;
+        this.factionHandler = new PlayerFactionHandler(this);
         this.playerRepository = Sets.newConcurrentHashSet();
 
         this.displayUpdater = new Scheduler(plugin).async(() -> playerRepository.stream().filter(profile -> !profile.getTimers().isEmpty()).forEach(profile -> {
