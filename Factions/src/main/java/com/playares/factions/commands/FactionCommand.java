@@ -85,7 +85,15 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("home")
     @Description("Return to your faction home")
     public void onHome(Player player) {
+        plugin.getPlayerManager().getFactionHandler().attemptHome(player, new SimplePromise() {
+            @Override
+            public void success() {}
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("stuck")
