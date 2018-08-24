@@ -19,6 +19,9 @@ public final class ClaimPillar implements Pillar {
     @Getter
     public final BLocatable startLocation;
 
+    @Getter
+    public final List<BLocatable> blocks;
+
     @Getter @Setter
     public boolean drawn;
 
@@ -26,6 +29,7 @@ public final class ClaimPillar implements Pillar {
         this.viewer = viewer;
         this.type = type;
         this.startLocation = startLocation;
+        this.blocks = Lists.newArrayList();
         this.drawn = false;
     }
 

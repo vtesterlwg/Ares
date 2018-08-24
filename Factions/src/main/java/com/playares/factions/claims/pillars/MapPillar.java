@@ -17,6 +17,9 @@ public final class MapPillar implements Pillar {
     public final BLocatable startLocation;
 
     @Getter
+    public final List<BLocatable> blocks;
+
+    @Getter
     public final Material material;
 
     @Getter @Setter
@@ -25,12 +28,8 @@ public final class MapPillar implements Pillar {
     public MapPillar(Player viewer, BLocatable startLocation, Material material) {
         this.viewer = viewer;
         this.startLocation = startLocation;
+        this.blocks = Lists.newArrayList();
         this.material = material;
         this.drawn = false;
-    }
-
-    @Override
-    public List<BLocatable> getBlocks() {
-        return Lists.newArrayList();
     }
 }

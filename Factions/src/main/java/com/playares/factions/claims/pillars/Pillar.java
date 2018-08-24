@@ -63,7 +63,5 @@ public interface Pillar {
             final Block block = location.getBukkit();
             block.getState().update();
         });
-
-        getBlocks().clear();
     }
 }
