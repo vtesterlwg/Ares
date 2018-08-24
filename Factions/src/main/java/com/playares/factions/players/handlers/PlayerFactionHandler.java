@@ -2,6 +2,7 @@ package com.playares.factions.players.handlers;
 
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.location.PLocatable;
+import com.playares.commons.bukkit.util.Players;
 import com.playares.factions.claims.DefinedClaim;
 import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.PlayerFaction;
@@ -84,13 +85,13 @@ public final class PlayerFactionHandler {
                 }
             }
 
-            player.teleport(faction.getHome().getBukkit());
+            Players.teleportWithVehicle(manager.getPlugin(), player, faction.getHome().getBukkit());
             player.sendMessage(ChatColor.GREEN + "Returned to faction home");
 
             return;
         }
 
-        profile.getTimers().add(new HomeTimer(player.getUniqueId(), faction, manager.getPlugin().getFactionConfig().getTimerHome()));
+        profile.getTimers().add(new HomeTimer(manager.getPlugin(), player.getUniqueId(), faction, manager.getPlugin().getFactionConfig().getTimerHome()));
 
         player.sendMessage(ChatColor.YELLOW + "You will return home in " + ChatColor.AQUA + manager.getPlugin().getFactionConfig().getTimerHome() + " seconds" + ChatColor.YELLOW + "." +
                 " Moving or taking damage will cancel this timer");

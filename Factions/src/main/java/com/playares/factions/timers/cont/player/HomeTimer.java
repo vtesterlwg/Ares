@@ -1,5 +1,7 @@
 package com.playares.factions.timers.cont.player;
 
+import com.playares.commons.bukkit.util.Players;
+import com.playares.factions.Factions;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.timers.PlayerTimer;
 import lombok.Getter;
@@ -11,10 +13,14 @@ import java.util.UUID;
 
 public final class HomeTimer extends PlayerTimer {
     @Getter
+    public final Factions plugin;
+
+    @Getter
     public final PlayerFaction faction;
 
-    public HomeTimer(UUID owner, PlayerFaction faction, int seconds) {
+    public HomeTimer(Factions plugin, UUID owner, PlayerFaction faction, int seconds) {
         super(owner, PlayerTimerType.HOME, seconds);
+        this.plugin = plugin;
         this.faction = faction;
     }
 
@@ -31,7 +37,7 @@ public final class HomeTimer extends PlayerTimer {
             return;
         }
 
-        player.teleport(faction.getHome().getBukkit());
+        Players.teleportWithVehicle(plugin, player, faction.getHome().getBukkit());
         player.sendMessage(ChatColor.GREEN + "Returned to faction home");
     }
 }

@@ -13,6 +13,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -54,6 +55,23 @@ public final class Players {
 
     public static void sendActionBar(Player player, String text) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(text));
+    }
+
+    public static void teleportWithVehicle(AresPlugin plugin, Player player, Location location) {
+        final Entity vehicle = player.getVehicle();
+
+        if (vehicle == null) {
+            player.teleport(location);
+            return;
+        }
+
+        player.teleport(location);
+
+        new Scheduler(plugin).sync(() -> {
+            vehicle.teleport(location);
+
+            new Scheduler(plugin).sync(() -> vehicle.addPassenger(player)).delay(5L).run();
+        }).delay(5L).run();
     }
 
     public static void sendSignChange(AresPlugin plugin, Player player, Location location, String[] lines, long duration) {
