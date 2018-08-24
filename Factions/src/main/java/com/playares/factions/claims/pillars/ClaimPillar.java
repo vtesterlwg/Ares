@@ -14,13 +14,17 @@ public final class ClaimPillar implements Pillar {
     public final Player viewer;
 
     @Getter
+    public final ClaimPillarType type;
+
+    @Getter
     public final BLocatable startLocation;
 
     @Getter @Setter
     public boolean drawn;
 
-    public ClaimPillar(Player viewer, BLocatable startLocation) {
+    public ClaimPillar(Player viewer, ClaimPillarType type, BLocatable startLocation) {
         this.viewer = viewer;
+        this.type = type;
         this.startLocation = startLocation;
         this.drawn = false;
     }
@@ -30,8 +34,7 @@ public final class ClaimPillar implements Pillar {
         return Material.GOLD_BLOCK;
     }
 
-    @Override
-    public List<BLocatable> getBlocks() {
-        return Lists.newArrayList();
+    public enum ClaimPillarType {
+        A, B
     }
 }
