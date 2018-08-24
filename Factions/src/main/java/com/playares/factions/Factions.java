@@ -14,6 +14,7 @@ import com.playares.factions.items.ClaimingStick;
 import com.playares.factions.listener.ClaimBuilderListener;
 import com.playares.factions.listener.DataListener;
 import com.playares.factions.listener.PillarListener;
+import com.playares.factions.listener.PlayerTimerListener;
 import com.playares.factions.players.PlayerManager;
 import com.playares.services.classes.ClassService;
 import com.playares.services.customevents.CustomEventService;
@@ -69,6 +70,7 @@ public final class Factions extends AresPlugin {
         registerListener(new ClaimBuilderListener(this));
         registerListener(new DataListener(this));
         registerListener(new PillarListener(this));
+        registerListener(new PlayerTimerListener(this));
 
         registerService(new ClassService(this));
         registerService(new CustomEventService(this));
