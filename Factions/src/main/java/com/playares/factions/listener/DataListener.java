@@ -4,7 +4,6 @@ import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.players.FactionPlayer;
 import com.playares.factions.players.PlayerDAO;
-import com.playares.factions.timers.cont.player.EnderpearlTimer;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -24,7 +23,6 @@ public final class DataListener implements Listener {
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onLogin(AsyncPlayerPreLoginEvent event) {
         final FactionPlayer profile = plugin.getPlayerManager().loadPlayer(event.getUniqueId(), event.getName());
-        profile.getTimers().add(new EnderpearlTimer(profile.getUniqueId(), 30)); // TODO: Debug, remove when finished
         plugin.getPlayerManager().getPlayerRepository().add(profile);
     }
 
