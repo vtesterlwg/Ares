@@ -20,6 +20,12 @@ public abstract class PlayerTimer extends Timer {
         this.type = type;
     }
 
+    public PlayerTimer(UUID owner, PlayerTimerType type, long milliseconds) {
+        super(milliseconds);
+        this.owner = owner;
+        this.type = type;
+    }
+
     @AllArgsConstructor
     public enum PlayerTimerType {
         ENDERPEARL(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Enderpearl", true, true),
