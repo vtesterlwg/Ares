@@ -53,6 +53,11 @@ public final class PlayerFactionHandler {
             return;
         }
 
+        if (profile.hasTimer(PlayerTimer.PlayerTimerType.PROTECTION)) {
+            promise.failure("You can not warp home while you have PvP Protection");
+            return;
+        }
+
         if (!player.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
             promise.failure("You can only warp home in the Overworld");
             return;
