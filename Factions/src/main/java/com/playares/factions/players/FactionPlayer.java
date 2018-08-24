@@ -94,6 +94,15 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         }
     }
 
+    public ClaimPillar getExistingClaimPillar(ClaimPillar.ClaimPillarType type) {
+        return (ClaimPillar)pillars
+                .stream()
+                .filter(pillar -> pillar instanceof ClaimPillar)
+                .filter(pillar -> ((ClaimPillar) pillar).getType().equals(type))
+                .findFirst()
+                .orElse(null);
+    }
+
     public void hideAllPillars() {
         pillars.forEach(Pillar::hide);
         pillars.clear();
