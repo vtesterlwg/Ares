@@ -72,6 +72,14 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.stats = new Statistics();
     }
 
+    public PlayerTimer getTimer(PlayerTimer.PlayerTimerType type) {
+        return getTimers().stream().filter(timer -> timer.getType().equals(type)).findFirst().orElse(null);
+    }
+
+    public boolean hasTimer(PlayerTimer.PlayerTimerType type) {
+        return getTimers().stream().anyMatch(timer -> timer.getType().equals(type));
+    }
+
     public Player getPlayer() {
         return Bukkit.getPlayer(uniqueId);
     }
