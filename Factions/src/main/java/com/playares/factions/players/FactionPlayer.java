@@ -125,6 +125,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     public FactionPlayer fromDocument(Document document) {
         this.uniqueId = (UUID)document.get("id");
         this.username = document.getString("username");
+        this.balance = document.getDouble("balance");
         this.faction = null;
         this.stats = new Statistics().fromDocument(document.get("stats", Document.class));
 
@@ -136,6 +137,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         return new Document()
                 .append("id", uniqueId)
                 .append("username", username)
+                .append("balance", balance)
                 .append("stats", stats.toDocument());
     }
 }
