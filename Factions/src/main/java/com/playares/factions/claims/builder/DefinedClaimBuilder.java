@@ -46,10 +46,15 @@ public final class DefinedClaimBuilder {
         this.cornerA = location;
 
         if (profile != null) {
-            final ClaimPillar pillar = new ClaimPillar(claimer, location);
+            final ClaimPillar pillar = new ClaimPillar(claimer, ClaimPillar.ClaimPillarType.A, location);
+            final ClaimPillar previous = profile.getExistingClaimPillar(ClaimPillar.ClaimPillarType.A);
+
+            if (previous != null) {
+                previous.hide();
+                profile.getPillars().remove(previous);
+            }
 
             pillar.draw();
-
             profile.getPillars().add(pillar);
         }
 
@@ -67,11 +72,18 @@ public final class DefinedClaimBuilder {
         this.cornerB = location;
 
         if (profile != null) {
-            final ClaimPillar pillar = new ClaimPillar(claimer, location);
+            final ClaimPillar pillar = new ClaimPillar(claimer, ClaimPillar.ClaimPillarType.B, location);
+            final ClaimPillar previous = profile.getExistingClaimPillar(ClaimPillar.ClaimPillarType.B);
 
-            pillar.draw();
+            if (previous != null) {
+                previous.hide();
+                profile.getPillars().remove(previous);
+            }
 
             profile.getPillars().add(pillar);
+
+            // Delay the sending of B pillars to prevent the bottom block being right-clicked quickly
+            new Scheduler(plugin).sync(pillar::draw).delay(5L).run();
         }
 
         claimer.sendMessage(ChatColor.GOLD + "Claim point B set at " + ChatColor.YELLOW + "(" + ChatColor.WHITE +
