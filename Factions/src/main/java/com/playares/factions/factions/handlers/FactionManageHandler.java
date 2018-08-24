@@ -3,6 +3,7 @@ package com.playares.factions.factions.handlers;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.logger.Logger;
+import com.playares.factions.claims.DefinedClaim;
 import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
@@ -118,6 +119,7 @@ public final class FactionManageHandler {
 
     public void setHome(Player player, SimplePromise promise) {
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
+        final DefinedClaim inside = manager.getPlugin().getClaimManager().getClaimAt(new PLocatable(player));
         final boolean mod = player.hasPermission("factions.mod");
 
         if (faction == null) {
@@ -135,7 +137,10 @@ public final class FactionManageHandler {
             return;
         }
 
-        // TODO: Check if location is inside owned claims, cancel if not
+        if (inside == null || !inside.getOwnerId().equals(faction.getUniqueId())) {
+            promise.failure("You must be standing in your faction's claims to set the home location");
+            return;
+        }
 
         faction.updateHome(player);
 
@@ -144,13 +149,17 @@ public final class FactionManageHandler {
 
     public void setHome(Player player, String factionName, SimplePromise promise) {
         final Faction faction = manager.getFactionByName(factionName);
+        final DefinedClaim inside = manager.getPlugin().getClaimManager().getClaimAt(new PLocatable(player));
 
         if (faction == null) {
             promise.failure("Faction not found");
             return;
         }
 
-        // TODO: Check if location is inside owned claims, cancel if not
+        if (inside == null || !inside.getOwnerId().equals(faction.getUniqueId())) {
+            promise.failure("You are not inside the faction's claims");
+            return;
+        }
 
         if (faction instanceof ServerFaction) {
             final ServerFaction sf = (ServerFaction)faction;

@@ -1,7 +1,9 @@
 package com.playares.factions.factions.handlers;
 
 import com.playares.commons.base.promise.SimplePromise;
+import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.logger.Logger;
+import com.playares.factions.claims.DefinedClaim;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.services.profiles.ProfileService;
@@ -20,6 +22,7 @@ public final class FactionDisbandHandler {
 
     public void leave(Player player, SimplePromise promise) {
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
+        final DefinedClaim inside = manager.getPlugin().getClaimManager().getClaimAt(new PLocatable(player));
         final boolean mod = player.hasPermission("factions.mod");
 
         if (faction == null) {
@@ -42,7 +45,10 @@ public final class FactionDisbandHandler {
             return;
         }
 
-        // TODO: Check if inside faction's claims, cancel if they are
+        if (inside != null && inside.getOwnerId().equals(faction.getUniqueId())) {
+            promise.failure("You must leave " + faction.getName() + "'s claims before leaving the faction");
+            return;
+        }
 
         faction.getMembers().remove(faction.getMember(player.getUniqueId()));
         faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " has " + ChatColor.RED + "left" + ChatColor.GOLD + " the faction");
