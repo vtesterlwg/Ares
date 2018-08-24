@@ -114,6 +114,10 @@ public final class ClaimBuilderListener implements Listener {
 
                     plugin.getClaimManager().getClaimRepository().add(definedClaim);
 
+                    plugin.getClaimManager().getClaimBuilders().remove(builder);
+
+                    player.getInventory().remove(claimingStick.getItem());
+
                     if (owner instanceof PlayerFaction) {
                         final PlayerFaction pf = (PlayerFaction)owner;
 
