@@ -24,10 +24,23 @@ public final class Statistics implements MongoDocument<Statistics> {
     public int deaths;
 
     @Getter @Setter
+    public long playtime;
+
+    @Getter @Setter
     public int minorEventCaptures;
 
     @Getter @Setter
     public int majorEventCaptures;
+
+    public Statistics() {
+        this.uniqueId = null;
+        this.minedOres = Maps.newConcurrentMap();
+        this.kills = 0;
+        this.deaths = 0;
+        this.playtime = 0L;;
+        this.minorEventCaptures = 0;
+        this.majorEventCaptures = 0;
+    }
 
     public int getMinedOre(Material material) {
         return this.minedOres.getOrDefault(material, 0);
@@ -44,6 +57,10 @@ public final class Statistics implements MongoDocument<Statistics> {
 
     public void addDeath() {
         setDeaths(getDeaths() + 1);
+    }
+
+    public void addPlaytime(long ms) {
+        setPlaytime(getPlaytime() + ms);
     }
 
     public void addMinorEvent() {
@@ -63,6 +80,7 @@ public final class Statistics implements MongoDocument<Statistics> {
         this.minedOres = Maps.newConcurrentMap();
         this.kills = document.getInteger("kills");
         this.deaths = document.getInteger("deaths");
+        this.playtime = document.getLong("playtime");
         this.minorEventCaptures = document.getInteger("minorEvents");
         this.majorEventCaptures = document.getInteger("majorEvents");
 
@@ -89,6 +107,7 @@ public final class Statistics implements MongoDocument<Statistics> {
                 .append("ores", convertedOres)
                 .append("kills", kills)
                 .append("deaths", deaths)
+                .append("playtime", playtime)
                 .append("minorEvents", minorEventCaptures)
                 .append("majorEvents", majorEventCaptures);
     }
