@@ -9,6 +9,7 @@ import com.playares.factions.claims.builder.DefinedClaimBuilder;
 import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.items.ClaimingStick;
+import com.playares.factions.players.FactionPlayer;
 import com.playares.services.customitems.CustomItemService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -18,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -28,6 +30,16 @@ public final class ClaimBuilderListener implements Listener {
 
     public ClaimBuilderListener(Factions plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+        final DefinedClaimBuilder builder = plugin.getClaimManager().getClaimBuilder(player);
+
+        if (builder != null) {
+            plugin.getClaimManager().getClaimBuilders().remove(builder);
+        }
     }
 
     @EventHandler
@@ -88,11 +100,16 @@ public final class ClaimBuilderListener implements Listener {
             builder.build(new FailablePromise<DefinedClaim>() {
                 @Override
                 public void success(@Nonnull DefinedClaim definedClaim) {
+                    final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
                     final Faction owner = plugin.getFactionManager().getFactionById(definedClaim.getOwnerId());
 
                     if (owner == null) {
                         player.sendMessage(ChatColor.RED + "Claim owner not found");
                         return;
+                    }
+
+                    if (profile != null) {
+                        profile.hideAllClaimPillars();
                     }
 
                     plugin.getClaimManager().getClaimRepository().add(definedClaim);
