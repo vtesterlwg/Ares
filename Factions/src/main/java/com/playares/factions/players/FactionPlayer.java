@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.factions.addons.stats.Statistics;
+import com.playares.factions.claims.DefinedClaim;
 import com.playares.factions.claims.pillars.ClaimPillar;
 import com.playares.factions.claims.pillars.MapPillar;
 import com.playares.factions.claims.pillars.Pillar;
@@ -33,6 +34,9 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     @Getter @Setter
     public PlayerFaction faction;
 
+    @Getter @Setter
+    public DefinedClaim currentClaim;
+
     @Getter
     public Set<PlayerTimer> timers;
 
@@ -47,6 +51,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = null;
         this.balance = 0.0;
         this.faction = null;
+        this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.stats = null;
@@ -57,6 +62,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = player.getName();
         this.balance = 0.0; // TODO: Get from economyconfig
         this.faction = null;
+        this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.stats = new Statistics();
@@ -67,6 +73,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = username;
         this.balance = 0.0;
         this.faction = null;
+        this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.stats = new Statistics();
