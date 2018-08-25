@@ -128,6 +128,10 @@ public final class PlayerListener implements Listener {
         final Player player = event.getPlayer();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
 
+        if (profile == null) {
+            return;
+        }
+
         if (profile.getStatus().equals(PlayerStatus.INGAME)) {
             return;
         }
