@@ -4,6 +4,7 @@ import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
+import com.playares.factions.players.FactionPlayer;
 import com.playares.services.profiles.ProfileService;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -21,6 +22,8 @@ public final class FactionCreationHandler {
     }
 
     public void createFaction(Player player, String name, SimplePromise promise) {
+        final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
         if (!name.matches("^[A-Za-z0-9_.]+$")) {
             promise.failure("Faction names must only contain characters A-Z, 0-9");
             return;
@@ -52,6 +55,10 @@ public final class FactionCreationHandler {
         }
 
         final PlayerFaction faction = new PlayerFaction(manager.getPlugin(), name);
+
+        if (profile != null && profile.getBalance() > 0.0) {
+            faction.setBalance(profile.getBalance());
+        }
 
         faction.addMember(player.getUniqueId(), PlayerFaction.FactionRank.LEADER);
         faction.getMemberHistory().add(player.getUniqueId());
