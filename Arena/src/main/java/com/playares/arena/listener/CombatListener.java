@@ -187,6 +187,14 @@ public final class CombatListener implements Listener {
 
             Worlds.playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE);
 
+            for (ItemStack contents : player.getInventory().getContents()) {
+                player.getWorld().dropItem(player.getLocation(), contents);
+            }
+
+            for (ItemStack armor : player.getInventory().getArmorContents()) {
+                player.getWorld().dropItem(player.getLocation(), armor);
+            }
+
             Players.resetHealth(player);
             player.setGameMode(GameMode.CREATIVE);
             player.getInventory().clear();
@@ -207,15 +215,6 @@ public final class CombatListener implements Listener {
 
                 if (winner == null) {
                     plugin.getSpectatorHandler().updateSpectators(profile);
-
-                    for (ItemStack contents : player.getInventory().getContents()) {
-                        player.getWorld().dropItem(player.getLocation(), contents);
-                    }
-
-                    for (ItemStack armor : player.getInventory().getArmorContents()) {
-                        player.getWorld().dropItem(player.getLocation(), armor);
-                    }
-
                     return;
                 }
 
@@ -235,15 +234,6 @@ public final class CombatListener implements Listener {
 
                 if (winner == null) {
                     plugin.getSpectatorHandler().updateSpectators(profile);
-
-                    for (ItemStack contents : player.getInventory().getContents()) {
-                        player.getWorld().dropItem(player.getLocation(), contents);
-                    }
-
-                    for (ItemStack armor : player.getInventory().getArmorContents()) {
-                        player.getWorld().dropItem(player.getLocation(), armor);
-                    }
-
                     return;
                 }
 
