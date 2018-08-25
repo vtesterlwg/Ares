@@ -57,13 +57,13 @@ public final class ClaimListener implements Listener {
         if (faction instanceof ServerFaction && !admin) {
             final ServerFaction sf = (ServerFaction)faction;
 
-            player.sendMessage(ChatColor.RED + "This land is claimed by " + ChatColor.RESET + sf.getDisplayName());
+            player.sendMessage(ChatColor.RED + "This land is owned by " + ChatColor.RESET + sf.getDisplayName());
             event.setCancelled(true);
         } else if (faction instanceof PlayerFaction) {
             final PlayerFaction pf = (PlayerFaction)faction;
 
             if (!pf.isRaidable() && pf.getMember(player.getUniqueId()) == null && !admin) {
-                player.sendMessage(ChatColor.RED + "This land is claimed by " + ChatColor.YELLOW + pf.getName());
+                player.sendMessage(ChatColor.RED + "This land is owned by " + ChatColor.RESET + pf.getName());
                 event.setCancelled(true);
             }
         }
@@ -171,7 +171,7 @@ public final class ClaimListener implements Listener {
 
             if (sf.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
                 if (!action.equals(Action.PHYSICAL)) {
-                    player.sendMessage(ChatColor.RED + "This land is claimed by " + ChatColor.RESET + sf.getDisplayName());
+                    player.sendMessage(ChatColor.RED + "This land is owned by " + ChatColor.RESET + sf.getDisplayName());
                 }
 
                 event.setCancelled(true);
@@ -181,7 +181,7 @@ public final class ClaimListener implements Listener {
 
             if (!pf.isRaidable() && pf.getMember(player.getUniqueId()) == null && !admin) {
                 if (!action.equals(Action.PHYSICAL)) {
-                    player.sendMessage(ChatColor.RED + "This land is claimed by " + ChatColor.YELLOW + pf.getName());
+                    player.sendMessage(ChatColor.RED + "This land is owned by " + ChatColor.RESET + pf.getName());
                 }
 
                 event.setCancelled(true);
@@ -374,11 +374,11 @@ public final class ClaimListener implements Listener {
             if (owner != null) {
                 if (owner instanceof ServerFaction) {
                     final ServerFaction sf = (ServerFaction)owner;
-                    player.sendMessage(ChatColor.GOLD + "Now Leaving" + ChatColor.YELLOW + ": " + ChatColor.RESET + sf.getDisplayName());
+                    player.sendMessage(ChatColor.YELLOW + "Now Entering: " + ChatColor.RESET + sf.getDisplayName());
                 } else if (owner instanceof PlayerFaction) {
                     final PlayerFaction pf = (PlayerFaction)owner;
                     final ChatColor color = (pf.getMember(player.getUniqueId()) != null ? ChatColor.GREEN : ChatColor.RED);
-                    player.sendMessage(ChatColor.GOLD + "Now Leaving" + ChatColor.YELLOW + ": " + color + pf.getName());
+                    player.sendMessage(ChatColor.YELLOW + "Now Entering: " + color + pf.getName());
                 }
             }
         }
@@ -389,11 +389,11 @@ public final class ClaimListener implements Listener {
             if (owner != null) {
                 if (owner instanceof ServerFaction) {
                     final ServerFaction sf = (ServerFaction)owner;
-                    player.sendMessage(ChatColor.GOLD + "Now Entering" + ChatColor.YELLOW + ": " + ChatColor.RESET + sf.getDisplayName());
+                    player.sendMessage(ChatColor.YELLOW + "Now Entering: " + ChatColor.RESET + sf.getDisplayName());
                 } else if (owner instanceof PlayerFaction) {
                     final PlayerFaction pf = (PlayerFaction)owner;
                     final ChatColor color = (pf.getMember(player.getUniqueId()) != null ? ChatColor.GREEN : ChatColor.RED);
-                    player.sendMessage(ChatColor.GOLD + "Now Entering" + ChatColor.YELLOW + ": " + color + pf.getName());
+                    player.sendMessage(ChatColor.YELLOW + "Now Entering: " + color + pf.getName());
                 }
             }
         }
