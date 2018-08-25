@@ -72,8 +72,7 @@ public final class Items {
                 material.equals(Material.ENCHANTING_TABLE) || material.name().endsWith("ANVIL") || material.equals(Material.ITEM_FRAME) ||
                 material.name().endsWith("_BED") || material.equals(Material.LEVER) || material.name().endsWith("_PLATE") ||
                 material.name().endsWith("_BUTTON") || material.name().endsWith("_TRAPDOOR") || material.name().endsWith("_FENCE_GATE") ||
-                material.equals(Material.DAYLIGHT_DETECTOR) || material.equals(Material.HOPPER) || material.equals(Material.DROPPER) ||
-                material.equals(Material.OBSERVER) || material.name().endsWith("_DOOR") || material.equals(Material.REPEATER) ||
+                material.equals(Material.DAYLIGHT_DETECTOR) || material.equals(Material.HOPPER) || material.equals(Material.DROPPER) || material.name().endsWith("_DOOR") || material.equals(Material.REPEATER) ||
                 material.equals(Material.COMPARATOR) || material.equals(Material.BEACON) || material.equals(Material.CAULDRON) ||
                 material.equals(Material.FLOWER_POT) || material.name().endsWith("SHULKER_BOX");
     }
