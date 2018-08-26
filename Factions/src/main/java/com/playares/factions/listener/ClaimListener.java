@@ -374,11 +374,11 @@ public final class ClaimListener implements Listener {
             if (owner != null) {
                 if (owner instanceof ServerFaction) {
                     final ServerFaction sf = (ServerFaction)owner;
-                    player.sendMessage(ChatColor.YELLOW + "Now Entering: " + ChatColor.RESET + sf.getDisplayName());
+                    player.sendMessage(ChatColor.GOLD + "Now Leaving: " + ChatColor.RESET + sf.getDisplayName() + ChatColor.GOLD + " (" + sf.getFlag().getDisplayName() + ChatColor.GOLD + ")");
                 } else if (owner instanceof PlayerFaction) {
                     final PlayerFaction pf = (PlayerFaction)owner;
                     final ChatColor color = (pf.getMember(player.getUniqueId()) != null ? ChatColor.GREEN : ChatColor.RED);
-                    player.sendMessage(ChatColor.YELLOW + "Now Entering: " + color + pf.getName());
+                    player.sendMessage(ChatColor.GOLD + "Now Leaving: " + color + pf.getName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
                 }
             }
         }
@@ -389,11 +389,11 @@ public final class ClaimListener implements Listener {
             if (owner != null) {
                 if (owner instanceof ServerFaction) {
                     final ServerFaction sf = (ServerFaction)owner;
-                    player.sendMessage(ChatColor.YELLOW + "Now Entering: " + ChatColor.RESET + sf.getDisplayName());
+                    player.sendMessage(ChatColor.GOLD + "Now Entering: " + ChatColor.RESET + sf.getDisplayName() + ChatColor.GOLD + " (" + sf.getFlag().getDisplayName() + ChatColor.GOLD + ")");
                 } else if (owner instanceof PlayerFaction) {
                     final PlayerFaction pf = (PlayerFaction)owner;
                     final ChatColor color = (pf.getMember(player.getUniqueId()) != null ? ChatColor.GREEN : ChatColor.RED);
-                    player.sendMessage(ChatColor.YELLOW + "Now Entering: " + color + pf.getName());
+                    player.sendMessage(ChatColor.GOLD + "Now Entering: " + color + pf.getName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
                 }
             }
         }

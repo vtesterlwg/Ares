@@ -3,6 +3,7 @@ package com.playares.factions.factions;
 import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.factions.Factions;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -82,8 +83,13 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
                 .append("buffer", buffer);
     }
 
+    @AllArgsConstructor
     public enum FactionFlag {
-        SAFEZONE,
-        EVENT
+        SAFEZONE(ChatColor.GREEN + "Safezone"),
+        EVENT(ChatColor.DARK_AQUA + "Event"),
+        LANDMARK(ChatColor.LIGHT_PURPLE + "Landmark");
+
+        @Getter
+        public final String displayName;
     }
 }
