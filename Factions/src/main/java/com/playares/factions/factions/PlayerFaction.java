@@ -27,6 +27,7 @@ import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
@@ -352,7 +353,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
     @SuppressWarnings("unchecked")
     @Override
     public PlayerFaction fromDocument(Document document) {
-        final Map<UUID, String> convertedMembers = (Map<UUID, String>)document.get("members");
+        final Map<String, String> convertedMembers = (Map<String, String>)document.get("members");
         final Map<String, Long> convertedTimers = (Map<String, Long>)document.get("timers");
 
         this.uniqueId = (UUID)document.get("id");
@@ -364,8 +365,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.reinvites = document.getInteger("reinvites");
 
         convertedMembers.keySet().forEach(memberId -> {
+            final UUID id = UUID.fromString(memberId);
             final FactionRank rank = FactionRank.valueOf(convertedMembers.get(memberId));
-            this.members.add(new FactionProfile(memberId, rank));
+
+            this.members.add(new FactionProfile(id, rank));
         });
 
         convertedTimers.keySet().forEach(timerName -> {
@@ -382,8 +385,8 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
             }
         });
 
-        this.pendingInvites = (Set<UUID>)document.get("pendingInvites");
-        this.memberHistory = (Set<UUID>)document.get("memberHistory");
+        this.pendingInvites = Sets.newConcurrentHashSet((List<UUID>)document.get("pendingInvites"));
+        this.memberHistory = Sets.newConcurrentHashSet((List<UUID>)document.get("memberHistory"));
         this.stats.fromDocument(document.get("stats", Document.class));
 
         return this;
@@ -391,10 +394,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
 
     @Override
     public Document toDocument() {
-        final Map<UUID, String> convertedMembers = Maps.newHashMap();
+        final Map<String, String> convertedMembers = Maps.newHashMap();
         final Map<String, Long> convertedTimers = Maps.newHashMap();
 
-        this.members.forEach(member -> convertedMembers.put(member.getUniqueId(), member.getRank().toString()));
+        this.members.forEach(member -> convertedMembers.put(member.getUniqueId().toString(), member.getRank().toString()));
         this.timers.forEach(timer -> convertedTimers.put(timer.getType().toString(), timer.getExpire()));
 
         return new Document()

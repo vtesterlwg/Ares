@@ -61,8 +61,10 @@ public final class Factions extends AresPlugin {
         });
 
         registerCommandManager(commandManager);
-
         registerCommand(new FactionCommand(this));
+
+        factionManager.loadFactions();
+        claimManager.loadClaims();
 
         registerListener(new ClaimBuilderListener(this));
         registerListener(new DataListener(this));
@@ -86,13 +88,17 @@ public final class Factions extends AresPlugin {
 
     @Override
     public void onDisable() {
-        this.factionManager.getFactionRepository().clear();
-        this.claimManager.getClaimRepository().clear();
-        this.playerManager.getPlayerRepository().clear();
+        playerManager.savePlayers(true);
+        factionManager.saveFactions(true);
+        claimManager.saveClaims(true);
 
-        this.factionManager = null;
-        this.claimManager = null;
-        this.playerManager = null;
+        factionManager.getFactionRepository().clear();
+        claimManager.getClaimRepository().clear();
+        playerManager.getPlayerRepository().clear();
+
+        factionManager = null;
+        claimManager = null;
+        playerManager = null;
 
         stopServices();
     }

@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.playares.commons.base.promise.Promise;
 import com.playares.commons.base.util.Time;
+import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.timer.Timer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
@@ -66,6 +67,26 @@ public final class FactionManager {
                         });
                     }
                 })).repeat(0L, 20L).run();
+    }
+
+    public void loadFactions() {
+        factionRepository.addAll(FactionDAO.getFactions(plugin, plugin.getMongo()));
+        Logger.print("Loaded " + factionRepository.size() + " Factions");
+    }
+
+    public void saveFactions(boolean blocking) {
+        Logger.print("Saving " + factionRepository.size() + " Factions, Blocking = " + blocking);
+
+        if (blocking) {
+            FactionDAO.saveFactions(plugin.getMongo(), factionRepository);
+            Logger.print("Finished saving factions");
+            return;
+        }
+
+        new Scheduler(plugin).async(() -> {
+            FactionDAO.saveFactions(plugin.getMongo(), factionRepository);
+            Logger.print("Finished saving factions");
+        }).run();
     }
 
     public Faction getFactionById(UUID uniqueId) {

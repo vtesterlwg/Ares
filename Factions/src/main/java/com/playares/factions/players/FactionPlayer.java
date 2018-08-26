@@ -1,6 +1,7 @@
 package com.playares.factions.players;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.bukkit.util.Players;
@@ -11,6 +12,7 @@ import com.playares.factions.claims.pillars.MapPillar;
 import com.playares.factions.claims.pillars.Pillar;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.timers.PlayerTimer;
+import com.playares.factions.timers.cont.player.EnderpearlTimer;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -18,6 +20,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -145,23 +148,45 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         pillars.removeAll(toRemove);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public FactionPlayer fromDocument(Document document) {
+        final Map<String, Long> convertedTimers = (Map<String, Long>)document.get("timers");
+
         this.uniqueId = (UUID)document.get("id");
         this.username = document.getString("username");
         this.balance = document.getDouble("balance");
         this.faction = null;
         this.stats = new Statistics().fromDocument(document.get("stats", Document.class));
 
+        convertedTimers.keySet().forEach(timerName -> {
+            final PlayerTimer.PlayerTimerType type = PlayerTimer.PlayerTimerType.valueOf(timerName);
+            final long expire = convertedTimers.get(timerName);
+            final long remaining = convertedTimers.get(timerName);
+            final int remainingSeconds = (int)(remaining / 1000L);
+
+            if (remaining > 0) {
+                if (type.equals(PlayerTimer.PlayerTimerType.ENDERPEARL)) {
+                    final EnderpearlTimer timer = new EnderpearlTimer(uniqueId, remainingSeconds);
+                    this.timers.add(timer);
+                }
+            }
+        });
+
         return this;
     }
 
     @Override
     public Document toDocument() {
+        final Map<String, Long> convertedTimers = Maps.newHashMap();
+
+        this.timers.forEach(timer -> convertedTimers.put(timer.getType().toString(), timer.getRemaining()));
+
         return new Document()
                 .append("id", uniqueId)
                 .append("username", username)
                 .append("balance", balance)
+                .append("timers", convertedTimers)
                 .append("stats", stats.toDocument());
     }
 }

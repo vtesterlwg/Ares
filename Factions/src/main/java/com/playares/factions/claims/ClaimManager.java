@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.location.Locatable;
+import com.playares.commons.bukkit.logger.Logger;
+import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.claims.builder.DefinedClaimBuilder;
 import com.playares.factions.claims.handler.ClaimCreationHandler;
@@ -39,6 +41,26 @@ public final class ClaimManager {
         this.creationHandler = new ClaimCreationHandler(this);
         this.claimRepository = Sets.newConcurrentHashSet();
         this.claimBuilders = Sets.newConcurrentHashSet();
+    }
+
+    public void loadClaims() {
+        claimRepository.addAll(ClaimDAO.getDefinedClaims(plugin, plugin.getMongo()));
+        Logger.print("Loaded " + claimRepository.size() + " Claims");
+    }
+
+    public void saveClaims(boolean blocking) {
+        Logger.print("Saving " + claimRepository.size() + " Claims, Blocking = " + blocking);
+
+        if (blocking) {
+            ClaimDAO.saveDefinedClaims(plugin.getMongo(), claimRepository);
+            Logger.print("Finished saving claims");
+            return;
+        }
+
+        new Scheduler(plugin).async(() -> {
+            ClaimDAO.saveDefinedClaims(plugin.getMongo(), claimRepository);
+            Logger.print("Finished saving claims");
+        }).run();
     }
 
     public DefinedClaim getClaimAt(Locatable location) {

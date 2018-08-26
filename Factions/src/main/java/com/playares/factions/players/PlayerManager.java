@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.client.model.Filters;
 import com.playares.commons.base.util.Time;
+import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.timer.Timer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
@@ -62,6 +63,25 @@ public final class PlayerManager {
         }
 
         return profile;
+    }
+
+    public void savePlayers(boolean blocking) {
+        Logger.print("Saving " + playerRepository.size() + " Players");
+
+        if (blocking) {
+            for (FactionPlayer profile : playerRepository) {
+                PlayerDAO.savePlayer(plugin.getMongo(), profile);
+            }
+
+            Logger.print("Finished saving players");
+            return;
+        }
+
+        for (FactionPlayer profile : playerRepository) {
+            PlayerDAO.savePlayer(plugin.getMongo(), profile);
+        }
+
+        Logger.print("Finished saving players");
     }
 
     public FactionPlayer getPlayer(UUID uniqueId) {

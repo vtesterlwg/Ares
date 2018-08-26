@@ -37,6 +37,9 @@ public final class DataListener implements Listener {
 
         profile.getStats().addPlaytime(player.getLastPlayed());
 
-        new Scheduler(plugin).async(() -> PlayerDAO.savePlayer(plugin.getMongo(), profile)).run();
+        new Scheduler(plugin).async(() -> {
+            PlayerDAO.savePlayer(plugin.getMongo(), profile);
+            plugin.getPlayerManager().getPlayerRepository().remove(profile);
+        }).run();
     }
 }
