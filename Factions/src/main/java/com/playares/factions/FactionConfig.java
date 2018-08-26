@@ -9,12 +9,18 @@ public final class FactionConfig {
     @Getter
     public Factions plugin;
 
-    public FactionConfig(Factions plugin) {
+    FactionConfig(Factions plugin) {
         this.plugin = plugin;
     }
 
     @Getter
     public String databaseURI;
+
+    @Getter
+    public boolean autosaveEnabled;
+
+    @Getter
+    public int autosaveInterval;
 
     @Getter
     public int factionMemberCap;
@@ -101,6 +107,8 @@ public final class FactionConfig {
         final YamlConfiguration config = plugin.getConfig("config");
 
         this.databaseURI = config.getString("database");
+        this.autosaveEnabled = config.getBoolean("autosave.enabled");
+        this.autosaveInterval = config.getInt("autosave.interval");
         this.factionMemberCap = config.getInt("factions.member-cap");
         this.factionAllyCap = config.getInt("factions.ally-cap");
         this.factionHomeCap = config.getDouble("factions.home-height-cap");

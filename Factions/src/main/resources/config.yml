@@ -2,6 +2,10 @@ database: 'mongodb://localhost'
 
 server-state: 'SOTW' # Determines how the server should act, can be set to SOTW|NORMAL|EOTW
 
+autosave:
+  enabled: true # If enabled, all claims, players and factions will be autosaved on a set interval
+  interval: 900 # Autosave interval in seconds
+
 factions:
   member-cap: 30 # Max amount of players a faction can have
   ally-cap: 1 # Max amount of allies a faction can have

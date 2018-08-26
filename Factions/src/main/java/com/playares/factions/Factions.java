@@ -13,6 +13,7 @@ import com.playares.factions.factions.FactionManager;
 import com.playares.factions.items.ClaimingStick;
 import com.playares.factions.listener.*;
 import com.playares.factions.players.PlayerManager;
+import com.playares.factions.util.Autosave;
 import com.playares.services.classes.ClassService;
 import com.playares.services.customevents.CustomEventService;
 import com.playares.services.customitems.CustomItemService;
@@ -38,19 +39,23 @@ public final class Factions extends AresPlugin {
     @Getter
     protected PlayerManager playerManager;
 
+    @Getter
+    protected Autosave autosave;
+
     @Override
     public void onEnable() {
-        this.factionConfig = new FactionConfig(this);
-        this.factionConfig.loadValues();
+        factionConfig = new FactionConfig(this);
+        factionConfig.loadValues();
 
         registerMongo(new MongoDB(factionConfig.getDatabaseURI()));
         getMongo().openConnection();
 
         registerProtocol(ProtocolLibrary.getProtocolManager());
 
-        this.factionManager = new FactionManager(this);
-        this.claimManager = new ClaimManager(this);
-        this.playerManager = new PlayerManager(this);
+        factionManager = new FactionManager(this);
+        claimManager = new ClaimManager(this);
+        playerManager = new PlayerManager(this);
+        autosave = new Autosave(this);
 
         final PaperCommandManager commandManager = new PaperCommandManager(this);
 
@@ -84,10 +89,16 @@ public final class Factions extends AresPlugin {
         startServices();
 
         registerItems();
+
+        if (factionConfig.isAutosaveEnabled()) {
+            autosave.start();
+        }
     }
 
     @Override
     public void onDisable() {
+        autosave.stop();
+
         playerManager.savePlayers(true);
         factionManager.saveFactions(true);
         claimManager.saveClaims(true);
