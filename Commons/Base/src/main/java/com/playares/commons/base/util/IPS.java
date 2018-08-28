@@ -1,6 +1,6 @@
 package com.playares.commons.base.util;
 
-public class IPS {
+public final class IPS {
     public static int toInt(String address) {
         final String formatted = address
                 .replace(".", "")
