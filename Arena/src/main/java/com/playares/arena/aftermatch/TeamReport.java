@@ -1,7 +1,6 @@
 package com.playares.arena.aftermatch;
 
 import com.google.common.collect.Maps;
-import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.team.Team;
 import lombok.Getter;
 
@@ -39,8 +38,6 @@ public final class TeamReport implements AftermatchReport {
         this.usedHealthPotions = team.getUsedHealthPotions();
         this.roster = Maps.newHashMap();
 
-        for (ArenaPlayer member : team.getMembers()) {
-            roster.put(member.getUniqueId(), member.getUsername());
-        }
+        team.getMembers().forEach(member -> roster.put(member.getUniqueId(), member.getUsername()));
     }
 }

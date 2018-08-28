@@ -60,7 +60,6 @@ public final class Arenas extends AresPlugin {
         this.mainConfig = getConfig("config");
 
         final PaperCommandManager commandManager = new PaperCommandManager(this);
-        commandManager.getCommandCompletions().registerCompletion("arenalist", c -> this.arenaManager.getArenaList());
         registerCommandManager(commandManager);
 
         registerMongo(new MongoDB("mongodb+srv://dev:vIwpVwYNc4WTQkRN@ares-zny4z.mongodb.net/test?retryWrites=true")); //  mongodb://localhost

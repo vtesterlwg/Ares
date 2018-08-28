@@ -72,12 +72,4 @@ public final class LoadoutCommand extends BaseCommand {
             }
         });
     }
-
-    @Subcommand("list")
-    @CommandPermission("arena.loadout.list")
-    @Syntax("/loadout list")
-    @Description("List all loadouts")
-    public void onList(Player player) {
-        // TODO: Loadout Lists
-    }
 }

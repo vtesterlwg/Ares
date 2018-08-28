@@ -3,7 +3,6 @@ package com.playares.arena.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Syntax;
 import com.playares.arena.Arenas;
 import com.playares.arena.challenge.Challenge;
 import com.playares.arena.challenge.cont.DuelChallenge;
@@ -23,7 +22,6 @@ public final class AcceptCommand extends BaseCommand {
     }
 
     @CommandAlias("accept")
-    @Syntax("<matchId>")
     @Description("Accept a challenge")
     public void onAccept(Player player, String matchId) {
         final UUID id;

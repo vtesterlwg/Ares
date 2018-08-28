@@ -224,4 +224,34 @@ public final class TeamHandler {
 
         promise.success();
     }
+
+    public void kickFromTeam(ArenaPlayer player, ArenaPlayer target, SimplePromise promise) {
+        final Team team = player.getTeam();
+
+        if (team == null) {
+            promise.failure("You are not on a team");
+            return;
+        }
+
+        if (!team.getLeader().equals(player)) {
+            promise.failure("You are not the leader of the team");
+            return;
+        }
+
+        if (!team.getMembers().contains(target)) {
+            promise.failure(target.getUsername() + " is not a member of the team");
+            return;
+        }
+
+        if (!team.getStatus().equals(TeamStatus.LOBBY)) {
+            promise.failure("Can not kick players while a match is currently active");
+            return;
+        }
+
+        team.getMembers().remove(target);
+        target.getPlayer().sendMessage(ChatColor.RED + "You have been kicked from the team");
+        team.sendMessage(ChatColor.AQUA + player.getUsername() + ChatColor.YELLOW + " kicked " + ChatColor.AQUA + target.getUsername() + ChatColor.YELLOW + " from the team");
+
+        promise.success();
+    }
 }

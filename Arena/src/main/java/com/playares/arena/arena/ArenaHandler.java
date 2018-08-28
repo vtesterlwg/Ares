@@ -52,7 +52,7 @@ public final class ArenaHandler {
         final Arena foundArena = plugin.getArenaManager().getRandomArena();
 
         if (foundArena == null) {
-            promise.failure("Failed to obtain an open Arena");
+            promise.failure("Failed to obtain an open arena");
             return;
         }
 

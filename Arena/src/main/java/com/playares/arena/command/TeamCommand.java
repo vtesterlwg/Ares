@@ -23,14 +23,6 @@ public final class TeamCommand extends BaseCommand {
         this.plugin = plugin;
     }
 
-    /*
-    /team open - open your team
-    /team close - close your team
-    /team kick <player> Kick a player from the team
-    /team invite <player> - Invite a player to the team
-    /team join <name> - Join a players team
-     */
-
     @Subcommand("open")
     @Description("Open your team for others to join")
     public void onOpen(Player player) {
@@ -132,7 +124,31 @@ public final class TeamCommand extends BaseCommand {
     }
 
     @Subcommand("kick")
+    @CommandCompletion("@players")
     public void onKick(Player player, String name) {
-        // TODO: Team kick command
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+        final ArenaPlayer target = plugin.getPlayerManager().getPlayer(name);
+
+        if (profile == null) {
+            player.sendMessage(ChatColor.RED + "Failed to obtain your profile");
+            return;
+        }
+
+        if (target == null) {
+            player.sendMessage(ChatColor.RED + "Player not found");
+            return;
+        }
+
+        plugin.getTeamHandler().kickFromTeam(profile, target, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Player has been kicked");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 }

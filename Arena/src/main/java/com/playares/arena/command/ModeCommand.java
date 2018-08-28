@@ -23,7 +23,7 @@ public final class ModeCommand extends BaseCommand {
 
     @Subcommand("create")
     @CommandPermission("arena.mode.create")
-    @Syntax("/mode create <name>")
+    @Syntax("<name>")
     @Description("Create a new mode")
     public void onCreate(Player player, String name) {
         plugin.getModeHandler().createMode(name, new SimplePromise() {
@@ -41,7 +41,7 @@ public final class ModeCommand extends BaseCommand {
 
     @Subcommand("delete|remove")
     @CommandPermission("arena.mode.delete")
-    @Syntax("/mode delete <name>")
+    @Syntax("<name>")
     @Description("Delete a mode")
     public void onDelete(Player player, String name) {
         plugin.getModeHandler().deleteMode(name, new SimplePromise() {
@@ -59,7 +59,7 @@ public final class ModeCommand extends BaseCommand {
 
     @Subcommand("seticon")
     @CommandPermission("arena.mode.icon")
-    @Syntax("/mode seticon <mode>")
+    @Syntax("<mode>")
     @Description("Update the icon for a mode")
     public void onSetIcon(Player player, String name) {
         final ItemStack hand = player.getInventory().getItemInMainHand();
@@ -82,9 +82,9 @@ public final class ModeCommand extends BaseCommand {
         });
     }
 
-    @Subcommand("addkit")
+    @Subcommand("addloadout|al")
     @CommandPermission("arena.mode.addkit")
-    @Syntax("/mode addkit <mode> <kit>")
+    @Syntax("<mode> <kit>")
     @Description("Add a kit to a mode")
     public void onKitAdd(Player player, String modeName, String kitName) {
         plugin.getModeHandler().addLoadout(modeName, kitName, new SimplePromise() {
@@ -100,9 +100,9 @@ public final class ModeCommand extends BaseCommand {
         });
     }
 
-    @Subcommand("remkit")
+    @Subcommand("remloadout|rl")
     @CommandPermission("arena.mode.remkit")
-    @Syntax("/mode remkit <mode> <kit>")
+    @Syntax("<mode> <kit>")
     @Description("Remove a kit from a mode")
     public void onKitRemove(Player player, String modeName, String kitName) {
         plugin.getModeHandler().removeLoadout(modeName, kitName, new SimplePromise() {

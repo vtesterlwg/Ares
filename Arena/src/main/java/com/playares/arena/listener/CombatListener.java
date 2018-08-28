@@ -226,11 +226,32 @@ public final class CombatListener implements Listener {
                 final TeamMatch teamfight = (TeamMatch)match;
                 final Team winner = teamfight.getWinner();
 
-                if (player.getKiller() != null) {
-                    match.sendMessage(teamfight.getViewers(), ChatColor.GREEN + player.getKiller().getName() + ChatColor.GRAY + " killed " + ChatColor.RED + player.getName());
-                } else {
-                    match.sendMessage(teamfight.getViewers(), ChatColor.RED + player.getName() + ChatColor.GRAY + " died");
-                }
+                teamfight.getSpectators().forEach(spectator -> {
+                    if (player.getKiller() != null) {
+                        spectator.getPlayer().sendMessage(ChatColor.AQUA + player.getKiller().getName() + ChatColor.GRAY + " killed " + ChatColor.AQUA + player.getName());
+                    } else {
+                        spectator.getPlayer().sendMessage(ChatColor.AQUA + player.getName() + ChatColor.GRAY + " died");
+                    }
+                });
+
+                teamfight.getOpponents().forEach(team -> {
+                    final ChatColor killedColor;
+                    final ChatColor killerColor;
+
+                    if (team.getMembers().contains(profile)) {
+                        killedColor = ChatColor.GREEN;
+                        killerColor = ChatColor.RED;
+                    } else {
+                        killedColor = ChatColor.RED;
+                        killerColor = ChatColor.GREEN;
+                    }
+
+                    if (player.getKiller() != null) {
+                        team.sendMessage(killerColor + player.getKiller().getName() + ChatColor.GRAY + " killed " + killedColor + player.getName());
+                    } else {
+                        team.sendMessage(killedColor + player.getName() + ChatColor.GRAY + " died");
+                    }
+                });
 
                 if (winner == null) {
                     plugin.getSpectatorHandler().updateSpectators(profile);

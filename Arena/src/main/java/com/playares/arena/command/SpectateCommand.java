@@ -35,7 +35,9 @@ public final class SpectateCommand extends BaseCommand {
 
         plugin.getSpectatorHandler().startSpectating(profile, target, new SimplePromise() {
             @Override
-            public void success() {}
+            public void success() {
+                player.sendMessage(ChatColor.YELLOW + "You are now spectating " + ChatColor.LIGHT_PURPLE + target.getUsername());
+            }
 
             @Override
             public void failure(@Nonnull String reason) {

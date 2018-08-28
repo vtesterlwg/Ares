@@ -14,7 +14,7 @@ public interface Arena {
     boolean isInUse();
 
     default boolean isConfigured() {
-        return getName() != null && !getAuthors().isEmpty() && !getSpawns().isEmpty();
+        return getName() != null && !getSpawns().isEmpty();
     }
 
     void setInUse(boolean b);
