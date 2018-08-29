@@ -12,7 +12,9 @@ import com.playares.factions.claims.pillars.MapPillar;
 import com.playares.factions.claims.pillars.Pillar;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.timers.PlayerTimer;
+import com.playares.factions.timers.cont.player.CombatTagTimer;
 import com.playares.factions.timers.cont.player.EnderpearlTimer;
+import com.playares.factions.timers.cont.player.ProtectionTimer;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -177,6 +179,16 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
             if (remaining > 0) {
                 if (type.equals(PlayerTimer.PlayerTimerType.ENDERPEARL)) {
                     final EnderpearlTimer timer = new EnderpearlTimer(uniqueId, remainingSeconds);
+                    this.timers.add(timer);
+                }
+
+                else if (type.equals(PlayerTimer.PlayerTimerType.COMBAT)) {
+                    final CombatTagTimer timer = new CombatTagTimer(uniqueId, remainingSeconds);
+                    this.timers.add(timer);
+                }
+
+                else if (type.equals(PlayerTimer.PlayerTimerType.PROTECTION)) {
+                    final ProtectionTimer timer = new ProtectionTimer(uniqueId, remainingSeconds);
                     this.timers.add(timer);
                 }
             }

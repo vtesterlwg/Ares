@@ -10,6 +10,7 @@ import com.playares.commons.bukkit.timer.Timer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.players.handlers.PlayerTimerHandler;
+import com.playares.factions.timers.cont.player.ProtectionTimer;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
@@ -68,8 +69,7 @@ public final class PlayerManager {
 
         if (profile == null) {
             profile = new FactionPlayer(uniqueId, username);
-
-            // TODO: Load PvP Protection here
+            profile.getTimers().add(new ProtectionTimer(uniqueId, plugin.getFactionConfig().getTimerProtection()));
         }
 
         return profile;
