@@ -14,10 +14,10 @@ import java.util.UUID;
 
 @CommandAlias("aftermatch|am")
 public final class AftermatchCommand extends BaseCommand {
-    @Getter
+    @Nonnull @Getter
     public Arenas plugin;
 
-    public AftermatchCommand(Arenas plugin) {
+    public AftermatchCommand(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

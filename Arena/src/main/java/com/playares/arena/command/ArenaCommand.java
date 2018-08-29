@@ -13,10 +13,10 @@ import javax.annotation.Nonnull;
 
 @CommandAlias("arena")
 public final class ArenaCommand extends BaseCommand {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public ArenaCommand(Arenas plugin) {
+    public ArenaCommand(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

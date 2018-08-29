@@ -12,15 +12,22 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
 
+import javax.annotation.Nonnull;
+
 public final class TeamHandler {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public TeamHandler(Arenas plugin) {
+    public TeamHandler(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 
-    public void createTeam(ArenaPlayer player, FailablePromise<Team> promise) {
+    public void createTeam(@Nonnull ArenaPlayer player, @Nonnull FailablePromise<Team> promise) {
+        if (player.getPlayer() == null) {
+            promise.failure("Player not online");
+            return;
+        }
+
         if (player.getTeam() != null) {
             promise.failure("You are already on a team");
             return;
@@ -39,7 +46,7 @@ public final class TeamHandler {
         promise.success(team);
     }
 
-    public void leaveTeam(ArenaPlayer player, SimplePromise promise) {
+    public void leaveTeam(@Nonnull ArenaPlayer player, @Nonnull SimplePromise promise) {
         final Team team = player.getTeam();
 
         if (team == null) {
@@ -51,8 +58,11 @@ public final class TeamHandler {
         team.getScoreboard().getFriendlyTeam().removeEntry(player.getUsername());
         team.sendMessage(ChatColor.AQUA + player.getUsername() + ChatColor.YELLOW + " has left the team");
 
-        player.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
         player.setTeam(null);
+
+        if (player.getPlayer() != null) {
+            player.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+        }
 
         if (team.getLeader().equals(player)) {
             if (team.getMembers().size() == 0) {
@@ -67,7 +77,7 @@ public final class TeamHandler {
         promise.success();
     }
 
-    public void disbandTeam(ArenaPlayer player, SimplePromise promise) {
+    public void disbandTeam(@Nonnull ArenaPlayer player, @Nonnull SimplePromise promise) {
         final Team team = player.getTeam();
 
         if (team == null) {
@@ -76,9 +86,14 @@ public final class TeamHandler {
         }
 
         team.sendMessage(ChatColor.RED + "Team has been disbanded");
+
         team.getMembers().forEach(member -> {
             member.setTeam(null);
-            member.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+
+            if (member.getPlayer() != null) {
+                member.getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+            }
+
             plugin.getPlayerHandler().giveLobbyItems(member);
         });
 
@@ -87,7 +102,7 @@ public final class TeamHandler {
         promise.success();
     }
 
-    public void openTeam(ArenaPlayer player, SimplePromise promise) {
+    public void openTeam(@Nonnull ArenaPlayer player, @Nonnull SimplePromise promise) {
         final Team team = player.getTeam();
 
         if (team == null) {
@@ -115,7 +130,7 @@ public final class TeamHandler {
         promise.success();
     }
 
-    public void closeTeam(ArenaPlayer player, SimplePromise promise) {
+    public void closeTeam(@Nonnull ArenaPlayer player, @Nonnull SimplePromise promise) {
         final Team team = player.getTeam();
 
         if (team == null) {
@@ -156,6 +171,11 @@ public final class TeamHandler {
             return;
         }
 
+        if (invited.getPlayer() == null) {
+            promise.failure("Player is not online");
+            return;
+        }
+
         if (invited.getTeam() != null) {
             promise.failure("This player is already on a team");
             return;
@@ -184,8 +204,13 @@ public final class TeamHandler {
         new Scheduler(plugin).sync(() -> team.getInvites().remove(invited)).delay(30 * 20L).run();
     }
 
-    public void joinTeam(ArenaPlayer player, ArenaPlayer target, SimplePromise promise) {
+    public void joinTeam(@Nonnull ArenaPlayer player, @Nonnull ArenaPlayer target, @Nonnull SimplePromise promise) {
         final Team team = target.getTeam();
+
+        if (player.getPlayer() == null) {
+            promise.failure("Player is not online");
+            return;
+        }
 
         if (!player.getStatus().equals(PlayerStatus.LOBBY)) {
             promise.failure("You must be in the lobby to perform this action");
@@ -225,7 +250,7 @@ public final class TeamHandler {
         promise.success();
     }
 
-    public void kickFromTeam(ArenaPlayer player, ArenaPlayer target, SimplePromise promise) {
+    public void kickFromTeam(@Nonnull ArenaPlayer player, @Nonnull ArenaPlayer target, @Nonnull SimplePromise promise) {
         final Team team = player.getTeam();
 
         if (team == null) {
@@ -249,7 +274,11 @@ public final class TeamHandler {
         }
 
         team.getMembers().remove(target);
-        target.getPlayer().sendMessage(ChatColor.RED + "You have been kicked from the team");
+
+        if (target.getPlayer() != null) {
+            target.getPlayer().sendMessage(ChatColor.RED + "You have been kicked from the team");
+        }
+
         team.sendMessage(ChatColor.AQUA + player.getUsername() + ChatColor.YELLOW + " kicked " + ChatColor.AQUA + target.getUsername() + ChatColor.YELLOW + " from the team");
 
         promise.success();

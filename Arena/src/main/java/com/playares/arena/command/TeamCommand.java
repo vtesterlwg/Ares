@@ -16,10 +16,10 @@ import javax.annotation.Nonnull;
 
 @CommandAlias("team|t")
 public final class TeamCommand extends BaseCommand {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public TeamCommand(Arenas plugin) {
+    public TeamCommand(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

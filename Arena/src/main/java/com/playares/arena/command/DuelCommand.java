@@ -11,11 +11,13 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
+
 public final class DuelCommand extends BaseCommand {
-    @Getter
+    @Nonnull @Getter
     public Arenas plugin;
 
-    public DuelCommand(Arenas plugin) {
+    public DuelCommand(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

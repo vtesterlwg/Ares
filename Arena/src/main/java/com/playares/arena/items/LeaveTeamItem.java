@@ -59,6 +59,11 @@ public final class LeaveTeamItem implements CustomItem {
                 return;
             }
 
+            if (player.getTeam() == null) {
+                who.sendMessage(ChatColor.RED + "You are not on a team");
+                return;
+            }
+
             if (player.getTeam().getLeader().equals(player)) {
                 plugin.getTeamHandler().disbandTeam(player, new SimplePromise() {
                     @Override
@@ -79,7 +84,10 @@ public final class LeaveTeamItem implements CustomItem {
                 @Override
                 public void success() {
                     plugin.getPlayerHandler().giveLobbyItems(player);
-                    player.getPlayer().sendMessage(ChatColor.GREEN + "You have left your team");
+
+                    if (player.getPlayer() != null) {
+                        player.getPlayer().sendMessage(ChatColor.GREEN + "You have left your team");
+                    }
                 }
 
                 @Override

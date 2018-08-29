@@ -10,11 +10,13 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
+import javax.annotation.Nonnull;
+
 public final class DataListener implements Listener {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public DataListener(Arenas plugin) {
+    public DataListener(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

@@ -14,19 +14,26 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
+import javax.annotation.Nonnull;
+
 public final class SpectatorHandler {
-    @Getter
+    @Nonnull @Getter
     public Arenas plugin;
 
-    public SpectatorHandler(Arenas plugin) {
+    public SpectatorHandler(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 
-    public void startSpectating(ArenaPlayer viewer, ArenaPlayer viewed, SimplePromise promise) {
+    public void startSpectating(@Nonnull ArenaPlayer viewer, @Nonnull ArenaPlayer viewed, @Nonnull SimplePromise promise) {
         final CustomItemService customItemService = (CustomItemService)plugin.getService(CustomItemService.class);
 
         if (customItemService == null) {
             promise.failure("Could not obtain Custom Item Service");
+            return;
+        }
+
+        if (viewed.getPlayer() == null) {
+            promise.failure("Player is not online");
             return;
         }
 
@@ -61,16 +68,18 @@ public final class SpectatorHandler {
 
         updateSpectators(viewer);
 
-        viewer.getPlayer().teleport(viewed.getPlayer().getLocation());
-        viewer.getPlayer().getInventory().clear();
-        viewer.getPlayer().getInventory().setArmorContents(null);
+        if (viewer.getPlayer() != null) {
+            viewer.getPlayer().teleport(viewed.getPlayer().getLocation());
+            viewer.getPlayer().getInventory().clear();
+            viewer.getPlayer().getInventory().setArmorContents(null);
+        }
 
         customItemService.getItem(ExitSpectatorItem.class).ifPresent(item -> viewer.getPlayer().getInventory().setItem(8, item.getItem()));
 
         promise.success();
     }
 
-    public void stopSpectating(ArenaPlayer viewer, SimplePromise promise) {
+    public void stopSpectating(@Nonnull ArenaPlayer viewer, @Nonnull SimplePromise promise) {
         if (!viewer.getStatus().equals(PlayerStatus.SPECTATING)) {
             promise.failure("You are not in spectator mode");
             return;
@@ -80,9 +89,14 @@ public final class SpectatorHandler {
 
         viewer.setStatus(PlayerStatus.LOBBY);
         viewer.setMatch(null);
-        viewer.getPlayer().teleport(plugin.getPlayerHandler().getLobby().getBukkit());
 
-        match.getSpectators().remove(viewer);
+        if (viewer.getPlayer() != null) {
+            viewer.getPlayer().teleport(plugin.getPlayerHandler().getLobby().getBukkit());
+        }
+
+        if (match != null) {
+            match.getSpectators().remove(viewer);
+        }
 
         updateSpectators(viewer);
 
@@ -91,7 +105,11 @@ public final class SpectatorHandler {
         promise.success();
     }
 
-    public void updateSpectators(ArenaPlayer viewer) {
+    public void updateSpectators(@Nonnull ArenaPlayer viewer) {
+        if (viewer.getPlayer() == null) {
+            return;
+        }
+
         if (viewer.getStatus().equals(PlayerStatus.LOBBY)) {
             Bukkit.getOnlinePlayers().forEach(online -> {
                 online.showPlayer(plugin, viewer.getPlayer());
@@ -138,7 +156,7 @@ public final class SpectatorHandler {
         if (viewer.getStatus().equals(PlayerStatus.INGAME)) {
             final Match match = viewer.getMatch();
 
-            if (match != null) {
+            if (match != null && viewer.getPlayer() != null) {
                 match.getSpectators()
                         .stream()
                         .filter(s -> s.getPlayer() != null)

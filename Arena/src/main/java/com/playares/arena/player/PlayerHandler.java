@@ -47,25 +47,31 @@ public final class PlayerHandler {
         final CustomItemService customItemService = (CustomItemService)plugin.getService(CustomItemService.class);
 
         if (customItemService == null) {
-            bukkit.sendMessage(ChatColor.RED + "Failed to retrieve lobby items");
+            if (bukkit != null) {
+                bukkit.sendMessage(ChatColor.RED + "Failed to retrieve lobby items");
+            }
+
             return;
         }
 
-        Players.resetHealth(bukkit);
+        if (bukkit != null) {
+            Players.resetHealth(bukkit);
+            bukkit.getInventory().clear();
+            bukkit.getInventory().setArmorContents(null);
+        }
 
-        bukkit.getInventory().clear();
-        bukkit.getInventory().setArmorContents(null);
+        if (bukkit != null) {
+            new Scheduler(plugin).sync(() -> {
+                if (player.getTeam() != null) {
+                    customItemService.getItem(TeamStatusItem.class).ifPresent(item -> bukkit.getInventory().setItem(0, item.getItem()));
+                    customItemService.getItem(ViewTeamItem.class).ifPresent(item -> bukkit.getInventory().setItem(4, item.getItem()));
+                    customItemService.getItem(LeaveTeamItem.class).ifPresent(item -> bukkit.getInventory().setItem(8, item.getItem()));
+                    return;
+                }
 
-        new Scheduler(plugin).sync(() -> {
-            if (player.getTeam() != null) {
-                customItemService.getItem(TeamStatusItem.class).ifPresent(item -> bukkit.getInventory().setItem(0, item.getItem()));
-                customItemService.getItem(ViewTeamItem.class).ifPresent(item -> bukkit.getInventory().setItem(4, item.getItem()));
-                customItemService.getItem(LeaveTeamItem.class).ifPresent(item -> bukkit.getInventory().setItem(8, item.getItem()));
-                return;
-            }
-
-            customItemService.getItem(CreateTeamItem.class).ifPresent(item -> bukkit.getInventory().setItem(4, item.getItem()));
-        }).delay(1L).run();
+                customItemService.getItem(CreateTeamItem.class).ifPresent(item -> bukkit.getInventory().setItem(4, item.getItem()));
+            }).delay(1L).run();
+        }
     }
 
     public void setLobby(PLocatable location) {

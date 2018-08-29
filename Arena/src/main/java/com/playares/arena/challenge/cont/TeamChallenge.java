@@ -5,22 +5,23 @@ import com.playares.arena.mode.Mode;
 import com.playares.arena.team.Team;
 import lombok.Getter;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public final class TeamChallenge implements Challenge {
-    @Getter
+    @Nonnull @Getter
     public final UUID uniqueId;
 
-    @Getter
+    @Nonnull @Getter
     public final Team challenger;
 
-    @Getter
+    @Nonnull @Getter
     public final Team challenged;
 
-    @Getter
+    @Nonnull @Getter
     public final Mode mode;
 
-    public TeamChallenge(Team challenger, Team challenged, Mode mode) {
+    public TeamChallenge(@Nonnull Team challenger, @Nonnull Team challenged, @Nonnull Mode mode) {
         this.uniqueId = UUID.randomUUID();
         this.challenger = challenger;
         this.challenged = challenged;

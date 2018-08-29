@@ -20,17 +20,24 @@ import org.bukkit.event.player.*;
 import javax.annotation.Nonnull;
 
 public final class PlayerListener implements Listener {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public PlayerListener(Arenas plugin) {
+    public PlayerListener(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final ArenaPlayer arenaPlayer = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        event.setJoinMessage(null);
+
+        if (profile == null) {
+            player.sendMessage(ChatColor.RED + "Could not find your profile");
+            return;
+        }
 
         Players.resetHealth(player);
         Players.sendTablist(plugin.getProtocol(), player, ChatColor.GOLD + "" + ChatColor.BOLD + "Ares Network", ChatColor.GOLD + "playares.com");
@@ -38,15 +45,19 @@ public final class PlayerListener implements Listener {
         player.teleport(plugin.getPlayerHandler().getLobby().getBukkit());
         player.sendTitle(ChatColor.DARK_RED + "Welcome to the Arena!", ChatColor.GOLD + "Good luck and have fun!", 5, 40, 5);
 
-        plugin.getPlayerHandler().giveLobbyItems(arenaPlayer);
-
-        event.setJoinMessage(null);
+        plugin.getPlayerHandler().giveLobbyItems(profile);
     }
 
     @EventHandler (priority = EventPriority.LOW)
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        event.setQuitMessage(null);
+
+        if (profile == null) {
+            return;
+        }
 
         if (profile.getTeam() != null) {
             plugin.getTeamHandler().leaveTeam(profile, new SimplePromise() {
@@ -61,8 +72,6 @@ public final class PlayerListener implements Listener {
         if (profile.getMatch() != null) {
             profile.getMatch().getSpectators().remove(profile);
         }
-
-        event.setQuitMessage(null);
     }
 
     @EventHandler
@@ -78,6 +87,11 @@ public final class PlayerListener implements Listener {
 
         final Player player = (Player)event.getCollidedWith();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
 
         if (profile.getStatus().equals(PlayerStatus.INGAME)) {
             return;
@@ -95,6 +109,11 @@ public final class PlayerListener implements Listener {
         final Player player = (Player)event.getWhoClicked();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
 
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (profile.getStatus().equals(PlayerStatus.INGAME)) {
             return;
         }
@@ -110,6 +129,11 @@ public final class PlayerListener implements Listener {
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         final Player player = event.getPlayer();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
 
         if (profile.getStatus().equals(PlayerStatus.INGAME)) {
             if (player.getInventory().getHeldItemSlot() == 0) {
@@ -129,6 +153,7 @@ public final class PlayerListener implements Listener {
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
 
         if (profile == null) {
+            event.setCancelled(true);
             return;
         }
 
@@ -144,6 +169,11 @@ public final class PlayerListener implements Listener {
         final Player player = event.getPlayer();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
 
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (!profile.getStatus().equals(PlayerStatus.LOBBY)) {
             event.setCancelled(true);
             return;
@@ -158,6 +188,11 @@ public final class PlayerListener implements Listener {
     public void onBlockPlace(BlockPlaceEvent event) {
         final Player player = event.getPlayer();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
 
         if (!profile.getStatus().equals(PlayerStatus.LOBBY)) {
             event.setCancelled(true);

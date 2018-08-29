@@ -8,17 +8,18 @@ import com.playares.commons.base.promise.SimplePromise;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public final class MatchHandler {
-    @Getter
+    @Nonnull @Getter
     public Arenas plugin;
 
-    public MatchHandler(Arenas plugin) {
+    public MatchHandler(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 
-    public void openPlayerReport(Player viewer, UUID playerId, UUID matchId, SimplePromise promise) {
+    public void openPlayerReport(@Nonnull Player viewer, @Nonnull UUID playerId, @Nonnull UUID matchId, @Nonnull SimplePromise promise) {
         final Match match = plugin.getMatchManager().getMatchById(matchId);
 
         if (match == null) {
@@ -36,7 +37,7 @@ public final class MatchHandler {
         plugin.getMenuHandler().openPlayerReport(viewer, report);
     }
 
-    public void openTeamReport(Player viewer, UUID teamId, UUID matchId, SimplePromise promise) {
+    public void openTeamReport(@Nonnull Player viewer, @Nonnull UUID teamId, @Nonnull UUID matchId, @Nonnull SimplePromise promise) {
         final Match match = plugin.getMatchManager().getMatchById(matchId);
 
         if (match == null) {

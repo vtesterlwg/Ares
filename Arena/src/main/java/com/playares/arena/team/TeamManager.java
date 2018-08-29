@@ -5,28 +5,29 @@ import com.playares.arena.Arenas;
 import com.playares.arena.player.ArenaPlayer;
 import lombok.Getter;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class TeamManager {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<Team> teams;
 
-    public TeamManager(Arenas plugin) {
+    public TeamManager(@Nonnull Arenas plugin) {
         this.plugin = plugin;
         this.teams = Sets.newConcurrentHashSet();
     }
 
-    public Team getTeam(UUID uniqueId) {
+    public Team getTeam(@Nonnull UUID uniqueId) {
         return teams.stream().filter(team -> team.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
-    public Team getTeam(ArenaPlayer player) {
+    public Team getTeam(@Nonnull ArenaPlayer player) {
         return teams.stream().filter(team -> team.getMembers().contains(player)).findFirst().orElse(null);
     }
 

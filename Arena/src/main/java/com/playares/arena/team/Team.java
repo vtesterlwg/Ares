@@ -13,27 +13,28 @@ import lombok.Setter;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class Team implements StatisticHolder, TeamStatisticHolder {
-    @Getter
+    @Nonnull @Getter
     public final UUID uniqueId;
 
-    @Getter @Setter
+    @Nonnull @Getter @Setter
     public ArenaPlayer leader;
 
-    @Getter @Setter
+    @Nonnull @Getter @Setter
     public TeamStatus status;
 
-    @Getter
+    @Nonnull @Getter
     public final ArenaScoreboard scoreboard;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<ArenaPlayer> members;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<ArenaPlayer> invites;
 
     @Getter @Setter
@@ -48,8 +49,8 @@ public final class Team implements StatisticHolder, TeamStatisticHolder {
     @Getter @Setter
     public double damage;
 
-    public Team(ArenaPlayer player) {
-        Preconditions.checkArgument(player.getPlayer() != null, "Team creator could not be found");
+    public Team(@Nonnull ArenaPlayer player) {
+        Preconditions.checkArgument(player.getPlayer() != null, "Team creator is not online");
 
         this.uniqueId = UUID.randomUUID();
         this.leader = player;
@@ -95,7 +96,7 @@ public final class Team implements StatisticHolder, TeamStatisticHolder {
         this.damage = 0.0;
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(@Nonnull String message) {
         members.forEach(member -> {
             final Player player = member.getPlayer();
 
@@ -105,7 +106,7 @@ public final class Team implements StatisticHolder, TeamStatisticHolder {
         });
     }
 
-    public void teleport(Location location) {
+    public void teleport(@Nonnull Location location) {
         members.forEach(member -> {
             final Player player = member.getPlayer();
 
@@ -115,7 +116,7 @@ public final class Team implements StatisticHolder, TeamStatisticHolder {
         });
     }
 
-    public void setStatuses(PlayerStatus status) {
+    public void setStatuses(@Nonnull PlayerStatus status) {
         members.forEach(member -> member.setStatus(status));
     }
 }

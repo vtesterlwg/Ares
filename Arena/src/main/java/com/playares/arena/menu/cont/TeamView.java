@@ -20,14 +20,15 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitTask;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 
 public final class TeamView extends Menu implements Listener {
-    @Getter
+    @Nonnull @Getter
     public final Arenas arenas;
 
-    @Getter
+    @Nullable @Getter
     public BukkitTask updateTask;
 
     public TeamView(@Nonnull Arenas plugin, @Nonnull Player player, @Nonnull String title, int rows) {
@@ -37,11 +38,11 @@ public final class TeamView extends Menu implements Listener {
 
     public void startUpdater() {
         updateTask = new Scheduler(plugin).sync(() -> {
-            clearInventory();
-
             final List<Team> teams = arenas.getTeamManager().getAvailableTeams();
 
             teams.sort(Comparator.comparingInt(t -> t.getMembers().size()));
+
+            clearInventory();
 
             for (int i = 0; i < teams.size(); i++) {
                 if (i >= 53) {
@@ -66,6 +67,11 @@ public final class TeamView extends Menu implements Listener {
 
                 addItem(new ClickableItem(icon, i, click -> {
                     final ArenaPlayer profile = arenas.getPlayerManager().getPlayer(player.getUniqueId());
+
+                    if (profile == null) {
+                        player.sendMessage(ChatColor.RED + "Could not find your profile");
+                        return;
+                    }
 
                     if (profile.getTeam() == null) {
                         player.sendMessage(ChatColor.RED + "You are not on a team");

@@ -12,40 +12,43 @@ import com.playares.arena.team.Team;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 public final class TeamMatch implements Match {
-    @Getter
+    @Nonnull @Getter
     public final UUID uniqueId;
 
     @Getter @Setter
     public long startTimestamp;
 
-    @Getter @Setter
+    @Nonnull @Getter @Setter
     public MatchStatus status;
 
-    @Getter
+    @Nonnull @Getter
     public Mode mode;
 
-    @Getter @Setter
+    @Nullable @Getter @Setter
     public Arena arena;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<Team> opponents;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<ArenaPlayer> spectators;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<PlayerReport> playerReports;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<TeamReport> teamReports;
 
-    public TeamMatch(Team teamA, Team teamB, Mode mode) {
+    public TeamMatch(@Nonnull Team teamA, @Nonnull Team teamB, @Nonnull Mode mode) {
         this.uniqueId = UUID.randomUUID();
+        this.status = MatchStatus.COUNTDOWN;
         this.opponents = ImmutableSet.of(teamA, teamB);
         this.mode = mode;
         this.spectators = Sets.newConcurrentHashSet();
@@ -53,7 +56,8 @@ public final class TeamMatch implements Match {
         this.teamReports = Sets.newConcurrentHashSet();
     }
 
-    public ArenaPlayer getPlayer(UUID uniqueId) {
+    @Nullable
+    public ArenaPlayer getPlayer(@Nonnull UUID uniqueId) {
         for (Team team : opponents) {
             for (ArenaPlayer member : team.getMembers()) {
                 if (member.getUniqueId().equals(uniqueId)) {
@@ -65,7 +69,8 @@ public final class TeamMatch implements Match {
         return null;
     }
 
-    public Team getTeam(ArenaPlayer player) {
+    @Nullable
+    public Team getTeam(@Nonnull ArenaPlayer player) {
         for (Team team : opponents) {
             if (team.getMembers().contains(player)) {
                 return team;
@@ -75,6 +80,7 @@ public final class TeamMatch implements Match {
         return null;
     }
 
+    @Nonnull
     public ImmutableCollection<ArenaPlayer> getViewers() {
         final List<ArenaPlayer> result = Lists.newArrayList();
         opponents.forEach(opponent -> result.addAll(opponent.getMembers()));
@@ -82,14 +88,17 @@ public final class TeamMatch implements Match {
         return ImmutableList.copyOf(result);
     }
 
-    public TeamReport getTeamReport(Team team) {
+    @Nullable
+    public TeamReport getTeamReport(@Nonnull Team team) {
         return teamReports.stream().filter(t -> t.getUniqueId().equals(team.getUniqueId())).findFirst().orElse(null);
     }
 
-    public TeamReport getTeamReport(UUID uniqueId) {
+    @Nullable
+    public TeamReport getTeamReport(@Nonnull UUID uniqueId) {
         return teamReports.stream().filter(t -> t.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
+    @Nullable
     public Team getWinner() {
         final List<Team> alive = Lists.newArrayList();
 
@@ -106,6 +115,7 @@ public final class TeamMatch implements Match {
         return alive.get(0);
     }
 
+    @Nullable
     public Team getLoser(Team winner) {
         for (Team team : opponents) {
             if (!team.getUniqueId().equals(winner.getUniqueId())) {

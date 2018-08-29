@@ -10,22 +10,24 @@ import com.playares.commons.bukkit.logger.Logger;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class ArenaManager {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<Arena> arenas;
 
-    @Getter
+    @Nonnull @Getter
     public final YamlConfiguration config;
 
-    public ArenaManager(Arenas plugin) {
+    public ArenaManager(@Nonnull Arenas plugin) {
         this.plugin = plugin;
         this.arenas = Sets.newCopyOnWriteArraySet();
         this.config = plugin.getConfig("arenas");
@@ -61,20 +63,24 @@ public final class ArenaManager {
         Logger.print("Loaded " + arenas.size() + " Arenas");
     }
 
+    @Nullable
     public Arena getArena(String name) {
         return arenas.stream().filter(arena -> arena.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
+    @Nonnull
     public ImmutableList<Arena> getAvailableArenas() {
         return ImmutableList.copyOf(arenas.stream().filter(arena -> !arena.isInUse()).collect(Collectors.toList()));
     }
 
+    @Nonnull
     public ImmutableList<String> getArenaList() {
         final List<String> names = Lists.newArrayList();
         arenas.forEach(arena -> names.add(arena.getName()));
         return ImmutableList.copyOf(names);
     }
 
+    @Nullable
     public Arena getRandomArena() {
         final List<Arena> available = getAvailableArenas();
 
@@ -85,7 +91,7 @@ public final class ArenaManager {
         return available.get(new Random().nextInt(available.size()));
     }
 
-    public void saveArena(Arena arena) {
+    public void saveArena(@Nonnull Arena arena) {
         if (!arena.isConfigured()) {
             return;
         }
@@ -109,7 +115,7 @@ public final class ArenaManager {
         plugin.saveConfig("arenas", config);
     }
 
-    public void deleteArena(Arena arena) {
+    public void deleteArena(@Nonnull Arena arena) {
         config.set("arenas." + arena.getName(), null);
         plugin.saveConfig("arenas", config);
     }

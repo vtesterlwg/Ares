@@ -12,11 +12,13 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
+
 public final class LoadoutListener implements Listener {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public LoadoutListener(Arenas plugin) {
+    public LoadoutListener(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

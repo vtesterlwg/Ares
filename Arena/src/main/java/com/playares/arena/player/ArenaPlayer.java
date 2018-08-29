@@ -1,43 +1,37 @@
 package com.playares.arena.player;
 
-import com.google.common.collect.Maps;
 import com.playares.arena.match.Match;
 import com.playares.arena.scoreboard.ArenaScoreboard;
 import com.playares.arena.stats.ArcherStatisticHolder;
 import com.playares.arena.stats.StatisticHolder;
 import com.playares.arena.team.Team;
-import com.playares.commons.base.util.Time;
-import com.playares.services.classes.data.effects.ClassEffectable;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public final class ArenaPlayer implements StatisticHolder, ArcherStatisticHolder {
-    @Getter
+    @Nonnull @Getter
     public final UUID uniqueId;
 
-    @Getter
+    @Nonnull @Getter
     public final String username;
 
-    @Getter @Setter
+    @Nullable @Getter @Setter
     public Team team;
 
-    @Getter @Setter
+    @Nullable @Getter @Setter
     public Match match;
 
-    @Getter @Setter
+    @Nonnull @Getter @Setter
     public PlayerStatus status;
 
-    @Getter @Setter
+    @Nullable @Getter @Setter
     public ArenaScoreboard scoreboard;
-
-    @Getter
-    public final Map<Material, Long> classCooldowns;
 
     @Getter @Setter
     public int hits;
@@ -54,31 +48,18 @@ public final class ArenaPlayer implements StatisticHolder, ArcherStatisticHolder
     @Getter @Setter
     public int totalArrowsFired;
 
-    public ArenaPlayer(Player player) {
+    public ArenaPlayer(@Nonnull Player player) {
         this.uniqueId = player.getUniqueId();
         this.username = player.getName();
         this.team = null;
         this.match = null;
         this.status = PlayerStatus.LOBBY;
         this.scoreboard = null;
-        this.classCooldowns = Maps.newConcurrentMap();
     }
 
+    @Nullable
     public Player getPlayer() {
         return Bukkit.getPlayer(uniqueId);
-    }
-
-    public boolean hasConsumableCooldown(ClassEffectable consumable) {
-        return classCooldowns.containsKey(consumable.getMaterial());
-    }
-
-    public long getRemainingConsumableCooldown(ClassEffectable consumable) {
-        if (!hasConsumableCooldown(consumable)) {
-            return 0L;
-        }
-
-        final long timestamp = classCooldowns.get(consumable.getMaterial());
-        return (timestamp - Time.now());
     }
 
     @Override
@@ -117,9 +98,20 @@ public final class ArenaPlayer implements StatisticHolder, ArcherStatisticHolder
     }
 
     public void deleteScoreboard() {
+        if (getPlayer() == null) {
+            return;
+        }
+
+        if (scoreboard == null) {
+            getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+            return;
+        }
+
         scoreboard.getFriendlyTeam().getEntries().forEach(entry -> scoreboard.getFriendlyTeam().removeEntry(entry));
         scoreboard.getEnemyTeam().getEntries().forEach(entry -> scoreboard.getEnemyTeam().removeEntry(entry));
+
         getPlayer().setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+
         setScoreboard(null);
     }
 }

@@ -12,10 +12,10 @@ import javax.annotation.Nonnull;
 
 @CommandAlias("loadout")
 public final class LoadoutCommand extends BaseCommand {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public LoadoutCommand(Arenas plugin) {
+    public LoadoutCommand(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

@@ -32,11 +32,13 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
 
+import javax.annotation.Nonnull;
+
 public final class CombatListener implements Listener {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public CombatListener(Arenas plugin) {
+    public CombatListener(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 
@@ -96,6 +98,12 @@ public final class CombatListener implements Listener {
         if (arenaPlayerA.getMatch() instanceof TeamMatch) {
             final TeamMatch teamfight = (TeamMatch)arenaPlayerA.getMatch();
             final ArenaPlayer arenaPlayerB = plugin.getPlayerManager().getPlayer(damaged.getUniqueId());
+
+            if (arenaPlayerB == null) {
+                event.setCancelled(true);
+                return;
+            }
+
             final Team teamA = teamfight.getTeam(arenaPlayerA);
             final Team teamB = teamfight.getTeam(arenaPlayerB);
 
@@ -138,6 +146,11 @@ public final class CombatListener implements Listener {
         final Player player = (Player)shooter;
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
 
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
+
         if (projectile instanceof EnderPearl) {
             new Scheduler(plugin).sync(() -> player.setCooldown(Material.ENDER_PEARL, (16 * 20))).delay(1L).run();
             return;
@@ -173,6 +186,12 @@ public final class CombatListener implements Listener {
 
         final Player player = (Player)event.getEntity();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
+
         final Match match = profile.getMatch();
         final double damage = event.getFinalDamage();
 
@@ -223,7 +242,7 @@ public final class CombatListener implements Listener {
 
                 plugin.getSpectatorHandler().updateSpectators(profile);
 
-                if (winner == null) {
+                if (winner != null) {
                     plugin.getArenaHandler().finishArena(match);
                 }
 
@@ -235,10 +254,12 @@ public final class CombatListener implements Listener {
                 final Team winner = teamfight.getWinner();
 
                 teamfight.getSpectators().forEach(spectator -> {
-                    if (player.getKiller() != null) {
-                        spectator.getPlayer().sendMessage(ChatColor.AQUA + player.getKiller().getName() + ChatColor.GRAY + " killed " + ChatColor.AQUA + player.getName());
-                    } else {
-                        spectator.getPlayer().sendMessage(ChatColor.AQUA + player.getName() + ChatColor.GRAY + " died");
+                    if (spectator.getPlayer() != null) {
+                        if (player.getKiller() != null) {
+                            spectator.getPlayer().sendMessage(ChatColor.AQUA + player.getKiller().getName() + ChatColor.GRAY + " killed " + ChatColor.AQUA + player.getName());
+                        } else {
+                            spectator.getPlayer().sendMessage(ChatColor.AQUA + player.getName() + ChatColor.GRAY + " died");
+                        }
                     }
                 });
 
@@ -274,6 +295,11 @@ public final class CombatListener implements Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            return;
+        }
+
         final Match match = profile.getMatch();
 
         if (match == null || !profile.getStatus().equals(PlayerStatus.INGAME)) {

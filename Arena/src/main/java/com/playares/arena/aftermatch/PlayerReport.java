@@ -7,19 +7,21 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionType;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.UUID;
 
 public final class PlayerReport implements AftermatchReport {
-    @Getter
+    @Nonnull @Getter
     public final UUID uniqueId;
 
-    @Getter
+    @Nonnull @Getter
     public final String username;
 
-    @Getter
+    @Nonnull @Getter
     public final UUID matchId;
 
-    @Getter
+    @Nullable @Getter
     public final UUID teamId;
 
     @Getter
@@ -43,13 +45,13 @@ public final class PlayerReport implements AftermatchReport {
     @Getter
     public final double accuracy;
 
-    @Getter
+    @Nullable @Getter
     public final ItemStack[] contents;
 
-    @Getter
+    @Nullable @Getter
     public final ItemStack[] armor;
 
-    public PlayerReport(ArenaPlayer player, UUID matchId, UUID teamId, double health) {
+    public PlayerReport(@Nonnull ArenaPlayer player, @Nonnull UUID matchId, @Nullable UUID teamId, double health) {
         this.uniqueId = player.getUniqueId();
         this.username = player.getUsername();
         this.matchId = matchId;
@@ -61,11 +63,15 @@ public final class PlayerReport implements AftermatchReport {
         this.arrowsHit = player.getArrowHits();
         this.arrowsFired = player.getTotalArrowsFired();
         this.accuracy = player.getAccuracy();
-        this.contents = player.getPlayer().getInventory().getContents();
-        this.armor = player.getPlayer().getInventory().getArmorContents();
+        this.contents = (player.getPlayer() != null ? player.getPlayer().getInventory().getContents() : null);
+        this.armor = (player.getPlayer() != null ? player.getPlayer().getInventory().getArmorContents() : null);
     }
 
     public int getRemainingHealthPotions() {
+        if (contents == null) {
+            return 0;
+        }
+
         int count = 0;
 
         for (ItemStack item : contents) {

@@ -12,22 +12,24 @@ import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class ModeManager {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<Mode> modes;
 
-    @Getter
+    @Nonnull @Getter
     public final YamlConfiguration config;
 
-    public ModeManager(Arenas plugin) {
+    public ModeManager(@Nonnull Arenas plugin) {
         this.plugin = plugin;
         this.modes = Sets.newConcurrentHashSet();
         this.config = plugin.getConfig("modes");
@@ -49,42 +51,49 @@ public final class ModeManager {
             }
 
             final StandardMode mode = new StandardMode(modeName);
+
             mode.setIcon(icon);
             mode.getLoadouts().addAll(loadouts);
+
             modes.add(mode);
         }
 
         Logger.print("Loaded " + modes.size() + " Modes");
     }
 
-    public Mode getMode(String name) {
+    @Nullable
+    public Mode getMode(@Nonnull String name) {
         return modes.stream().filter(mode -> mode.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
+    @Nonnull
     public ImmutableList<Mode> getConfiguredModes() {
         return ImmutableList.copyOf(modes.stream().filter(Mode::isConfigured).collect(Collectors.toList()));
     }
 
+    @Nonnull
     public ImmutableList<Mode> getSortedConfiguredModes() {
         final List<Mode> configured = Lists.newArrayList(getConfiguredModes());
         configured.sort(Comparator.comparing(Mode::getName));
         return ImmutableList.copyOf(configured);
     }
 
-    public void saveMode(Mode mode) {
+    public void saveMode(@Nonnull Mode mode) {
         if (!mode.isConfigured()) {
             return;
         }
 
         final List<String> loadoutNames = Lists.newArrayList();
+
         mode.getLoadouts().forEach(loadout -> loadoutNames.add(loadout.getName()));
 
         config.set("modes." + mode.getName() + ".icon", InventorySerializer.encodeItemStackToString(mode.getIcon()));
         config.set("modes." + mode.getName() + ".loadouts", loadoutNames);
+
         plugin.saveConfig("modes", config);
     }
 
-    public void deleteMode(Mode mode) {
+    public void deleteMode(@Nonnull Mode mode) {
         config.set("modes." + mode.getName(), null);
         plugin.saveConfig("modes", config);
     }

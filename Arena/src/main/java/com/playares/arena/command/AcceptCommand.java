@@ -11,13 +11,14 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public final class AcceptCommand extends BaseCommand {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public AcceptCommand(Arenas plugin) {
+    public AcceptCommand(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

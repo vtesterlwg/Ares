@@ -11,47 +11,52 @@ import com.playares.arena.player.PlayerStatus;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 public final class DuelMatch implements Match {
-    @Getter
+    @Nonnull @Getter
     public final UUID uniqueId;
 
     @Getter @Setter
     public long startTimestamp;
 
-    @Getter @Setter
+    @Nonnull @Getter @Setter
     public MatchStatus status;
 
-    @Getter
+    @Nonnull @Getter
     public final Mode mode;
 
-    @Getter @Setter
+    @Nullable @Getter @Setter
     public Arena arena;
 
-    @Getter
+    @Nonnull @Getter
     public Set<ArenaPlayer> opponents;
 
-    @Getter
+    @Nonnull @Getter
     public Set<ArenaPlayer> spectators;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<PlayerReport> playerReports;
 
-    public DuelMatch(ArenaPlayer playerA, ArenaPlayer playerB, Mode mode) {
+    public DuelMatch(@Nonnull ArenaPlayer playerA, @Nonnull ArenaPlayer playerB, @Nonnull Mode mode) {
         this.uniqueId = UUID.randomUUID();
+        this.status = MatchStatus.COUNTDOWN;
         this.opponents = ImmutableSet.of(playerA, playerB);
         this.mode = mode;
         this.spectators = Sets.newConcurrentHashSet();
         this.playerReports = Sets.newConcurrentHashSet();
     }
 
+    @Nullable
     public ArenaPlayer getPlayer(UUID uniqueId) {
         return opponents.stream().filter(player -> player.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
+    @Nonnull
     public ImmutableCollection<ArenaPlayer> getViewers() {
         final List<ArenaPlayer> result = Lists.newArrayList();
         result.addAll(opponents);
@@ -59,6 +64,7 @@ public final class DuelMatch implements Match {
         return ImmutableList.copyOf(result);
     }
 
+    @Nullable
     public ArenaPlayer getWinner() {
         final List<ArenaPlayer> alive = Lists.newArrayList();
 
@@ -75,7 +81,8 @@ public final class DuelMatch implements Match {
         return alive.get(0);
     }
 
-    public ArenaPlayer getLoser(ArenaPlayer winner) {
+    @Nullable
+    public ArenaPlayer getLoser(@Nonnull ArenaPlayer winner) {
         for (ArenaPlayer opponent : opponents) {
             if (!opponent.equals(winner)) {
                 return opponent;

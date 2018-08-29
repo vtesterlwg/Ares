@@ -10,11 +10,13 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
+
 public final class SetLobbyCommand extends BaseCommand {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public SetLobbyCommand(Arenas plugin) {
+    public SetLobbyCommand(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

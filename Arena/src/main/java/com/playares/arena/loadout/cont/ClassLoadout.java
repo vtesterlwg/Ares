@@ -8,32 +8,40 @@ import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
+
 public final class ClassLoadout implements Loadout {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    @Getter
+    @Nonnull @Getter
     public final String name;
 
-    @Getter
+    @Nonnull @Getter
     public final ItemStack[] contents;
 
-    @Getter
+    @Nonnull @Getter
     public final ItemStack[] armor;
 
-    @Getter
+    @Nonnull @Getter
     public final AresClass classType;
 
-    public ClassLoadout(Arenas plugin, String name, ItemStack[] contents, ItemStack[] armor, AresClass type) {
+    public ClassLoadout(@Nonnull Arenas plugin,
+                        @Nonnull String name,
+                        @Nonnull ItemStack[] contents,
+                        @Nonnull ItemStack[] armor,
+                        @Nonnull AresClass type) {
+
         this.plugin = plugin;
         this.name = name;
         this.contents = contents;
         this.armor = armor;
         this.classType = type;
+
     }
 
     @Override
-    public void apply(Player who) {
+    public void apply(@Nonnull Player who) {
         who.getInventory().clear();
         who.getInventory().setArmorContents(null);
 

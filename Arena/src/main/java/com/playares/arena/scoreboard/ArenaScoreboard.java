@@ -6,14 +6,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import javax.annotation.Nonnull;
+
 public final class ArenaScoreboard {
-    @Getter
+    @Nonnull @Getter
     public final Scoreboard scoreboard;
 
-    @Getter
+    @Nonnull @Getter
     public final Team friendlyTeam;
 
-    @Getter
+    @Nonnull @Getter
     public final Team enemyTeam;
 
     public ArenaScoreboard() {
@@ -23,10 +25,8 @@ public final class ArenaScoreboard {
 
         this.friendlyTeam.setCanSeeFriendlyInvisibles(true);
         this.friendlyTeam.setColor(ChatColor.DARK_GREEN);
-        this.friendlyTeam.setPrefix(ChatColor.DARK_GREEN + "");
 
         this.enemyTeam.setColor(ChatColor.RED);
-        this.enemyTeam.setPrefix(ChatColor.RED + "");
     }
 
     public void clearEnemyTeam() {

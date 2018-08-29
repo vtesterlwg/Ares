@@ -14,10 +14,10 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nonnull;
 
 public final class SpectateCommand extends BaseCommand {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public SpectateCommand(Arenas plugin) {
+    public SpectateCommand(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

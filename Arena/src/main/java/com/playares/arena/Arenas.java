@@ -8,7 +8,10 @@ import com.playares.arena.challenge.ChallengeHandler;
 import com.playares.arena.challenge.ChallengeManager;
 import com.playares.arena.command.*;
 import com.playares.arena.items.*;
-import com.playares.arena.listener.*;
+import com.playares.arena.listener.CombatListener;
+import com.playares.arena.listener.DataListener;
+import com.playares.arena.listener.LoadoutListener;
+import com.playares.arena.listener.PlayerListener;
 import com.playares.arena.loadout.LoadoutHandler;
 import com.playares.arena.loadout.LoadoutManager;
 import com.playares.arena.match.MatchHandler;
@@ -97,7 +100,6 @@ public final class Arenas extends AresPlugin {
         registerListener(new DataListener(this));
         registerListener(new PlayerListener(this));
         registerListener(new LoadoutListener(this));
-        registerListener(new ClassListener(this));
 
         registerCommand(new ModeCommand(this));
         registerCommand(new LoadoutCommand(this));

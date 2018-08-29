@@ -8,6 +8,8 @@ import com.playares.commons.bukkit.logger.Logger;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
+
 public final class ModeHandler {
     @Getter
     public final Arenas plugin;
@@ -16,7 +18,7 @@ public final class ModeHandler {
         this.plugin = plugin;
     }
 
-    public void createMode(String name, SimplePromise promise) {
+    public void createMode(@Nonnull String name, @Nonnull SimplePromise promise) {
         final Mode existing = plugin.getModeManager().getMode(name);
 
         if (existing != null) {
@@ -27,11 +29,13 @@ public final class ModeHandler {
         final StandardMode mode = new StandardMode(name);
 
         plugin.getModeManager().getModes().add(mode);
+
         Logger.print("Mode '" + name + "' has been created");
+
         promise.success();
     }
 
-    public void deleteMode(String name, SimplePromise promise) {
+    public void deleteMode(@Nonnull String name, @Nonnull SimplePromise promise) {
         final Mode mode = plugin.getModeManager().getMode(name);
 
         if (mode == null) {
@@ -43,10 +47,11 @@ public final class ModeHandler {
         plugin.getModeManager().deleteMode(mode);
 
         Logger.print("Mode '" + mode.getName() + "' has been deleted");
+
         promise.success();
     }
 
-    public void setModeIcon(ItemStack item, String name, SimplePromise promise) {
+    public void setModeIcon(@Nonnull ItemStack item, @Nonnull String name, @Nonnull SimplePromise promise) {
         final Mode mode = plugin.getModeManager().getMode(name);
 
         if (mode == null) {
@@ -59,10 +64,11 @@ public final class ModeHandler {
         plugin.getModeManager().saveMode(mode);
 
         Logger.print("Updated icon for mode '" + name + "'");
+
         promise.success();
     }
 
-    public void addLoadout(String modeName, String kitName, SimplePromise promise) {
+    public void addLoadout(@Nonnull String modeName, @Nonnull String kitName, @Nonnull SimplePromise promise) {
         final Mode mode = plugin.getModeManager().getMode(modeName);
         final Loadout loadout = plugin.getLoadoutManager().getLoadout(kitName);
 
@@ -86,10 +92,11 @@ public final class ModeHandler {
         plugin.getModeManager().saveMode(mode);
 
         Logger.print("Added loadout " + loadout.getName() + " to mode " + mode.getName());
+
         promise.success();
     }
 
-    public void removeLoadout(String modeName, String kitName, SimplePromise promise) {
+    public void removeLoadout(@Nonnull String modeName, @Nonnull String kitName, @Nonnull SimplePromise promise) {
         final Mode mode = plugin.getModeManager().getMode(modeName);
         final Loadout loadout = plugin.getLoadoutManager().getLoadout(kitName);
 

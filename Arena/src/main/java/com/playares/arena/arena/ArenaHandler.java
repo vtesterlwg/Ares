@@ -39,19 +39,20 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
 public final class ArenaHandler {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public ArenaHandler(Arenas plugin) {
+    public ArenaHandler(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 
-    public void startArena(Match match, FailablePromise<Arena> promise) {
+    public void startArena(@Nonnull Match match, @Nonnull FailablePromise<Arena> promise) {
         final Arena foundArena = plugin.getArenaManager().getRandomArena();
 
         if (foundArena == null) {
@@ -60,7 +61,7 @@ public final class ArenaHandler {
         }
 
         final EssentialsService essentials = (EssentialsService)plugin.getService(EssentialsService.class);
-        final MainArena arena = (MainArena)plugin.getArenaManager().getRandomArena();
+        final MainArena arena = (MainArena)foundArena;
         final BossTimer timer = new BossTimer(plugin, ChatColor.GOLD + "Match Starting...", BarColor.RED, BarStyle.SEGMENTED_6, BossTimer.BossTimerDuration.FIVE_SECONDS);
 
         arena.setInUse(true);
@@ -75,27 +76,33 @@ public final class ArenaHandler {
                 final PLocatable spawn = arena.getSpawns().get(i);
                 final ArenaPlayer opponent = opponents.get(i);
 
-                Players.resetHealth(opponent.getPlayer());
-
-                opponent.getPlayer().setGameMode(GameMode.SURVIVAL);
-                opponent.getPlayer().teleport(spawn.getBukkit());
                 opponent.setStatus(PlayerStatus.INGAME);
                 opponent.setMatch(match);
                 opponent.setScoreboard(new ArenaScoreboard());
-                opponent.getPlayer().setScoreboard(opponent.getScoreboard().getScoreboard());
-                opponent.getScoreboard().getFriendlyTeam().addEntry(opponent.getUsername());
-                ((CraftPlayer)opponent.getPlayer()).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b), 0);
 
-                if (essentials != null) {
-                    essentials.getVanishHandler().showPlayer(opponent.getPlayer(), true);
+                if (opponent.getPlayer() != null) {
+                    Players.resetHealth(opponent.getPlayer());
+
+                    opponent.getPlayer().setGameMode(GameMode.SURVIVAL);
+                    opponent.getPlayer().teleport(spawn.getBukkit());
+                    ((CraftPlayer)opponent.getPlayer()).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b), 0);
+
+                    timer.addPlayer(opponent.getPlayer());
+
+                    if (essentials != null) {
+                        essentials.getVanishHandler().showPlayer(opponent.getPlayer(), true);
+                    }
+
+                    if (opponent.getScoreboard() != null) {
+                        opponent.getPlayer().setScoreboard(opponent.getScoreboard().getScoreboard());
+                        opponent.getScoreboard().getFriendlyTeam().addEntry(opponent.getUsername());
+
+                        opponents
+                                .stream()
+                                .filter(p -> !p.getUniqueId().equals(opponent.getUniqueId()))
+                                .forEach(enemy -> opponent.getScoreboard().getEnemyTeam().addEntry(enemy.getUsername()));
+                    }
                 }
-
-                timer.addPlayer(opponent.getPlayer());
-
-                opponents
-                        .stream()
-                        .filter(p -> !p.getUniqueId().equals(opponent.getUniqueId()))
-                        .forEach(enemy -> opponent.getScoreboard().getEnemyTeam().addEntry(enemy.getUsername()));
             }
         }
 
@@ -111,18 +118,19 @@ public final class ArenaHandler {
                 opponent.setStatuses(PlayerStatus.INGAME);
 
                 opponent.getMembers().forEach(member -> {
-                    Players.resetHealth(member.getPlayer());
-
                     member.setMatch(match);
-                    member.getPlayer().setGameMode(GameMode.SURVIVAL);
-                    ((CraftPlayer)member.getPlayer()).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b), 0);
 
-                    if (essentials != null) {
-                        essentials.getVanishHandler().showPlayer(member.getPlayer(), true);
+                    if (member.getPlayer() != null) {
+                        if (essentials != null) {
+                            essentials.getVanishHandler().showPlayer(member.getPlayer(), true);
+                        }
+
+                        Players.resetHealth(member.getPlayer());
+                        member.getPlayer().setGameMode(GameMode.SURVIVAL);
+                        ((CraftPlayer)member.getPlayer()).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b), 0);
+                        timer.addPlayer(member.getPlayer());
                     }
                 });
-
-                opponent.getMembers().forEach(member -> timer.addPlayer(member.getPlayer()));
 
                 opponents
                         .stream()
@@ -163,7 +171,7 @@ public final class ArenaHandler {
 
             if (winner != null) {
                 final ArenaPlayer loser = duel.getLoser(winner);
-                final PlayerReport report = new PlayerReport(winner, match.getUniqueId(), null, winner.getPlayer().getHealth());
+                final PlayerReport report = new PlayerReport(winner, match.getUniqueId(), null, (winner.getPlayer() != null ? winner.getPlayer().getHealth() : 10.0));
                 final Collection<ArenaPlayer> viewers = duel.getViewers();
 
                 winner.setStatus(PlayerStatus.INGAME_DEAD);
@@ -219,12 +227,14 @@ public final class ArenaHandler {
                 final Team loser = teamfight.getLoser(winner);
 
                 winner.getAlive().forEach(alive -> {
-                    final PlayerReport report = new PlayerReport(alive, match.getUniqueId(), alive.getTeam().getUniqueId(), alive.getPlayer().getHealth());
-                    teamfight.getPlayerReports().add(report);
+                    if (alive.getTeam() != null) {
+                        final PlayerReport report = new PlayerReport(alive, match.getUniqueId(), alive.getTeam().getUniqueId(), (alive.getPlayer() != null ? alive.getPlayer().getHealth() : 10.0));
+                        teamfight.getPlayerReports().add(report);
+                    }
 
                     alive.setStatus(PlayerStatus.INGAME_DEAD);
 
-                    if (classService != null && classService.getPlayerClass(alive.getPlayer()) != null) {
+                    if (alive.getPlayer() != null && classService != null && classService.getPlayerClass(alive.getPlayer()) != null) {
                         classService.removeFromClass(alive.getPlayer());
                     }
                 });
@@ -274,7 +284,10 @@ public final class ArenaHandler {
         new Scheduler(plugin).sync(() -> {
             final List<ArenaPlayer> viewers = Lists.newArrayList();
 
-            arena.setInUse(false);
+            if (arena != null) {
+                arena.setInUse(false);
+            }
+
             match.setStatus(MatchStatus.FINISHED);
 
             if (match instanceof DuelMatch) {
@@ -284,7 +297,6 @@ public final class ArenaHandler {
 
                 duel.getOpponents().forEach(opponent -> {
                     opponent.deleteScoreboard();
-                    opponent.getClassCooldowns().clear();
 
                     if (opponent.getPlayer() != null) {
                         opponent.getPlayer().setCooldown(Material.ENDER_PEARL, 0);
@@ -303,8 +315,6 @@ public final class ArenaHandler {
                     team.getScoreboard().clearEnemyTeam();
 
                     team.getMembers().forEach(member -> {
-                        member.getClassCooldowns().clear();
-
                         if (member.getPlayer() != null) {
                             member.getPlayer().setCooldown(Material.ENDER_PEARL, 0);
                         }

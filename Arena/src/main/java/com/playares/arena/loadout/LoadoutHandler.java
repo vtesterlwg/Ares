@@ -10,15 +10,21 @@ import com.playares.services.classes.data.classes.*;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
+
 public final class LoadoutHandler {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public LoadoutHandler(Arenas plugin) {
+    public LoadoutHandler(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 
-    public void createStandardLoadout(ItemStack[] contents, ItemStack[] armor, String name, SimplePromise promise) {
+    public void createStandardLoadout(@Nonnull ItemStack[] contents,
+                                      @Nonnull ItemStack[] armor,
+                                      @Nonnull String name,
+                                      @Nonnull SimplePromise promise) {
+
         final Loadout existing = plugin.getLoadoutManager().getLoadout(name);
 
         if (existing != null) {
@@ -36,7 +42,12 @@ public final class LoadoutHandler {
         promise.success();
     }
 
-    public void createClassLoadout(ItemStack[] contents, ItemStack[] armor, String name, String classType, SimplePromise promise) {
+    public void createClassLoadout(@Nonnull ItemStack[] contents,
+                                   @Nonnull ItemStack[] armor,
+                                   @Nonnull String name,
+                                   @Nonnull String classType,
+                                   @Nonnull SimplePromise promise) {
+
         final ClassService classService = (ClassService)plugin.getService(ClassService.class);
         final Loadout existing = plugin.getLoadoutManager().getLoadout(name);
         AresClass type = null;
@@ -76,7 +87,7 @@ public final class LoadoutHandler {
         promise.success();
     }
 
-    public void deleteLoadout(String name, SimplePromise promise) {
+    public void deleteLoadout(@Nonnull String name, @Nonnull SimplePromise promise) {
         final Loadout loadout = plugin.getLoadoutManager().getLoadout(name);
 
         if (loadout == null) {

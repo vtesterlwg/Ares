@@ -9,10 +9,10 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nonnull;
 
 public final class DuelModeView extends Menu {
-    @Getter
+    @Nonnull @Getter
     public final ArenaPlayer challenged;
 
-    public DuelModeView(@Nonnull AresPlugin plugin, @Nonnull Player player, @Nonnull String title, int rows, ArenaPlayer challenged) {
+    public DuelModeView(@Nonnull AresPlugin plugin, @Nonnull Player player, @Nonnull String title, int rows, @Nonnull ArenaPlayer challenged) {
         super(plugin, player, title, rows);
         this.challenged = challenged;
     }

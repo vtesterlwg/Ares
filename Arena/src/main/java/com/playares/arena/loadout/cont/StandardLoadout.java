@@ -4,17 +4,19 @@ import com.playares.arena.loadout.Loadout;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
+
 public final class StandardLoadout implements Loadout {
-    @Getter
+    @Nonnull @Getter
     public final String name;
 
-    @Getter
+    @Nonnull @Getter
     public final ItemStack[] contents;
 
-    @Getter
+    @Nonnull @Getter
     public final ItemStack[] armor;
 
-    public StandardLoadout(String name, ItemStack[] contents, ItemStack[] armor) {
+    public StandardLoadout(@Nonnull String name, @Nonnull ItemStack[] contents, @Nonnull ItemStack[] armor) {
         this.name = name;
         this.contents = contents;
         this.armor = armor;

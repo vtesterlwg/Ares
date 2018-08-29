@@ -23,14 +23,19 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import javax.annotation.Nonnull;
 
 public final class ChallengeHandler {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public ChallengeHandler(Arenas plugin) {
+    public ChallengeHandler(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 
-    public void sendChallenge(ArenaPlayer challenger, ArenaPlayer challenged, Mode mode, SimplePromise promise) {
+    public void sendChallenge(@Nonnull ArenaPlayer challenger, @Nonnull ArenaPlayer challenged, @Nonnull Mode mode, @Nonnull SimplePromise promise) {
+        if (challenged.getPlayer() == null) {
+            promise.failure("Player is not online");
+            return;
+        }
+
         if (challenger.getTeam() != null || challenger.getMatch() != null || !challenger.getStatus().equals(PlayerStatus.LOBBY)) {
             promise.failure("You must be in the lobby to perform this action");
             return;
@@ -69,7 +74,7 @@ public final class ChallengeHandler {
         promise.success();
     }
 
-    public void sendChallenge(Team challenger, Team challenged, Mode mode, SimplePromise promise) {
+    public void sendChallenge(@Nonnull Team challenger, @Nonnull Team challenged, @Nonnull Mode mode, @Nonnull SimplePromise promise) {
         if (!challenger.getStatus().equals(TeamStatus.LOBBY)) {
             promise.failure("You must be in the lobby to perform this action");
             return;
@@ -88,6 +93,11 @@ public final class ChallengeHandler {
         final TeamChallenge challenge = new TeamChallenge(challenger, challenged, mode);
         final ArenaPlayer challengedLeader = challenged.getLeader();
         final String challengerName = challenger.getLeader().getUsername();
+
+        if (challengedLeader.getPlayer() == null) {
+            promise.failure("Player is not online");
+            return;
+        }
 
         challengedLeader.getPlayer().sendMessage(
                 new ComponentBuilder(challengerName)
@@ -113,7 +123,11 @@ public final class ChallengeHandler {
         promise.success();
     }
 
-    public void acceptChallenge(ArenaPlayer playerA, ArenaPlayer playerB, Mode mode) {
+    public void acceptChallenge(@Nonnull ArenaPlayer playerA, @Nonnull ArenaPlayer playerB, @Nonnull Mode mode) {
+        if (playerA.getPlayer() == null || playerB.getPlayer() == null) {
+            return;
+        }
+
         if (playerA.getTeam() != null || playerA.getMatch() != null || !playerA.getStatus().equals(PlayerStatus.LOBBY)) {
             return;
         }
@@ -156,7 +170,7 @@ public final class ChallengeHandler {
         });
     }
 
-    public void acceptChallenge(Team teamA, Team teamB, Mode mode) {
+    public void acceptChallenge(@Nonnull Team teamA, @Nonnull Team teamB, @Nonnull Mode mode) {
         if (!teamA.getStatus().equals(TeamStatus.LOBBY) || !teamB.getStatus().equals(TeamStatus.LOBBY)) {
             return;
         }
@@ -178,8 +192,8 @@ public final class ChallengeHandler {
                             ChatColor.YELLOW + " by " + ChatColor.AQUA + Joiner.on(ChatColor.YELLOW + ", " + ChatColor.AQUA).join(arena.getAuthors());
                 }
 
-                teamA.getMembers().forEach(member -> mode.giveBooks(member.getPlayer()));
-                teamB.getMembers().forEach(member -> mode.giveBooks(member.getPlayer()));
+                teamA.getMembers().stream().filter(member -> member.getPlayer() != null).forEach(member -> mode.giveBooks(member.getPlayer()));
+                teamB.getMembers().stream().filter(member -> member.getPlayer() != null).forEach(member -> mode.giveBooks(member.getPlayer()));
 
                 teamA.sendMessage(nowPlaying);
                 teamB.sendMessage(nowPlaying);

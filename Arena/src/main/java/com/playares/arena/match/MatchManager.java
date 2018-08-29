@@ -8,38 +8,44 @@ import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.team.Team;
 import lombok.Getter;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class MatchManager {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    @Getter
+    @Nonnull @Getter
     public final Set<Match> matches;
 
-    public MatchManager(Arenas plugin) {
+    public MatchManager(@Nonnull Arenas plugin) {
         this.plugin = plugin;
         this.matches = Sets.newConcurrentHashSet();
     }
 
-    public Match getMatchById(UUID uniqueId) {
+    @Nullable
+    public Match getMatchById(@Nonnull UUID uniqueId) {
         return matches.stream().filter(match -> match.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
-    public Match getMatchByTeam(Team team) {
+    @Nullable
+    public Match getMatchByTeam(@Nonnull Team team) {
         return matches.stream()
                 .filter(match -> match instanceof TeamMatch)
                 .filter(teamfight -> ((TeamMatch)teamfight).getOpponents().contains(team))
                 .findFirst().orElse(null);
     }
 
-    public Match getMatchBySpectator(ArenaPlayer player) {
+    @Nullable
+    public Match getMatchBySpectator(@Nonnull ArenaPlayer player) {
         return matches.stream().filter(match -> match.getSpectators().contains(player)).findFirst().orElse(null);
     }
 
-    public ImmutableSet<Match> getMatchByStatus(MatchStatus status) {
+    @Nullable
+    public ImmutableSet<Match> getMatchByStatus(@Nonnull MatchStatus status) {
         return ImmutableSet.copyOf(matches.stream().filter(match -> match.getStatus().equals(status)).collect(Collectors.toSet()));
     }
 }

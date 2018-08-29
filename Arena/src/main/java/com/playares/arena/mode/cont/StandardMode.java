@@ -7,19 +7,21 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.inventory.ItemStack;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 
 public final class StandardMode implements Mode {
-    @Getter
+    @Nonnull @Getter
     public final String name;
 
-    @Getter @Setter
+    @Nullable @Getter @Setter
     public ItemStack icon;
 
-    @Getter
+    @Nonnull @Getter
     public List<Loadout> loadouts;
 
-    public StandardMode(String name) {
+    public StandardMode(@Nonnull String name) {
         this.name = name;
         this.icon = null;
         this.loadouts = Lists.newArrayList();

@@ -14,10 +14,10 @@ import javax.annotation.Nonnull;
 
 @CommandAlias("mode")
 public final class ModeCommand extends BaseCommand {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public ModeCommand(Arenas plugin) {
+    public ModeCommand(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 

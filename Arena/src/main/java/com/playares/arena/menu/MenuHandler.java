@@ -28,20 +28,20 @@ import java.util.Collections;
 import java.util.UUID;
 
 public final class MenuHandler {
-    @Getter
+    @Nonnull @Getter
     public final Arenas plugin;
 
-    public MenuHandler(Arenas plugin) {
+    public MenuHandler(@Nonnull Arenas plugin) {
         this.plugin = plugin;
     }
 
-    public void openTeamMenu(Player viewer) {
+    public void openTeamMenu(@Nonnull Player viewer) {
         final TeamView teamViewer = new TeamView(plugin, viewer, "Teams", 6);
         teamViewer.startUpdater();
         teamViewer.open();
     }
 
-    public void openPlayerReport(Player viewer, PlayerReport report) {
+    public void openPlayerReport(@Nonnull Player viewer, @Nonnull PlayerReport report) {
         final Menu menu = new Menu(plugin, viewer, report.getUsername(), 6);
 
         final ItemStack stats = new ItemBuilder()
@@ -84,7 +84,7 @@ public final class MenuHandler {
         menu.open();
     }
 
-    public void openTeamReport(Player viewer, TeamReport report) {
+    public void openTeamReport(@Nonnull Player viewer, @Nonnull TeamReport report) {
         final Match match = plugin.getMatchManager().getMatchById(report.getMatchId());
 
         if (match == null) {
@@ -137,13 +137,18 @@ public final class MenuHandler {
         menu.open();
     }
 
-    public void openTeamChallengeMenu(Player viewer, Team team) {
+    public void openTeamChallengeMenu(@Nonnull Player viewer, @Nonnull Team team) {
         final TeamModeView teamModeView = new TeamModeView(plugin, viewer, "Select Mode", 3, team);
         int slot = 0;
 
         for (Mode mode : plugin.getModeManager().getSortedConfiguredModes()) {
             teamModeView.addItem(new ClickableItem(mode.getIcon(), slot, click -> {
                 final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(viewer.getUniqueId());
+
+                if (profile == null) {
+                    viewer.sendMessage(ChatColor.RED + "Could not find your profile");
+                    return;
+                }
 
                 if (profile.getTeam() == null) {
                     viewer.sendMessage(ChatColor.RED + "You are no longer on a team");
@@ -183,6 +188,11 @@ public final class MenuHandler {
         for (Mode mode : plugin.getModeManager().getSortedConfiguredModes()) {
             duelModeView.addItem(new ClickableItem(mode.getIcon(), slot, click -> {
                 final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(viewer.getUniqueId());
+
+                if (profile == null) {
+                    viewer.sendMessage(ChatColor.RED + "Could not obtain your profile");
+                    return;
+                }
 
                 plugin.getChallengeHandler().sendChallenge(profile, challenged, mode, new SimplePromise() {
                     @Override
