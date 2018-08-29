@@ -130,8 +130,14 @@ public final class ChallengeHandler {
         plugin.getArenaHandler().startArena(match, new FailablePromise<Arena>() {
             @Override
             public void success(@Nonnull Arena arena) {
-                final String nowPlaying = ChatColor.YELLOW + "You are now playing " + ChatColor.AQUA + arena.getName() +
-                        ChatColor.YELLOW + " by " + ChatColor.AQUA + Joiner.on(ChatColor.YELLOW + ", " + ChatColor.AQUA).join(arena.getAuthors());
+                final String nowPlaying;
+
+                if (arena.getAuthors().isEmpty()) {
+                    nowPlaying = ChatColor.YELLOW + "You are now playing " + ChatColor.AQUA + arena.getName();
+                } else {
+                    nowPlaying = ChatColor.YELLOW + "You are now playing " + ChatColor.AQUA + arena.getName() +
+                            ChatColor.YELLOW + " by " + ChatColor.AQUA + Joiner.on(ChatColor.YELLOW + ", " + ChatColor.AQUA).join(arena.getAuthors());
+                }
 
                 mode.giveBooks(playerA.getPlayer());
                 mode.giveBooks(playerB.getPlayer());
@@ -163,8 +169,14 @@ public final class ChallengeHandler {
         plugin.getArenaHandler().startArena(match, new FailablePromise<Arena>() {
             @Override
             public void success(@Nonnull Arena arena) {
-                final String nowPlaying = ChatColor.YELLOW + "You are now playing " + ChatColor.AQUA + arena.getName() +
-                        ChatColor.YELLOW + " by " + ChatColor.AQUA + Joiner.on(ChatColor.YELLOW + ", " + ChatColor.AQUA).join(arena.getAuthors());
+                final String nowPlaying;
+
+                if (arena.getAuthors().isEmpty()) {
+                    nowPlaying = ChatColor.YELLOW + "You are now playing " + ChatColor.AQUA + arena.getName();
+                } else {
+                    nowPlaying = ChatColor.YELLOW + "You are now playing " + ChatColor.AQUA + arena.getName() +
+                            ChatColor.YELLOW + " by " + ChatColor.AQUA + Joiner.on(ChatColor.YELLOW + ", " + ChatColor.AQUA).join(arena.getAuthors());
+                }
 
                 teamA.getMembers().forEach(member -> mode.giveBooks(member.getPlayer()));
                 teamB.getMembers().forEach(member -> mode.giveBooks(member.getPlayer()));
