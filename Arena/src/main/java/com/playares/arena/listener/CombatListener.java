@@ -188,10 +188,18 @@ public final class CombatListener implements Listener {
             Worlds.playSound(player.getLocation(), Sound.ENTITY_DRAGON_FIREBALL_EXPLODE);
 
             for (ItemStack contents : player.getInventory().getContents()) {
+                if (contents == null) {
+                    continue;
+                }
+
                 player.getWorld().dropItem(player.getLocation(), contents);
             }
 
             for (ItemStack armor : player.getInventory().getArmorContents()) {
+                if (armor == null) {
+                    continue;
+                }
+
                 player.getWorld().dropItem(player.getLocation(), armor);
             }
 
@@ -213,12 +221,12 @@ public final class CombatListener implements Listener {
                     match.sendMessage(duel.getViewers(), ChatColor.RED + player.getName() + ChatColor.GRAY + " died");
                 }
 
+                plugin.getSpectatorHandler().updateSpectators(profile);
+
                 if (winner == null) {
-                    plugin.getSpectatorHandler().updateSpectators(profile);
-                    return;
+                    plugin.getArenaHandler().finishArena(match);
                 }
 
-                plugin.getArenaHandler().finishArena(match);
                 return;
             }
 
@@ -253,12 +261,11 @@ public final class CombatListener implements Listener {
                     }
                 });
 
-                if (winner == null) {
-                    plugin.getSpectatorHandler().updateSpectators(profile);
-                    return;
-                }
+                plugin.getSpectatorHandler().updateSpectators(profile);
 
-                plugin.getArenaHandler().finishArena(match);
+                if (winner != null) {
+                    plugin.getArenaHandler().finishArena(match);
+                }
             }
         }
     }

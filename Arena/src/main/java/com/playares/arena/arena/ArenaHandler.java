@@ -29,11 +29,14 @@ import lombok.Getter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.minecraft.server.v1_13_R1.DataWatcherObject;
+import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -81,6 +84,7 @@ public final class ArenaHandler {
                 opponent.setScoreboard(new ArenaScoreboard());
                 opponent.getPlayer().setScoreboard(opponent.getScoreboard().getScoreboard());
                 opponent.getScoreboard().getFriendlyTeam().addEntry(opponent.getUsername());
+                ((CraftPlayer)opponent.getPlayer()).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b), 0);
 
                 if (essentials != null) {
                     essentials.getVanishHandler().showPlayer(opponent.getPlayer(), true);
@@ -111,6 +115,7 @@ public final class ArenaHandler {
 
                     member.setMatch(match);
                     member.getPlayer().setGameMode(GameMode.SURVIVAL);
+                    ((CraftPlayer)member.getPlayer()).getHandle().getDataWatcher().set(new DataWatcherObject<>(10, DataWatcherRegistry.b), 0);
 
                     if (essentials != null) {
                         essentials.getVanishHandler().showPlayer(member.getPlayer(), true);
