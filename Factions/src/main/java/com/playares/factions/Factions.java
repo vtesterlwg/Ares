@@ -97,6 +97,9 @@ public final class Factions extends AresPlugin {
 
     @Override
     public void onDisable() {
+        factionManager.cancelTasks();
+        playerManager.cancelTasks();
+
         autosave.stop();
 
         playerManager.savePlayers(true);

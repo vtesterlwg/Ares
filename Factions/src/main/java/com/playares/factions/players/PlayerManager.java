@@ -9,7 +9,7 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.timer.Timer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
-import com.playares.factions.players.handlers.PlayerFactionHandler;
+import com.playares.factions.players.handlers.PlayerTimerHandler;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
@@ -23,7 +23,7 @@ public final class PlayerManager {
     public final Factions plugin;
 
     @Getter
-    public final PlayerFactionHandler factionHandler;
+    public final PlayerTimerHandler timerHandler;
 
     @Getter
     public final Set<FactionPlayer> playerRepository;
@@ -36,7 +36,7 @@ public final class PlayerManager {
 
     public PlayerManager(Factions plugin) {
         this.plugin = plugin;
-        this.factionHandler = new PlayerFactionHandler(this);
+        this.timerHandler = new PlayerTimerHandler(this);
         this.playerRepository = Sets.newConcurrentHashSet();
 
         this.displayUpdater = new Scheduler(plugin).async(() -> playerRepository.stream().filter(profile -> !profile.getTimers().isEmpty()).forEach(profile -> {
@@ -51,6 +51,16 @@ public final class PlayerManager {
             profile.getTimers().remove(expired);
 
         }).run()))).repeat(0L, 5L).run();
+    }
+
+    public void cancelTasks() {
+        if (this.displayUpdater != null) {
+            this.displayUpdater.cancel();
+        }
+
+        if (this.timerUpdater != null) {
+            this.timerUpdater.cancel();
+        }
     }
 
     public FactionPlayer loadPlayer(UUID uniqueId, String username) {

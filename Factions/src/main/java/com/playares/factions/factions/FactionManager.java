@@ -69,6 +69,12 @@ public final class FactionManager {
                 })).repeat(0L, 20L).run();
     }
 
+    public void cancelTasks() {
+        if (this.factionTicker != null) {
+            this.factionTicker.cancel();
+        }
+    }
+
     public void loadFactions() {
         factionRepository.addAll(FactionDAO.getFactions(plugin, plugin.getMongo()));
         Logger.print("Loaded " + factionRepository.size() + " Factions");
