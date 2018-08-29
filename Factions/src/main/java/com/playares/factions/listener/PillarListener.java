@@ -23,7 +23,9 @@ public final class PillarListener implements Listener {
         final Player player = event.getPlayer();
         final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
 
-        profile.hideAllPillars();
+        if (profile != null) {
+            profile.hideAllPillars();
+        }
     }
 
     @EventHandler
