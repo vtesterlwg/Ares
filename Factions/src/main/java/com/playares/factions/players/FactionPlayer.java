@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     @Getter
@@ -124,6 +125,14 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     public void hideAllPillars() {
         pillars.forEach(Pillar::hide);
         pillars.clear();
+    }
+
+    public boolean hasClaimPillars() {
+        return !pillars.stream().filter(pillar -> pillar instanceof ClaimPillar).collect(Collectors.toList()).isEmpty();
+    }
+
+    public boolean hasMapPillars() {
+        return !pillars.stream().filter(pillar -> pillar instanceof MapPillar).collect(Collectors.toList()).isEmpty();
     }
 
     public void hideAllClaimPillars() {

@@ -61,7 +61,9 @@ public interface Pillar {
 
         getBlocks().forEach(location -> {
             final Block block = location.getBukkit();
-            block.getState().update();
+            Players.sendBlockChange(getViewer(), block.getLocation(), block.getType());
         });
+
+        setDrawn(false);
     }
 }
