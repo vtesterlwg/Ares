@@ -7,6 +7,7 @@ import com.playares.factions.players.FactionPlayer;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.EnderpearlTimer;
 import com.playares.factions.timers.cont.player.HomeTimer;
+import com.playares.factions.timers.cont.player.StuckTimer;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.EnderPearl;
@@ -33,13 +34,17 @@ public final class PlayerTimerListener implements Listener {
             return;
         }
 
-        // TODO: Stuck timer
-
         final HomeTimer homeTimer = (HomeTimer)profile.getTimer(PlayerTimer.PlayerTimerType.HOME);
+        final StuckTimer stuckTimer = (StuckTimer)profile.getTimer(PlayerTimer.PlayerTimerType.STUCK);
 
         if (homeTimer != null) {
             profile.getTimers().remove(homeTimer);
             player.sendMessage(ChatColor.RED + "Home warp cancelled");
+        }
+
+        if (stuckTimer != null) {
+            profile.getTimers().remove(stuckTimer);
+            player.sendMessage(ChatColor.RED + "Stuck warp cancelled");
         }
     }
 
@@ -56,13 +61,17 @@ public final class PlayerTimerListener implements Listener {
             return;
         }
 
-        // TODO: Stuck timer
-
         final HomeTimer homeTimer = (HomeTimer)profile.getTimer(PlayerTimer.PlayerTimerType.HOME);
+        final StuckTimer stuckTimer = (StuckTimer)profile.getTimer(PlayerTimer.PlayerTimerType.STUCK);
 
         if (homeTimer != null) {
             profile.getTimers().remove(homeTimer);
             player.sendMessage(ChatColor.RED + "Home warp cancelled");
+        }
+
+        if (stuckTimer != null) {
+            profile.getTimers().remove(stuckTimer);
+            player.sendMessage(ChatColor.RED + "Stuck warp cancelled");
         }
     }
 

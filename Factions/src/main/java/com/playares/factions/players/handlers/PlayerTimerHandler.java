@@ -2,6 +2,7 @@ package com.playares.factions.players.handlers;
 
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.location.PLocatable;
+import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.factions.claims.DefinedClaim;
 import com.playares.factions.factions.Faction;
@@ -11,17 +12,49 @@ import com.playares.factions.players.FactionPlayer;
 import com.playares.factions.players.PlayerManager;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.HomeTimer;
+import com.playares.factions.timers.cont.player.StuckTimer;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-public final class PlayerFactionHandler {
+public final class PlayerTimerHandler {
     @Getter
     public final PlayerManager manager;
 
-    public PlayerFactionHandler(PlayerManager manager) {
+    public PlayerTimerHandler(PlayerManager manager) {
         this.manager = manager;
+    }
+
+    public void attemptStuck(Player player, SimplePromise promise) {
+        final FactionPlayer profile = manager.getPlayer(player.getUniqueId());
+        final DefinedClaim inside = manager.getPlugin().getClaimManager().getClaimAt(new PLocatable(player));
+
+        if (profile == null) {
+            promise.failure("Failed to obtain your profile");
+            return;
+        }
+
+        if (inside == null) {
+            promise.failure("You are not standing in a claim");
+            return;
+        }
+
+        if (profile.getTimer(PlayerTimer.PlayerTimerType.STUCK) != null) {
+            promise.failure("This action is already in progress");
+            return;
+        }
+
+        final StuckTimer timer = new StuckTimer(manager.getPlugin(), player.getUniqueId(), manager.getPlugin().getFactionConfig().getTimerStuck());
+
+        profile.getTimers().add(timer);
+
+        player.sendMessage(ChatColor.YELLOW + "You will teleport outside this claim in " + ChatColor.AQUA + manager.getPlugin().getFactionConfig().getTimerStuck() + " seconds" + ChatColor.YELLOW + "." +
+                " Moving or taking damage will cancel this timer");
+
+        Logger.print(player.getName() + " is attempting to unstuck themselves");
+
+        promise.success();
     }
 
     public void attemptHome(Player player, SimplePromise promise) {

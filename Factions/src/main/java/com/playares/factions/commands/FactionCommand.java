@@ -85,7 +85,7 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("home")
     @Description("Return to your faction home")
     public void onHome(Player player) {
-        plugin.getPlayerManager().getFactionHandler().attemptHome(player, new SimplePromise() {
+        plugin.getPlayerManager().getTimerHandler().attemptHome(player, new SimplePromise() {
             @Override
             public void success() {}
 
@@ -99,7 +99,15 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("stuck")
     @Description("Teleport outside of the claim you are standing in")
     public void onStuck(Player player) {
+        plugin.getPlayerManager().getTimerHandler().attemptStuck(player, new SimplePromise() {
+            @Override
+            public void success() {}
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("deposit|d")
