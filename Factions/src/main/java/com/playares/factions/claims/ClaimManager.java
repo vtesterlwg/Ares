@@ -9,6 +9,7 @@ import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.claims.builder.DefinedClaimBuilder;
 import com.playares.factions.claims.handler.ClaimCreationHandler;
+import com.playares.factions.claims.handler.ClaimDeleteHandler;
 import com.playares.factions.claims.handler.ClaimMapHandler;
 import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.ServerFaction;
@@ -28,6 +29,9 @@ public final class ClaimManager {
     public ClaimCreationHandler creationHandler;
 
     @Getter
+    public ClaimDeleteHandler deleteHandler;
+
+    @Getter
     public ClaimMapHandler mapHandler;
 
     @Getter
@@ -39,6 +43,8 @@ public final class ClaimManager {
     public ClaimManager(Factions plugin) {
         this.plugin = plugin;
         this.creationHandler = new ClaimCreationHandler(this);
+        this.deleteHandler = new ClaimDeleteHandler(this);
+        this.mapHandler = new ClaimMapHandler(this);
         this.claimRepository = Sets.newConcurrentHashSet();
         this.claimBuilders = Sets.newConcurrentHashSet();
     }

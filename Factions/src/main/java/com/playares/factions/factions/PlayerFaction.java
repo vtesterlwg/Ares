@@ -269,6 +269,15 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         timer.start();
     }
 
+    public void unsetHome() {
+        if (home == null) {
+            return;
+        }
+
+        home = null;
+        sendMessage(ChatColor.RED + "Faction home has been unset");
+    }
+
     public void addTimer(FactionTimer timer) {
         final FactionTimer existing = getTimer(timer.getType());
 

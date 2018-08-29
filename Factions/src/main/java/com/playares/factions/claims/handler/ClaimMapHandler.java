@@ -78,6 +78,10 @@ public final class ClaimMapHandler {
                             adjusted.setY(viewer.getLocation().getBlockY() - 5);
 
                             final MapPillar pillar = new MapPillar(viewer, adjusted, Material.EMERALD_BLOCK);
+
+                            profile.getPillars().add(pillar);
+
+                            pillar.draw();
                         }
                     });
                 }

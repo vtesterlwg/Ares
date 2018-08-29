@@ -6,13 +6,12 @@ import com.google.common.collect.Lists;
 import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.bukkit.location.BLocatable;
 import com.playares.commons.bukkit.location.Locatable;
+import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.factions.Factions;
 import com.playares.factions.factions.Faction;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 
 import java.util.Arrays;
 import java.util.List;
@@ -159,12 +158,17 @@ public final class DefinedClaim implements Claimable, MongoDocument<DefinedClaim
             return false;
         }
 
-        final double xMin = Math.min(x1, x2);
-        final double yMin = Math.min(y1, y2);
-        final double zMin = Math.min(z1, z2);
-        final double xMax = Math.max(x1, x2);
-        final double yMax = Math.max(y1, y2);
-        final double zMax = Math.max(z1, z2);
+        double xMin = Math.min(x1, x2);
+        double yMin = Math.min(y1, y2);
+        double zMin = Math.min(z1, z2);
+        double xMax = Math.max(x1, x2);
+        double yMax = Math.max(y1, y2);
+        double zMax = Math.max(z1, z2);
+
+        if (location instanceof PLocatable) {
+            xMax++;
+            zMax++;
+        }
 
         return
                 location.getX() >= xMin && location.getX() <= xMax &&
@@ -262,17 +266,20 @@ public final class DefinedClaim implements Claimable, MongoDocument<DefinedClaim
             return false;
         }
 
-        final BLocatable converted = new BLocatable(location.getWorldName(), location.getX(), location.getY(), location.getZ());
-        final Block block = converted.getBukkit();
+        if (inside(new BLocatable(location.getWorldName(), location.getX() + 1.0, location.getY(), location.getZ()))) {
+            return true;
+        }
 
-        for (BlockFace face : BlockFace.values()) {
-            if (face.equals(BlockFace.NORTH) || face.equals(BlockFace.EAST) || face.equals(BlockFace.SOUTH) || face.equals(BlockFace.WEST)) {
-                final Block relative = block.getRelative(face);
+        if (inside(new BLocatable(location.getWorldName(), location.getX(), location.getY(), location.getZ() + 1.0))) {
+            return true;
+        }
 
-                if (inside(new BLocatable(relative))) {
-                    return true;
-                }
-            }
+        if (inside(new BLocatable(location.getWorldName(), location.getX() - 1.0, location.getY(), location.getZ()))) {
+            return true;
+        }
+
+        if (inside(new BLocatable(location.getWorldName(), location.getX(), location.getY(), location.getZ() - 1.0))) {
+            return true;
         }
 
         return false;
