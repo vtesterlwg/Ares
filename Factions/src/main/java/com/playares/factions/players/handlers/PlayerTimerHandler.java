@@ -104,7 +104,10 @@ public final class PlayerTimerHandler {
                 if (insideFaction instanceof ServerFaction) {
                     final ServerFaction sf = (ServerFaction)insideFaction;
 
-                    if (!sf.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+                    if (sf.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+                        Players.teleportWithVehicle(manager.getPlugin(), player, faction.getHome().getBukkit());
+                        player.sendMessage(ChatColor.GREEN + "Returned to faction home");
+                    } else {
                         promise.failure("You can not warp home from inside this claim");
                         return;
                     }
@@ -117,11 +120,6 @@ public final class PlayerTimerHandler {
                     }
                 }
             }
-
-            Players.teleportWithVehicle(manager.getPlugin(), player, faction.getHome().getBukkit());
-            player.sendMessage(ChatColor.GREEN + "Returned to faction home");
-
-            return;
         }
 
         profile.getTimers().add(new HomeTimer(manager.getPlugin(), player.getUniqueId(), faction, manager.getPlugin().getFactionConfig().getTimerHome()));
