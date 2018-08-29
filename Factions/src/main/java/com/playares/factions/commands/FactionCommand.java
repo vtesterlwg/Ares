@@ -408,7 +408,17 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("disband")
     @Description("Disband your faction")
     public void onDisband(Player player) {
+        plugin.getFactionManager().getDisbandHandler().disband(player, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction has been disbanded");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("disband")
