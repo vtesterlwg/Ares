@@ -1,11 +1,13 @@
 package com.playares.factions.timers.cont.player;
 
 import com.playares.commons.bukkit.location.PLocatable;
+import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.timers.PlayerTimer;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -42,6 +44,9 @@ public final class StuckTimer extends PlayerTimer {
                 final Location fixed = block.getLocation().add(0, 2.0, 0);
 
                 player.teleport(fixed);
+                player.sendMessage(ChatColor.GREEN + "You have been teleported outside the claim");
+
+                Logger.print(player.getName() + " finished the unstuck process");
             }).run();
         }).run();
     }
