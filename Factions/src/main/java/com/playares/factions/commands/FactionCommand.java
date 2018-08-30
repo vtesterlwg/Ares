@@ -264,7 +264,7 @@ public final class FactionCommand extends BaseCommand {
         });
     }
 
-    /*@Subcommand("claim")
+    @Subcommand("claim")
     @Description("Begin the claiming process for your faction")
     @Syntax("[faction]")
     @CommandPermission("factions.claim.others")
