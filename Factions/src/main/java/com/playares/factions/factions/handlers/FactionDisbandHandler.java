@@ -6,6 +6,7 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.claims.ClaimDAO;
 import com.playares.factions.claims.DefinedClaim;
+import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.FactionDAO;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
@@ -70,7 +71,9 @@ public final class FactionDisbandHandler {
         });
 
         new Scheduler(manager.getPlugin()).async(() -> {
-            claims.forEach(claim -> ClaimDAO.deleteDefinedClaim(manager.getPlugin().getMongo(), claim));
+            manager.getPlugin().getClaimManager().getClaimRepository().removeAll(claims);
+
+            ClaimDAO.deleteDefinedClaims(manager.getPlugin().getMongo(), claims);
             FactionDAO.deleteFaction(manager.getPlugin().getMongo(), faction);
 
             new Scheduler(manager.getPlugin()).sync(() -> {
@@ -82,6 +85,59 @@ public final class FactionDisbandHandler {
 
                 Logger.print(player.getName() + " disbanded " + faction.getName());
 
+                promise.success();
+            }).run();
+        }).run();
+    }
+
+    public void disband(Player player, String name, SimplePromise promise) {
+        final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+        final Faction faction = manager.getFactionByName(name);
+
+        if (profile == null) {
+            promise.failure("Failed to obtain your profile");
+            return;
+        }
+
+        if (faction == null) {
+            promise.failure("Faction not found");
+            return;
+        }
+
+        final List<DefinedClaim> claims = manager.getPlugin().getClaimManager().getClaimsByOwner(faction);
+
+        if (faction instanceof PlayerFaction) {
+            final PlayerFaction pf = (PlayerFaction)faction;
+
+            claims.forEach(claim -> pf.setBalance(pf.getBalance() + claim.getValue()));
+            profile.setBalance(profile.getBalance() + pf.getBalance());
+
+            pf.getOnlineMembers().forEach(member -> {
+                final Player bukkitMember = Bukkit.getPlayer(member.getUniqueId());
+                final FactionPlayer memberProfile = manager.getPlugin().getPlayerManager().getPlayer(member.getUniqueId());
+
+                if (memberProfile != null) {
+                    memberProfile.setFaction(null);
+                }
+
+                if (bukkitMember != null) {
+                    pf.unregister(bukkitMember);
+                    bukkitMember.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+                }
+            });
+
+            pf.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.RED + " disbanded the faction");
+        }
+
+        new Scheduler(manager.getPlugin()).async(() -> {
+            manager.getPlugin().getClaimManager().getClaimRepository().removeAll(claims);
+
+            ClaimDAO.deleteDefinedClaims(manager.getPlugin().getMongo(), claims);
+            FactionDAO.deleteFaction(manager.getPlugin().getMongo(), faction);
+
+            new Scheduler(manager.getPlugin()).sync(() -> {
+                manager.getFactionRepository().remove(faction);
+                Logger.print(player.getName() + " disbanded " + faction.getName());
                 promise.success();
             }).run();
         }).run();
