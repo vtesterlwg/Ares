@@ -34,10 +34,19 @@ public final class ClaimingStick implements CustomItem {
     public List<String> getLore() {
         final List<String> lore = Lists.newArrayList();
 
-        lore.add(ChatColor.YELLOW + "Left-click to set " + ChatColor.BLUE + "Corner A");
-        lore.add(ChatColor.YELLOW + "Right-click to set " + ChatColor.BLUE + "Corner B");
-        lore.add(ChatColor.YELLOW + "Left-click " + ChatColor.YELLOW + "" + ChatColor.UNDERLINE + "while sneaking" + ChatColor.YELLOW + " to confirm claim");
-        lore.add(ChatColor.YELLOW + "Right-click the air to " + ChatColor.RED + "cancel" + ChatColor.YELLOW + " the claim");
+        lore.add(ChatColor.GOLD + "Left-click" + ChatColor.YELLOW + " to set " + ChatColor.BLUE + "Corner A");
+        lore.add(ChatColor.GOLD + "Right-click" + ChatColor.YELLOW + " to set " + ChatColor.BLUE + "Corner B");
+        lore.add(ChatColor.RESET + " ");
+        lore.add(ChatColor.AQUA + "With both corners set,");
+        lore.add(ChatColor.AQUA + "Left-click " + ChatColor.AQUA + "" + ChatColor.UNDERLINE + "while sneaking" + ChatColor.AQUA + " to confirm");
+        lore.add(ChatColor.RESET + " ");
+        lore.add(ChatColor.RED + "To cancel the claiming process,");
+        lore.add(ChatColor.RED + "Right-click " + ChatColor.RED + "" + ChatColor.UNDERLINE + "while sneaking" + ChatColor.RESET);
+        lore.add(ChatColor.RESET + " ");
+        lore.add(ChatColor.DARK_PURPLE + "Tips" + ChatColor.LIGHT_PURPLE + ": ");
+        lore.add(ChatColor.YELLOW + " - " + ChatColor.GOLD + "All claims must be connected");
+        lore.add(ChatColor.YELLOW + " - " + ChatColor.GOLD + "Claims must be " + plugin.getFactionConfig().getPlayerClaimBuffer() + " blocks away from other faction claims");
+        lore.add(ChatColor.YELLOW + " - " + ChatColor.GOLD + "Claims can not be near Server Claims");
 
         return lore;
     }
