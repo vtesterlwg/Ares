@@ -13,6 +13,8 @@ import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.factions.ServerFaction;
 import com.playares.factions.players.FactionPlayer;
 import com.playares.factions.timers.PlayerTimer;
+import com.playares.factions.timers.cont.player.EnderpearlTimer;
+import com.playares.factions.util.FactionUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -26,9 +28,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -283,6 +284,108 @@ public final class ClaimListener implements Listener {
 
         if (inside != null) {
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onTeleport(PlayerTeleportEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (!event.getCause().equals(PlayerTeleportEvent.TeleportCause.ENDER_PEARL)) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            return;
+        }
+
+        final EnderpearlTimer timer = (EnderpearlTimer)profile.getTimer(PlayerTimer.PlayerTimerType.ENDERPEARL);
+        final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new PLocatable(
+                event.getTo().getWorld().getName(),
+                event.getTo().getX(),
+                event.getTo().getY(),
+                event.getTo().getZ(),
+                event.getTo().getYaw(),
+                event.getTo().getPitch()));
+
+        if (timer == null) {
+            return;
+        }
+
+        if (inside == null) {
+            return;
+        }
+
+        final Faction owner = plugin.getFactionManager().getFactionById(inside.getOwnerId());
+
+        if (owner == null) {
+            return;
+        }
+
+        if (owner instanceof PlayerFaction) {
+            if (profile.getTimer(PlayerTimer.PlayerTimerType.PROTECTION) != null) {
+                player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
+                player.sendMessage(ChatColor.RED + "Your enderpearl landed in a claim you are not allowed to enter - Your enderpearl has been refunded");
+
+                profile.getTimers().remove(timer);
+
+                event.setCancelled(true);
+            }
+        } else if (owner instanceof ServerFaction) {
+            final ServerFaction sf = (ServerFaction)owner;
+
+            if (profile.getTimer(PlayerTimer.PlayerTimerType.COMBAT) != null && sf.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+                player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
+                player.sendMessage(ChatColor.RED + "Your enderpearl landed in a claim you are not allowed to enter - Your enderpearl has been refunded");
+
+                profile.getTimers().remove(timer);
+
+                event.setCancelled(true);
+            }
+
+            // TODO: Cancel enderpearl landing in active Palace event claims
+        }
+    }
+
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        final Player player = event.getPlayer();
+        final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            return;
+        }
+
+        final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new PLocatable(player));
+
+        if (inside != null) {
+            final Faction owner = plugin.getFactionManager().getFactionById(inside.getOwnerId());
+            final PlayerChangeClaimEvent changeClaimEvent = new PlayerChangeClaimEvent(player, null, inside);
+            Bukkit.getPluginManager().callEvent(changeClaimEvent);
+
+            if (changeClaimEvent.isCancelled()) {
+                FactionUtils.teleportOutsideClaims(plugin, player);
+                player.sendMessage(ChatColor.DARK_PURPLE + "You have been escorted outside of the claim you were logged out in");
+                return;
+            }
+
+            if (owner instanceof ServerFaction) {
+                final ServerFaction sf = (ServerFaction)owner;
+
+                if (sf.getFlag().equals(ServerFaction.FactionFlag.EVENT)) {
+                    FactionUtils.teleportOutsideClaims(plugin, player);
+                    player.sendMessage(ChatColor.DARK_PURPLE + "You have been escorted outside of the claim you were logged out in");
+                    return;
+                }
+            }
+
+            profile.setCurrentClaim(inside);
         }
     }
 
