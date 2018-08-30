@@ -12,9 +12,7 @@ import com.playares.factions.claims.pillars.MapPillar;
 import com.playares.factions.claims.pillars.Pillar;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.timers.PlayerTimer;
-import com.playares.factions.timers.cont.player.CombatTagTimer;
-import com.playares.factions.timers.cont.player.EnderpearlTimer;
-import com.playares.factions.timers.cont.player.ProtectionTimer;
+import com.playares.factions.timers.cont.player.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -172,7 +170,6 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
 
         convertedTimers.keySet().forEach(timerName -> {
             final PlayerTimer.PlayerTimerType type = PlayerTimer.PlayerTimerType.valueOf(timerName);
-            final long expire = convertedTimers.get(timerName);
             final long remaining = convertedTimers.get(timerName);
             final int remainingSeconds = (int)(remaining / 1000L);
 
@@ -189,6 +186,16 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
 
                 else if (type.equals(PlayerTimer.PlayerTimerType.PROTECTION)) {
                     final ProtectionTimer timer = new ProtectionTimer(uniqueId, remainingSeconds);
+                    this.timers.add(timer);
+                }
+
+                else if (type.equals(PlayerTimer.PlayerTimerType.TOTEM)) {
+                    final TotemTimer timer = new TotemTimer(uniqueId, remainingSeconds);
+                    this.timers.add(timer);
+                }
+
+                else if (type.equals(PlayerTimer.PlayerTimerType.GAPPLE)) {
+                    final GappleTimer timer = new GappleTimer(uniqueId, remainingSeconds);
                     this.timers.add(timer);
                 }
             }
