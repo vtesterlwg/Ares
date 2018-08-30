@@ -31,7 +31,7 @@ public abstract class PlayerTimer extends Timer {
         ENDERPEARL(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Enderpearl", true, true),
         HOME(ChatColor.BLUE + "" + ChatColor.BOLD + "Home", true, true),
         STUCK(ChatColor.BLUE + "" + ChatColor.BOLD + "Stuck", true, false),
-        CRAPPLE(ChatColor.GOLD + "" + ChatColor.BOLD + "Crapple", false, false),
+        CRAPPLE(ChatColor.GOLD + "" + ChatColor.BOLD + "Crapple", true, true),
         GAPPLE(ChatColor.GOLD + "" + ChatColor.BOLD + "Gapple", false, false),
         TOTEM(ChatColor.GOLD + "" + ChatColor.BOLD + "Totem", false, false),
         LOGOUT(ChatColor.AQUA + "" + ChatColor.BOLD + "Logout", true, true),
