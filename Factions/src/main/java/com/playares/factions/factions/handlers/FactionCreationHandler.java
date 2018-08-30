@@ -109,7 +109,7 @@ public final class FactionCreationHandler {
             }
 
             faction.getPendingInvites().add(profile.getUniqueId());
-            faction.sendMessage(ChatColor.GOLD + player.getName() + ChatColor.GOLD + " has invited " + ChatColor.YELLOW + profile.getUsername() + ChatColor.GOLD + " to the faction");
+            faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " has invited " + ChatColor.YELLOW + profile.getUsername() + ChatColor.GOLD + " to the faction");
 
             if (faction.isRaidable()) {
                 player.sendMessage(ChatColor.RED + profile.getUsername() + " will not be able to join until your faction is no longer raidable");
