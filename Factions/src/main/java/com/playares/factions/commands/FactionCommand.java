@@ -270,8 +270,18 @@ public final class FactionCommand extends BaseCommand {
     @CommandPermission("factions.claim.others")
     @CommandCompletion("@factions")
     public void onClaim(Player player, String faction) {
+        plugin.getClaimManager().getCreationHandler().startClaiming(player, faction, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GOLD + "You have been given a Claiming Stick");
+            }
 
-    }*/
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
 
     @Subcommand("subclaim")
     @Description("Subclaim the chest you are looking at")
