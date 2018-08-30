@@ -47,6 +47,7 @@ public final class ClaimingStick implements CustomItem {
         lore.add(ChatColor.YELLOW + " - " + ChatColor.GOLD + "All claims must be connected");
         lore.add(ChatColor.YELLOW + " - " + ChatColor.GOLD + "Claims must be " + plugin.getFactionConfig().getPlayerClaimBuffer() + " blocks away from other faction claims");
         lore.add(ChatColor.YELLOW + " - " + ChatColor.GOLD + "Claims can not be near Server Claims");
+        lore.add(ChatColor.YELLOW + " - " + ChatColor.GOLD + "Claims can only be created in the Overworld");
 
         return lore;
     }
