@@ -164,11 +164,11 @@ public final class ProfileService implements AresService, Listener {
         new Scheduler(getOwner()).async(() -> AresProfileDAO.insertProfile(getOwner().getMongo(), profile)).run();
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.LOW)
     public void onProcessedChat(ProcessedChatEvent event) {
         final Player player = event.getPlayer();
         final AresProfile profile = getProfile(player.getUniqueId());
-        final List<UUID> toRemove = Lists.newArrayList();
+        final List<Player> toRemove = Lists.newArrayList();
 
         if (profile == null) {
             player.sendMessage(ChatColor.RED + "Failed to obtain your profile");
@@ -188,12 +188,12 @@ public final class ProfileService implements AresService, Listener {
             final AresProfile viewerProfile = getProfile(recipient.getUniqueId());
 
             if (viewerProfile.getSettings().isHidingGlobalChat()) {
-                toRemove.add(recipient.getUniqueId());
+                toRemove.add(recipient);
                 continue;
             }
 
             if (profile.getSettings().isIgnoring(recipient.getUniqueId()) || viewerProfile.getSettings().isIgnoring(player.getUniqueId())) {
-                toRemove.add(recipient.getUniqueId());
+                toRemove.add(recipient);
             }
         }
 

@@ -14,6 +14,7 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 import java.util.Collections;
@@ -129,7 +130,7 @@ public final class RankService implements AresService, Listener {
         return false;
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.NORMAL)
     public void onProcessedChat(ProcessedChatEvent event) {
         event.setDisplayName(getDisplayName(event.getPlayer()));
     }
