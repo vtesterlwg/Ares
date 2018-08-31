@@ -64,38 +64,36 @@ public final class FactionDAO {
 
     public static void deleteFaction(MongoDB database, Faction faction) {
         if (faction instanceof ServerFaction) {
+            final ServerFaction sf = (ServerFaction)faction;
             final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_SF_COLL);
 
             if (collection == null) {
-                Logger.error("Collection '" + DB_SF_COLL + "' was not found, failed to save faction");
+                Logger.error("Collection '" + DB_SF_COLL + "' was not found, failed to delete faction");
                 return;
             }
 
-            final Document existing = collection.find(Filters.eq("id", faction.getUniqueId())).first();
+            final Document existing = collection.find(Filters.eq("id", sf.getUniqueId())).first();
 
             if (existing != null) {
-                collection.replaceOne(existing, ((ServerFaction) faction).toDocument());
-            } else {
-                collection.insertOne(((ServerFaction) faction).toDocument());
+                collection.deleteOne(existing);
             }
 
             return;
         }
 
         if (faction instanceof PlayerFaction) {
+            final PlayerFaction pf = (PlayerFaction)faction;
             final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_PF_COLL);
 
             if (collection == null) {
-                Logger.error("Collection '" + DB_PF_COLL + "' was not found, failed to save faction");
+                Logger.error("Collection '" + DB_PF_COLL + "' was not found, failed to delete faction");
                 return;
             }
 
-            final Document existing = collection.find(Filters.eq("id", faction.getUniqueId())).first();
+            final Document existing = collection.find(Filters.eq("id", pf.getUniqueId())).first();
 
             if (existing != null) {
-                collection.replaceOne(existing, ((PlayerFaction) faction).toDocument());
-            } else {
-                collection.insertOne(((PlayerFaction) faction).toDocument());
+                collection.deleteOne(existing);
             }
         }
     }
