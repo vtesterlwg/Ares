@@ -30,6 +30,7 @@ public final class RankHandler {
 
     public void deleteRank(AresRank rank, SimplePromise promise) {
         new Scheduler(rankService.getOwner()).async(() -> {
+            rankService.getRanks().remove(rank);
             AresRankDAO.deleteRank(rankService.getOwner().getMongo(), rank);
             new Scheduler(rankService.getOwner()).sync(promise::success).run();
         }).run();
