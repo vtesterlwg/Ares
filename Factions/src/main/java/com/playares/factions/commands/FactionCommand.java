@@ -186,14 +186,62 @@ public final class FactionCommand extends BaseCommand {
     @Description("Retrieve a list of all factions")
     @Syntax("[page]")
     public void onList(Player player) {
+        plugin.getFactionManager().getDisplayHandler().viewList(player, 1, new SimplePromise() {
+            @Override
+            public void success() {}
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("list")
     @Description("Retrieve a list of all factions")
     @Syntax("[page]")
     public void onList(Player player, int page) {
+        final int cleanPage = (page > 0) ? page : 1;
 
+        plugin.getFactionManager().getDisplayHandler().viewList(player, cleanPage, new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("chat|c")
+    @Description("Change chat channels")
+    @Syntax("[channel]")
+    public void onChat(Player player) {
+        plugin.getFactionManager().getChatHandler().cycleChatChannel(player, new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(reason);
+            }
+        });
+    }
+
+    @Subcommand("chat|c")
+    @Description("Change chat channels")
+    @Syntax("[channel]")
+    public void onChat(Player player, @Flags("p|pub|public|f|fac|faction|of|officer") String channel) {
+        plugin.getFactionManager().getChatHandler().selectChatChannel(player, channel, new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("invite|inv")

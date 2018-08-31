@@ -77,6 +77,7 @@ public final class Factions extends AresPlugin {
         registerListener(new PlayerTimerListener(this));
         registerListener(new ClaimListener(this));
         registerListener(new PlayerListener(this));
+        registerListener(new ChatListener(this));
 
         registerService(new ClassService(this));
         registerService(new CustomEventService(this));

@@ -163,7 +163,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
             return;
         }
 
-        final FactionProfile profile = new FactionProfile(playerId, FactionRank.MEMBER);
+        final FactionProfile profile = new FactionProfile(playerId, FactionRank.MEMBER, ChatChannel.PUBLIC);
 
         members.add(profile);
     }
@@ -173,7 +173,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
             return;
         }
 
-        final FactionProfile profile = new FactionProfile(playerId, rank);
+        final FactionProfile profile = new FactionProfile(playerId, rank, ChatChannel.PUBLIC);
 
         members.add(profile);
     }
@@ -377,7 +377,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
             final UUID id = UUID.fromString(memberId);
             final FactionRank rank = FactionRank.valueOf(convertedMembers.get(memberId));
 
-            this.members.add(new FactionProfile(id, rank));
+            this.members.add(new FactionProfile(id, rank, ChatChannel.PUBLIC));
         });
 
         convertedTimers.keySet().forEach(timerName -> {
@@ -444,6 +444,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         }
     }
 
+    public enum ChatChannel {
+        PUBLIC, FACTION, OFFICER;
+    }
+
     @AllArgsConstructor
     public final class FactionProfile {
         @Getter
@@ -451,5 +455,8 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
 
         @Getter @Setter
         public FactionRank rank;
+
+        @Getter @Setter
+        public ChatChannel channel;
     }
 }

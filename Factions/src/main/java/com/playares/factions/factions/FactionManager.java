@@ -38,6 +38,9 @@ public final class FactionManager {
     public final FactionStaffHandler staffHandler;
 
     @Getter
+    public final FactionChatHandler chatHandler;
+
+    @Getter
     public final BukkitTask factionTicker;
 
     @Getter
@@ -51,6 +54,7 @@ public final class FactionManager {
         this.displayHandler = new FactionDisplayHandler(this);
         this.manageHandler = new FactionManageHandler(this);
         this.staffHandler = new FactionStaffHandler(this);
+        this.chatHandler = new FactionChatHandler(this);
 
         this.factionRepository = Sets.newConcurrentHashSet();
 

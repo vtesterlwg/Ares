@@ -15,6 +15,8 @@ import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
 import com.playares.services.profiles.ProfileService;
 import com.playares.services.profiles.data.AresProfile;
 import lombok.Getter;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -71,9 +73,79 @@ public final class FactionDisplayHandler {
         promise.success();
     }
 
-    public void prepareFactionInfo(Player viewer, String name, SimplePromise promise) {
-        final Player foundPlayer = Bukkit.getPlayer(name);
+    public void viewList(Player viewer, int page, SimplePromise promise) {
+        final List<PlayerFaction> factions = Lists.newArrayList(manager.getPlayerFactions());
 
+        factions.sort(Comparator.comparingInt(f -> f.getOnlineMembers().size()));
+
+        int finishPos = page * 10;
+        int startPos = finishPos - 9;
+
+        if (startPos > factions.size()) {
+            promise.failure("Page does not exist");
+            return;
+        }
+
+        viewer.sendMessage(ChatColor.BLUE + "Faction List " + ChatColor.GOLD + "(" + ChatColor.YELLOW + "Page " + page + ChatColor.GOLD + ")");
+
+        for (int i = startPos; i < finishPos; i++) {
+            if (i >= factions.size()) {
+                break;
+            }
+
+            final PlayerFaction faction = factions.get(i);
+
+            if (faction == null) {
+                finishPos++;
+                continue;
+            }
+
+            viewer.sendMessage(new ComponentBuilder("" + i)
+            .color(net.md_5.bungee.api.ChatColor.GOLD)
+            .append(".")
+            .color(net.md_5.bungee.api.ChatColor.YELLOW)
+            .append(" " + faction.getName())
+            .color(net.md_5.bungee.api.ChatColor.BLUE)
+            .append(" | " + faction.getOnlineMembers().size() + " online | " + String.format("%.2f", faction.getDeathsTilRaidable()) + "DTR")
+            .color(net.md_5.bungee.api.ChatColor.GRAY)
+            .append(" [MORE INFO]")
+            .color(net.md_5.bungee.api.ChatColor.AQUA)
+            .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/f who " + faction.getName()))
+            .create());
+        }
+
+        if (page > 1) {
+            viewer.sendMessage(new ComponentBuilder("[")
+            .color(net.md_5.bungee.api.ChatColor.GOLD)
+            .append(" << ")
+            .color(net.md_5.bungee.api.ChatColor.WHITE)
+            .bold(true)
+            .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/f list " + (page - 1)))
+            .append("|")
+            .color(net.md_5.bungee.api.ChatColor.YELLOW)
+            .append(" >> ")
+            .color(net.md_5.bungee.api.ChatColor.WHITE)
+            .bold(true)
+            .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/f list " + (page + 1)))
+            .append("]")
+            .color(net.md_5.bungee.api.ChatColor.GOLD)
+            .create());
+        } else {
+            viewer.sendMessage(new ComponentBuilder("[")
+            .color(net.md_5.bungee.api.ChatColor.GOLD)
+            .append(" >> ")
+            .color(net.md_5.bungee.api.ChatColor.WHITE)
+            .bold(true)
+            .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/f list " + (page + 1)))
+            .append("]")
+            .color(net.md_5.bungee.api.ChatColor.GOLD)
+            .create());
+        }
+
+        promise.success();
+    }
+
+    public void prepareFactionInfo(Player viewer, String name, SimplePromise promise) {
         manager.getFactionByPlayer(name, faction -> {
             if (faction == null) {
                 final Faction byName = manager.getFactionByName(name);
