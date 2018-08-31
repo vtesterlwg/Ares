@@ -53,8 +53,8 @@ public final class FactionDisbandHandler {
         }
 
         final List<DefinedClaim> claims = manager.getPlugin().getClaimManager().getClaimsByOwner(faction);
-
         claims.forEach(claim -> faction.setBalance(faction.getBalance() + claim.getValue()));
+        manager.getPlugin().getClaimManager().getClaimRepository().removeAll(claims);
 
         faction.getOnlineMembers().forEach(member -> {
             final Player bukkitMember = Bukkit.getPlayer(member.getUniqueId());
@@ -70,21 +70,16 @@ public final class FactionDisbandHandler {
             }
         });
 
-        new Scheduler(manager.getPlugin()).async(() -> {
-            manager.getPlugin().getClaimManager().getClaimRepository().removeAll(claims);
+        manager.getFactionRepository().remove(faction);
 
+        new Scheduler(manager.getPlugin()).async(() -> {
             ClaimDAO.deleteDefinedClaims(manager.getPlugin().getMongo(), claims);
             FactionDAO.deleteFaction(manager.getPlugin().getMongo(), faction);
 
             new Scheduler(manager.getPlugin()).sync(() -> {
                 faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.RED + " disbanded the faction");
-
                 profile.setBalance(profile.getBalance() + faction.getBalance());
-
-                manager.getFactionRepository().remove(faction);
-
                 Logger.print(player.getName() + " disbanded " + faction.getName());
-
                 promise.success();
             }).run();
         }).run();
@@ -105,6 +100,7 @@ public final class FactionDisbandHandler {
         }
 
         final List<DefinedClaim> claims = manager.getPlugin().getClaimManager().getClaimsByOwner(faction);
+        manager.getPlugin().getClaimManager().getClaimRepository().removeAll(claims);
 
         if (faction instanceof PlayerFaction) {
             final PlayerFaction pf = (PlayerFaction)faction;
@@ -129,14 +125,13 @@ public final class FactionDisbandHandler {
             pf.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.RED + " disbanded the faction");
         }
 
-        new Scheduler(manager.getPlugin()).async(() -> {
-            manager.getPlugin().getClaimManager().getClaimRepository().removeAll(claims);
+        manager.getFactionRepository().remove(faction);
 
+        new Scheduler(manager.getPlugin()).async(() -> {
             ClaimDAO.deleteDefinedClaims(manager.getPlugin().getMongo(), claims);
             FactionDAO.deleteFaction(manager.getPlugin().getMongo(), faction);
 
             new Scheduler(manager.getPlugin()).sync(() -> {
-                manager.getFactionRepository().remove(faction);
                 Logger.print(player.getName() + " disbanded " + faction.getName());
                 promise.success();
             }).run();
