@@ -7,6 +7,7 @@ import com.google.common.collect.Lists;
 import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
+import com.playares.factions.addons.AddonManager;
 import com.playares.factions.claims.ClaimManager;
 import com.playares.factions.commands.FactionCommand;
 import com.playares.factions.factions.FactionManager;
@@ -42,6 +43,9 @@ public final class Factions extends AresPlugin {
     @Getter
     protected Autosave autosave;
 
+    @Getter
+    protected AddonManager addonManager;
+
     @Override
     public void onEnable() {
         factionConfig = new FactionConfig(this);
@@ -55,6 +59,7 @@ public final class Factions extends AresPlugin {
         factionManager = new FactionManager(this);
         claimManager = new ClaimManager(this);
         playerManager = new PlayerManager(this);
+        addonManager = new AddonManager(this);
         autosave = new Autosave(this);
 
         final PaperCommandManager commandManager = new PaperCommandManager(this);
@@ -89,6 +94,8 @@ public final class Factions extends AresPlugin {
         registerService(new RankService(this));
         startServices();
 
+        addonManager.startAddons();
+
         registerItems();
 
         if (factionConfig.isAutosaveEnabled()) {
@@ -114,6 +121,8 @@ public final class Factions extends AresPlugin {
         factionManager = null;
         claimManager = null;
         playerManager = null;
+
+        addonManager.stopAddons();
 
         stopServices();
     }

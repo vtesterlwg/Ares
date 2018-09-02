@@ -80,18 +80,44 @@ economy:
   starting-balance: 100.0 # Given upon a player logging in to the map for the first time
 
 mining:
-  enabled: true # If disabled ores will not spawn
-  # Determines min and max vein sizes
-  vein-size:
-    min: 2
-    max: 8
-  # Determines the rate at which each ore will spawn
-  spawnrates:
-    coal: 0.010
-    iron: 0.008
-    redstone: 0.008
-    lapis: 0.008
-    gold: 0.006
-    diamond: 0.004
-    emerald: 0.001
-    glowstone: 0.002
+  enabled: true
+  findables:
+    GLOWSTONE:
+      rate: 0.01
+      found-in: 'NETHERRACK'
+      height:
+        min: 1
+        max: 256
+      world: 'NETHER'
+      vein-size:
+        min: 5
+        max: 15
+      broadcast: false
+      message: true
+      color: '6'
+    DIAMOND_ORE:
+      rate: 0.0125
+      found-in: 'STONE'
+      height:
+        min: 1
+        max: 16
+      world: 'NORMAL'
+      vein-size:
+        min: 2
+        max: 8
+      broadcast: true
+      message: false
+      color: 'b'
+    EMERALD_ORE:
+      rate: 0.01
+      found-in: 'STONE'
+      height:
+        min: 1
+        max: 16
+      world: 'NORMAL'
+      vein-size:
+        min: 2
+        max: 8
+      broadcast: true
+      message: false
+      color: 'a'
