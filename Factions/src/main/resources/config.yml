@@ -121,3 +121,14 @@ mining:
       broadcast: true
       message: false
       color: 'a'
+
+stats:
+  enabled: true
+  starting-elo: 0
+  elo-modifiers:
+    kill: 25
+    death: 25
+    minor-capture: 75
+    major-capture: 200
+    diamonds: 2
+    emeralds: 3
