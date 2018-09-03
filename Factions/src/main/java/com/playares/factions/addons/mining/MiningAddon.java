@@ -47,6 +47,11 @@ public final class MiningAddon implements Addon, Listener {
     }
 
     @Override
+    public String getName() {
+        return "Mining";
+    }
+
+    @Override
     public void prepare() {
         if (!findables.isEmpty()) {
             findables.clear();
