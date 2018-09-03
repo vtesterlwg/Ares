@@ -5,7 +5,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.bukkit.util.Players;
-import com.playares.factions.addons.stats.Statistics;
+import com.playares.factions.addons.stats.holder.PlayerStatisticHolder;
 import com.playares.factions.claims.DefinedClaim;
 import com.playares.factions.claims.pillars.ClaimPillar;
 import com.playares.factions.claims.pillars.MapPillar;
@@ -48,7 +48,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     public Set<Pillar> pillars;
 
     @Getter
-    public Statistics stats;
+    public PlayerStatisticHolder stats;
 
     public FactionPlayer() {
         this.uniqueId = null;
@@ -69,7 +69,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
-        this.stats = new Statistics();
+        this.stats = new PlayerStatisticHolder();
     }
 
     public FactionPlayer(UUID uniqueId, String username) {
@@ -80,7 +80,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
-        this.stats = new Statistics();
+        this.stats = new PlayerStatisticHolder();
     }
 
     public PlayerTimer getTimer(PlayerTimer.PlayerTimerType type) {
@@ -166,7 +166,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = document.getString("username");
         this.balance = document.getDouble("balance");
         this.faction = null;
-        this.stats = new Statistics().fromDocument(document.get("stats", Document.class));
+        this.stats = new PlayerStatisticHolder().fromDocument(document.get("stats", Document.class));
 
         convertedTimers.keySet().forEach(timerName -> {
             final PlayerTimer.PlayerTimerType type = PlayerTimer.PlayerTimerType.valueOf(timerName);

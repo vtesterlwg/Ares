@@ -10,7 +10,7 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.timer.BossTimer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
-import com.playares.factions.addons.stats.Statistics;
+import com.playares.factions.addons.stats.holder.FactionStatisticHolder;
 import com.playares.factions.timers.FactionTimer;
 import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
 import lombok.AllArgsConstructor;
@@ -77,7 +77,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
     public Scoreboard scoreboard;
 
     @Getter
-    public Statistics stats;
+    public FactionStatisticHolder stats;
 
     @Getter @Setter
     public long nextTick;
@@ -97,7 +97,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.memberHistory = Sets.newConcurrentHashSet();
         this.timers = Sets.newConcurrentHashSet();
         this.scoreboard = null;
-        this.stats = new Statistics();
+        this.stats = new FactionStatisticHolder();
         this.nextTick = (Time.now() + (plugin.getFactionConfig().getFactionTickInterval() * 1000L));
 
         configureScoreboard();
@@ -118,7 +118,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.memberHistory = Sets.newConcurrentHashSet();
         this.timers = Sets.newConcurrentHashSet();
         this.scoreboard = null;
-        this.stats = new Statistics();
+        this.stats = new FactionStatisticHolder();
         this.nextTick = (Time.now() + (plugin.getFactionConfig().getFactionTickInterval() * 1000L));
 
         configureScoreboard();
