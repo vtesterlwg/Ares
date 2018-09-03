@@ -1,9 +1,15 @@
 package com.playares.factions.util;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
+import com.playares.factions.factions.PlayerFaction;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+
+import java.util.List;
 
 public final class FactionUtils {
     public static void teleportOutsideClaims(Factions plugin, Player player) {
@@ -20,5 +26,33 @@ public final class FactionUtils {
                 player.teleport(location.getBukkit().add(0, 1.0, 0.0));
             }).run();
         }).run();
+    }
+
+    public static ImmutableList<Player> getNearbyEnemies(Factions plugin, Player player, double distance) {
+        final List<Player> result = Lists.newArrayList();
+        final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(player.getUniqueId());
+
+        for (Entity entity : player.getNearbyEntities(distance, distance, distance)) {
+            if (!(entity instanceof Player)) {
+                continue;
+            }
+
+            final Player otherPlayer = (Player)entity;
+
+            if (!player.canSee(otherPlayer) || otherPlayer.hasPermission("factions.mod") || otherPlayer.hasPermission("factions.admin")) {
+                continue;
+            }
+
+            if (faction == null) {
+                result.add(otherPlayer);
+                continue;
+            }
+
+            if (faction.getMember(otherPlayer.getUniqueId()) == null) {
+                result.add(otherPlayer);
+            }
+        }
+
+        return ImmutableList.copyOf(result);
     }
 }
