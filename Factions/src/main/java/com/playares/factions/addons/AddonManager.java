@@ -3,7 +3,9 @@ package com.playares.factions.addons;
 import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.Factions;
+import com.playares.factions.addons.autosave.AutosaveAddon;
 import com.playares.factions.addons.mining.MiningAddon;
+import com.playares.factions.addons.stats.StatsAddon;
 import lombok.Getter;
 
 import java.util.Set;
@@ -20,6 +22,8 @@ public final class AddonManager {
         this.addons = Sets.newHashSet();
 
         registerAddon(new MiningAddon(plugin));
+        registerAddon(new StatsAddon(plugin));
+        registerAddon(new AutosaveAddon(plugin));
     }
 
     public void startAddons() {
@@ -28,6 +32,7 @@ public final class AddonManager {
         addons.forEach(addon -> {
             addon.prepare();
             addon.start();
+            Logger.print("Started Factions Addon: " + addon.getName());
         });
 
         Logger.print("Finished starting Faction Addons");
@@ -35,8 +40,14 @@ public final class AddonManager {
 
     public void stopAddons() {
         Logger.print("Stopping Faction Addons...");
-        addons.forEach(Addon::stop);
+
+        addons.forEach(addon -> {
+            addon.stop();
+            Logger.print("Stopped Factions Addon: " + addon.getName());
+        });
+
         addons.clear();
+
         Logger.print("Finished stopping Faction Addons");
     }
 
