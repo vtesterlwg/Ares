@@ -1,11 +1,16 @@
 package com.playares.factions.players;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.playares.commons.base.connect.mongodb.MongoDB;
 import org.bson.Document;
 import org.bson.conversions.Bson;
+
+import java.util.List;
 
 public final class PlayerDAO {
     private static final String DB_NAME = "factions";
@@ -48,5 +53,23 @@ public final class PlayerDAO {
         } else {
             collection.insertOne(document);
         }
+    }
+
+    public static ImmutableList<FactionPlayer> getPlayers(MongoDB database) {
+        final List<FactionPlayer> result = Lists.newArrayList();
+        final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
+        final MongoCursor<Document> cursor;
+
+        if (collection == null) {
+            return ImmutableList.of();
+        }
+
+        cursor = collection.find().iterator();
+
+        while (cursor.hasNext()) {
+            result.add(new FactionPlayer().fromDocument(cursor.next()));
+        }
+
+        return ImmutableList.copyOf(result);
     }
 }
