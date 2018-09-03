@@ -36,6 +36,9 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     public double balance;
 
     @Getter @Setter
+    public boolean safelogging;
+
+    @Getter @Setter
     public PlayerFaction faction;
 
     @Getter @Setter
@@ -54,6 +57,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.uniqueId = null;
         this.username = null;
         this.balance = 0.0;
+        this.safelogging = false;
         this.faction = null;
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
@@ -65,6 +69,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.uniqueId = player.getUniqueId();
         this.username = player.getName();
         this.balance = 0.0; // TODO: Get from economyconfig
+        this.safelogging = false;
         this.faction = null;
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
@@ -76,6 +81,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.uniqueId = uniqueId;
         this.username = username;
         this.balance = 0.0;
+        this.safelogging = false;
         this.faction = null;
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
