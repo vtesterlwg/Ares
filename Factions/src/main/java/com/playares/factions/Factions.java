@@ -14,7 +14,6 @@ import com.playares.factions.factions.FactionManager;
 import com.playares.factions.items.ClaimingStick;
 import com.playares.factions.listener.*;
 import com.playares.factions.players.PlayerManager;
-import com.playares.factions.util.Autosave;
 import com.playares.services.classes.ClassService;
 import com.playares.services.customevents.CustomEventService;
 import com.playares.services.customitems.CustomItemService;
@@ -41,9 +40,6 @@ public final class Factions extends AresPlugin {
     protected PlayerManager playerManager;
 
     @Getter
-    protected Autosave autosave;
-
-    @Getter
     protected AddonManager addonManager;
 
     @Override
@@ -60,7 +56,6 @@ public final class Factions extends AresPlugin {
         claimManager = new ClaimManager(this);
         playerManager = new PlayerManager(this);
         addonManager = new AddonManager(this);
-        autosave = new Autosave(this);
 
         final PaperCommandManager commandManager = new PaperCommandManager(this);
 
@@ -97,18 +92,12 @@ public final class Factions extends AresPlugin {
         addonManager.startAddons();
 
         registerItems();
-
-        if (factionConfig.isAutosaveEnabled()) {
-            autosave.start();
-        }
     }
 
     @Override
     public void onDisable() {
         factionManager.cancelTasks();
         playerManager.cancelTasks();
-
-        autosave.stop();
 
         playerManager.savePlayers(true);
         factionManager.saveFactions(true);
