@@ -1,5 +1,7 @@
 package com.playares.factions.addons.stats.holder;
 
+import com.playares.factions.addons.stats.StatsAddon;
+
 public interface StatisticHolder {
     int getKills();
 
@@ -16,4 +18,18 @@ public interface StatisticHolder {
     void addMinorEventCapture();
 
     void addMajorEventCapture();
+
+    default int calculateELO(StatsAddon addon) {
+        int elo = addon.getStartingElo();
+        elo += getKills() * addon.getEloModifierKill();
+        elo -= getDeaths() * addon.getEloModifierDeath();
+        elo += getMinorEventCaptures() * addon.getEloModifierMinorCapture();
+        elo += getMajorEventCaptures() * addon.getEloModifierMajorCapture();
+
+        if (elo < 0) {
+            elo = 0;
+        }
+
+        return elo;
+    }
 }

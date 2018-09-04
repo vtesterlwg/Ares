@@ -6,6 +6,7 @@ import com.google.common.collect.Maps;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.util.Scheduler;
+import com.playares.factions.addons.stats.StatsAddon;
 import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
@@ -188,8 +189,10 @@ public final class FactionDisplayHandler {
             return;
         }
 
+        final StatsAddon addon = (StatsAddon)manager.getPlugin().getAddonManager().getAddon(StatsAddon.class);
         final PlayerFaction pf = (PlayerFaction)faction;
         final String dtr = String.format("%.2f", pf.getDeathsTilRaidable());
+        final int elo = (addon != null) ? addon.getStatsManager().getELO(pf) : 0;
         String formattedDTR;
 
         if (pf.getDeathsTilRaidable() >= pf.getMaxDTR()) {
@@ -223,6 +226,7 @@ public final class FactionDisplayHandler {
                     ChatColor.BLUE + (int)(Math.round(pf.getHome().getZ())));
         }
 
+        viewer.sendMessage(spacer + ChatColor.GOLD + "Rating" + ChatColor.YELLOW + ": " + elo);
         viewer.sendMessage(spacer + ChatColor.GOLD + "Balance" + ChatColor.YELLOW + ": " + ChatColor.BLUE + "$" + String.format("%.2f", pf.getBalance()));
         viewer.sendMessage(spacer + ChatColor.GOLD + "Deaths Until Raid-able" + ChatColor.YELLOW + ": " + formattedDTR);
 
