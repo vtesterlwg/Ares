@@ -1,6 +1,6 @@
 package com.playares.factions.addons;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.autosave.AutosaveAddon;
@@ -8,18 +8,18 @@ import com.playares.factions.addons.mining.MiningAddon;
 import com.playares.factions.addons.stats.StatsAddon;
 import lombok.Getter;
 
-import java.util.Set;
+import java.util.Map;
 
 public final class AddonManager {
     @Getter
     public final Factions plugin;
 
     @Getter
-    public final Set<Addon> addons;
+    public final Map<Class<? extends Addon>, Addon> addons;
 
     public AddonManager(Factions plugin) {
         this.plugin = plugin;
-        this.addons = Sets.newHashSet();
+        this.addons = Maps.newHashMap();
 
         registerAddon(new MiningAddon(plugin));
         registerAddon(new StatsAddon(plugin));
@@ -29,7 +29,7 @@ public final class AddonManager {
     public void startAddons() {
         Logger.print("Starting Faction Addons...");
 
-        addons.forEach(addon -> {
+        addons.values().forEach(addon -> {
             addon.prepare();
             addon.start();
             Logger.print("Started Factions Addon: " + addon.getName());
@@ -41,7 +41,7 @@ public final class AddonManager {
     public void stopAddons() {
         Logger.print("Stopping Faction Addons...");
 
-        addons.forEach(addon -> {
+        addons.values().forEach(addon -> {
             addon.stop();
             Logger.print("Stopped Factions Addon: " + addon.getName());
         });
@@ -52,6 +52,10 @@ public final class AddonManager {
     }
 
     public void registerAddon(Addon addon) {
-        this.addons.add(addon);
+        this.addons.put(addon.getClass(), addon);
+    }
+
+    public Addon getAddon(Class<? extends Addon> clazz) {
+        return addons.get(clazz);
     }
 }
