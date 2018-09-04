@@ -36,6 +36,9 @@ public final class MiningAddon implements Addon, Listener {
     public final Factions plugin;
 
     @Getter
+    public boolean enabled;
+
+    @Getter
     public final Set<Findable> findables;
 
     private final Random random;
@@ -58,6 +61,8 @@ public final class MiningAddon implements Addon, Listener {
         }
 
         final YamlConfiguration config = plugin.getConfig("config");
+
+        this.enabled = config.getBoolean("mining.enabled");
 
         for (String matName : config.getConfigurationSection("mining.findables").getKeys(false)) {
             final Material material = Material.matchMaterial(matName);
@@ -248,6 +253,10 @@ public final class MiningAddon implements Addon, Listener {
         final Player player = event.getPlayer();
         final Block block = event.getBlock();
         final ItemStack hand = player.getInventory().getItemInMainHand();
+
+        if (!isEnabled()) {
+            return;
+        }
 
         if (block == null || hand == null) {
             return;
