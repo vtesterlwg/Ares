@@ -5,6 +5,7 @@ import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.Addon;
 import lombok.Getter;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitTask;
 
 public final class AutosaveAddon implements Addon {
@@ -13,6 +14,9 @@ public final class AutosaveAddon implements Addon {
 
     @Getter
     public BukkitTask task;
+
+    private boolean enabled;
+    private int interval;
 
     public AutosaveAddon(Factions plugin) {
         this.plugin = plugin;
@@ -24,11 +28,19 @@ public final class AutosaveAddon implements Addon {
     }
 
     @Override
-    public void prepare() {}
+    public void prepare() {
+        final YamlConfiguration config = plugin.getConfig("config");
+        this.enabled = config.getBoolean("autosave.enabled");
+        this.interval = config.getInt("autosave.interval");
+    }
 
     @Override
     public void start() {
         this.task = new Scheduler(plugin).async(() -> {
+            if (!enabled) {
+                return;
+            }
+
             Logger.print("Preparing to auto-save...");
 
             plugin.getFactionManager().saveFactions(true);
@@ -36,7 +48,7 @@ public final class AutosaveAddon implements Addon {
             plugin.getClaimManager().saveClaims(true);
 
             Logger.print("Autosave completed");
-        }).repeat(plugin.getFactionConfig().getAutosaveInterval() * 20L, plugin.getFactionConfig().getAutosaveInterval() * 20L).run();
+        }).repeat(interval * 20L, interval * 20L).run();
     }
 
     @Override

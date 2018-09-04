@@ -39,6 +39,7 @@ public final class StatsAddon implements Addon {
 
         plugin.registerListener(trackableListener);
         plugin.registerListener(statsListener);
+
         plugin.registerCommand(new StatsCommand(statsHandler));
     }
 
