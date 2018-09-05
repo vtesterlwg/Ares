@@ -226,7 +226,7 @@ public final class FactionDisplayHandler {
                     ChatColor.BLUE + (int)(Math.round(pf.getHome().getZ())));
         }
 
-        viewer.sendMessage(spacer + ChatColor.GOLD + "Rating" + ChatColor.YELLOW + ": " + elo);
+        viewer.sendMessage(spacer + ChatColor.GOLD + "Rating" + ChatColor.YELLOW + ": " + ChatColor.BLUE + elo);
         viewer.sendMessage(spacer + ChatColor.GOLD + "Balance" + ChatColor.YELLOW + ": " + ChatColor.BLUE + "$" + String.format("%.2f", pf.getBalance()));
         viewer.sendMessage(spacer + ChatColor.GOLD + "Deaths Until Raid-able" + ChatColor.YELLOW + ": " + formattedDTR);
 
