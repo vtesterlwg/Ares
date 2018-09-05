@@ -46,7 +46,7 @@ public final class StatsAddon implements Addon {
 
     @Override
     public void start() {
-        statsHandler = new StatsHandler(plugin);
+        statsHandler = new StatsHandler(plugin, this);
         statsManager = new StatsManager(plugin, this);
         trackableListener = new TrackableItemListener();
         statsListener = new StatisticEventListener(plugin);

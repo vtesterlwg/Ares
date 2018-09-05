@@ -18,12 +18,17 @@ public final class StatsHandler {
     @Getter
     public final Factions plugin;
 
-    public StatsHandler(Factions plugin) {
+    @Getter
+    public final StatsAddon addon;
+
+    public StatsHandler(Factions plugin, StatsAddon addon) {
         this.plugin = plugin;
+        this.addon = addon;
     }
 
     public void printStats(Player viewer, String username, PlayerStatisticHolder stats) {
         final String spacer = ChatColor.RESET + " " + ChatColor.RESET + " " + ChatColor.YELLOW + " - " + ChatColor.RESET;
+        final int elo = stats.calculateELO(addon);
         final int kills = stats.getKills();
         final int deaths = stats.getDeaths();
         final int minorEvents = stats.getMinorEventCaptures();
@@ -37,20 +42,26 @@ public final class StatsHandler {
         final int emerald = stats.getMinedOres().getOrDefault(Material.EMERALD_ORE, 0);
         final long playtime = stats.getPlaytime();
 
+        viewer.sendMessage(ChatColor.DARK_PURPLE + "--------------------" + ChatColor.GOLD + "[ " + ChatColor.WHITE + username + ChatColor.GOLD + " ]" + ChatColor.DARK_PURPLE + "--------------------");
+        viewer.sendMessage(ChatColor.GOLD + "Main" + ChatColor.YELLOW + ": ");
+        viewer.sendMessage(spacer + ChatColor.GOLD + "Rating" + ChatColor.YELLOW + ": " + ChatColor.WHITE + elo);
+        viewer.sendMessage(spacer + ChatColor.GOLD + "Kills" + ChatColor.YELLOW + ": " + ChatColor.WHITE + kills);
+        viewer.sendMessage(spacer + ChatColor.GOLD + "Deaths" + ChatColor.YELLOW + ": " + ChatColor.WHITE + deaths);
+        viewer.sendMessage(spacer + ChatColor.GOLD + "Playtime" + ChatColor.YELLOW + ": " + ChatColor.BLUE + Time.convertToRemaining(playtime));
         viewer.sendMessage(ChatColor.RESET + " ");
-        viewer.sendMessage(ChatColor.BLUE + "Player Statistics: " + ChatColor.RESET + username);
-        viewer.sendMessage(ChatColor.GREEN + "K" + ChatColor.RESET + ": " + kills + " " + ChatColor.RED + "D" + ChatColor.RESET + ": " + deaths);
-        viewer.sendMessage(ChatColor.GOLD + "Minor Events" + ChatColor.RESET + ": " + minorEvents + " " + ChatColor.GOLD + "Major Events" + ChatColor.RESET + ": " + majorEvents);
-        viewer.sendMessage(ChatColor.BLUE + "Playtime" + ChatColor.RESET + ": " + Time.convertToRemaining(playtime));
-        viewer.sendMessage(ChatColor.GOLD + "Ores" + ChatColor.RESET + ": ");
-        viewer.sendMessage(spacer + ChatColor.GOLD + "Coal" + ChatColor.RESET + coal);
-        viewer.sendMessage(spacer + ChatColor.GOLD + "Iron" + ChatColor.RESET + iron);
-        viewer.sendMessage(spacer + ChatColor.GOLD + "Redstone" + ChatColor.RESET + redstone);
-        viewer.sendMessage(spacer + ChatColor.GOLD + "Lapis" + ChatColor.RESET + lapis);
-        viewer.sendMessage(spacer + ChatColor.GOLD + "Gold" + ChatColor.RESET + gold);
-        viewer.sendMessage(spacer + ChatColor.GOLD + "Diamond" + ChatColor.RESET + diamond);
-        viewer.sendMessage(spacer + ChatColor.GOLD + "Emerald" + ChatColor.RESET + emerald);
+        viewer.sendMessage(ChatColor.GOLD + "Events" + ChatColor.YELLOW + ": ");
+        viewer.sendMessage(spacer + ChatColor.GOLD + "Minor Events" + ChatColor.YELLOW + ": " + ChatColor.WHITE + minorEvents);
+        viewer.sendMessage(spacer + ChatColor.GOLD + "Major Events" + ChatColor.YELLOW + ": " + ChatColor.WHITE + majorEvents);
         viewer.sendMessage(ChatColor.RESET + " ");
+        viewer.sendMessage(ChatColor.GOLD + "Ores" + ChatColor.YELLOW + ":");
+        viewer.sendMessage(spacer + ChatColor.DARK_GRAY + "Coal" + ChatColor.YELLOW + ": " + ChatColor.WHITE + coal);
+        viewer.sendMessage(spacer + ChatColor.GRAY + "Iron" + ChatColor.YELLOW + ": " + ChatColor.WHITE + iron);
+        viewer.sendMessage(spacer + ChatColor.RED + "Redstone" + ChatColor.YELLOW + ": " + ChatColor.WHITE + redstone);
+        viewer.sendMessage(spacer + ChatColor.BLUE + "Lapis" + ChatColor.YELLOW + ": " + ChatColor.WHITE + lapis);
+        viewer.sendMessage(spacer + ChatColor.GOLD + "Gold" + ChatColor.YELLOW + ": " + ChatColor.WHITE + gold);
+        viewer.sendMessage(spacer + ChatColor.AQUA + "Diamond" + ChatColor.YELLOW + ": " + ChatColor.WHITE + diamond);
+        viewer.sendMessage(spacer + ChatColor.GREEN + "Emerald" + ChatColor.YELLOW + ": " + ChatColor.WHITE + emerald);
+        viewer.sendMessage(ChatColor.DARK_PURPLE + "------------------------------------------------");
     }
 
     public void getStats(Player viewer, SimplePromise promise) {
