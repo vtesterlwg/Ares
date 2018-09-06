@@ -5,6 +5,7 @@ import com.playares.factions.Factions;
 import com.playares.factions.players.FactionPlayer;
 import com.playares.factions.players.PlayerDAO;
 import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,6 +23,11 @@ public final class DataListener implements Listener {
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onLogin(AsyncPlayerPreLoginEvent event) {
+        if (plugin.getPlayerManager() == null) {
+            event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_OTHER, ChatColor.RED + "The server is still starting up");
+            return;
+        }
+
         final FactionPlayer profile = plugin.getPlayerManager().loadPlayer(event.getUniqueId(), event.getName());
         plugin.getPlayerManager().getPlayerRepository().add(profile);
     }
