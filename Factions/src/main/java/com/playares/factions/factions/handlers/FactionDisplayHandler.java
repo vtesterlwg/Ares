@@ -180,11 +180,13 @@ public final class FactionDisplayHandler {
 
             viewer.sendMessage(spacer + ChatColor.DARK_PURPLE + StringUtils.capitaliseAllWords(sf.getFlag().name().toLowerCase().replace("_", " ")));
 
-            viewer.sendMessage(spacer + ChatColor.GOLD + "Located At" + ChatColor.YELLOW + ": " +
-                    ChatColor.BLUE + (int)(Math.round(sf.getLocation().getX())) + ChatColor.YELLOW + ", " +
-                    ChatColor.BLUE + (int)(Math.round(sf.getLocation().getY())) + ChatColor.YELLOW + ", " +
-                    ChatColor.BLUE + (int)(Math.round(sf.getLocation().getZ())) + ChatColor.YELLOW + ", " +
-                    ChatColor.BLUE + StringUtils.capitaliseAllWords(sf.getLocation().getBukkit().getWorld().getEnvironment().name().toLowerCase().replace("_", " ")));
+            if (sf.getLocation() != null) {
+                viewer.sendMessage(spacer + ChatColor.GOLD + "Located At" + ChatColor.YELLOW + ": " +
+                        ChatColor.BLUE + (int)(Math.round(sf.getLocation().getX())) + ChatColor.YELLOW + ", " +
+                        ChatColor.BLUE + (int)(Math.round(sf.getLocation().getY())) + ChatColor.YELLOW + ", " +
+                        ChatColor.BLUE + (int)(Math.round(sf.getLocation().getZ())) + ChatColor.YELLOW + ", " +
+                        ChatColor.BLUE + StringUtils.capitaliseAllWords(sf.getLocation().getBukkit().getWorld().getEnvironment().name().toLowerCase().replace("_", " ")));
+            }
 
             viewer.sendMessage(ChatColor.YELLOW + "------------------------------------------------");
 

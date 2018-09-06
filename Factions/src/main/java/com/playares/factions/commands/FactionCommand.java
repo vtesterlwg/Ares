@@ -12,8 +12,7 @@ import javax.annotation.Nonnull;
 
 /*
 /f buffer <faction> <buffer>
-/f reinvite restock <all/faction>
-/f tag <faction> <tag>
+/f setflag <faction> <flag>
 */
 @CommandAlias("factions|faction|f|teams|team|t")
 public final class FactionCommand extends BaseCommand {
@@ -45,8 +44,18 @@ public final class FactionCommand extends BaseCommand {
     @Description("Create a faction")
     @Syntax("[server] <name>")
     @CommandPermission("factions.create.server")
-    public void onCreate(Player player, @Flags("server") String server, @Single String name) {
+    public void onCreate(Player player, @Values("server") String server, @Single String name) {
+        plugin.getFactionManager().getCreateHandler().createServerFaction(player, name, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction has been created");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("accept")
@@ -316,7 +325,6 @@ public final class FactionCommand extends BaseCommand {
     @Description("Begin the claiming process for your faction")
     @Syntax("[faction]")
     @CommandPermission("factions.claim.others")
-    @CommandCompletion("@factions")
     public void onClaim(Player player, String faction) {
         plugin.getClaimManager().getCreationHandler().startClaiming(player, faction, new SimplePromise() {
             @Override
@@ -357,7 +365,6 @@ public final class FactionCommand extends BaseCommand {
     @Description("Update your factions home location to your current location")
     @Syntax("[faction]")
     @CommandPermission("factions.sethome.others")
-    @CommandCompletion("@factions")
     public void onSetHome(Player player, String faction) {
         plugin.getFactionManager().getManageHandler().setHome(player, faction, new SimplePromise() {
             @Override
@@ -448,7 +455,6 @@ public final class FactionCommand extends BaseCommand {
     @Description("Rename your faction")
     @Syntax("[faction] <name>")
     @CommandPermission("factions.rename.others")
-    @CommandCompletion("@factions")
     public void onRename(Player player, String faction, String name) {
         plugin.getFactionManager().getManageHandler().rename(player, faction, name, new SimplePromise() {
             @Override
@@ -483,7 +489,6 @@ public final class FactionCommand extends BaseCommand {
     @Description("Disband your faction")
     @Syntax("[faction]")
     @CommandPermission("factions.disband.others")
-    @CommandCompletion("@factions")
     public void onDisband(Player player, String faction) {
         plugin.getFactionManager().getDisbandHandler().disband(player, faction, new SimplePromise() {
             @Override
@@ -518,7 +523,6 @@ public final class FactionCommand extends BaseCommand {
     @Description("Freeze a factions DTR")
     @Syntax("<faction> <time>")
     @CommandPermission("factions.freeze.others")
-    @CommandCompletion("@factions")
     public void onFreeze(Player player, String faction, String time) {
         plugin.getFactionManager().getStaffHandler().freeze(player, faction, time, new SimplePromise() {
             @Override
@@ -537,7 +541,6 @@ public final class FactionCommand extends BaseCommand {
     @Description("Unfreeze a factions DTR")
     @Syntax("<faction>")
     @CommandPermission("factions.freeze.others")
-    @CommandCompletion("@factions")
     public void onUnfreeze(Player player, String faction) {
         plugin.getFactionManager().getStaffHandler().unfreeze(player, faction, new SimplePromise() {
             @Override
@@ -556,7 +559,6 @@ public final class FactionCommand extends BaseCommand {
     @Description("Update a factions DTR")
     @Syntax("<faction> <value>")
     @CommandPermission("factions.dtr.others")
-    @CommandCompletion("@factions")
     public void onSetDTR(Player player, String name, double dtr) {
         plugin.getFactionManager().getStaffHandler().updateDTR(player, name, dtr, new SimplePromise() {
             @Override

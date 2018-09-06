@@ -4,6 +4,7 @@ import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
+import com.playares.factions.factions.ServerFaction;
 import com.playares.factions.players.FactionPlayer;
 import com.playares.services.profiles.ProfileService;
 import lombok.Getter;
@@ -74,7 +75,35 @@ public final class FactionCreationHandler {
     }
 
     public void createServerFaction(Player player, String name, SimplePromise promise) {
+        if (!name.matches("^[A-Za-z0-9_.]+$")) {
+            promise.failure("Faction names must only contain characters A-Z, 0-9");
+            return;
+        }
 
+        if (name.length() < manager.getPlugin().getFactionConfig().getMinFactionNameLength()) {
+            promise.failure("Name is too short (Min 3 characters)");
+            return;
+        }
+
+        if (name.length() > manager.getPlugin().getFactionConfig().getMaxFactionNameLength()) {
+            promise.failure("Name is too long (Max 16 characters)");
+            return;
+        }
+
+        if (manager.getPlugin().getFactionConfig().getBannedFactionNames().contains(name)) {
+            promise.failure("This faction name is not allowed");
+            return;
+        }
+
+        if (manager.getFactionByName(name) != null) {
+            promise.failure("Faction name is already in use");
+            return;
+        }
+
+        final ServerFaction faction = new ServerFaction(manager.getPlugin(), name);
+        manager.getFactionRepository().add(faction);
+        Logger.print(player.getName() + " created server-faction " + faction.getName());
+        promise.success();
     }
 
     public void sendInvite(Player player, String username, SimplePromise promise) {
