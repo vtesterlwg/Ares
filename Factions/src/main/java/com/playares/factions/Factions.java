@@ -2,8 +2,6 @@ package com.playares.factions;
 
 import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
@@ -24,8 +22,6 @@ import com.playares.services.profiles.ProfileService;
 import com.playares.services.punishments.PunishmentService;
 import com.playares.services.ranks.RankService;
 import lombok.Getter;
-
-import java.util.List;
 
 public final class Factions extends AresPlugin {
     @Getter
@@ -48,6 +44,14 @@ public final class Factions extends AresPlugin {
         factionConfig = new FactionConfig(this);
         factionConfig.loadValues();
 
+        registerListener(new ClaimBuilderListener(this));
+        registerListener(new DataListener(this));
+        registerListener(new PillarListener(this));
+        registerListener(new PlayerTimerListener(this));
+        registerListener(new ClaimListener(this));
+        registerListener(new PlayerListener(this));
+        registerListener(new ChatListener(this));
+
         registerMongo(new MongoDB(factionConfig.getDatabaseURI()));
         getMongo().openConnection();
 
@@ -56,14 +60,6 @@ public final class Factions extends AresPlugin {
         final PaperCommandManager commandManager = new PaperCommandManager(this);
         registerCommandManager(commandManager);
         registerCommand(new FactionCommand(this));
-
-        registerListener(new ClaimBuilderListener(this));
-        registerListener(new DataListener(this));
-        registerListener(new PillarListener(this));
-        registerListener(new PlayerTimerListener(this));
-        registerListener(new ClaimListener(this));
-        registerListener(new PlayerListener(this));
-        registerListener(new ChatListener(this));
 
         registerService(new ClassService(this));
         registerService(new CustomEventService(this));
@@ -80,12 +76,6 @@ public final class Factions extends AresPlugin {
         claimManager = new ClaimManager(this);
         playerManager = new PlayerManager(this);
         addonManager = new AddonManager(this);
-
-        commandManager.getCommandCompletions().registerAsyncCompletion("factions", c -> {
-            final List<String> names = Lists.newArrayList();
-            factionManager.getFactionRepository().forEach(faction -> names.add(faction.getName()));
-            return ImmutableList.copyOf(names);
-        });
 
         factionManager.loadFactions();
         claimManager.loadClaims();
