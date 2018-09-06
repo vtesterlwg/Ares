@@ -18,6 +18,8 @@ import com.playares.services.profiles.data.AresProfile;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -226,7 +228,22 @@ public final class FactionDisplayHandler {
                     ChatColor.BLUE + (int)(Math.round(pf.getHome().getZ())));
         }
 
-        viewer.sendMessage(spacer + ChatColor.GOLD + "Rating" + ChatColor.YELLOW + ": " + ChatColor.BLUE + elo);
+        viewer.sendMessage(new ComponentBuilder("")
+                .append(TextComponent.fromLegacyText(spacer + ChatColor.GOLD + "Rating" + ChatColor.YELLOW + ": " + ChatColor.BLUE + elo))
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+                        new ComponentBuilder("Statistics")
+                                .color(net.md_5.bungee.api.ChatColor.DARK_PURPLE)
+                                .append("\n").color(net.md_5.bungee.api.ChatColor.RESET)
+                                .append(TextComponent.fromLegacyText(ChatColor.GOLD + "Kills" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getStats().getKills()))
+                                .append("\n").color(net.md_5.bungee.api.ChatColor.RESET)
+                                .append(TextComponent.fromLegacyText(ChatColor.GOLD + "Deaths" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getStats().getDeaths()))
+                                .append("\n").color(net.md_5.bungee.api.ChatColor.RESET)
+                                .append(TextComponent.fromLegacyText(ChatColor.GOLD + "Minor Event Captures" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getStats().getMinorEventCaptures()))
+                                .append("\n").color(net.md_5.bungee.api.ChatColor.RESET)
+                                .append(TextComponent.fromLegacyText(ChatColor.GOLD + "Major Event Captures" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getStats().getMajorEventCaptures()))
+                                .create()))
+                .create());
+
         viewer.sendMessage(spacer + ChatColor.GOLD + "Balance" + ChatColor.YELLOW + ": " + ChatColor.BLUE + "$" + String.format("%.2f", pf.getBalance()));
         viewer.sendMessage(spacer + ChatColor.GOLD + "Deaths Until Raid-able" + ChatColor.YELLOW + ": " + formattedDTR);
 

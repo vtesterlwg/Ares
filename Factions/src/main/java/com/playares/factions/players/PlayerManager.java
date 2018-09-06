@@ -10,7 +10,9 @@ import com.playares.commons.bukkit.timer.Timer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.players.handlers.PlayerTimerHandler;
+import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.ProtectionTimer;
+import com.playares.services.automatedrestarts.AutomatedRestartService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
@@ -18,6 +20,7 @@ import org.bukkit.scheduler.BukkitTask;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public final class PlayerManager {
     @Getter
@@ -36,21 +39,37 @@ public final class PlayerManager {
     public final BukkitTask timerUpdater;
 
     public PlayerManager(Factions plugin) {
+        final AutomatedRestartService restartService = (AutomatedRestartService)plugin.getService(AutomatedRestartService.class);
         this.plugin = plugin;
         this.timerHandler = new PlayerTimerHandler(this);
         this.playerRepository = Sets.newConcurrentHashSet();
 
-        this.displayUpdater = new Scheduler(plugin).async(() -> playerRepository.stream().filter(profile -> !profile.getTimers().isEmpty()).forEach(profile -> {
-            final List<String> hudElements = Lists.newArrayList();
-            profile.getTimers().stream().filter(timer -> !timer.isExpired() && timer.getType().isRender()).forEach(timer -> hudElements.add(timer.getType().getDisplayName() + " " + ChatColor.RED + (timer.getType().isDecimal() ? Time.convertToDecimal(timer.getRemaining()) : Time.convertToHHMMSS(timer.getRemaining()))));
-            profile.sendActionBar(Joiner.on(ChatColor.RESET + " " + ChatColor.RESET + " ").join(hudElements));
+        this.displayUpdater = new Scheduler(plugin).async(() -> playerRepository.forEach(profile -> {
+            List<String> hudElements = null;
+
+            if (restartService != null && restartService.isInProgress()) {
+                hudElements = Lists.newArrayList();
+                hudElements.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Reboot" + " " + ChatColor.RED + Time.convertToHHMMSS(restartService.getTimeUntilReboot()));
+            }
+
+            if (!profile.getTimers().isEmpty()) {
+                for (PlayerTimer timer : profile.getTimers().stream().filter(timer -> !timer.isExpired() && timer.getType().isRender()).collect(Collectors.toList())) {
+                    if (hudElements == null) {
+                        hudElements = Lists.newArrayList();
+                    }
+
+                    hudElements.add(timer.getType().getDisplayName() + " " + ChatColor.RED + (timer.getType().isDecimal() ? Time.convertToDecimal(timer.getRemaining()) : Time.convertToHHMMSS(timer.getRemaining())));
+                }
+            }
+
+            if (hudElements != null && !hudElements.isEmpty()) {
+                profile.sendActionBar(Joiner.on(ChatColor.RESET + " " + ChatColor.RESET + " ").join(hudElements));
+            }
         })).repeat(0L, 1L).run();
 
         this.timerUpdater = new Scheduler(plugin).async(() -> playerRepository.stream().filter(profile -> !profile.getTimers().isEmpty()).forEach(profile -> profile.getTimers().stream().filter(Timer::isExpired).forEach(expired -> new Scheduler(plugin).sync(() -> {
-
             expired.onFinish();
             profile.getTimers().remove(expired);
-
         }).run()))).repeat(0L, 5L).run();
     }
 

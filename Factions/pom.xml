@@ -36,6 +36,7 @@
                                     <include>com.playares:Humbug</include>
                                     <include>com.playares:Punishments</include>
                                     <include>com.playares:Classes</include>
+                                    <include>com.playares:AutomatedRestarts</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -160,6 +161,14 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Classes</artifactId>
+            <version>1.13</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Automated Restart Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>AutomatedRestarts</artifactId>
             <version>1.13</version>
             <scope>compile</scope>
         </dependency>

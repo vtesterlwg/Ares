@@ -23,5 +23,6 @@
         <module>Punishments</module>
         <module>ProxyEssentials</module>
         <module>Classes</module>
+        <module>AutomatedRestarts</module>
     </modules>
 </project>

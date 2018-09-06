@@ -14,6 +14,7 @@ import com.playares.factions.factions.FactionManager;
 import com.playares.factions.items.ClaimingStick;
 import com.playares.factions.listener.*;
 import com.playares.factions.players.PlayerManager;
+import com.playares.services.automatedrestarts.AutomatedRestartService;
 import com.playares.services.classes.ClassService;
 import com.playares.services.customevents.CustomEventService;
 import com.playares.services.customitems.CustomItemService;
@@ -52,24 +53,9 @@ public final class Factions extends AresPlugin {
 
         registerProtocol(ProtocolLibrary.getProtocolManager());
 
-        factionManager = new FactionManager(this);
-        claimManager = new ClaimManager(this);
-        playerManager = new PlayerManager(this);
-        addonManager = new AddonManager(this);
-
         final PaperCommandManager commandManager = new PaperCommandManager(this);
-
-        commandManager.getCommandCompletions().registerAsyncCompletion("factions", c -> {
-            final List<String> names = Lists.newArrayList();
-            factionManager.getFactionRepository().forEach(faction -> names.add(faction.getName()));
-            return ImmutableList.copyOf(names);
-        });
-
         registerCommandManager(commandManager);
         registerCommand(new FactionCommand(this));
-
-        factionManager.loadFactions();
-        claimManager.loadClaims();
 
         registerListener(new ClaimBuilderListener(this));
         registerListener(new DataListener(this));
@@ -87,7 +73,22 @@ public final class Factions extends AresPlugin {
         registerService(new ProfileService(this));
         registerService(new PunishmentService(this));
         registerService(new RankService(this));
+        registerService(new AutomatedRestartService(this, 42300));
         startServices();
+
+        factionManager = new FactionManager(this);
+        claimManager = new ClaimManager(this);
+        playerManager = new PlayerManager(this);
+        addonManager = new AddonManager(this);
+
+        commandManager.getCommandCompletions().registerAsyncCompletion("factions", c -> {
+            final List<String> names = Lists.newArrayList();
+            factionManager.getFactionRepository().forEach(faction -> names.add(faction.getName()));
+            return ImmutableList.copyOf(names);
+        });
+
+        factionManager.loadFactions();
+        claimManager.loadClaims();
 
         addonManager.startAddons();
 

@@ -57,3 +57,7 @@ factions.rename.others - Rename others factions
 factions.disband.others - Disband others factions
 factions.freeze.others - Freeze others factions
 factions.dtr.others - Set others faction DTR
+
+autoreboot.schedule - Schedule reboot
+autoreboot.start - Start reboot process
+autoreboot.cancel - Cancel a pending reboot
