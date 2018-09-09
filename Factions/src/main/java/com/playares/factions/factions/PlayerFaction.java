@@ -218,6 +218,27 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         return timers.stream().filter(timer -> timer.getType().equals(type)).findFirst().orElse(null);
     }
 
+    public void addTimer(FactionTimer timer) {
+        final FactionTimer existing = getTimer(timer.getType());
+
+        if (existing != null) {
+            existing.setExpire(timer.getExpire());
+            return;
+        }
+
+        getTimers().add(timer);
+    }
+
+    public void removeTimer(FactionTimer.FactionTimerType type) {
+        final FactionTimer timer = getTimer(type);
+
+        if (timer == null) {
+            return;
+        }
+
+        getTimers().remove(timer);
+    }
+
     public boolean isFrozen() {
         return getTimer(FactionTimer.FactionTimerType.FREEZE) != null;
     }
@@ -276,26 +297,6 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
 
         home = null;
         sendMessage(ChatColor.RED + "Faction home has been unset");
-    }
-
-    public void addTimer(FactionTimer timer) {
-        final FactionTimer existing = getTimer(timer.getType());
-
-        if (existing != null) {
-            getTimers().remove(existing);
-        }
-
-        getTimers().add(timer);
-    }
-
-    public void removeTimer(FactionTimer.FactionTimerType type) {
-        final FactionTimer timer = getTimer(type);
-
-        if (timer == null) {
-            return;
-        }
-
-        getTimers().remove(timer);
     }
 
     public void registerFriendly(Player player) {
