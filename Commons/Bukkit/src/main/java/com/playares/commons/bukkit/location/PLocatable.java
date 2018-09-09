@@ -9,9 +9,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public class PLocatable implements Locatable, MongoDocument<PLocatable> {
-    @Nonnull @Getter @Setter
+    @Nullable @Getter @Setter
     public String worldName;
 
     @Getter @Setter
