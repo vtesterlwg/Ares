@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.autosave.AutosaveAddon;
+import com.playares.factions.addons.loggers.LoggerAddon;
 import com.playares.factions.addons.mining.MiningAddon;
 import com.playares.factions.addons.stats.StatsAddon;
 import lombok.Getter;
@@ -24,6 +25,7 @@ public final class AddonManager {
         registerAddon(new MiningAddon(plugin));
         registerAddon(new StatsAddon(plugin));
         registerAddon(new AutosaveAddon(plugin));
+        registerAddon(new LoggerAddon(plugin));
     }
 
     public void startAddons() {

@@ -4,6 +4,8 @@ import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
 import com.playares.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
 import com.playares.commons.bukkit.event.PlayerSplashPlayerEvent;
 import com.playares.factions.Factions;
+import com.playares.factions.addons.loggers.CombatLogger;
+import com.playares.factions.addons.loggers.event.PlayerDamageLoggerEvent;
 import com.playares.factions.claims.DefinedClaim;
 import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.PlayerFaction;
@@ -224,6 +226,36 @@ public final class CombatListener implements Listener {
                     event.setCancelled(true);
                 }
             }
+        }
+    }
+
+    @EventHandler (priority = EventPriority.LOW)
+    public void onLoggerDamage(PlayerDamageLoggerEvent event) {
+        final Player damager = event.getPlayer();
+        final FactionPlayer profile = plugin.getPlayerManager().getPlayer(damager.getUniqueId());
+        final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(damager.getUniqueId());
+        final CombatLogger logger = event.getLogger();
+
+        if (profile != null && profile.hasTimer(PlayerTimer.PlayerTimerType.PROTECTION)) {
+            damager.sendMessage(ChatColor.RED + "You can not attack players while you have PvP Protection");
+            event.setCancelled(true);
+            return;
+        }
+
+        if (profile != null && profile.getCurrentClaim() != null) {
+            final DefinedClaim inside = profile.getCurrentClaim();
+            final ServerFaction sf = plugin.getFactionManager().getServerFactionById(inside.getOwnerId());
+
+            if (sf != null && sf.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+                damager.sendMessage(ChatColor.RED + "PvP is disabled in " + ChatColor.RESET + sf.getDisplayName());
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        if (faction != null && faction.getMember(logger.getOwner()) != null) {
+            damager.sendMessage(ChatColor.RED + "PvP is disabled between " + ChatColor.RESET + "Faction Members");
+            event.setCancelled(true);
         }
     }
 }
