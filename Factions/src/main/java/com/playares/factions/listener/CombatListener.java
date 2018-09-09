@@ -4,6 +4,7 @@ import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
 import com.playares.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
 import com.playares.commons.bukkit.event.PlayerSplashPlayerEvent;
 import com.playares.commons.bukkit.location.PLocatable;
+import com.playares.commons.bukkit.util.Players;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.loggers.CombatLogger;
 import com.playares.factions.addons.loggers.event.LoggerDeathEvent;
@@ -19,6 +20,7 @@ import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
@@ -292,6 +294,9 @@ public final class CombatListener implements Listener {
             faction.setDeathsTilRaidable(faction.getDeathsTilRaidable() - memberDeathEvent.getSubtractedDTR());
             faction.addTimer(new DTRFreezeTimer(faction, memberDeathEvent.getFreezeDuration()));
         }
+
+        logger.getBukkitLivingEntity().getWorld().strikeLightningEffect(logger.getBukkitLivingEntity().getLocation());
+        Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_BOLT_THUNDER));
     }
 
     @EventHandler
@@ -322,6 +327,9 @@ public final class CombatListener implements Listener {
             faction.setDeathsTilRaidable(faction.getDeathsTilRaidable() - memberDeathEvent.getSubtractedDTR());
             faction.addTimer(new DTRFreezeTimer(faction, memberDeathEvent.getFreezeDuration()));
         }
+
+        player.getWorld().strikeLightningEffect(player.getLocation());
+        Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_BOLT_THUNDER));
 
         event.setDeathMessage(null);
 
@@ -403,7 +411,7 @@ public final class CombatListener implements Listener {
             case WITHER: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " withered away"); break;
             case FLY_INTO_WALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " hit a wall going too fast"); break;
             case VOID: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " slipped and fell in to the void"); break;
-            case FALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " fell " + ChatColor.BLUE + Math.round(player.getFallDistance()) + " blocks " + ChatColor.RED + " to their death"); break;
+            case FALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " fell " + ChatColor.BLUE + Math.round(player.getFallDistance()) + " blocks" + ChatColor.RED + " to their death"); break;
             case CONTACT: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " was too close to a cactus"); break;
             case LIGHTNING: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " was struck by lightning"); break;
             default: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " died");
