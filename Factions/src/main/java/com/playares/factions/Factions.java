@@ -51,6 +51,7 @@ public final class Factions extends AresPlugin {
         registerListener(new ClaimListener(this));
         registerListener(new PlayerListener(this));
         registerListener(new ChatListener(this));
+        registerListener(new CombatListener(this));
 
         registerMongo(new MongoDB(factionConfig.getDatabaseURI()));
         getMongo().openConnection();
