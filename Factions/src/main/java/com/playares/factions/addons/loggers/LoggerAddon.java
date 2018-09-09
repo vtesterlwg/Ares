@@ -88,6 +88,13 @@ public final class LoggerAddon implements Addon, Listener {
     }
 
     @EventHandler (priority = EventPriority.MONITOR)
+    public void onLoggerSpawn(CombatLogEvent event) {
+        final Player player = event.getPlayer();
+        Bukkit.broadcastMessage(ChatColor.RED + "Combat-Logger: " + ChatColor.YELLOW + player.getName());
+        Logger.print(player.getName() + " combat-logged");
+    }
+
+    @EventHandler (priority = EventPriority.MONITOR)
     public void onLoggerDamage(PlayerDamageLoggerEvent event) {
         final Player attacker = event.getPlayer();
 
