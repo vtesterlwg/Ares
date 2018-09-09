@@ -24,5 +24,6 @@
         <module>ProxyEssentials</module>
         <module>Classes</module>
         <module>AutomatedRestarts</module>
+        <module>CustomEntity</module>
     </modules>
 </project>
