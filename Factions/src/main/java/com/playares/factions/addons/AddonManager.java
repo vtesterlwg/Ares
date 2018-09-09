@@ -53,6 +53,15 @@ public final class AddonManager {
         Logger.print("Finished stopping Faction Addons");
     }
 
+    public void reloadAddons() {
+        addons.values().forEach(addon -> {
+            addon.prepare();
+            Logger.print("Reloaded Factions Addon: " + addon.getName());
+        });
+
+        Logger.print("Finished reloading Faction Addons");
+    }
+
     public void registerAddon(Addon addon) {
         this.addons.put(addon.getClass(), addon);
     }
