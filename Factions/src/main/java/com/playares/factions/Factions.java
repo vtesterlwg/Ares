@@ -14,6 +14,7 @@ import com.playares.factions.listener.*;
 import com.playares.factions.players.PlayerManager;
 import com.playares.services.automatedrestarts.AutomatedRestartService;
 import com.playares.services.classes.ClassService;
+import com.playares.services.customentity.CustomEntityService;
 import com.playares.services.customevents.CustomEventService;
 import com.playares.services.customitems.CustomItemService;
 import com.playares.services.essentials.EssentialsService;
@@ -65,6 +66,7 @@ public final class Factions extends AresPlugin {
         registerService(new ClassService(this));
         registerService(new CustomEventService(this));
         registerService(new CustomItemService(this));
+        registerService(new CustomEntityService(this));
         registerService(new EssentialsService(this));
         registerService(new HumbugService(this));
         registerService(new ProfileService(this));

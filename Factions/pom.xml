@@ -37,6 +37,7 @@
                                     <include>com.playares:Punishments</include>
                                     <include>com.playares:Classes</include>
                                     <include>com.playares:AutomatedRestarts</include>
+                                    <include>com.playares:CustomEntity</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -169,6 +170,14 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>AutomatedRestarts</artifactId>
+            <version>1.13.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Custom Entity Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>CustomEntity</artifactId>
             <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
