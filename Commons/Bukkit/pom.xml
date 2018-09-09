@@ -6,7 +6,7 @@
     <parent>
         <artifactId>Commons</artifactId>
         <groupId>com.playares</groupId>
-        <version>1.13</version>
+        <version>1.13.1</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -75,8 +75,8 @@
         <!-- PaperSpigot API -->
         <dependency>
             <groupId>com.playares</groupId>
-            <artifactId>paper</artifactId>
-            <version>1.13</version>
+            <artifactId>Paper</artifactId>
+            <version>1.13.1</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
@@ -85,7 +85,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Base</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
         </dependency>
 
         <!-- ACF -->

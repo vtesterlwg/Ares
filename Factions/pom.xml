@@ -5,7 +5,7 @@
     <parent>
         <artifactId>Ares</artifactId>
         <groupId>com.playares</groupId>
-        <version>1.13</version>
+        <version>1.13.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -72,8 +72,8 @@
         <!-- Ares Paper -->
         <dependency>
             <groupId>com.playares</groupId>
-            <artifactId>paper</artifactId>
-            <version>1.13</version>
+            <artifactId>Paper</artifactId>
+            <version>1.13.1</version>
             <scope>provided</scope>
         </dependency>
 
@@ -89,7 +89,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Bukkit</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -97,7 +97,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Ranks</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -105,7 +105,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Profiles</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -113,7 +113,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>CustomEvents</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -121,7 +121,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Essentials</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -137,7 +137,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Humbug</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -145,7 +145,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Punishments</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -153,7 +153,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>CustomItems</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -161,7 +161,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Classes</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
 
@@ -169,7 +169,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>AutomatedRestarts</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

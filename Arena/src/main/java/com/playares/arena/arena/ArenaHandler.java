@@ -29,14 +29,14 @@ import lombok.Getter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.minecraft.server.v1_13_R1.DataWatcherObject;
-import net.minecraft.server.v1_13_R1.DataWatcherRegistry;
+import net.minecraft.server.v1_13_R2.DataWatcherObject;
+import net.minecraft.server.v1_13_R2.DataWatcherRegistry;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>Commons</artifactId>
         <groupId>com.playares</groupId>
-        <version>1.13</version>
+        <version>1.13.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -66,7 +66,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Base</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
         </dependency>
 
         <!-- Bungeecord API -->

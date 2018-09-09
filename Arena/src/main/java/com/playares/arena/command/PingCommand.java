@@ -7,7 +7,7 @@ import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Syntax;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.v1_13_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 public final class PingCommand extends BaseCommand {

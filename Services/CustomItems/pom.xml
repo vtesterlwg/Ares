@@ -5,12 +5,12 @@
     <parent>
         <artifactId>Services</artifactId>
         <groupId>com.playares</groupId>
-        <version>1.13</version>
+        <version>1.13.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>CustomItems</artifactId>
-    <version>1.13</version>
+    <version>1.13.1</version>
 
     <build>
         <plugins>
@@ -29,15 +29,15 @@
         <!-- Ares Paper -->
         <dependency>
             <groupId>com.playares</groupId>
-            <artifactId>paper</artifactId>
-            <version>1.13</version>
+            <artifactId>Paper</artifactId>
+            <version>1.13.1</version>
         </dependency>
 
         <!-- Ares Bukkit Commons -->
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Bukkit</artifactId>
-            <version>1.13</version>
+            <version>1.13.1</version>
         </dependency>
     </dependencies>
 </project>
