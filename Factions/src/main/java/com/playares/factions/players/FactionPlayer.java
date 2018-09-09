@@ -97,6 +97,17 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         return getTimers().stream().anyMatch(timer -> timer.getType().equals(type));
     }
 
+    public void addTimer(PlayerTimer timer) {
+        final PlayerTimer existing = getTimer(timer.getType());
+
+        if (existing != null) {
+            existing.setExpire(timer.getExpire());
+            return;
+        }
+
+        getTimers().add(timer);
+    }
+
     public Player getPlayer() {
         return Bukkit.getPlayer(uniqueId);
     }
