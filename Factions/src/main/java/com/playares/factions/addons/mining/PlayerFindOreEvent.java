@@ -1,4 +1,4 @@
-package com.playares.factions.event;
+package com.playares.factions.addons.mining;
 
 import lombok.Getter;
 import lombok.Setter;

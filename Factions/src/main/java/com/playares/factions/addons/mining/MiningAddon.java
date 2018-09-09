@@ -9,7 +9,6 @@ import com.playares.commons.bukkit.util.Worlds;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.Addon;
 import com.playares.factions.claims.DefinedClaim;
-import com.playares.factions.event.PlayerFindOreEvent;
 import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.factions.ServerFaction;
