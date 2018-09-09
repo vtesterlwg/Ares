@@ -5,7 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 public abstract class Timer {
-    private long expire;
+    @Setter
+    public long expire;
 
     @Getter @Setter
     public long frozenTime;
