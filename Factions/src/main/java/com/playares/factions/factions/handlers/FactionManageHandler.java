@@ -173,4 +173,59 @@ public final class FactionManageHandler {
         pf.updateHome(player);
         promise.success();
     }
+
+    public void setFlag(Player player, String name, String flagName, SimplePromise promise) {
+        final ServerFaction faction = manager.getServerFactionByName(name);
+
+        if (faction == null) {
+            promise.failure("Faction not found");
+            return;
+        }
+
+        final ServerFaction.FactionFlag flag;
+
+        try {
+            flag = ServerFaction.FactionFlag.valueOf(flagName.toUpperCase());
+        } catch (IllegalArgumentException ex) {
+            promise.failure("Invalid faction flag");
+            return;
+        }
+
+        if (faction.getFlag().equals(flag)) {
+            promise.failure("This faction is already using this flag");
+            return;
+        }
+
+        faction.setFlag(flag);
+        Logger.print(player.getName() + " updated flag for " + faction.getName() + " to " + flag.name());
+        promise.success();
+    }
+
+    public void setDisplayName(Player player, String factionName, String displayName, SimplePromise promise) {
+        final ServerFaction faction = manager.getServerFactionByName(factionName);
+
+        if (faction == null) {
+            promise.failure("Faction not found");
+            return;
+        }
+
+        final String formatted = ChatColor.translateAlternateColorCodes('&', displayName);
+
+        faction.setDisplayName(formatted);
+        Logger.print(player.getName() + " set display name for " + faction.getName() + " to " + formatted);
+        promise.success();
+    }
+
+    public void setBuffer(Player player, String factionName, double buffer, SimplePromise promise) {
+        final ServerFaction faction = manager.getServerFactionByName(factionName);
+
+        if (faction == null) {
+            promise.failure("Faction not found");
+            return;
+        }
+
+        faction.setBuffer(buffer);
+        Logger.print(player.getName() + " updated buffer radius for " + faction.getName() + " to " + buffer);
+        promise.success();
+    }
 }

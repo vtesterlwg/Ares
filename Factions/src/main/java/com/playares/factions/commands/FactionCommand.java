@@ -10,10 +10,6 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 
-/*
-/f buffer <faction> <buffer>
-/f setflag <faction> <flag>
-*/
 @CommandAlias("factions|faction|f|teams|team|t")
 public final class FactionCommand extends BaseCommand {
     @Getter
@@ -564,6 +560,60 @@ public final class FactionCommand extends BaseCommand {
             @Override
             public void success() {
                 player.sendMessage(ChatColor.GREEN + "Faction DTR has been updated");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("setflag")
+    @Description("Update a factions flag")
+    @CommandPermission("factions.flag.others")
+    @Syntax("[faction] [flag]")
+    public void onSetFlag(Player player, String faction, @Values("SAFEZONE|LANDMARK|EVENT") String flag) {
+        plugin.getFactionManager().getManageHandler().setFlag(player, faction, flag, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction flag has been updated");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("setdisplayname|sdn")
+    @Description("Update a factions display name")
+    @CommandPermission("factions.displayname.others")
+    @Syntax("[faction] [displayName]")
+    public void onSetDisplayName(Player player, String faction, @Single String displayName) {
+        plugin.getFactionManager().getManageHandler().setDisplayName(player, faction, displayName, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction display name has been updated");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("setbuffer|sb")
+    @Description("Update a factions buffer radius")
+    @CommandPermission("factions.buffer.others")
+    @Syntax("[faction] [buffer]")
+    public void onSetBuffer(Player player, String faction, double buffer) {
+        plugin.getFactionManager().getManageHandler().setBuffer(player, faction, buffer, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction buffer has been updated");
             }
 
             @Override
