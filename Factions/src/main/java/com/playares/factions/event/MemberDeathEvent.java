@@ -4,13 +4,20 @@ import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.factions.factions.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
-import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerEvent;
 
-public final class MemberDeathEvent extends PlayerEvent {
+import java.util.UUID;
+
+public final class MemberDeathEvent extends Event {
     @Getter
     public static final HandlerList handlerList = new HandlerList();
+
+    @Getter
+    public final UUID uniqueId;
+
+    @Getter
+    public final String username;
 
     @Getter
     public final PlayerFaction faction;
@@ -21,11 +28,16 @@ public final class MemberDeathEvent extends PlayerEvent {
     @Getter @Setter
     public double subtractedDTR;
 
-    public MemberDeathEvent(Player who, PlayerFaction faction, PLocatable locatable, double subtractedDTR) {
-        super(who);
+    @Getter @Setter
+    public int freezeDuration;
+
+    public MemberDeathEvent(UUID uniqueId, String username, PlayerFaction faction, PLocatable locatable, double subtractedDTR, int freezeDuration) {
+        this.uniqueId = uniqueId;
+        this.username = username;
         this.faction = faction;
         this.locatable = locatable;
         this.subtractedDTR = subtractedDTR;
+        this.freezeDuration = freezeDuration;
     }
 
     @Override
