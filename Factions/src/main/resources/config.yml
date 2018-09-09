@@ -163,3 +163,9 @@ stats:
     death: 25
     minor-capture: 75
     major-capture: 200
+
+# Combat logger configuration
+loggers:
+  enabled: true
+  logger-duration: 30
+  enemy-radius: 16

@@ -20,9 +20,11 @@ import com.playares.factions.timers.cont.player.CombatTagTimer;
 import com.playares.factions.util.FactionUtils;
 import com.playares.services.customentity.CustomEntityService;
 import lombok.Getter;
+import lombok.Setter;
 import net.minecraft.server.v1_13_R2.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
@@ -46,6 +48,15 @@ public final class LoggerAddon implements Addon, Listener {
     @Getter
     public final Factions plugin;
 
+    @Getter @Setter
+    public boolean enabled;
+
+    @Getter @Setter
+    public int loggerDuration;
+
+    @Getter @Setter
+    public int enemyCheckRadius;
+
     @Getter
     public final Map<UUID, CombatLogger> loggers;
 
@@ -60,7 +71,12 @@ public final class LoggerAddon implements Addon, Listener {
     }
 
     @Override
-    public void prepare() {}
+    public void prepare() {
+        final YamlConfiguration config = plugin.getConfig("config");
+        this.enabled = config.getBoolean("loggers.enabled");
+        this.loggerDuration = config.getInt("loggers.logger-duration");
+        this.enemyCheckRadius = config.getInt("loggers.enemy-radius");
+    }
 
     @Override
     public void start() {
@@ -85,6 +101,7 @@ public final class LoggerAddon implements Addon, Listener {
         PlayerQuitEvent.getHandlerList().unregister(this);
         PlayerJoinEvent.getHandlerList().unregister(this);
         PlayerDamageLoggerEvent.getHandlerList().unregister(this);
+        CombatLogEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler (priority = EventPriority.MONITOR)
@@ -98,6 +115,10 @@ public final class LoggerAddon implements Addon, Listener {
     public void onLoggerDamage(PlayerDamageLoggerEvent event) {
         final Player attacker = event.getPlayer();
 
+        if (!isEnabled()) {
+            return;
+        }
+
         if (event.isCancelled()) {
             return;
         }
@@ -109,6 +130,10 @@ public final class LoggerAddon implements Addon, Listener {
     public void onPlayerAttackPlayer(PlayerDamagePlayerEvent event) {
         final Player attacker = event.getDamager();
         final Player attacked = event.getDamaged();
+
+        if (!isEnabled()) {
+            return;
+        }
 
         if (event.isCancelled()) {
             return;
@@ -127,6 +152,10 @@ public final class LoggerAddon implements Addon, Listener {
         final Player attacked = event.getDamaged();
         final ThrownPotion potion = event.getPotion();
         boolean isDebuff = false;
+
+        if (!isEnabled()) {
+            return;
+        }
 
         if (event.isCancelled()) {
             return;
@@ -159,6 +188,10 @@ public final class LoggerAddon implements Addon, Listener {
         final Player attacked = event.getDamaged();
         final AreaEffectCloud cloud = event.getCloud();
 
+        if (!isEnabled()) {
+            return;
+        }
+
         if (event.isCancelled()) {
             return;
         }
@@ -182,6 +215,10 @@ public final class LoggerAddon implements Addon, Listener {
         final Player player = event.getPlayer();
         final CombatLogger logger = loggers.get(player.getUniqueId());
 
+        if (!isEnabled()) {
+            return;
+        }
+
         if (logger == null) {
             return;
         }
@@ -195,6 +232,10 @@ public final class LoggerAddon implements Addon, Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (!isEnabled()) {
+            return;
+        }
 
         if (profile == null) {
             return;
@@ -228,7 +269,7 @@ public final class LoggerAddon implements Addon, Listener {
             return;
         }
 
-        if (!FactionUtils.getNearbyEnemies(plugin, player, 16).isEmpty()) {
+        if (!FactionUtils.getNearbyEnemies(plugin, player, enemyCheckRadius).isEmpty()) {
             spawnLogger(player);
         }
     }
@@ -238,6 +279,10 @@ public final class LoggerAddon implements Addon, Listener {
         final LivingEntity entity = event.getEntity();
         final Player killer = entity.getKiller();
         final EntityLiving nmsEntity = ((CraftLivingEntity)entity).getHandle();
+
+        if (!isEnabled()) {
+            return;
+        }
 
         if (!(nmsEntity instanceof CombatLogger)) {
             return;
@@ -257,6 +302,10 @@ public final class LoggerAddon implements Addon, Listener {
 
     @EventHandler
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (!isEnabled()) {
+            return;
+        }
+
         if (!(event.getEntity() instanceof LivingEntity)) {
             return;
         }
@@ -288,7 +337,7 @@ public final class LoggerAddon implements Addon, Listener {
             final ProjectileSource source = projectile.getShooter();
 
             if (source instanceof Player) {
-                final Player playerDamager = (Player)damager;
+                final Player playerDamager = (Player)source;
                 final PlayerDamageLoggerEvent loggerEvent = new PlayerDamageLoggerEvent(playerDamager, logger);
 
                 Bukkit.getPluginManager().callEvent(loggerEvent);
@@ -301,6 +350,10 @@ public final class LoggerAddon implements Addon, Listener {
     }
 
     private void spawnLogger(Player player) {
+        if (!isEnabled()) {
+            return;
+        }
+
         final CombatLogEvent event = new CombatLogEvent(player);
         Bukkit.getPluginManager().callEvent(event);
 
@@ -315,7 +368,7 @@ public final class LoggerAddon implements Addon, Listener {
         new Scheduler(plugin).sync(() -> {
             logger.getBukkitEntity().remove();
             loggers.remove(player.getUniqueId());
-        }).delay(30 * 20L).run();
+        }).delay(loggerDuration * 20L).run();
     }
 
     private void performAttack(@Nonnull Player attacker, @Nullable Player attacked) {
