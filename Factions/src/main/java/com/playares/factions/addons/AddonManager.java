@@ -6,6 +6,7 @@ import com.playares.factions.Factions;
 import com.playares.factions.addons.autosave.AutosaveAddon;
 import com.playares.factions.addons.loggers.LoggerAddon;
 import com.playares.factions.addons.mining.MiningAddon;
+import com.playares.factions.addons.spawnpoints.SpawnpointAddon;
 import com.playares.factions.addons.stats.StatsAddon;
 import lombok.Getter;
 
@@ -26,6 +27,7 @@ public final class AddonManager {
         registerAddon(new StatsAddon(plugin));
         registerAddon(new AutosaveAddon(plugin));
         registerAddon(new LoggerAddon(plugin));
+        registerAddon(new SpawnpointAddon(plugin));
     }
 
     public void startAddons() {

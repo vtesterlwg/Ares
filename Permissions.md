@@ -58,6 +58,8 @@ factions.disband.others - Disband others factions
 factions.freeze.others - Freeze others factions
 factions.dtr.others - Set others faction DTR
 factions.flag.others - Set flag for other factions
+factions.spawn - Teleport to a spawnpoint
+factions.setspawn - Set a spawnpoint
 
 autoreboot.schedule - Schedule reboot
 autoreboot.start - Start reboot process
