@@ -396,14 +396,34 @@ public final class FactionCommand extends BaseCommand {
     @Description("Promote a player to the next highest role")
     @Syntax("<player>")
     public void onPromote(Player player, String username) {
+        plugin.getFactionManager().getManageHandler().promote(player, username, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Player has been promoted");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("demote")
     @Description("Demote a player to the next lowest role")
     @Syntax("<player>")
     public void onDemote(Player player, String username) {
+        plugin.getFactionManager().getManageHandler().demote(player, username, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Player has been demoted");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("unclaim")

@@ -8,7 +8,10 @@ import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.factions.ServerFaction;
+import com.playares.services.profiles.ProfileService;
 import lombok.Getter;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -115,6 +118,128 @@ public final class FactionManageHandler {
         }
 
         promise.success();
+    }
+
+    public void promote(Player player, String name, SimplePromise promise) {
+        final ProfileService profileService = (ProfileService)manager.getPlugin().getService(ProfileService.class);
+        final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
+        final boolean admin = player.hasPermission("factions.admin");
+
+        if (profileService == null) {
+            promise.failure("Failed to obtain Profile Service");
+            return;
+        }
+
+        if (faction == null) {
+            promise.failure("You are not in a faction");
+            return;
+        }
+
+        final PlayerFaction.FactionProfile profile = faction.getMember(player.getUniqueId());
+        final boolean leader = profile.getRank().equals(PlayerFaction.FactionRank.LEADER);
+
+        if (profile.getRank().equals(PlayerFaction.FactionRank.MEMBER) && !admin) {
+            promise.failure("Members are not able to perform this action");
+            return;
+        }
+
+        profileService.getProfile(name, aresProfile -> {
+            if (aresProfile == null) {
+                promise.failure("Player not found");
+                return;
+            }
+
+            final PlayerFaction.FactionProfile otherProfile = faction.getMember(aresProfile.getUniqueId());
+
+            if (otherProfile == null) {
+                promise.failure("This player is not in your faction");
+                return;
+            }
+
+            if (otherProfile.getRank().isHigherOrEqual(profile.getRank()) && !admin && !leader) {
+                promise.failure("This player has equal or higher ranking");
+                return;
+            }
+
+            final PlayerFaction.FactionRank newRank = otherProfile.getRank().getNext();
+
+            if (newRank == null) {
+                promise.failure("Next rank level not found");
+                return;
+            }
+
+            otherProfile.setRank(newRank);
+
+            if (Bukkit.getPlayer(aresProfile.getUniqueId()) != null) {
+                Bukkit.getPlayer(aresProfile.getUniqueId()).sendMessage(ChatColor.GREEN + "You have been promoted!");
+                return;
+            }
+
+            faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " promoted " + ChatColor.DARK_GREEN + aresProfile.getUsername() + ChatColor.GOLD + " to " + ChatColor.BLUE + StringUtils.capitalise(newRank.name().toLowerCase()));
+            Logger.print(player.getName() + " promoted " + aresProfile.getUsername() + " to " + newRank.name());
+            promise.success();
+        });
+    }
+
+    public void demote(Player player, String name, SimplePromise promise) {
+        final ProfileService profileService = (ProfileService)manager.getPlugin().getService(ProfileService.class);
+        final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
+        final boolean admin = player.hasPermission("factions.admin");
+
+        if (profileService == null) {
+            promise.failure("Failed to obtain Profile Service");
+            return;
+        }
+
+        if (faction == null) {
+            promise.failure("You are not in a faction");
+            return;
+        }
+
+        final PlayerFaction.FactionProfile profile = faction.getMember(player.getUniqueId());
+        final boolean leader = profile.getRank().equals(PlayerFaction.FactionRank.LEADER);
+
+        if (profile.getRank().equals(PlayerFaction.FactionRank.MEMBER) && !admin) {
+            promise.failure("Members are not able to perform this action");
+            return;
+        }
+
+        profileService.getProfile(name, aresProfile -> {
+            if (aresProfile == null) {
+                promise.failure("Player not found");
+                return;
+            }
+
+            final PlayerFaction.FactionProfile otherProfile = faction.getMember(aresProfile.getUniqueId());
+
+            if (otherProfile == null) {
+                promise.failure("This player is not in your faction");
+                return;
+            }
+
+            if (otherProfile.getRank().isHigherOrEqual(profile.getRank()) && !admin && !leader) {
+                promise.failure("This player has equal or higher ranking");
+                return;
+            }
+
+            final PlayerFaction.FactionRank newRank = otherProfile.getRank().getLower();
+
+            if (newRank == null) {
+                promise.failure("Lower rank level not found");
+                return;
+            }
+
+            otherProfile.setRank(newRank);
+
+            if (Bukkit.getPlayer(aresProfile.getUniqueId()) != null) {
+                Bukkit.getPlayer(aresProfile.getUniqueId()).sendMessage(ChatColor.RED + "You have been demoted!");
+                return;
+            }
+
+            faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " demoted " + ChatColor.DARK_GREEN + aresProfile.getUsername() + ChatColor.GOLD + " to " + ChatColor.BLUE + StringUtils.capitalise(newRank.name().toLowerCase()));
+            Logger.print(player.getName() + " demoted " + aresProfile.getUsername() + " to " + newRank.name());
+            promise.success();
+        });
     }
 
     public void setHome(Player player, SimplePromise promise) {

@@ -443,6 +443,26 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         public boolean isHigherOrEqual(FactionRank other) {
             return this.getWeight() >= other.getWeight();
         }
+
+        public FactionRank getNext() {
+            switch (this) {
+                case MEMBER: return OFFICER;
+                case OFFICER: return CO_LEADER;
+                case CO_LEADER: return LEADER;
+                case LEADER: return null;
+                default: return null;
+            }
+        }
+
+        public FactionRank getLower() {
+            switch (this) {
+                case MEMBER: return null;
+                case OFFICER: return MEMBER;
+                case CO_LEADER: return OFFICER;
+                case LEADER: return CO_LEADER;
+                default: return null;
+            }
+        }
     }
 
     public enum ChatChannel {
