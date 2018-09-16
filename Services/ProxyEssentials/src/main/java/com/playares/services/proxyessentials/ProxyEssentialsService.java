@@ -94,7 +94,7 @@ public final class ProxyEssentialsService implements AresService, Listener {
             getProxy().getProxy().getPlayers().forEach(viewer -> {
                 if (viewer.hasPermission("proxyessentials.notifications")) {
                     viewer.sendMessage(ChatColor.BLUE + "[" + ChatColor.DARK_AQUA + "Staff" + ChatColor.BLUE + "] " + ChatColor.AQUA +
-                            player.getName() + ChatColor.RED + " left " + ChatColor.AQUA + "the network " + ChatColor.GRAY + "[From: " + player.getServer().getInfo().getName() + "]");
+                            player.getName() + ChatColor.RED + " left " + ChatColor.AQUA + "the network");
                 }
             });
         }
