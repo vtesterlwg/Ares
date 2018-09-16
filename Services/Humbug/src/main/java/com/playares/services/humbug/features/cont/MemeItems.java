@@ -273,7 +273,7 @@ public final class MemeItems implements HumbugModule, Listener {
         for (Integer i : event.getNewItems().keySet()) {
             final ItemStack item = event.getNewItems().get(i);
 
-            if (i == 45 && (item.getType().equals(Material.BOW) || item.getType().equals(Material.TRIDENT))) {
+            if (i == 45 && (item.getType().equals(Material.BOW) || item.getType().equals(Material.TRIDENT) || item.getType().equals(Material.SHIELD))) {
                 event.setCancelled(true);
                 player.sendMessage(ChatColor.RED + "This item can not be moved to your off-hand");
                 return;
@@ -294,8 +294,13 @@ public final class MemeItems implements HumbugModule, Listener {
         final Player player = (Player)event.getWhoClicked();
         final ItemStack cursor = event.getCursor();
 
-        if (cursor == null || (!cursor.getType().equals(Material.BOW) && !cursor.getType().equals(Material.TRIDENT))) {
+        if (cursor == null ||
+                (!cursor.getType().equals(Material.BOW) &&
+                !cursor.getType().equals(Material.TRIDENT) &&
+                !cursor.getType().equals(Material.SHIELD))) {
+
             return;
+
         }
 
         if (event.getRawSlot() != 45) {
