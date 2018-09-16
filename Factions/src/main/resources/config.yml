@@ -1,9 +1,6 @@
 # Database connect URI, use 'mongodb://localhost' for default connection
 database: 'mongodb://localhost'
 
-# Allowed types, 'SOTW', 'NORMAL', and 'EOTW'
-server-state: 'NORMAL'
-
 # Autosaves Factions, Players and Claims at a set interval
 autosave:
   enabled: true
