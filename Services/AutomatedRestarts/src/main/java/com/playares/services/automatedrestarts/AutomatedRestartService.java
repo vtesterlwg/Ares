@@ -12,7 +12,7 @@ import org.spigotmc.RestartCommand;
 
 public final class AutomatedRestartService implements AresService {
     static final String PREFIX = ChatColor.DARK_RED + "[" + ChatColor.RED + "Rebooting" + ChatColor.DARK_RED + "]";
-    static int DEFAULT_REBOOT_TIME = 300;
+    static int DEFAULT_REBOOT_TIME = 300; // TODO: Make configurable
 
     @Getter
     public final AresPlugin owner;
