@@ -71,21 +71,21 @@ public final class GiantBoss extends EntityGiantZombie {
             return;
         }
 
-        Worlds.playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL);
+        Worlds.playSound(getBukkitEntity().getLocation(), Sound.ENTITY_ENDER_DRAGON_GROWL);
 
         new Scheduler(plugin).sync(() -> {
             this.motY += 2.0;
-            Worlds.playSound(getBukkitLivingEntity().getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP);
+            Worlds.playSound(getBukkitEntity().getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP);
 
             new Scheduler(plugin).sync(() -> {
                 playGroundVibrate((int)(Math.round(locX)), (int)(Math.round(locY)), (int)(Math.round(locZ)));
 
-                for (Player nearby : getBukkitLivingEntity().getWorld().getNearbyPlayers(getBukkitLivingEntity().getLocation(), 15)) {
+                for (Player nearby : getBukkitEntity().getWorld().getNearbyPlayers(getBukkitEntity().getLocation(), 15)) {
                     if (nearby.getGameMode().equals(GameMode.CREATIVE) || nearby.getGameMode().equals(GameMode.SPECTATOR)) {
                         continue;
                     }
 
-                    final double distance = nearby.getLocation().distance(getBukkitLivingEntity().getLocation());
+                    final double distance = nearby.getLocation().distance(getBukkitEntity().getLocation());
 
                     // TODO: Apply damage and knock back
                 }

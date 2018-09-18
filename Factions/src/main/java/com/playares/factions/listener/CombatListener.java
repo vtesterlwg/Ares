@@ -21,6 +21,7 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
@@ -271,6 +272,7 @@ public final class CombatListener implements Listener {
     @EventHandler (priority = EventPriority.MONITOR)
     public void onLoggerDeath(LoggerDeathEvent event) {
         final CombatLogger logger = event.getLogger();
+        final CraftLivingEntity living = (CraftLivingEntity)logger.getBukkitEntity();
 
         if (event.isCancelled()) {
             return;
@@ -289,13 +291,13 @@ public final class CombatListener implements Listener {
         }
 
         if (faction != null) {
-            final MemberDeathEvent memberDeathEvent = new MemberDeathEvent(logger.getOwner(), logger.getOwnerUsername(), faction, new PLocatable(logger.getBukkitLivingEntity()), 1.0, plugin.getFactionConfig().getTimerFreeze());
+            final MemberDeathEvent memberDeathEvent = new MemberDeathEvent(logger.getOwner(), logger.getOwnerUsername(), faction, new PLocatable(living), 1.0, plugin.getFactionConfig().getTimerFreeze());
             Bukkit.getPluginManager().callEvent(memberDeathEvent);
             faction.setDeathsTilRaidable(faction.getDeathsTilRaidable() - memberDeathEvent.getSubtractedDTR());
             faction.addTimer(new DTRFreezeTimer(faction, memberDeathEvent.getFreezeDuration()));
         }
 
-        logger.getBukkitLivingEntity().getWorld().strikeLightningEffect(logger.getBukkitLivingEntity().getLocation());
+        logger.getBukkitEntity().getWorld().strikeLightningEffect(logger.getBukkitEntity().getLocation());
         Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_BOLT_THUNDER));
     }
 

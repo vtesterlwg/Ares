@@ -67,17 +67,15 @@
             <id>destroystokyo-repo</id>
             <url>https://repo.destroystokyo.com/repository/maven-snapshots/</url>
         </repository>
+
+        <!-- Spigot -->
+        <repository>
+            <id>spigot-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
-        <!-- CraftBukkit -->
-        <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.13.1-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Paper -->
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
@@ -91,6 +89,7 @@
             <groupId>com.playares</groupId>
             <artifactId>Base</artifactId>
             <version>1.13.1</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- ACF -->

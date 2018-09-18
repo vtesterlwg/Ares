@@ -32,10 +32,19 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- Ares Bukkit -->
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Bukkit</artifactId>
             <version>1.13.1</version>
+        </dependency>
+
+        <!-- Craftbukkit -->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -4,10 +4,12 @@ import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_13_R2.Entity;
+import net.minecraft.server.v1_13_R2.EntityLiving;
 import net.minecraft.server.v1_13_R2.EntityVillager;
 import net.minecraft.server.v1_13_R2.World;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.inventory.ItemStack;
@@ -46,19 +48,20 @@ public final class CombatLogger extends EntityVillager {
             this.items.add(item);
         }
 
-        getBukkitLivingEntity().setHealth(player.getHealth());
-        getBukkitLivingEntity().setFallDistance(player.getFallDistance());
-        getBukkitLivingEntity().setNoDamageTicks(player.getNoDamageTicks());
-        getBukkitLivingEntity().setFireTicks(player.getFireTicks());
-        getBukkitLivingEntity().setRemainingAir(player.getRemainingAir());
-        getBukkitLivingEntity().setCollidable(false);
+        final CraftLivingEntity living = (CraftLivingEntity)getBukkitEntity();
+        living.setHealth(player.getHealth());
+        living.setFallDistance(player.getFallDistance());
+        living.setNoDamageTicks(player.getNoDamageTicks());
+        living.setFireTicks(player.getFireTicks());
+        living.setRemainingAir(player.getRemainingAir());
+        living.setCollidable(false);
 
-        getBukkitLivingEntity().getEquipment().setHelmet(player.getEquipment().getHelmet());
-        getBukkitLivingEntity().getEquipment().setChestplate(player.getEquipment().getChestplate());
-        getBukkitLivingEntity().getEquipment().setLeggings(player.getEquipment().getLeggings());
-        getBukkitLivingEntity().getEquipment().setBoots(player.getEquipment().getBoots());
+        living.getEquipment().setHelmet(player.getEquipment().getHelmet());
+        living.getEquipment().setChestplate(player.getEquipment().getChestplate());
+        living.getEquipment().setLeggings(player.getEquipment().getLeggings());
+        living.getEquipment().setBoots(player.getEquipment().getBoots());
 
-        player.getActivePotionEffects().forEach(effect -> getBukkitLivingEntity().addPotionEffect(effect));
+        player.getActivePotionEffects().forEach(living::addPotionEffect);
     }
 
     @Override
@@ -68,18 +71,19 @@ public final class CombatLogger extends EntityVillager {
     protected void n() {}
 
     public void reapply(Player player) {
-        player.getEquipment().setHelmet(getBukkitLivingEntity().getEquipment().getHelmet());
-        player.getEquipment().setChestplate(getBukkitLivingEntity().getEquipment().getChestplate());
-        player.getEquipment().setLeggings(getBukkitLivingEntity().getEquipment().getLeggings());
-        player.getEquipment().setBoots(getBukkitLivingEntity().getEquipment().getBoots());
-        player.setHealth(getBukkitLivingEntity().getHealth());
+        final CraftLivingEntity living = (CraftLivingEntity)getBukkitEntity();
+        player.getEquipment().setHelmet(living.getEquipment().getHelmet());
+        player.getEquipment().setChestplate(living.getEquipment().getChestplate());
+        player.getEquipment().setLeggings(living.getEquipment().getLeggings());
+        player.getEquipment().setBoots(living.getEquipment().getBoots());
+        player.setHealth(living.getHealth());
         player.getActivePotionEffects().forEach(effect -> player.removePotionEffect(effect.getType()));
-        player.teleport(getBukkitLivingEntity().getLocation());
-        player.setFallDistance(getBukkitLivingEntity().getFallDistance());
-        player.setFireTicks(getBukkitLivingEntity().getFireTicks());
-        player.setRemainingAir(getBukkitLivingEntity().getRemainingAir());
-        getBukkitLivingEntity().getActivePotionEffects().forEach(player::addPotionEffect);
-        getBukkitLivingEntity().remove();
+        player.teleport(living.getLocation());
+        player.setFallDistance(living.getFallDistance());
+        player.setFireTicks(living.getFireTicks());
+        player.setRemainingAir(living.getRemainingAir());
+        living.getActivePotionEffects().forEach(player::addPotionEffect);
+        living.remove();
     }
 
     public void spawn() {

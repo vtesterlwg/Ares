@@ -224,7 +224,7 @@ public final class LoggerAddon implements Addon, Listener {
         }
 
         logger.reapply(player);
-        logger.getBukkitLivingEntity().remove();
+        logger.getBukkitEntity().remove();
         loggers.remove(player.getUniqueId());
     }
 
