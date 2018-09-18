@@ -72,7 +72,7 @@ public final class CombatListener implements Listener {
         }
 
         if (attackedProfile.hasTimer(PlayerTimer.PlayerTimerType.PROTECTION)) {
-            attacked.sendMessage(ChatColor.RED + "This player has PvP Protection");
+            attacker.sendMessage(ChatColor.RED + "This player has PvP Protection");
             event.setCancelled(true);
             return;
         }

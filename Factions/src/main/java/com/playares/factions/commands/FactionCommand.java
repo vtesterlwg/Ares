@@ -643,6 +643,36 @@ public final class FactionCommand extends BaseCommand {
         });
     }
 
+    @Subcommand("leaderboard|lb|top")
+    @Description("View the faction leaderboards")
+    @Syntax("[category]")
+    public void onLeaderboard(Player player) {
+        plugin.getFactionManager().getDisplayHandler().displayLeaderboard(player, "elo", new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("leaderboard|lb|top")
+    @Description("View the faction leaderboards")
+    @Syntax("[category]")
+    public void onLeaderboard(Player player, @Flags("elo|e|kills|k|deaths|d|minorevents|minor|majorevents|major") String category) {
+        plugin.getFactionManager().getDisplayHandler().displayLeaderboard(player, category, new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
     @Subcommand("help")
     @Description("View a list of commands")
     public void onHelp(Player player) {

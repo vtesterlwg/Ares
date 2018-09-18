@@ -5,6 +5,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.base.util.Time;
+import com.playares.commons.bukkit.item.ItemBuilder;
+import com.playares.commons.bukkit.menu.ClickableItem;
+import com.playares.commons.bukkit.menu.Menu;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.addons.stats.StatsAddon;
 import com.playares.factions.factions.Faction;
@@ -23,7 +26,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -318,6 +323,83 @@ public final class FactionDisplayHandler {
                 }
 
                 viewer.sendMessage(ChatColor.YELLOW + "------------------------------------------------");
+            }).run();
+        }).run();
+    }
+
+    public void displayLeaderboard(Player player, String category, SimplePromise promise) {
+        final StatsAddon addon = (StatsAddon)manager.getPlugin().getAddonManager().getAddon(StatsAddon.class);
+        final List<PlayerFaction> factions = Lists.newArrayList(manager.getPlayerFactions());
+
+        if (factions.isEmpty()) {
+            promise.failure("There are no factions on the leaderboard");
+            return;
+        }
+
+        new Scheduler(manager.getPlugin()).async(() -> {
+            final String fancyCategory;
+
+            if (category.equalsIgnoreCase("elo") || category.equalsIgnoreCase("e")) {
+                factions.sort(Comparator.comparingInt(f -> f.getStats().calculateELO(addon)));
+                fancyCategory = "Rating";
+            } else if (category.equalsIgnoreCase("kills") || category.equalsIgnoreCase("k")) {
+                factions.sort(Comparator.comparingInt(f -> f.getStats().getKills()));
+                fancyCategory = "Kills";
+            } else if (category.equalsIgnoreCase("deaths") || category.equalsIgnoreCase("d")) {
+                factions.sort(Comparator.comparingInt(f -> f.getStats().getDeaths()));
+                fancyCategory = "Deaths";
+            } else if (category.equalsIgnoreCase("minorevents") || category.equalsIgnoreCase("minor")) {
+                factions.sort(Comparator.comparingInt(f -> f.getStats().getMinorEventCaptures()));
+                fancyCategory = "Minor Event Captures";
+            } else if (category.equalsIgnoreCase("majorevents") || category.equalsIgnoreCase("major")) {
+                factions.sort(Comparator.comparingInt(f -> f.getStats().getMajorEventCaptures()));
+                fancyCategory = "Major Event Captures";
+            } else {
+                new Scheduler(manager.getPlugin()).sync(() -> promise.failure("Invalid category")).run();
+                return;
+            }
+
+            Collections.reverse(factions);
+
+            final Menu menu = new Menu(manager.getPlugin(), player, "Factions Leaderboard: " + fancyCategory, 1);
+            final List<PlayerFaction> top = (factions.size() >= 5 ? factions.subList(0, 4) : factions.subList(0, factions.size()));
+
+            new Scheduler(manager.getPlugin()).sync(() -> {
+                int pos = 1;
+                int slot = 0;
+
+                for (PlayerFaction faction : top) {
+                    final ItemBuilder builder = new ItemBuilder().setMaterial(Material.PLAYER_HEAD);
+                    ChatColor color = ChatColor.RESET;
+
+                    if (pos == 1) {
+                        color = ChatColor.GOLD;
+                    } else if (pos == 2) {
+                        color = ChatColor.GRAY;
+                    } else if (pos == 3) {
+                        color = ChatColor.RED;
+                    }
+
+                    builder.setName(color + "#" + pos + ChatColor.RESET + " - " + ChatColor.YELLOW + faction.getName());
+
+                    final List<String> lore = Lists.newArrayList();
+                    lore.add(ChatColor.GOLD + "Rating: " + ChatColor.YELLOW + faction.getStats().calculateELO(addon));
+                    lore.add(ChatColor.GOLD + "Kills: " + ChatColor.YELLOW + faction.getStats().getKills());
+                    lore.add(ChatColor.GOLD + "Deaths: " + ChatColor.YELLOW + faction.getStats().getDeaths());
+                    lore.add(ChatColor.GOLD + "Minor Event Captures: " + ChatColor.YELLOW + faction.getStats().getMinorEventCaptures());
+                    lore.add(ChatColor.GOLD + "Major Event Captures: " + ChatColor.YELLOW + faction.getStats().getMajorEventCaptures());
+
+                    builder.addLore(lore);
+
+                    final ItemStack icon = builder.build();
+
+                    menu.addItem(new ClickableItem(icon, slot, click -> displayFactionInfo(player, faction)));
+
+                    pos++;
+                    slot += 2;
+                }
+
+                menu.open();
             }).run();
         }).run();
     }
