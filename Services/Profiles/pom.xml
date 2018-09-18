@@ -34,11 +34,12 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Ares Paper -->
+        <!-- Paper -->
         <dependency>
-            <groupId>com.playares</groupId>
-            <artifactId>Paper</artifactId>
-            <version>1.13.1</version>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Ares Bukkit Commons -->

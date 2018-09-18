@@ -61,6 +61,12 @@
             <id>dmulloy2-repo</id>
             <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
         </repository>
+
+        <!-- Paper -->
+        <repository>
+            <id>destroystokyo-repo</id>
+            <url>https://repo.destroystokyo.com/repository/maven-snapshots/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -72,12 +78,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- PaperSpigot API -->
+        <!-- Paper -->
         <dependency>
-            <groupId>com.playares</groupId>
-            <artifactId>Paper</artifactId>
-            <version>1.13.1</version>
-            <type>jar</type>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 

@@ -54,10 +54,10 @@
     </build>
 
     <repositories>
-        <!-- Spigot Repo, Eventually, we will be moving over to the Ares 1.13 Build -->
+        <!-- Paper -->
         <repository>
-            <id>spigot-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+            <id>destroystokyo-repo</id>
+            <url>https://repo.destroystokyo.com/repository/maven-snapshots/</url>
         </repository>
 
         <!-- ProtocolLib -->
@@ -68,11 +68,11 @@
     </repositories>
 
     <dependencies>
-        <!-- Ares Paper -->
+        <!-- Paper -->
         <dependency>
-            <groupId>com.playares</groupId>
-            <artifactId>Paper</artifactId>
-            <version>1.13.1</version>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
