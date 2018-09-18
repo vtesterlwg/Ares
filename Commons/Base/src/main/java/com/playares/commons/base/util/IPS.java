@@ -1,6 +1,11 @@
 package com.playares.commons.base.util;
 
 public final class IPS {
+    /**
+     * Converts an IP-Address to an Integer
+     * @param address InetAddress as String
+     * @return IP-Address as Integer
+     */
     public static int toInt(String address) {
         final String formatted = address
                 .replace(".", "")

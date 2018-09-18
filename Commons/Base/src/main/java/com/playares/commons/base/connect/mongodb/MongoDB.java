@@ -18,6 +18,10 @@ public final class MongoDB implements Connectable {
     @Nullable @Getter
     public MongoClient client;
 
+    /**
+     * Creates a new MongoDB instance
+     * @param uri Connect URI
+     */
     public MongoDB(@Nonnull String uri) {
         this.uri = uri;
         this.client = null;
@@ -37,6 +41,11 @@ public final class MongoDB implements Connectable {
         client.close();
     }
 
+    /**
+     * Returns a Mongo Database matching the given name, creates a new one if not found
+     * @param name Database Name
+     * @return MongoDatabase instance matching provided name
+     */
     @Nullable
     public MongoDatabase getDatabase(@Nonnull String name) {
         if (client == null) {
@@ -46,6 +55,12 @@ public final class MongoDB implements Connectable {
         return client.getDatabase(name);
     }
 
+    /**
+     * Returns a Mongo Collection matching the given name in the given database, creates a new one if not found
+     * @param database Database Name
+     * @param collection Collection Name
+     * @return MongoCollection instance matching provided name in the given database
+     */
     @Nullable
     public MongoCollection<Document> getCollection(@Nonnull String database, String collection) {
         final MongoDatabase db = getDatabase(database);

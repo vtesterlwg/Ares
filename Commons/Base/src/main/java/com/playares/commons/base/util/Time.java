@@ -9,30 +9,59 @@ import java.util.concurrent.TimeUnit;
 
 @ParametersAreNonnullByDefault
 public final class Time {
+    /**
+     * @return Epoch time in milliseconds
+     */
     public static long now() {
         return Instant.now().toEpochMilli();
     }
 
+    /**
+     * Converts supplied date to the supplied pattern
+     * @param pattern Pattern
+     * @param date Date
+     * @return Formatted date
+     */
     @Nonnull
     public static String convertToDate(String pattern, Date date) {
         return new SimpleDateFormat(pattern).format(date);
     }
 
+    /**
+     * Converts the supplied date to standard date format
+     * @param date Date
+     * @return Formatted date
+     */
     @Nonnull
     public static String convertToDate(Date date) {
         return convertToDate("MMM d, hh:mm:ss a", date);
     }
 
+    /**
+     * Converts the supplied date to the shorthand format
+     * @param date Date
+     * @return Formatted date
+     */
     @Nonnull
     public static String convertToShortDate(Date date) {
         return convertToDate("hh:mm:ss a", date);
     }
 
+    /**
+     * Converts milliseconds to decimal
+     * @param duration Milliseconds
+     * @return Converted milliseconds to decimal
+     */
     @Nonnull
     public static String convertToDecimal(long duration) {
         return String.format("%.1f", Math.abs(duration / 1000.0F));
     }
 
+    /**
+     * Converts milliseconds to HH:MM:SS format
+     * @param duration Milliseconds
+     * @return Converted milliseconds to hh:mm:ss
+     */
     @Nonnull
     public static String convertToHHMMSS(long duration) {
         final int hours = (int) TimeUnit.MILLISECONDS.toHours(duration) % 24;
@@ -42,6 +71,11 @@ public final class Time {
         return (hours > 0) ? String.format("%02d:%02d:%02d", hours, minutes, seconds) : String.format("%02d:%02d", minutes, seconds);
     }
 
+    /**
+     * Converts milliseconds to a remainder time display
+     * @param duration Milliseconds
+     * @return Converted milliseconds to remaining
+     */
     @Nonnull
     public static String convertToRemaining(long duration) {
         final long days = TimeUnit.MILLISECONDS.toDays(duration);
@@ -74,6 +108,11 @@ public final class Time {
         return response.toString();
     }
 
+    /**
+     * Convert milliseconds to an elapsed time display
+     * @param duration Milliseconds
+     * @return Converted milliseconds to elapsed
+     */
     @Nonnull
     public static String convertToElapsed(long duration) {
         final long days = TimeUnit.MILLISECONDS.toDays(duration);
@@ -108,6 +147,11 @@ public final class Time {
         return response.toString();
     }
 
+    /**
+     * Converts milliseconds to an inaccurate elapsed time
+     * @param duration Milliseconds
+     * @return Converted milliseconds to elapsed
+     */
     @Nonnull
     public static String convertToInaccurateElapsed(long duration) {
         final long days = TimeUnit.MILLISECONDS.toDays(duration);
@@ -134,6 +178,18 @@ public final class Time {
         return "Just Now";
     }
 
+    /**
+     * Attempts to parse a string for time format
+     *
+     * Examples:
+     * 30s - 30 seconds
+     * 1h30m25s - 1 hour, 30 minutes, 25 seconds
+     * 1d3h45m10s - 1 day, 3 hours, 45 minutes, 10 seconds
+     *
+     * @param input String input
+     * @return Parsed time in milliseconds
+     * @throws NumberFormatException - If format does not follow correct format
+     */
     public static long parseTime(String input) throws NumberFormatException {
         if (input.length() < 2) {
             return 0;
