@@ -26,27 +26,52 @@ public final class ItemBuilder {
         this.amount = 1;
     }
 
+    /**
+     * Set the material
+     * @param material Material
+     * @return ItemBuilder
+     */
     public ItemBuilder setMaterial(@Nonnull Material material) {
         this.material = material;
         return this;
     }
 
+    /**
+     * Set the amount
+     * @param amount Amount
+     * @return ItemBuilder
+     */
     public ItemBuilder setAmount(int amount) {
         this.amount = amount;
         return this;
     }
 
+    /**
+     * Set the data
+     * @param data Data
+     * @return ItemBuilder
+     */
     public ItemBuilder setData(short data) {
         this.data = data;
         return this;
     }
 
+    /**
+     * Set the item display name
+     * @param name Display name
+     * @return ItemBuilder
+     */
     public ItemBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
-    public ItemBuilder addFlag(@Nonnull  ItemFlag flag) {
+    /**
+     * Add an item flag
+     * @param flag Item Flag
+     * @return ItemBuilder
+     */
+    public ItemBuilder addFlag(@Nonnull ItemFlag flag) {
         if (this.flags == null) {
             this.flags = Lists.newArrayList();
         }
@@ -55,11 +80,21 @@ public final class ItemBuilder {
         return this;
     }
 
+    /**
+     * Add a collection of item flags
+     * @param flags Flags
+     * @return ItemBuilder
+     */
     public ItemBuilder addFlag(Collection<ItemFlag> flags) {
         flags.forEach(this::addFlag);
         return this;
     }
 
+    /**
+     * Add a line of lore
+     * @param line String
+     * @return ItemBuilder
+     */
     public ItemBuilder addLore(String line) {
         if (this.lore == null) {
             this.lore = Lists.newArrayList();
@@ -69,11 +104,22 @@ public final class ItemBuilder {
         return this;
     }
 
+    /**
+     * Add a collection of strings to the lore
+     * @param lines Lines
+     * @return ItemBuilder
+     */
     public ItemBuilder addLore(Collection<String> lines) {
         lines.forEach(this::addLore);
         return this;
     }
 
+    /**
+     * Add an enchantment
+     * @param enchantment Enchantment
+     * @param level Level
+     * @return ItemBuilder
+     */
     public ItemBuilder addEnchant(Enchantment enchantment, Integer level) {
         if (this.enchantments == null) {
             this.enchantments = Maps.newHashMap();
@@ -83,11 +129,20 @@ public final class ItemBuilder {
         return this;
     }
 
+    /**
+     * Add a map of enchantments
+     * @param enchantments Enchantments
+     * @return ItemBuilder
+     */
     public ItemBuilder addEnchant(Map<Enchantment, Integer> enchantments) {
         this.enchantments = enchantments;
         return this;
     }
 
+    /**
+     * Build the item in to an ItemStack
+     * @return ItemStack
+     */
     public ItemStack build() {
         if (this.material == null) {
             throw new NullPointerException("Material can not be null");

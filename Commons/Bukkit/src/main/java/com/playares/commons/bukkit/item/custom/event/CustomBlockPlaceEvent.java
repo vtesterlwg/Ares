@@ -10,6 +10,9 @@ import org.bukkit.event.player.PlayerEvent;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Fires when a custom block is placed
+ */
 public final class CustomBlockPlaceEvent extends PlayerEvent implements Cancellable {
     @Getter
     public static final HandlerList handlerList = new HandlerList();

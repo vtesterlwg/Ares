@@ -9,6 +9,9 @@ import org.bukkit.event.player.PlayerEvent;
 
 import java.util.Set;
 
+/**
+ * Fires when a player types in chat, event is used to intercept chat through multiple plugins safely
+ */
 public final class ProcessedChatEvent extends PlayerEvent implements Cancellable {
     @Getter public static final HandlerList handlerList = new HandlerList();
 

@@ -11,6 +11,9 @@ import org.bukkit.entity.LivingEntity;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Represents a living entity location
+ */
 public class PLocatable implements Locatable, MongoDocument<PLocatable> {
     @Nullable @Getter @Setter
     public String worldName;

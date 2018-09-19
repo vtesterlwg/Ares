@@ -8,6 +8,9 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+/**
+ * Fires when a lingering potion thrown by a player is applied to another player
+ */
 public final class PlayerLingeringSplashPlayerEvent extends Event implements Cancellable {
     @Getter
     public static final HandlerList handlerList = new HandlerList();

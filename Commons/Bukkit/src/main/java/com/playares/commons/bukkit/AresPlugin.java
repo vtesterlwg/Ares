@@ -30,6 +30,10 @@ public abstract class AresPlugin extends JavaPlugin {
     @Getter
     public ProtocolManager protocol;
 
+    /**
+     * Registers a new Ares Service
+     * @param service Ares Service
+     */
     public void registerService(AresService service) {
         if (services == null) {
             services = Maps.newHashMap();
@@ -39,23 +43,43 @@ public abstract class AresPlugin extends JavaPlugin {
         Logger.print("Registered new Ares Service: " + service.getName());
     }
 
+    /**
+     * Registers a new MongoDB instance
+     * @param mongo MongoDB Instance
+     */
     public void registerMongo(MongoDB mongo) {
         this.mongo = mongo;
         Logger.print("Registered new Mongo Database Instance");
     }
 
+    /**
+     * Register a new listener
+     * @param listener Listener
+     */
     public void registerListener(Listener listener) {
         Bukkit.getPluginManager().registerEvents(listener, this);
     }
 
+    /**
+     * Register a new command manager
+     * @param commandManager CommandManager
+     */
     public void registerCommandManager(PaperCommandManager commandManager) {
         this.commandManager = commandManager;
     }
 
+    /**
+     * Register a new Protocol manager
+     * @param protocol ProtocolManager
+     */
     public void registerProtocol(ProtocolManager protocol) {
         this.protocol = protocol;
     }
 
+    /**
+     * Register a new command
+     * @param command Command
+     */
     public void registerCommand(BaseCommand command) {
         if (this.commandManager == null) {
             throw new NullPointerException("Command Manager was not initialized");
@@ -64,13 +88,19 @@ public abstract class AresPlugin extends JavaPlugin {
         this.commandManager.registerCommand(command);
     }
 
-    public void startServices() {
+    /**
+     * Start all services
+     */
+    protected void startServices() {
         services.values().forEach(service -> {
             service.start();
             Logger.print("Service Started: " + service.getName());
         });
     }
 
+    /**
+     * Stop all services
+     */
     public void stopServices() {
         services.values().forEach(service -> {
             service.stop();
@@ -78,6 +108,11 @@ public abstract class AresPlugin extends JavaPlugin {
         });
     }
 
+    /**
+     * Obtain a registered service
+     * @param clazz Class Type
+     * @return Ares Service
+     */
     public AresService getService(Class<? extends AresService> clazz) {
         if (!services.containsKey(clazz)) {
             return null;
@@ -86,6 +121,11 @@ public abstract class AresPlugin extends JavaPlugin {
         return services.get(clazz);
     }
 
+    /**
+     * Return a Yaml Configuration
+     * @param name File Name
+     * @return YamlConfiguration
+     */
     public YamlConfiguration getConfig(String name) {
         final File file = new File(getDataFolder() + "/" + name + ".yml");
 
@@ -96,6 +136,10 @@ public abstract class AresPlugin extends JavaPlugin {
         return YamlConfiguration.loadConfiguration(file);
     }
 
+    /**
+     * Create a new Yaml Configuration
+     * @param name File Name
+     */
     public void createConfig(String name) {
         final File file = new File(getDataFolder() + "/" + name + ".yml");
 
@@ -119,6 +163,11 @@ public abstract class AresPlugin extends JavaPlugin {
         saveResource(name + ".yml", true);
     }
 
+    /**
+     * Save a Yaml Configuration
+     * @param name File Name
+     * @param config Config File
+     */
     public void saveConfig(String name, YamlConfiguration config) {
         final File file = new File(getDataFolder() + "/" + name + ".yml");
 

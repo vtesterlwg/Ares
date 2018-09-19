@@ -9,6 +9,9 @@ import org.bukkit.block.Block;
 
 import javax.annotation.Nonnull;
 
+/**
+ * Represents a single block location
+ */
 public class BLocatable implements Locatable, MongoDocument<BLocatable> {
     @Nonnull @Getter @Setter
     public String worldName;

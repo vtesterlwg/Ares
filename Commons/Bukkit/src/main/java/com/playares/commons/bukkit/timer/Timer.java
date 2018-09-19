@@ -26,28 +26,46 @@ public abstract class Timer {
         this.frozen = false;
     }
 
+    /**
+     * @return Expire milliseconds
+     */
     public long getExpire() {
         return frozen ? frozenTime + Time.now() : expire;
     }
 
+    /**
+     * @return Remaining milliseconds
+     */
     public long getRemaining() {
         return getExpire() - Time.now();
     }
 
+    /**
+     * @return True if expired
+     */
     public boolean isExpired() {
         return getExpire() <= Time.now();
     }
 
+    /**
+     * Freezes the timer
+     */
     public void freeze() {
         frozen = true;
         frozenTime = getRemaining();
     }
 
+    /**
+     * Unfreezes the timer
+     */
     public void unfreeze() {
         expire = getExpire();
         frozen = false;
         frozenTime = 0L;
     }
 
+    /**
+     * Called when this timer is finished
+     */
     public abstract void onFinish();
 }

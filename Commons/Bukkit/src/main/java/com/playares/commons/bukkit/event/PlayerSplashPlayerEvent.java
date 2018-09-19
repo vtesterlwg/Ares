@@ -10,6 +10,9 @@ import org.bukkit.event.HandlerList;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * Fires when a splash potion thrown by a player is applied to another player
+ */
 @ParametersAreNonnullByDefault
 public final class PlayerSplashPlayerEvent extends Event implements Cancellable {
     @Getter

@@ -13,6 +13,9 @@ import org.bukkit.event.player.PlayerEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+/**
+ * Fires when a custom item is interacted with
+ */
 public final class CustomItemInteractEvent extends PlayerEvent implements Cancellable {
     @Getter
     public static final HandlerList handlerList = new HandlerList();

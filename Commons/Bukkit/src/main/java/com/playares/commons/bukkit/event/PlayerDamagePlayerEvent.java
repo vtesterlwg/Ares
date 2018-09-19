@@ -10,6 +10,9 @@ import org.bukkit.event.HandlerList;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * Fires when a player is damaged by another player
+ */
 @ParametersAreNonnullByDefault
 public final class PlayerDamagePlayerEvent extends Event implements Cancellable {
     @Getter

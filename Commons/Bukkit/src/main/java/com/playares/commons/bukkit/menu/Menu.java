@@ -41,14 +41,26 @@ public class Menu implements Listener {
         plugin.registerListener(this);
     }
 
+    /**
+     * @return True if this inventory has viewers
+     */
     public boolean isOpen() {
         return !getInventory().getViewers().isEmpty();
     }
 
+    /**
+     * Returns the ClickableItem at the given slot position
+     * @param position Slot
+     * @return ClickableItem, null if no item is found
+     */
     public ClickableItem getItemAtPosition(int position) {
         return items.stream().filter(item -> item.getPosition() == position).findFirst().orElse(null);
     }
 
+    /**
+     * Returns the first empty slot in this inventory
+     * @return First empty slot in the inventory, -1 if no slot is empty
+     */
     public int getFirstEmpty() {
         for (int i = 0; i < inventory.getSize(); i++) {
             if (getItemAtPosition(i) == null) {
@@ -59,6 +71,10 @@ public class Menu implements Listener {
         return -1;
     }
 
+    /**
+     * Add an item to the menu
+     * @param item ClickableItem
+     */
     public void addItem(ClickableItem item) {
         if (getItemAtPosition(item.getPosition()) != null) {
             removeItem(item.getPosition());
@@ -68,15 +84,27 @@ public class Menu implements Listener {
         inventory.setItem(item.getPosition(), item.getItem());
     }
 
+    /**
+     * Add a collection of items to the menu
+     * @param items ClickableItems
+     */
     public void addItem(Collection<ClickableItem> items) {
         items.forEach(this::addItem);
     }
 
+    /**
+     * Remove an item from the menu
+     * @param item ClickableItem
+     */
     public void removeItem(@Nonnull ClickableItem item) {
         items.remove(item);
         inventory.setItem(item.getPosition(), null);
     }
 
+    /**
+     * Remove an item at the given slot position
+     * @param position Slot Position
+     */
     public void removeItem(int position) {
         final ClickableItem item = getItemAtPosition(position);
 
@@ -88,6 +116,10 @@ public class Menu implements Listener {
         inventory.setItem(position, null);
     }
 
+    /**
+     * Fill every open slot with an ItemStack
+     * @param item ItemStack
+     */
     public void fill(@Nonnull ItemStack item) {
         for (int i = 0; i < inventory.getSize(); i++) {
             final ClickableItem itemAt = getItemAtPosition(i);
@@ -100,11 +132,17 @@ public class Menu implements Listener {
         }
     }
 
+    /**
+     * Remove every item in this menu
+     */
     public void clearInventory() {
         inventory.clear();
         items.clear();
     }
 
+    /**
+     * Open the menu
+     */
     public void open() {
         player.openInventory(inventory);
     }

@@ -11,6 +11,9 @@ import org.bukkit.event.player.PlayerEvent;
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+/**
+ * Fires when a player moves a full block
+ */
 @ParametersAreNonnullByDefault
 public final class PlayerBigMoveEvent extends PlayerEvent implements Cancellable {
     @Getter
