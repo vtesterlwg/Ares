@@ -98,6 +98,7 @@ public final class CustomRecipes implements HumbugModule {
                 .setIngredient('M', Material.MELON_SLICE)
                 .setIngredient('G', Material.GOLD_NUGGET);
 
+        // TODO: Find a better way to do this
         Bukkit.resetRecipes();
 
         if (xpBottleEnabled) {
