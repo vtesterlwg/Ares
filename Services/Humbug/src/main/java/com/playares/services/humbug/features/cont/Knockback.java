@@ -71,6 +71,7 @@ public final class Knockback implements HumbugModule, Listener {
 
         PlayerVelocityEvent.getHandlerList().unregister(this);
         PlayerDamagePlayerEvent.getHandlerList().unregister(this);
+        PlayerQuitEvent.getHandlerList().unregister(this);
     }
 
     public boolean isRecentSprinter(Player player) {
