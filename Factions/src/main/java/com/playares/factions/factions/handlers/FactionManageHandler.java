@@ -16,13 +16,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public final class FactionManageHandler {
-    @Getter
-    public FactionManager manager;
+    /** Owning Manager **/
+    @Getter public FactionManager manager;
 
     public FactionManageHandler(FactionManager manager) {
         this.manager = manager;
     }
 
+    /**
+     * Renames a faction
+     * @param player Player
+     * @param name New Name
+     * @param promise Promise
+     */
     public void rename(Player player, String name, SimplePromise promise) {
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
         final boolean mod = player.hasPermission("factions.mod");
@@ -75,6 +81,13 @@ public final class FactionManageHandler {
         promise.success();
     }
 
+    /**
+     * Renames a faction in the third-person
+     * @param player Player
+     * @param factionName Renamed Faction Name
+     * @param name New Name
+     * @param promise Promise
+     */
     public void rename(Player player, String factionName, String name, SimplePromise promise) {
         final Faction faction = manager.getFactionByName(factionName);
 
@@ -120,6 +133,12 @@ public final class FactionManageHandler {
         promise.success();
     }
 
+    /**
+     * Promote a player to the next rank
+     * @param player Promoting Player
+     * @param name Promoted Username
+     * @param promise Promise
+     */
     public void promote(Player player, String name, SimplePromise promise) {
         final ProfileService profileService = (ProfileService)manager.getPlugin().getService(ProfileService.class);
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
@@ -181,6 +200,12 @@ public final class FactionManageHandler {
         });
     }
 
+    /**
+     * Demotes a player to the next lowest rank
+     * @param player Demoting Player
+     * @param name Demoted Username
+     * @param promise Promise
+     */
     public void demote(Player player, String name, SimplePromise promise) {
         final ProfileService profileService = (ProfileService)manager.getPlugin().getService(ProfileService.class);
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
@@ -242,6 +267,11 @@ public final class FactionManageHandler {
         });
     }
 
+    /**
+     * Sets the home location for a faction
+     * @param player Player
+     * @param promise Promise
+     */
     public void setHome(Player player, SimplePromise promise) {
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
         final DefinedClaim inside = manager.getPlugin().getClaimManager().getClaimAt(new PLocatable(player));
@@ -272,6 +302,12 @@ public final class FactionManageHandler {
         promise.success();
     }
 
+    /**
+     * Sets the home location for a faction in the third-person
+     * @param player Player
+     * @param factionName Faction Name
+     * @param promise Promise
+     */
     public void setHome(Player player, String factionName, SimplePromise promise) {
         final Faction faction = manager.getFactionByName(factionName);
         final DefinedClaim inside = manager.getPlugin().getClaimManager().getClaimAt(new PLocatable(player));
@@ -299,6 +335,13 @@ public final class FactionManageHandler {
         promise.success();
     }
 
+    /**
+     * Sets the flag for a Server Faction
+     * @param player Player
+     * @param name Faction Name
+     * @param flagName Flag name
+     * @param promise Promise
+     */
     public void setFlag(Player player, String name, String flagName, SimplePromise promise) {
         final ServerFaction faction = manager.getServerFactionByName(name);
 
@@ -326,6 +369,13 @@ public final class FactionManageHandler {
         promise.success();
     }
 
+    /**
+     * Sets the display name for a Server Faction
+     * @param player Player
+     * @param factionName Faction Name
+     * @param displayName New Display Name
+     * @param promise Promise
+     */
     public void setDisplayName(Player player, String factionName, String displayName, SimplePromise promise) {
         final ServerFaction faction = manager.getServerFactionByName(factionName);
 
@@ -341,6 +391,13 @@ public final class FactionManageHandler {
         promise.success();
     }
 
+    /**
+     * Sets the buffer radius for a Server Faction
+     * @param player Player
+     * @param factionName Faction Name
+     * @param buffer Buffer Radius
+     * @param promise Promise
+     */
     public void setBuffer(Player player, String factionName, double buffer, SimplePromise promise) {
         final ServerFaction faction = manager.getServerFactionByName(factionName);
 

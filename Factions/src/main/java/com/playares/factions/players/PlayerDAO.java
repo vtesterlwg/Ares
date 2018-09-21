@@ -13,9 +13,19 @@ import org.bson.conversions.Bson;
 import java.util.List;
 
 public final class PlayerDAO {
+    /** Factions Database Name **/
     private static final String DB_NAME = "factions";
+    /** Players Collection Name **/
     private static final String DB_COLL = "players";
 
+    /**
+     * Retrieves a FactionPlayer object from the database
+     *
+     * Will return null if no entry is found
+     * @param database MongoDB Database
+     * @param filter Bson Filter
+     * @return FactionPlayer
+     */
     public static FactionPlayer getPlayer(MongoDB database, Bson filter) {
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
         final FindIterable<Document> iter;
@@ -35,6 +45,11 @@ public final class PlayerDAO {
         return new FactionPlayer().fromDocument(existing);
     }
 
+    /**
+     * Saves a player to the database
+     * @param database MongoDB Database
+     * @param player Player
+     */
     public static void savePlayer(MongoDB database, FactionPlayer player) {
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
         final FindIterable<Document> iter;
@@ -55,6 +70,11 @@ public final class PlayerDAO {
         }
     }
 
+    /**
+     * Retrieves every FactionPlayer in the database
+     * @param database MongoDB Database
+     * @return ImmutableList containing every FactionPlayer found
+     */
     public static ImmutableList<FactionPlayer> getPlayers(MongoDB database) {
         final List<FactionPlayer> result = Lists.newArrayList();
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);

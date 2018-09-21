@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * Represents a players PvP Protection timer
+ */
 public final class ProtectionTimer extends PlayerTimer {
     public ProtectionTimer(UUID owner, int seconds) {
         super(owner, PlayerTimerType.PROTECTION, seconds);

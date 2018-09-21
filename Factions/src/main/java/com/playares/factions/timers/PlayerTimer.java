@@ -7,12 +7,14 @@ import org.bukkit.ChatColor;
 
 import java.util.UUID;
 
+/**
+ * Represents a timer for Players
+ */
 public abstract class PlayerTimer extends Timer {
-    @Getter
-    public final UUID owner;
-
-    @Getter
-    public final PlayerTimerType type;
+    /** The owner of this timer **/
+    @Getter public final UUID owner;
+    /** The type of this timer **/
+    @Getter public final PlayerTimerType type;
 
     public PlayerTimer(UUID owner, PlayerTimerType type, int seconds) {
         super(seconds);
@@ -38,13 +40,11 @@ public abstract class PlayerTimer extends Timer {
         COMBAT(ChatColor.RED + "" + ChatColor.BOLD + "Combat Tag", true, true),
         PROTECTION(ChatColor.GREEN + "" + ChatColor.BOLD + "Protection", true, false);
 
-        @Getter
-        public final String displayName;
-
-        @Getter
-        public final boolean render;
-
-        @Getter
-        public final boolean decimal;
+        /** The display name for this timer, usually used in HUD rendering **/
+        @Getter public final String displayName;
+        /** If true, this timer type will be rendering in the HUD **/
+        @Getter public final boolean render;
+        /** If true, the remaining time on this timer will be displayed in decimal format **/
+        @Getter public final boolean decimal;
     }
 }

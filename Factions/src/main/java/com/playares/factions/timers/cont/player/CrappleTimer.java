@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * Represents a players crapple timer
+ */
 public final class CrappleTimer extends PlayerTimer {
     public CrappleTimer(UUID owner, int seconds) {
         super(owner, PlayerTimerType.CRAPPLE, seconds);

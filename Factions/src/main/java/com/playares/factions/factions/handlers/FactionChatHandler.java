@@ -8,13 +8,18 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public final class FactionChatHandler {
-    @Getter
-    public FactionManager manager;
+    /** Owning manager **/
+    @Getter public FactionManager manager;
 
     public FactionChatHandler(FactionManager manager) {
         this.manager = manager;
     }
 
+    /**
+     * Cycles the provided player to the next possible chat-channel
+     * @param player Player
+     * @param promise Promise
+     */
     public void cycleChatChannel(Player player, SimplePromise promise) {
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
 
@@ -59,6 +64,12 @@ public final class FactionChatHandler {
         }
     }
 
+    /**
+     * Sets a players chat-channel
+     * @param player Player
+     * @param channelName Channel Name
+     * @param promise Promise
+     */
     public void selectChatChannel(Player player, String channelName, SimplePromise promise) {
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
         final PlayerFaction.ChatChannel channel;

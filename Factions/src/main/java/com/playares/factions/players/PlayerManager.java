@@ -23,20 +23,15 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class PlayerManager {
-    @Getter
-    public final Factions plugin;
-
-    @Getter
-    public final PlayerTimerHandler timerHandler;
-
-    @Getter
-    public final Set<FactionPlayer> playerRepository;
-
-    @Getter
-    public final BukkitTask displayUpdater;
-
-    @Getter
-    public final BukkitTask timerUpdater;
+    @Getter public final Factions plugin;
+    /** Handles Player Timers **/
+    @Getter public final PlayerTimerHandler timerHandler;
+    /** Handles Faction Timers **/
+    @Getter public final Set<FactionPlayer> playerRepository;
+    /** Performs HUD rendering **/
+    @Getter public final BukkitTask displayUpdater;
+    /** Performs timer updating **/
+    @Getter public final BukkitTask timerUpdater;
 
     public PlayerManager(Factions plugin) {
         final AutomatedRestartService restartService = (AutomatedRestartService)plugin.getService(AutomatedRestartService.class);
@@ -47,6 +42,7 @@ public final class PlayerManager {
         this.displayUpdater = new Scheduler(plugin).async(() -> playerRepository.forEach(profile -> {
             List<String> hudElements = null;
 
+            // Restarts are not part of the typical HUD elements
             if (restartService != null && restartService.isInProgress()) {
                 hudElements = Lists.newArrayList();
                 hudElements.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Reboot" + " " + ChatColor.RED + Time.convertToHHMMSS(restartService.getTimeUntilReboot()));
@@ -73,6 +69,9 @@ public final class PlayerManager {
         }).run()))).repeat(0L, 5L).run();
     }
 
+    /**
+     * Cancels all tasks running under this manager
+     */
     public void cancelTasks() {
         if (this.displayUpdater != null) {
             this.displayUpdater.cancel();
@@ -83,6 +82,14 @@ public final class PlayerManager {
         }
     }
 
+    /**
+     * Loads or creates a new FactionPlayer profile based on the provided Unique ID and Username
+     *
+     * Warning: This method accesses a database and should not be called on the main thread
+     * @param uniqueId Unique ID
+     * @param username Username
+     * @return FactionPlayer
+     */
     public FactionPlayer loadPlayer(UUID uniqueId, String username) {
         FactionPlayer profile = PlayerDAO.getPlayer(plugin.getMongo(), Filters.eq("id", uniqueId));
 
@@ -94,6 +101,10 @@ public final class PlayerManager {
         return profile;
     }
 
+    /**
+     * Saves all players to the database
+     * @param blocking If true the main thread will be blocked
+     */
     public void savePlayers(boolean blocking) {
         Logger.print("Saving " + playerRepository.size() + " Players");
 
@@ -113,10 +124,20 @@ public final class PlayerManager {
         Logger.print("Finished saving players");
     }
 
+    /**
+     * Returns a FactionPlayer matching the provided Unique ID
+     * @param uniqueId Unique ID
+     * @return FactionPlayer
+     */
     public FactionPlayer getPlayer(UUID uniqueId) {
         return playerRepository.stream().filter(player -> player.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
+    /**
+     * Returns a FactionPlayer matching the provided username
+     * @param username Username
+     * @return FactionPlayer
+     */
     public FactionPlayer getPlayer(String username) {
         return playerRepository.stream().filter(player -> player.getUsername().equalsIgnoreCase(username)).findFirst().orElse(null);
     }

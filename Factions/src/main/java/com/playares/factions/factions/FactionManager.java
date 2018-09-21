@@ -14,42 +14,34 @@ import com.playares.services.profiles.ProfileService;
 import lombok.Getter;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
 public final class FactionManager {
-    @Getter
-    public final Factions plugin;
-
-    @Getter
-    public final FactionCreationHandler createHandler;
-
-    @Getter
-    public final FactionDisbandHandler disbandHandler;
-
-    @Getter
-    public final FactionDisplayHandler displayHandler;
-
-    @Getter
-    public final FactionManageHandler manageHandler;
-
-    @Getter
-    public final FactionStaffHandler staffHandler;
-
-    @Getter
-    public final FactionChatHandler chatHandler;
-
-    @Getter
-    public final BukkitTask factionTicker;
-
-    @Getter
-    public final Set<Faction> factionRepository;
+    /** Owner of this manager **/
+    @Getter public final Factions plugin;
+    /** Handles all faction creation tasks **/
+    @Getter public final FactionCreationHandler createHandler;
+    /** Handles all faction disbanding tasks **/
+    @Getter public final FactionDisbandHandler disbandHandler;
+    /** Handles all faction display tasks **/
+    @Getter public final FactionDisplayHandler displayHandler;
+    /** Handles all faction management tasks **/
+    @Getter public final FactionManageHandler manageHandler;
+    /** Handles all faction staff tasks **/
+    @Getter public final FactionStaffHandler staffHandler;
+    /** Handles all faction chat tasks **/
+    @Getter public final FactionChatHandler chatHandler;
+    /** Performs faction ticking **/
+    @Getter public final BukkitTask factionTicker;
+    /** Contains a cache of every loaded faction **/
+    @Getter public final Set<Faction> factionRepository;
 
     public FactionManager(Factions plugin) {
         this.plugin = plugin;
 
+        // Handlers
         this.createHandler = new FactionCreationHandler(this);
         this.disbandHandler = new FactionDisbandHandler(this);
         this.displayHandler = new FactionDisplayHandler(this);
@@ -74,17 +66,27 @@ public final class FactionManager {
                 })).repeat(0L, 20L).run();
     }
 
+    /**
+     * Cancels all tasks for this manager
+     */
     public void cancelTasks() {
         if (this.factionTicker != null) {
             this.factionTicker.cancel();
         }
     }
 
+    /**
+     * Loads all factions to memory
+     */
     public void loadFactions() {
         factionRepository.addAll(FactionDAO.getFactions(plugin, plugin.getMongo()));
         Logger.print("Loaded " + factionRepository.size() + " Factions");
     }
 
+    /**
+     * Saves all factions to the database
+     * @param blocking Block the main-thread
+     */
     public void saveFactions(boolean blocking) {
         Logger.print("Saving " + factionRepository.size() + " Factions, Blocking = " + blocking);
 
@@ -100,14 +102,29 @@ public final class FactionManager {
         }).run();
     }
 
+    /**
+     * Returns a Faction matching the provided Unique ID
+     * @param uniqueId Unique ID
+     * @return Faction
+     */
     public Faction getFactionById(UUID uniqueId) {
         return factionRepository.stream().filter(f -> f.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
+    /**
+     * Returns a Faction matching the provided name
+     * @param name Name
+     * @return Faction
+     */
     public Faction getFactionByName(String name) {
         return factionRepository.stream().filter(f -> f.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
+    /**
+     * Returns a PlayerFaction matching the provided Unique ID
+     * @param uniqueId Unique ID
+     * @return PlayerFaction
+     */
     public PlayerFaction getPlayerFactionById(UUID uniqueId) {
         return (PlayerFaction)factionRepository
                 .stream()
@@ -117,6 +134,11 @@ public final class FactionManager {
                 .orElse(null);
     }
 
+    /**
+     * Returns a PlayerFaction matching the provided name
+     * @param name Name
+     * @return PlayerFaction
+     */
     public PlayerFaction getPlayerFactionByName(String name) {
         return (PlayerFaction)factionRepository
                 .stream()
@@ -126,6 +148,11 @@ public final class FactionManager {
                 .orElse(null);
     }
 
+    /**
+     * Returns a PlayerFaction that has a member matching the provided Player Unique ID
+     * @param playerId Player Unique ID
+     * @return PlayerFaction
+     */
     public PlayerFaction getFactionByPlayer(UUID playerId) {
         return (PlayerFaction)factionRepository
                 .stream()
@@ -135,6 +162,16 @@ public final class FactionManager {
                 .orElse(null);
     }
 
+    /**
+     * Returns a PlayerFaction that has a member matching the provided Player username
+     *
+     * Returns in a promise/callback because username must be pulled from the Profile Service
+     *
+     * Will return null if the Profile Service is not running
+     *
+     * @param username Username
+     * @param promise Promise
+     */
     public void getFactionByPlayer(String username, Promise<PlayerFaction> promise) {
         final ProfileService profileService = (ProfileService)plugin.getService(ProfileService.class);
 
@@ -153,6 +190,11 @@ public final class FactionManager {
         });
     }
 
+    /**
+     * Returns a ServerFaction matching the provided Unique ID
+     * @param uniqueId Unique ID
+     * @return ServerFaction
+     */
     public ServerFaction getServerFactionById(UUID uniqueId) {
         return (ServerFaction)factionRepository
                 .stream()
@@ -162,6 +204,11 @@ public final class FactionManager {
                 .orElse(null);
     }
 
+    /**
+     * Returns a ServerFaction matching the provided name
+     * @param name Name
+     * @return ServerFaction
+     */
     public ServerFaction getServerFactionByName(String name) {
         return (ServerFaction)factionRepository
                 .stream()
@@ -171,6 +218,10 @@ public final class FactionManager {
                 .orElse(null);
     }
 
+    /**
+     * Returns a collection of every PlayerFaction currently in memory
+     * @return ImmutableList containing PlayerFactions
+     */
     public ImmutableList<PlayerFaction> getPlayerFactions() {
         final List<PlayerFaction> result = Lists.newArrayList();
 
@@ -182,6 +233,10 @@ public final class FactionManager {
         return ImmutableList.copyOf(result);
     }
 
+    /**
+     * Returns a collection of every ServerFaction currently in memory
+     * @return ImmutableList containing ServerFactions
+     */
     public ImmutableList<ServerFaction> getServerFactions() {
         final List<ServerFaction> result = Lists.newArrayList();
 

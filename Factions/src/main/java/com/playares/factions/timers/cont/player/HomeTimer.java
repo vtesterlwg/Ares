@@ -11,6 +11,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * Represents a players home timer
+ */
 public final class HomeTimer extends PlayerTimer {
     @Getter
     public final Factions plugin;

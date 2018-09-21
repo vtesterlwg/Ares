@@ -34,53 +34,38 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction> {
-    @Getter
-    public final Factions plugin;
-
-    @Getter
-    public UUID uniqueId;
-
-    @Getter @Setter
-    public String name;
-
-    @Getter
-    public String announcement;
-
-    @Getter
-    public PLocatable home;
-
-    @Getter
-    public PLocatable rally;
-
-    @Getter @Setter
-    public double balance;
-
-    @Getter @Setter
-    public double deathsTilRaidable;
-
-    @Getter @Setter
-    public int reinvites;
-
-    @Getter
-    public Set<FactionProfile> members;
-
-    @Getter
-    public Set<UUID> pendingInvites;
-
-    @Getter
-    public Set<UUID> memberHistory;
-
-    @Getter
-    public Set<FactionTimer> timers;
-
-    @Getter
-    public Scoreboard scoreboard;
-
-    @Getter
-    public FactionStatisticHolder stats;
-
-    @Getter @Setter
-    public long nextTick;
+    /** The plugin owning this faction **/
+    @Getter public final Factions plugin;
+    /** Unique ID **/
+    @Getter public UUID uniqueId;
+    /** Faction Name **/
+    @Getter @Setter public String name;
+    /** Faction Announcement, shows up in '/f show' display **/
+    @Getter public String announcement;
+    /** Faction home location **/
+    @Getter public PLocatable home;
+    /** Faction rally location **/
+    @Getter public PLocatable rally;
+    /** Faction economy balance **/
+    @Getter @Setter public double balance;
+    /** Faction DTR **/
+    @Getter @Setter public double deathsTilRaidable;
+    /** Faction re-invites **/
+    @Getter @Setter public int reinvites;
+    /** Contains FactionProfile data for this factions roster **/
+    @Getter public Set<FactionProfile> members;
+    /** Pending invites to join this faction, contains Bukkit Player Unique IDs **/
+    @Getter public Set<UUID> pendingInvites;
+    /** Member history for this faction, contains Bukkit Player Unique IDs, holds all players who have joined this faction since re-invites we refreshed **/
+    @Getter public Set<UUID> memberHistory;
+    /** Contains all active timers **/
+    @Getter public Set<FactionTimer> timers;
+    /** Contains the scoreboard object for this faction, applied to all members **/
+    @Getter public Scoreboard scoreboard;
+    /** Statistics holder for this faction **/
+    @Getter public FactionStatisticHolder stats;
+    /** Next tick (in milliseconds) that this Faction should be ticked **/
+    @Getter @Setter public long nextTick;
 
     public PlayerFaction(Factions plugin) {
         this.plugin = plugin;
@@ -124,7 +109,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         configureScoreboard();
     }
 
-    public void tick() {
+    /**
+     * 'ticks' this faction, shifting up their DTR and setting the next tick time
+     */
+    void tick() {
         final long next = Time.now() + ((plugin.getFactionConfig().getFactionTickInterval() * 1000L) -
                 getOnlineMembers().size() * plugin.getFactionConfig().getFactionTickSubtractPerPlayer());
 
@@ -147,10 +135,19 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         }
     }
 
+    /**
+     * Sends a chat message to players in this faction
+     * @param message Message
+     */
     public void sendMessage(String message) {
         getOnlineMembers().forEach(member -> Bukkit.getPlayer(member.getUniqueId()).sendMessage(message));
     }
 
+    /**
+     * Sends a chat message to all players in this faction that meet the required minimum rank
+     * @param minRank Minimum rank, for example setting this to OFFICER would make it so only Officer+ could see this message
+     * @param message Message
+     */
     public void sendMessage(FactionRank minRank, String message) {
         getOnlineMembers()
                 .stream()
@@ -158,6 +155,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
                 .forEach(member -> Bukkit.getPlayer(member.getUniqueId()).sendMessage(message));
     }
 
+    /**
+     * Adds a member to this roster
+     * @param playerId Player Unique ID
+     */
     public void addMember(UUID playerId) {
         if (isMember(playerId)) {
             return;
@@ -168,6 +169,11 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         members.add(profile);
     }
 
+    /**
+     * Adds a member to this roster
+     * @param playerId Player Unique ID
+     * @param rank FactionRank
+     */
     public void addMember(UUID playerId, FactionRank rank) {
         if (isMember(playerId)) {
             return;
@@ -178,6 +184,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         members.add(profile);
     }
 
+    /**
+     * Removes a member from this roster
+     * @param playerId Player Unique ID
+     */
     public void removeMember(UUID playerId) {
         if (!isMember(playerId)) {
             return;
@@ -192,6 +202,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         members.remove(profile);
     }
 
+    /**
+     * Returns Max DTR
+     * @return Returns the maximum DTR this faction can achieve
+     */
     public double getMaxDTR() {
         final double max = plugin.getFactionConfig().getFactionPerPlayerValue() * members.size();
 
@@ -202,22 +216,45 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         return max;
     }
 
+    /**
+     * Returns online members
+     * @return ImmutableList containing all online members
+     */
     public ImmutableList<FactionProfile> getOnlineMembers() {
         return ImmutableList.copyOf(members.stream().filter(member -> Bukkit.getPlayer(member.getUniqueId()) != null).collect(Collectors.toList()));
     }
 
+    /**
+     * Returns members matching provided rank
+     * @param rank FactionRank
+     * @return ImmutableList containing all members matching provided rank
+     */
     public ImmutableList<FactionProfile> getMembersByRank(FactionRank rank) {
         return ImmutableList.copyOf(members.stream().filter(member -> member.getRank().equals(rank)).collect(Collectors.toList()));
     }
 
+    /**
+     * Returns a FactionProfile matching the provided player Unique ID
+     * @param playerId Player Unique ID
+     * @return FactionProfile
+     */
     public FactionProfile getMember(UUID playerId) {
         return members.stream().filter(member -> member.getUniqueId().equals(playerId)).findFirst().orElse(null);
     }
 
+    /**
+     * Returns an active FactionTimer matching the provided type
+     * @param type Type
+     * @return FactionTimer
+     */
     public FactionTimer getTimer(FactionTimer.FactionTimerType type) {
         return timers.stream().filter(timer -> timer.getType().equals(type)).findFirst().orElse(null);
     }
 
+    /**
+     * Adds a new FactionTimer
+     * @param timer FactionTimer
+     */
     public void addTimer(FactionTimer timer) {
         final FactionTimer existing = getTimer(timer.getType());
 
@@ -229,41 +266,71 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         getTimers().add(timer);
     }
 
+    /**
+     * Removes a timer matching the provided type
+     * @param type Type
+     */
     public void removeTimer(FactionTimer.FactionTimerType type) {
-        final FactionTimer timer = getTimer(type);
-
-        if (timer == null) {
-            return;
-        }
-
-        getTimers().remove(timer);
+        getTimers().removeIf(timer -> timer.getType().equals(type));
     }
 
+    /**
+     * Returns true if this faction's DTR is frozen
+     * @return True if frozen
+     */
     public boolean isFrozen() {
         return getTimer(FactionTimer.FactionTimerType.FREEZE) != null;
     }
 
+    /**
+     * Returns true if this faction is raid-able
+     * @return True if raid-able
+     */
     public boolean isRaidable() {
         return this.deathsTilRaidable <= 0.0;
     }
 
+    /**
+     * Returns true if the provided unique ID is a member of this faction
+     * @param uuid Player Unique ID
+     * @return True if a member
+     */
     public boolean isMember(UUID uuid) {
         return getMember(uuid) != null;
     }
 
+    /**
+     * Returns true if this player is being re-invited to the roster
+     * @param uuid Player Unique ID
+     * @return True if re-invited
+     */
     public boolean isReinvited(UUID uuid) {
         return memberHistory.contains(uuid);
     }
 
+    /**
+     * Returns true if this player has an open invitation to this faction
+     * @param uuid Player Unique ID
+     * @return True if invited
+     */
     public boolean isInvited(UUID uuid) {
         return pendingInvites.contains(uuid);
     }
 
+    /**
+     * Updates the Faction Announcement
+     * @param player Announcing Player
+     * @param message Message
+     */
     public void updateAnnouncement(Player player, String message) {
         this.announcement = message;
         sendMessage(ChatColor.GOLD + "(Faction Announcement) " + ChatColor.LIGHT_PURPLE + player.getName() + ChatColor.YELLOW + ": " + message);
     }
 
+    /**
+     * Updates the Faction Home
+     * @param player Player
+     */
     public void updateHome(Player player) {
         this.home = new PLocatable(player);
 
@@ -274,6 +341,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         Logger.print(player.getName() + " updated " + name + "'s home location");
     }
 
+    /**
+     * Updates the Faction Rally
+     * @param player Player
+     */
     public void updateRally(Player player) {
         this.rally = new PLocatable(player);
 
@@ -290,6 +361,9 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         timer.start();
     }
 
+    /**
+     * Unsets the Faction Home
+     */
     public void unsetHome() {
         if (home == null) {
             return;
@@ -299,6 +373,15 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         sendMessage(ChatColor.RED + "Faction home has been unset");
     }
 
+    /**
+     * Registers a player as a friendly
+     *
+     * Once registered:
+     *  - Player can see members of this faction while they are invisible
+     *  - Player will see members of this faction with green nameplates
+     *
+     * @param player Player
+     */
     public void registerFriendly(Player player) {
         if (this.scoreboard == null) {
             return;
@@ -311,18 +394,9 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.scoreboard.getTeam("friendly").addEntry(player.getName());
     }
 
-    public void registerAlly(Player player) {
-        if (this.scoreboard == null) {
-            return;
-        }
-
-        if (this.scoreboard.getTeam("ally").hasEntry(player.getName())) {
-            return;
-        }
-
-        this.scoreboard.getTeam("ally").addEntry(player.getName());
-    }
-
+    /**
+     * Unregisters the scoreboard for this faction
+     */
     public void unregister() {
         if (this.scoreboard == null) {
             return;
@@ -332,6 +406,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.scoreboard.getTeam("ally").unregister();
     }
 
+    /**
+     * Unregisters a Player from this faction's scoreboard
+     * @param player Player
+     */
     public void unregister(Player player) {
         if (this.scoreboard == null) {
             return;
@@ -341,7 +419,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.scoreboard.getTeam("ally").removeEntry(player.getName());
     }
 
-    public void configureScoreboard() {
+    /**
+     * Configures the scoreboard for this faction
+     */
+    private void configureScoreboard() {
         if (this.scoreboard != null) {
             return;
         }
@@ -349,15 +430,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
         final Team friendly = this.scoreboard.registerNewTeam("friendly");
-        final Team ally = this.scoreboard.registerNewTeam("ally");
 
-        friendly.setPrefix(ChatColor.DARK_GREEN + "");
-        friendly.setColor(ChatColor.GREEN);
+        friendly.setColor(ChatColor.DARK_GREEN);
         friendly.setNameTagVisibility(NameTagVisibility.ALWAYS);
         friendly.setCanSeeFriendlyInvisibles(true);
-
-        ally.setPrefix(ChatColor.BLUE + "");
-        ally.setColor(ChatColor.AQUA);
     }
 
     @SuppressWarnings("unchecked")
@@ -429,21 +505,39 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
     public enum FactionRank {
         MEMBER(0), OFFICER(1), CO_LEADER(2), LEADER(3);
 
-        @Getter
-        public final int weight;
+        /** Determines the value of this rank **/
+        @Getter public final int weight;
 
+        /**
+         * Returns the display name for this rank
+         * @return Display Name
+         */
         public String getDisplayName() {
             return StringUtils.capitaliseAllWords(this.name().toLowerCase().replace("_", "-"));
         }
 
+        /**
+         * Returns true if this rank is higher than the provided rank
+         * @param other Rank
+         * @return True if higher
+         */
         public boolean isHigher(FactionRank other) {
             return this.getWeight() > other.getWeight();
         }
 
+        /**
+         * Returns true if this rank is higher or equal to the provided rank
+         * @param other Rank
+         * @return True if higher or equal
+         */
         public boolean isHigherOrEqual(FactionRank other) {
             return this.getWeight() >= other.getWeight();
         }
 
+        /**
+         * Returns the next rank in order of this rank
+         * @return Next Rank
+         */
         public FactionRank getNext() {
             switch (this) {
                 case MEMBER: return OFFICER;
@@ -454,6 +548,10 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
             }
         }
 
+        /**
+         * Returns the previous rank in order of this rank
+         * @return Previous Rank
+         */
         public FactionRank getLower() {
             switch (this) {
                 case MEMBER: return null;
@@ -465,19 +563,23 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         }
     }
 
+    /**
+     * Determins Chat-Channels
+     */
     public enum ChatChannel {
-        PUBLIC, FACTION, OFFICER;
+        PUBLIC, FACTION, OFFICER
     }
 
+    /**
+     * Stores all information for a member on this roster
+     */
     @AllArgsConstructor
     public final class FactionProfile {
-        @Getter
-        public final UUID uniqueId;
-
-        @Getter @Setter
-        public FactionRank rank;
-
-        @Getter @Setter
-        public ChatChannel channel;
+        /** Player Unique ID **/
+        @Getter public final UUID uniqueId;
+        /** Faction Rank **/
+        @Getter @Setter public FactionRank rank;
+        /** Current Chat Channel **/
+        @Getter @Setter public ChatChannel channel;
     }
 }

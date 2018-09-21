@@ -26,32 +26,24 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class FactionPlayer implements MongoDocument<FactionPlayer> {
-    @Getter
-    public UUID uniqueId;
-
-    @Getter @Setter
-    public String username;
-
-    @Getter @Setter
-    public double balance;
-
-    @Getter @Setter
-    public boolean safelogging;
-
-    @Getter @Setter
-    public PlayerFaction faction;
-
-    @Getter @Setter
-    public DefinedClaim currentClaim;
-
-    @Getter
-    public Set<PlayerTimer> timers;
-
-    @Getter
-    public Set<Pillar> pillars;
-
-    @Getter
-    public PlayerStatisticHolder stats;
+    /** Player Unique ID **/
+    @Getter public UUID uniqueId;
+    /** Player Username **/
+    @Getter @Setter public String username;
+    /** Economy Balance **/
+    @Getter @Setter public double balance;
+    /** If true the player should not spawn a Combat Logger **/
+    @Getter @Setter public boolean safelogging;
+    /** Faction **/
+    @Getter @Setter public PlayerFaction faction;
+    /** Current claim inside of **/
+    @Getter @Setter public DefinedClaim currentClaim;
+    /** Contains all active timers **/
+    @Getter public Set<PlayerTimer> timers;
+    /** Contains all active pillars **/
+    @Getter public Set<Pillar> pillars;
+    /** Contains all Player Statistics **/
+    @Getter public PlayerStatisticHolder stats;
 
     public FactionPlayer() {
         this.uniqueId = null;
@@ -89,14 +81,34 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.stats = new PlayerStatisticHolder();
     }
 
+    /**
+     * Returns a Player Timer matching the provided type
+     * @param type Type
+     * @return PlayerTimer
+     */
     public PlayerTimer getTimer(PlayerTimer.PlayerTimerType type) {
-        return getTimers().stream().filter(timer -> timer.getType().equals(type)).findFirst().orElse(null);
+        return getTimers()
+                .stream()
+                .filter(timer -> timer.getType().equals(type))
+                .findFirst()
+                .orElse(null);
     }
 
+    /**
+     * Returns true if the provided type is active on this profile
+     * @param type Type
+     * @return True if exists
+     */
     public boolean hasTimer(PlayerTimer.PlayerTimerType type) {
-        return getTimers().stream().anyMatch(timer -> timer.getType().equals(type));
+        return getTimers()
+                .stream()
+                .anyMatch(timer -> timer.getType().equals(type));
     }
 
+    /**
+     * Adds a new PlayerTimer to this profile
+     * @param timer PlayerTimer
+     */
     public void addTimer(PlayerTimer timer) {
         final PlayerTimer existing = getTimer(timer.getType());
 
@@ -108,28 +120,53 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         getTimers().add(timer);
     }
 
+    /**
+     * Returns the Bukkit object this profile represents
+     * @return Player
+     */
     public Player getPlayer() {
         return Bukkit.getPlayer(uniqueId);
     }
 
+    /**
+     * Sends a chat message to this player
+     * @param message Message
+     */
     public void sendMessage(String message) {
         if (getPlayer() != null) {
             getPlayer().sendMessage(message);
         }
     }
 
+    /**
+     * Sends a title message to this player
+     * @param title Title
+     * @param subtitle Subtitle
+     * @param fadeIn Fade in ticks
+     * @param duration Duration ticks
+     * @param fadeOut Fade out ticks
+     */
     public void sendTitle(String title, String subtitle, int fadeIn, int duration, int fadeOut) {
         if (getPlayer() != null) {
             getPlayer().sendTitle(title, subtitle, fadeIn, duration, fadeOut);
         }
     }
 
+    /**
+     * Sends an action bar message to this player
+     * @param text Message
+     */
     public void sendActionBar(String text) {
         if (getPlayer() != null) {
             Players.sendActionBar(getPlayer(), text);
         }
     }
 
+    /**
+     * Returns a ClaimPillar matching the provided type
+     * @param type Type
+     * @return ClaimPillar
+     */
     public ClaimPillar getExistingClaimPillar(ClaimPillar.ClaimPillarType type) {
         return (ClaimPillar)pillars
                 .stream()
@@ -139,36 +176,71 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
                 .orElse(null);
     }
 
+    /**
+     * Hides all pillars for this player
+     */
     public void hideAllPillars() {
         pillars.forEach(Pillar::hide);
         pillars.clear();
     }
 
+    /**
+     * Returns true if this player has ClaimPillars
+     * @return True if ClaimPillars found
+     */
     public boolean hasClaimPillars() {
-        return !pillars.stream().filter(pillar -> pillar instanceof ClaimPillar).collect(Collectors.toList()).isEmpty();
+        return !pillars
+                .stream()
+                .filter(pillar -> pillar instanceof ClaimPillar)
+                .collect(Collectors.toList())
+                .isEmpty();
     }
 
+    /**
+     * Returns true if this player has MapPillars
+     * @return True if MapPillars found
+     */
     public boolean hasMapPillars() {
-        return !pillars.stream().filter(pillar -> pillar instanceof MapPillar).collect(Collectors.toList()).isEmpty();
+        return !pillars
+                .stream()
+                .filter(pillar -> pillar instanceof MapPillar)
+                .collect(Collectors.toList())
+                .isEmpty();
     }
 
+    /**
+     * Hides all claim pillars for this player
+     */
     public void hideAllClaimPillars() {
         final List<Pillar> toRemove = Lists.newArrayList();
 
-        pillars.stream().filter(pillar -> pillar instanceof ClaimPillar).forEach(claimPillar -> {
+        pillars
+                .stream()
+                .filter(pillar -> pillar instanceof ClaimPillar)
+                .forEach(claimPillar -> {
+
             claimPillar.hide();
             toRemove.add(claimPillar);
+
         });
 
         pillars.removeAll(toRemove);
     }
 
+    /**
+     * Hides all map pillars for this player
+     */
     public void hideAllMapPillars() {
         final List<Pillar> toRemove = Lists.newArrayList();
 
-        pillars.stream().filter(pillar -> pillar instanceof MapPillar).forEach(mapPillar -> {
+        pillars
+                .stream()
+                .filter(pillar -> pillar instanceof MapPillar)
+                .forEach(mapPillar -> {
+
             mapPillar.hide();
             toRemove.add(mapPillar);
+
         });
 
         pillars.removeAll(toRemove);
@@ -185,12 +257,14 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.faction = null;
         this.stats = new PlayerStatisticHolder().fromDocument(document.get("stats", Document.class));
 
+        // Load timers
         convertedTimers.keySet().forEach(timerName -> {
             final PlayerTimer.PlayerTimerType type = PlayerTimer.PlayerTimerType.valueOf(timerName);
             final long remaining = convertedTimers.get(timerName);
             final int remainingSeconds = (int)(remaining / 1000L);
 
             if (remaining > 0) {
+                // Kinda sloppy but each timer type needs to be added here
                 if (type.equals(PlayerTimer.PlayerTimerType.ENDERPEARL)) {
                     final EnderpearlTimer timer = new EnderpearlTimer(uniqueId, remainingSeconds);
                     this.timers.add(timer);

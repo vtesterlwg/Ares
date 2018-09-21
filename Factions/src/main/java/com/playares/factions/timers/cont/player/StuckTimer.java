@@ -14,6 +14,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * Represents a players stuck timer
+ */
 public final class StuckTimer extends PlayerTimer {
     @Getter
     public final Factions plugin;

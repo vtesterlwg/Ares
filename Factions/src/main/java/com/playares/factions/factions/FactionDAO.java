@@ -13,10 +13,19 @@ import java.util.Collection;
 import java.util.List;
 
 public final class FactionDAO {
+    /** Factions Database Name **/
     private static final String DB_NAME = "factions";
+    /** Server Factions Collection Name **/
     private static final String DB_SF_COLL = "server_factions";
+    /** Player Factions Collection Name **/
     private static final String DB_PF_COLL = "player_factions";
 
+    /**
+     * Loads all factions from the provided MongoDB Database
+     * @param plugin Plugin
+     * @param database MongoDB Database
+     * @return ImmutableList containing Factions
+     */
     public static ImmutableList<Faction> getFactions(Factions plugin, MongoDB database) {
         final List<Faction> factions = Lists.newArrayList();
         final MongoCollection<Document> playerCollection = database.getCollection(DB_NAME, DB_PF_COLL);
@@ -37,6 +46,11 @@ public final class FactionDAO {
         return ImmutableList.copyOf(factions);
     }
 
+    /**
+     * Saves the provided collection of factions to the provided MongoDB Database
+     * @param database MongoDB Database
+     * @param factions Collection of Factions
+     */
     public static void saveFactions(MongoDB database, Collection<Faction> factions) {
         final MongoCollection<Document> playerCollection = database.getCollection(DB_NAME, DB_PF_COLL);
         final MongoCollection<Document> serverCollection = database.getCollection(DB_NAME, DB_SF_COLL);
@@ -62,6 +76,11 @@ public final class FactionDAO {
         });
     }
 
+    /**
+     * Deletes the provided Faction from the provided MongoDB Database
+     * @param database MongoDB Database
+     * @param faction Faction
+     */
     public static void deleteFaction(MongoDB database, Faction faction) {
         if (faction instanceof ServerFaction) {
             final ServerFaction sf = (ServerFaction)faction;

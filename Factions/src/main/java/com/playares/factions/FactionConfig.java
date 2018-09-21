@@ -13,89 +13,62 @@ public final class FactionConfig {
         this.plugin = plugin;
     }
 
-    @Getter
-    public String databaseURI;
-
-    @Getter
-    public int factionMemberCap;
-
-    @Getter
-    public int factionAllyCap;
-
-    @Getter
-    public double factionHomeCap;
-
-    @Getter
-    public int factionReinvites;
-
-    @Getter
-    public double factionMaxDTR;
-
-    @Getter
-    public int factionTickInterval;
-
-    @Getter
-    public int factionTickSubtractPerPlayer;
-
-    @Getter
-    public double factionPerPlayerValue;
-
-    @Getter
-    public int minFactionNameLength;
-
-    @Getter
-    public int maxFactionNameLength;
-
-    @Getter
-    public List<String> bannedFactionNames;
-
-    @Getter
-    public int claimMinSize;
-
-    @Getter
-    public int maxClaims;
-
-    @Getter
-    public double claimBlockValue;
-
-    @Getter
-    public double playerClaimBuffer;
-
-    @Getter
-    public double defaultServerClaimBuffer;
-
-    @Getter
-    public int timerCombatTagAttacker;
-
-    @Getter
-    public int timerCombatTagAttacked;
-
-    @Getter
-    public int timerProtection;
-
-    @Getter
-    public int timerEnderpearl;
-
-    @Getter
-    public int timerTotem;
-
-    @Getter
-    public int timerGapple;
-
-    @Getter
-    public int timerCrapple;
-
-    @Getter
-    public int timerHome;
-
-    @Getter
-    public int timerStuck;
-
-    @Getter
-    public int timerFreeze;
-
-    @Getter
-    public int timerRally;
+    /** MongoDB Database Connect URI **/
+    @Getter public String databaseURI;
+    /** Faction Member Cap **/
+    @Getter public int factionMemberCap;
+    /** Faction Alliance Cap **/
+    @Getter public int factionAllyCap;
+    /** Faction Home Max Y Height **/
+    @Getter public double factionHomeCap;
+    /** Faction Re-invites **/
+    @Getter public int factionReinvites;
+    /** Max Faction DTR **/
+    @Getter public double factionMaxDTR;
+    /** Interval (in seconds) for a PlayerFaction to 'tick' **/
+    @Getter public int factionTickInterval;
+    /** Time subtracted (per player) off of each tick interval **/
+    @Getter public int factionTickSubtractPerPlayer;
+    /** DTR value per player **/
+    @Getter public double factionPerPlayerValue;
+    /** Minimum faction name length **/
+    @Getter public int minFactionNameLength;
+    /** Maximum faction name length **/
+    @Getter public int maxFactionNameLength;
+    /** Banned faction names **/
+    @Getter public List<String> bannedFactionNames;
+    /** Minimum PlayerFaction claim size **/
+    @Getter public int claimMinSize;
+    /** Maximum amount of claims a PlayerFaction can have at one time **/
+    @Getter public int maxClaims;
+    /** Value of each block in the area of a claim **/
+    @Getter public double claimBlockValue;
+    /** Distance (in blocks) that each unique faction claim must be from others **/
+    @Getter public double playerClaimBuffer;
+    /** Default distance (in blocks) that each unique faction claim must be from ServerFaction claims **/
+    @Getter public double defaultServerClaimBuffer;
+    /** Time (in seconds) that attacking players should be combat-tagged for **/
+    @Getter public int timerCombatTagAttacker;
+    /** Time (in seconds) that attacked players should be combat-tagged for **/
+    @Getter public int timerCombatTagAttacked;
+    /** Time (in seconds) that players should receive for PvP Protection upon logging in or respawning **/
+    @Getter public int timerProtection;
+    /** Time (in seconds) that player enderpearls should be locked upon using one **/
+    @Getter public int timerEnderpearl;
+    /** Time (in seconds) that player totems of the undying should be locked upon using one **/
+    @Getter public int timerTotem;
+    /** Time (in seconds) that player gapples should be locked upon using one **/
+    @Getter public int timerGapple;
+    /** Time (in seconds) that player crapples should be locked upon using one **/
+    @Getter public int timerCrapple;
+    /** Time (in seconds) that players should have to wait before warping home **/
+    @Getter public int timerHome;
+    /** Time (in seconds) that players should have to wait before being teleported outside of enemy claims when stuck **/
+    @Getter public int timerStuck;
+    /** Time (in seconds) that factions should have to wait upon a player dying **/
+    @Getter public int timerFreeze;
+    /** Time (in seconds) that factions should have to wait upon setting a new rally **/
+    @Getter public int timerRally;
 
     public void loadValues() {
         final YamlConfiguration config = plugin.getConfig("config");

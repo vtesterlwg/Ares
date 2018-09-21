@@ -4,6 +4,9 @@ import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.timers.FactionTimer;
 import org.bukkit.ChatColor;
 
+/**
+ * Represents a Faction's DTR freeze
+ */
 public final class DTRFreezeTimer extends FactionTimer {
     public DTRFreezeTimer(PlayerFaction owner, long milliseconds) {
         super(owner, FactionTimerType.FREEZE, milliseconds);

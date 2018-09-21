@@ -20,13 +20,18 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public final class FactionDisbandHandler {
-    @Getter
-    public final FactionManager manager;
+    /** Owning Manager **/
+    @Getter public final FactionManager manager;
 
     public FactionDisbandHandler(FactionManager manager) {
         this.manager = manager;
     }
 
+    /**
+     * Disbands a faction
+     * @param player Player
+     * @param promise Promise
+     */
     public void disband(Player player, SimplePromise promise) {
         final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
@@ -85,6 +90,12 @@ public final class FactionDisbandHandler {
         }).run();
     }
 
+    /**
+     * Disbands a faction in the third-person
+     * @param player Disbanding Player
+     * @param name Disbanded Faction's Name
+     * @param promise Promise
+     */
     public void disband(Player player, String name, SimplePromise promise) {
         final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
         final Faction faction = manager.getFactionByName(name);
@@ -138,6 +149,11 @@ public final class FactionDisbandHandler {
         }).run();
     }
 
+    /**
+     * Removes player from a faction
+     * @param player Player
+     * @param promise Promise
+     */
     public void leave(Player player, SimplePromise promise) {
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
         final DefinedClaim inside = manager.getPlugin().getClaimManager().getClaimAt(new PLocatable(player));
@@ -176,6 +192,12 @@ public final class FactionDisbandHandler {
         promise.success();
     }
 
+    /**
+     * Kicks a player from the faction
+     * @param player Kicking Player
+     * @param name Kicked Username
+     * @param promise Promise
+     */
     public void kick(Player player, String name, SimplePromise promise) {
         final ProfileService profileService = (ProfileService)manager.getPlugin().getService(ProfileService.class);
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());

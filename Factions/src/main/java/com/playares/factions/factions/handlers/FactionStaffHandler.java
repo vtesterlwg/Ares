@@ -12,13 +12,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public final class FactionStaffHandler {
-    @Getter
-    public final FactionManager manager;
+    /** Owning Manager **/
+    @Getter public final FactionManager manager;
 
     public FactionStaffHandler(FactionManager manager) {
         this.manager = manager;
     }
 
+    /**
+     * Freezes a faction's DTR
+     * @param player Player
+     * @param name Faction Name
+     * @param time Time
+     * @param promise Promise
+     */
     public void freeze(Player player, String name, String time, SimplePromise promise) {
         final PlayerFaction faction = manager.getPlayerFactionByName(name);
         final long ms;
@@ -43,6 +50,12 @@ public final class FactionStaffHandler {
         promise.success();
     }
 
+    /**
+     * Thaws a Faction's DTR
+     * @param player Player
+     * @param name Faction Name
+     * @param promise Promise
+     */
     public void unfreeze(Player player, String name, SimplePromise promise) {
         final PlayerFaction faction = manager.getPlayerFactionByName(name);
 
@@ -66,6 +79,13 @@ public final class FactionStaffHandler {
         promise.success();
     }
 
+    /**
+     * Updates the DTR for a Player Faction
+     * @param player Player
+     * @param name Faction Name
+     * @param dtr DTR
+     * @param promise Promise
+     */
     public void updateDTR(Player player, String name, double dtr, SimplePromise promise) {
         final PlayerFaction faction = manager.getPlayerFactionByName(name);
 

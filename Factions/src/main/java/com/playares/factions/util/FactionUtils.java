@@ -12,6 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public final class FactionUtils {
+    /**
+     * Teleports the supplied player outside of enemy claims
+     * @param plugin Plugin
+     * @param player Player
+     */
     public static void teleportOutsideClaims(Factions plugin, Player player) {
         final PLocatable location = new PLocatable(player);
 
@@ -28,6 +33,13 @@ public final class FactionUtils {
         }).run();
     }
 
+    /**
+     * Returns a list containing all players that are considering enemies within the supplied distance
+     * @param plugin Plugin
+     * @param player Player
+     * @param distance Distance (radius)
+     * @return ImmutableList containing all players considered enemies
+     */
     public static ImmutableList<Player> getNearbyEnemies(Factions plugin, Player player, double distance) {
         final List<Player> result = Lists.newArrayList();
         final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(player.getUniqueId());

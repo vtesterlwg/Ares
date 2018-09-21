@@ -12,26 +12,19 @@ import org.bukkit.ChatColor;
 import java.util.UUID;
 
 public final class ServerFaction implements Faction, MongoDocument<ServerFaction> {
-    @Getter
-    public final Factions plugin;
-
-    @Getter
-    public UUID uniqueId;
-
-    @Getter @Setter
-    public String name;
-
-    @Getter @Setter
-    public String displayName;
-
-    @Getter @Setter
-    public PLocatable location;
-
-    @Getter @Setter
-    public FactionFlag flag;
-
-    @Getter @Setter
-    public double buffer;
+    @Getter public final Factions plugin;
+    /** Unique ID **/
+    @Getter public UUID uniqueId;
+    /** Name of this faction **/
+    @Getter @Setter public String name;
+    /** Display name of this faction, shows up whenever called for in chat **/
+    @Getter @Setter public String displayName;
+    /** Location this faction at, used in '/f show' display **/
+    @Getter @Setter public PLocatable location;
+    /** Flag to determine how this claim should behave **/
+    @Getter @Setter public FactionFlag flag;
+    /** Buffer for this factions claims **/
+    @Getter @Setter public double buffer;
 
     public ServerFaction(Factions plugin) {
         this.plugin = plugin;
@@ -85,11 +78,27 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
 
     @AllArgsConstructor
     public enum FactionFlag {
+        /**
+         * Disables PvP
+         * Prevents players with Combat-tag from entering
+         * Freezes PvP Protection timers
+         * Disables enderpearl landing if thrown by a combat-tagged player
+         */
         SAFEZONE(ChatColor.GREEN + "Safezone"),
+
+        /**
+         * Prevents players with PvP-Protection from entering
+         * If the connected event is active all deaths in this claim may have different attributes than normal
+         * Players will be escorted outside of this factions claims if they log out inside them
+         */
         EVENT(ChatColor.DARK_AQUA + "Event"),
+
+        /**
+         * Prevents block modification
+         */
         LANDMARK(ChatColor.LIGHT_PURPLE + "Landmark");
 
-        @Getter
-        public final String displayName;
+        /** Display name for this flag **/
+        @Getter public final String displayName;
     }
 }

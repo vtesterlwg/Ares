@@ -5,12 +5,14 @@ import com.playares.factions.factions.PlayerFaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+/**
+ * Represents a timer for Factions
+ */
 public abstract class FactionTimer extends Timer {
-    @Getter
-    public PlayerFaction owner;
-
-    @Getter
-    public final FactionTimerType type;
+    /** The owner of this timer **/
+    @Getter public PlayerFaction owner;
+    /** The type of this timer **/
+    @Getter public final FactionTimerType type;
 
     public FactionTimer(PlayerFaction owner, FactionTimerType type, long milliseconds) {
         super(milliseconds);
@@ -26,6 +28,6 @@ public abstract class FactionTimer extends Timer {
 
     @AllArgsConstructor
     public enum FactionTimerType {
-        FREEZE;
+        FREEZE
     }
 }

@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * Represents a players gapple timer
+ */
 public final class GappleTimer extends PlayerTimer {
     public GappleTimer(UUID owner, int seconds) {
         super(owner, PlayerTimerType.GAPPLE, seconds);

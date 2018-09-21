@@ -7,6 +7,9 @@ import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
+/**
+ * Represents a players Totem of the Undying timer
+ */
 public final class TotemTimer extends PlayerTimer {
     public TotemTimer(UUID owner, int seconds) {
         super(owner, PlayerTimerType.TOTEM, seconds);

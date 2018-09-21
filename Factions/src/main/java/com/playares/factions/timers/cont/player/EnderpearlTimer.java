@@ -6,6 +6,9 @@ import org.bukkit.ChatColor;
 
 import java.util.UUID;
 
+/**
+ * Represents a players Enderpearl timer
+ */
 public final class EnderpearlTimer extends PlayerTimer {
     public EnderpearlTimer(UUID owner, int seconds) {
         super(owner, PlayerTimerType.ENDERPEARL, seconds);

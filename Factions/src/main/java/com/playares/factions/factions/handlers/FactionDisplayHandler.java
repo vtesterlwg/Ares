@@ -36,13 +36,19 @@ import java.util.List;
 import java.util.Map;
 
 public final class FactionDisplayHandler {
-    @Getter
-    public final FactionManager manager;
+    /** Owning Manager **/
+    @Getter public final FactionManager manager;
 
     public FactionDisplayHandler(FactionManager manager) {
         this.manager = manager;
     }
 
+    /**
+     * Updates the announcement for a faction+
+     * @param player Player
+     * @param text Message
+     * @param promise Promise
+     */
     public void updateAnnouncement(Player player, String text, SimplePromise promise) {
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
         final boolean mod = player.hasPermission("factions.mod");
@@ -62,6 +68,11 @@ public final class FactionDisplayHandler {
         promise.success();
     }
 
+    /**
+     * Updates the rally for a faction
+     * @param player Player
+     * @param promise Promise
+     */
     public void updateRally(Player player, SimplePromise promise) {
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
         final boolean mod = player.hasPermission("factions.mod");
@@ -81,6 +92,12 @@ public final class FactionDisplayHandler {
         promise.success();
     }
 
+    /**
+     * Displays the faction list to the provided viewer
+     * @param viewer Player
+     * @param page Page
+     * @param promise Promise
+     */
     public void viewList(Player viewer, int page, SimplePromise promise) {
         final List<PlayerFaction> factions = Lists.newArrayList(manager.getPlayerFactions());
 
@@ -153,6 +170,12 @@ public final class FactionDisplayHandler {
         promise.success();
     }
 
+    /**
+     * Prepares faction information for display
+     * @param viewer Player
+     * @param name Faction Name
+     * @param promise Promise
+     */
     public void prepareFactionInfo(Player viewer, String name, SimplePromise promise) {
         manager.getFactionByPlayer(name, faction -> {
             if (faction == null) {
@@ -173,6 +196,11 @@ public final class FactionDisplayHandler {
         });
     }
 
+    /**
+     * Displays faction information
+     * @param viewer Player
+     * @param faction Faction
+     */
     public void displayFactionInfo(Player viewer, Faction faction) {
         final ProfileService profileService = (ProfileService)manager.getPlugin().getService(ProfileService.class);
         final String spacer = ChatColor.RESET + " " + ChatColor.RESET + " " + ChatColor.YELLOW + " - " + ChatColor.RESET;
@@ -327,6 +355,12 @@ public final class FactionDisplayHandler {
         }).run();
     }
 
+    /**
+     * Displays the faction leaderboard for the provided category
+     * @param player Player
+     * @param category Category
+     * @param promise Promise
+     */
     public void displayLeaderboard(Player player, String category, SimplePromise promise) {
         final StatsAddon addon = (StatsAddon)manager.getPlugin().getAddonManager().getAddon(StatsAddon.class);
         final List<PlayerFaction> factions = Lists.newArrayList(manager.getPlayerFactions());

@@ -15,13 +15,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public final class FactionCreationHandler {
-    @Getter
-    public final FactionManager manager;
+    /** Owning Manager **/
+    @Getter public final FactionManager manager;
 
     public FactionCreationHandler(FactionManager manager) {
         this.manager = manager;
     }
 
+    /**
+     * Creates a new Player Faction
+     * @param player Player
+     * @param name Name
+     * @param promise Promise
+     */
     public void createFaction(Player player, String name, SimplePromise promise) {
         final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
 
@@ -74,6 +80,12 @@ public final class FactionCreationHandler {
         promise.success();
     }
 
+    /**
+     * Creates a new Server Faction
+     * @param player Player
+     * @param name Name
+     * @param promise Promise
+     */
     public void createServerFaction(Player player, String name, SimplePromise promise) {
         if (!name.matches("^[A-Za-z0-9_.]+$")) {
             promise.failure("Faction names must only contain characters A-Z, 0-9");
@@ -106,6 +118,12 @@ public final class FactionCreationHandler {
         promise.success();
     }
 
+    /**
+     * Sends an invitation to a player to join the faction
+     * @param player Inviting Player
+     * @param username Invited Username
+     * @param promise Promise
+     */
     public void sendInvite(Player player, String username, SimplePromise promise) {
         final ProfileService profileService = (ProfileService)manager.getPlugin().getService(ProfileService.class);
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
@@ -191,6 +209,12 @@ public final class FactionCreationHandler {
         });
     }
 
+    /**
+     * Revokes a players invitation to join the faction
+     * @param player Uninviting Player
+     * @param username Uninvited Username
+     * @param promise Promise
+     */
     public void revokeInvite(Player player, String username, SimplePromise promise) {
         final ProfileService profileService = (ProfileService)manager.getPlugin().getService(ProfileService.class);
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
@@ -231,6 +255,12 @@ public final class FactionCreationHandler {
         });
     }
 
+    /**
+     * Accepts an invitation to join a faction
+     * @param player Accepting Player
+     * @param factionName Faction Name
+     * @param promise Promise
+     */
     public void acceptInvite(Player player, String factionName, SimplePromise promise) {
         final PlayerFaction faction = manager.getPlayerFactionByName(factionName);
         final boolean admin = player.hasPermission("factions.admin");

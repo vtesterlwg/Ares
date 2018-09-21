@@ -25,26 +25,24 @@ import com.playares.services.ranks.RankService;
 import lombok.Getter;
 
 public final class Factions extends AresPlugin {
-    @Getter
-    protected FactionConfig factionConfig;
-
-    @Getter
-    protected FactionManager factionManager;
-
-    @Getter
-    protected ClaimManager claimManager;
-
-    @Getter
-    protected PlayerManager playerManager;
-
-    @Getter
-    protected AddonManager addonManager;
+    /** Core factions configuration **/
+    @Getter protected FactionConfig factionConfig;
+    /** Stores all data/handling for Factions **/
+    @Getter protected FactionManager factionManager;
+    /** Stores all data/handling for Claims **/
+    @Getter protected ClaimManager claimManager;
+    /** Stores all data/handling for Players **/
+    @Getter protected PlayerManager playerManager;
+    /** Stores all data/handling for Faction Addons **/
+    @Getter protected AddonManager addonManager;
 
     @Override
     public void onEnable() {
+        // Configuration Files
         factionConfig = new FactionConfig(this);
         factionConfig.loadValues();
 
+        // Listeners
         registerListener(new ClaimBuilderListener(this));
         registerListener(new DataListener(this));
         registerListener(new PillarListener(this));
@@ -54,15 +52,19 @@ public final class Factions extends AresPlugin {
         registerListener(new ChatListener(this));
         registerListener(new CombatListener(this));
 
+        // Database
         registerMongo(new MongoDB(factionConfig.getDatabaseURI()));
         getMongo().openConnection();
 
+        // Protocol
         registerProtocol(ProtocolLibrary.getProtocolManager());
 
+        // Commands
         final PaperCommandManager commandManager = new PaperCommandManager(this);
         registerCommandManager(commandManager);
         registerCommand(new FactionCommand(this));
 
+        // Register Services
         registerService(new ClassService(this));
         registerService(new CustomEventService(this));
         registerService(new CustomItemService(this));
@@ -75,41 +77,50 @@ public final class Factions extends AresPlugin {
         registerService(new AutomatedRestartService(this, 42300));
         startServices();
 
+        // Data Managers
         factionManager = new FactionManager(this);
         claimManager = new ClaimManager(this);
         playerManager = new PlayerManager(this);
         addonManager = new AddonManager(this);
 
+        // Data Loading
         factionManager.loadFactions();
         claimManager.loadClaims();
 
         addonManager.startAddons();
-
         registerItems();
     }
 
     @Override
     public void onDisable() {
+        // Cancel Timers
         factionManager.cancelTasks();
         playerManager.cancelTasks();
 
+        // Data Saving
         playerManager.savePlayers(true);
         factionManager.saveFactions(true);
         claimManager.saveClaims(true);
 
+        // Clear Data
         factionManager.getFactionRepository().clear();
         claimManager.getClaimRepository().clear();
         playerManager.getPlayerRepository().clear();
 
+        addonManager.stopAddons();
+
+        // Nullify Classes
         factionManager = null;
         claimManager = null;
         playerManager = null;
-
-        addonManager.stopAddons();
+        addonManager = null;
 
         stopServices();
     }
 
+    /**
+     * Registers custom items used in this Plugin
+     */
     private void registerItems() {
         final CustomItemService service = (CustomItemService)getService(CustomItemService.class);
 

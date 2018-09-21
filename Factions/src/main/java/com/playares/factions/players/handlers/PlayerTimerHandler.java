@@ -19,13 +19,18 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 public final class PlayerTimerHandler {
-    @Getter
-    public final PlayerManager manager;
+    /** Player Manager that owns this handler **/
+    @Getter public final PlayerManager manager;
 
     public PlayerTimerHandler(PlayerManager manager) {
         this.manager = manager;
     }
 
+    /**
+     * Attempts to unstuck a player
+     * @param player Player
+     * @param promise Promise
+     */
     public void attemptStuck(Player player, SimplePromise promise) {
         final FactionPlayer profile = manager.getPlayer(player.getUniqueId());
         final DefinedClaim inside = manager.getPlugin().getClaimManager().getClaimAt(new PLocatable(player));
@@ -57,6 +62,11 @@ public final class PlayerTimerHandler {
         promise.success();
     }
 
+    /**
+     * Attempts to warp a player home
+     * @param player Player
+     * @param promise Promise
+     */
     public void attemptHome(Player player, SimplePromise promise) {
         final FactionPlayer profile = manager.getPlayer(player.getUniqueId());
         final PlayerFaction faction = manager.getPlugin().getFactionManager().getFactionByPlayer(player.getUniqueId());
