@@ -661,7 +661,7 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("leaderboard|lb|top")
     @Description("View the faction leaderboards")
     @Syntax("[category]")
-    public void onLeaderboard(Player player, @Flags("elo|e|kills|k|deaths|d|minorevents|minor|majorevents|major") String category) {
+    public void onLeaderboard(Player player, @Flags("rating|elo|e|kill|kills|k|death|deaths|d|minorevent|minorevents|minor|majorevent|majorevents|major") String category) {
         plugin.getFactionManager().getDisplayHandler().displayLeaderboard(player, category, new SimplePromise() {
             @Override
             public void success() {}
