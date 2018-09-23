@@ -364,6 +364,7 @@ public final class FactionDisplayHandler {
     public void displayLeaderboard(Player player, String category, SimplePromise promise) {
         final StatsAddon addon = (StatsAddon)manager.getPlugin().getAddonManager().getAddon(StatsAddon.class);
         final List<PlayerFaction> factions = Lists.newArrayList(manager.getPlayerFactions());
+        final PlayerFaction personalFaction = manager.getFactionByPlayer(player.getUniqueId());
 
         if (factions.isEmpty()) {
             promise.failure("There are no factions on the leaderboard");
@@ -373,19 +374,19 @@ public final class FactionDisplayHandler {
         new Scheduler(manager.getPlugin()).async(() -> {
             final String fancyCategory;
 
-            if (category.equalsIgnoreCase("elo") || category.equalsIgnoreCase("e")) {
+            if (category.equalsIgnoreCase("elo") || category.equalsIgnoreCase("rating") || category.equalsIgnoreCase("e") || category.equalsIgnoreCase("r")) {
                 factions.sort(Comparator.comparingInt(f -> f.getStats().calculateELO(addon)));
                 fancyCategory = "Rating";
-            } else if (category.equalsIgnoreCase("kills") || category.equalsIgnoreCase("k")) {
+            } else if (category.equalsIgnoreCase("kill") || category.equalsIgnoreCase("kills") || category.equalsIgnoreCase("k")) {
                 factions.sort(Comparator.comparingInt(f -> f.getStats().getKills()));
                 fancyCategory = "Kills";
-            } else if (category.equalsIgnoreCase("deaths") || category.equalsIgnoreCase("d")) {
+            } else if (category.equalsIgnoreCase("death") || category.equalsIgnoreCase("deaths") || category.equalsIgnoreCase("d")) {
                 factions.sort(Comparator.comparingInt(f -> f.getStats().getDeaths()));
                 fancyCategory = "Deaths";
-            } else if (category.equalsIgnoreCase("minorevents") || category.equalsIgnoreCase("minor")) {
+            } else if (category.equalsIgnoreCase("minorevent") || category.equalsIgnoreCase("minorevents") || category.equalsIgnoreCase("minor")) {
                 factions.sort(Comparator.comparingInt(f -> f.getStats().getMinorEventCaptures()));
                 fancyCategory = "Minor Event Captures";
-            } else if (category.equalsIgnoreCase("majorevents") || category.equalsIgnoreCase("major")) {
+            } else if (category.equalsIgnoreCase("majorevent") || category.equalsIgnoreCase("majorevents") || category.equalsIgnoreCase("major")) {
                 factions.sort(Comparator.comparingInt(f -> f.getStats().getMajorEventCaptures()));
                 fancyCategory = "Major Event Captures";
             } else {
@@ -395,12 +396,12 @@ public final class FactionDisplayHandler {
 
             Collections.reverse(factions);
 
-            final Menu menu = new Menu(manager.getPlugin(), player, "Factions Leaderboard: " + fancyCategory, 1);
-            final List<PlayerFaction> top = (factions.size() >= 5 ? factions.subList(0, 4) : factions.subList(0, factions.size()));
+            final Menu menu = new Menu(manager.getPlugin(), player, "Factions Leaderboard: " + fancyCategory, 6);
+            final List<PlayerFaction> top = (factions.size() >= 3 ? factions.subList(0, 2) : factions.subList(0, factions.size()));
 
             new Scheduler(manager.getPlugin()).sync(() -> {
                 int pos = 1;
-                int slot = 0;
+                int slot = 10;
 
                 for (PlayerFaction faction : top) {
                     final ItemBuilder builder = new ItemBuilder().setMaterial(Material.PLAYER_HEAD);
@@ -430,9 +431,71 @@ public final class FactionDisplayHandler {
                     menu.addItem(new ClickableItem(icon, slot, click -> displayFactionInfo(player, faction)));
 
                     pos++;
-                    slot += 2;
+                    slot += 3;
                 }
 
+                if (personalFaction != null) {
+                    final ItemBuilder builder = new ItemBuilder().setMaterial(Material.PLAYER_HEAD);
+                    final List<String> lore = Lists.newArrayList();
+                    int personalPos = 1;
+
+                    for (PlayerFaction faction : factions) {
+                        if (faction.getUniqueId().equals(personalFaction.getUniqueId())) {
+                            break;
+                        }
+
+                        personalPos++;
+                    }
+
+                    builder.setName(ChatColor.GREEN + "(You) " + ChatColor.RESET + "#" + personalPos + " - " + ChatColor.YELLOW + personalFaction.getName());
+                    lore.add(ChatColor.GOLD + "Rating: " + ChatColor.YELLOW + personalFaction.getStats().calculateELO(addon));
+                    lore.add(ChatColor.GOLD + "Kills: " + ChatColor.YELLOW + personalFaction.getStats().getKills());
+                    lore.add(ChatColor.GOLD + "Deaths: " + ChatColor.YELLOW + personalFaction.getStats().getDeaths());
+                    lore.add(ChatColor.GOLD + "Minor Event Captures: " + ChatColor.YELLOW + personalFaction.getStats().getMinorEventCaptures());
+                    lore.add(ChatColor.GOLD + "Major Event Captures: " + ChatColor.YELLOW + personalFaction.getStats().getMajorEventCaptures());
+
+                    builder.addLore(lore);
+
+                    final ItemStack icon = builder.build();
+
+                    menu.addItem(new ClickableItem(icon, 40, click -> displayFactionInfo(player, personalFaction)));
+                }
+
+                final ItemStack goldBorder = new ItemBuilder().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName(ChatColor.GOLD + "1st Place").build();
+                final ItemStack silverBorder = new ItemBuilder().setMaterial(Material.WHITE_STAINED_GLASS_PANE).setName(ChatColor.GRAY + "2nd Place").build();
+                final ItemStack bronzeBorder = new ItemBuilder().setMaterial(Material.ORANGE_STAINED_GLASS_PANE).setName(ChatColor.RED + "3rd Place").build();
+
+                // Gold Border
+                menu.addItem(new ClickableItem(goldBorder, 0, click -> {}));
+                menu.addItem(new ClickableItem(goldBorder, 1, click -> {}));
+                menu.addItem(new ClickableItem(goldBorder, 2, click -> {}));
+                menu.addItem(new ClickableItem(goldBorder, 9, click -> {}));
+                menu.addItem(new ClickableItem(goldBorder, 11, click -> {}));
+                menu.addItem(new ClickableItem(goldBorder, 18, click -> {}));
+                menu.addItem(new ClickableItem(goldBorder, 19, click -> {}));
+                menu.addItem(new ClickableItem(goldBorder, 20, click -> {}));
+
+                // Silver Border
+                menu.addItem(new ClickableItem(silverBorder, 3, click -> {}));
+                menu.addItem(new ClickableItem(silverBorder, 4, click -> {}));
+                menu.addItem(new ClickableItem(silverBorder, 5, click -> {}));
+                menu.addItem(new ClickableItem(silverBorder, 12, click -> {}));
+                menu.addItem(new ClickableItem(silverBorder, 14, click -> {}));
+                menu.addItem(new ClickableItem(silverBorder, 21, click -> {}));
+                menu.addItem(new ClickableItem(silverBorder, 22, click -> {}));
+                menu.addItem(new ClickableItem(silverBorder, 23, click -> {}));
+
+                // Bronze Border
+                menu.addItem(new ClickableItem(bronzeBorder, 6, click -> {}));
+                menu.addItem(new ClickableItem(bronzeBorder, 7, click -> {}));
+                menu.addItem(new ClickableItem(bronzeBorder, 8, click -> {}));
+                menu.addItem(new ClickableItem(bronzeBorder, 15, click -> {}));
+                menu.addItem(new ClickableItem(bronzeBorder, 17, click -> {}));
+                menu.addItem(new ClickableItem(bronzeBorder, 24, click -> {}));
+                menu.addItem(new ClickableItem(bronzeBorder, 25, click -> {}));
+                menu.addItem(new ClickableItem(bronzeBorder, 26, click -> {}));
+
+                menu.fill(new ItemBuilder().setMaterial(Material.GRAY_STAINED_GLASS_PANE).setName(ChatColor.DARK_GRAY + "made u look").build());
                 menu.open();
             }).run();
         }).run();
