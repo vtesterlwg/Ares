@@ -403,7 +403,6 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         }
 
         this.scoreboard.getTeam("friendly").unregister();
-        this.scoreboard.getTeam("ally").unregister();
     }
 
     /**
@@ -416,7 +415,6 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         }
 
         this.scoreboard.getTeam("friendly").removeEntry(player.getName());
-        this.scoreboard.getTeam("ally").removeEntry(player.getName());
     }
 
     /**
