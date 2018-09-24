@@ -27,8 +27,10 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -366,6 +368,11 @@ public final class FactionDisplayHandler {
         final List<PlayerFaction> factions = Lists.newArrayList(manager.getPlayerFactions());
         final PlayerFaction personalFaction = manager.getFactionByPlayer(player.getUniqueId());
 
+        if (addon == null) {
+            promise.failure("Failed to obtain Stats Addon");
+            return;
+        }
+
         if (factions.isEmpty()) {
             promise.failure("There are no factions on the leaderboard");
             return;
@@ -427,8 +434,19 @@ public final class FactionDisplayHandler {
                     builder.addLore(lore);
 
                     final ItemStack icon = builder.build();
+                    final SkullMeta meta = (SkullMeta)icon.getItemMeta();
+                    final int currentSlot = slot;
 
-                    menu.addItem(new ClickableItem(icon, slot, click -> displayFactionInfo(player, faction)));
+                    new Scheduler(manager.getPlugin()).async(() -> {
+                        final PlayerFaction.FactionProfile leader = faction.getMembersByRank(PlayerFaction.FactionRank.LEADER).get(0);
+                        final OfflinePlayer offlinePlayer = (leader != null) ? Bukkit.getOfflinePlayer(leader.getUniqueId()) : null;
+
+                        new Scheduler(manager.getPlugin()).sync(() -> {
+                            meta.setOwningPlayer(offlinePlayer);
+                            icon.setItemMeta(meta);
+                            menu.addItem(new ClickableItem(icon, currentSlot, click -> displayFactionInfo(player, faction)));
+                        }).run();
+                    }).run();
 
                     pos++;
                     slot += 3;
@@ -457,8 +475,18 @@ public final class FactionDisplayHandler {
                     builder.addLore(lore);
 
                     final ItemStack icon = builder.build();
+                    final SkullMeta meta = (SkullMeta)icon.getItemMeta();
 
-                    menu.addItem(new ClickableItem(icon, 40, click -> displayFactionInfo(player, personalFaction)));
+                    new Scheduler(manager.getPlugin()).async(() -> {
+                        final PlayerFaction.FactionProfile leader = personalFaction.getMembersByRank(PlayerFaction.FactionRank.LEADER).get(0);
+                        final OfflinePlayer offlinePlayer = (leader != null) ? Bukkit.getOfflinePlayer(leader.getUniqueId()) : null;
+
+                        new Scheduler(manager.getPlugin()).sync(() -> {
+                            meta.setOwningPlayer(offlinePlayer);
+                            icon.setItemMeta(meta);
+                            menu.addItem(new ClickableItem(icon, 40, click -> displayFactionInfo(player, personalFaction)));
+                        }).run();
+                    }).run();
                 }
 
                 final ItemStack goldBorder = new ItemBuilder().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName(ChatColor.GOLD + "1st Place").build();
