@@ -2,6 +2,7 @@ package com.playares.factions.addons.stats;
 
 import com.playares.factions.Factions;
 import com.playares.factions.addons.Addon;
+import com.playares.factions.addons.stats.command.StatsCommand;
 import com.playares.factions.addons.stats.holder.StatisticEventListener;
 import com.playares.factions.addons.stats.lore.TrackableItemListener;
 import lombok.Getter;
