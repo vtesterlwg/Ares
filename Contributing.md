@@ -7,8 +7,8 @@
 * All tasks & schedulers should be handled using the **Scheduler** class
 
 ## Logging
-* All messages printed to the console should be accessed through the proper Logger class
-For Bukkit plugins, this means accessing **Logger** from **Commonms -> Bukkit**
+* All messages printed to the console should be accessed through the proper Logger class  
+For Bukkit plugins, this means accessing **Logger** from **Commonms -> Bukkit**  
 For Bungee plugins, access **Logger** from **Commons -> Bungee** instead
 
 ## Databases & Misc. Connections
@@ -16,17 +16,17 @@ For Bungee plugins, access **Logger** from **Commons -> Bungee** instead
 * All database interactions should be handled using **DAOs**
 
 ## Pass/Fail Handling
-* All pass/fail handling should be handled using the **Promise** package
-**Promise** should always offer a success response containing an object
-**FailablePromise** should always offer an object *if* successful, but can also fail containing a string as the error response
-**SimplePromise** does not return an object if successful, but should return an error response if it fails
+* All pass/fail handling should be handled using the **Promise** package  
+**Promise** should always offer a success response containing an object  
+**FailablePromise** should always offer an object *if* successful, but can also fail containing a string as the error response  
+**SimplePromise** does not return an object if successful, but should return an error response if it fails  
 
 **Examples of Pass/Fail scenarios:**
 * Literally anything running async with an expected response
 * Performing multi-check actions such as renaming a faction
 
 ## Time
-* Do **NOT** use `System.currentTimeMillis()`, instead, use `Time.now()`
+* Do **NOT** use `System.currentTimeMillis()`, instead, use `Time.now()`  
 The Time utility class contains several handy methods for formatting time. Use those whenever possible.
 
 ## Storing Locations
