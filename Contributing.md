@@ -7,7 +7,7 @@
 * All tasks & schedulers should be handled using the **Scheduler** class
 
 ## Logging
-* All messages printed to the console should be accessed through the proper Logger class  
+* All messages printed to the console should be accessed through the proper **Logger** class  
 For Bukkit plugins, this means accessing **Logger** from **Commonms -> Bukkit**  
 For Bungee plugins, access **Logger** from **Commons -> Bungee** instead
 
@@ -27,7 +27,7 @@ For Bungee plugins, access **Logger** from **Commons -> Bungee** instead
 
 ## Time
 * Do **NOT** use `System.currentTimeMillis()`, instead, use `Time.now()`  
-The Time utility class contains several handy methods for formatting time. Use those whenever possible.
+The **Time** utility class contains several handy methods for formatting time. **Use those whenever possible**
 
 ## Storing Locations
 * Use **Locatables**, they offer quick methods to convert back-and-fourth from database documents and are thread-safe
