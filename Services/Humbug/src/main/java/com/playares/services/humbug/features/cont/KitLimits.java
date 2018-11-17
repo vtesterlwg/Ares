@@ -46,7 +46,7 @@ public final class KitLimits implements HumbugModule, Listener {
     @Getter
     public final Set<EnchantLimit> enchantLimits;
 
-    @Getter
+    @Getter // hehe holy FUCK
     public final ImmutableMap<PotionEffectType, Integer> extendedValues = ImmutableMap.<PotionEffectType, Integer>builder()
             .put(PotionEffectType.INVISIBILITY, (480 * 20)).put(PotionEffectType.NIGHT_VISION, (480 * 20)).put(PotionEffectType.JUMP, (480 * 20))
             .put(PotionEffectType.FIRE_RESISTANCE, (480 * 20)).put(PotionEffectType.SPEED, (480 * 20)).put(PotionEffectType.SLOW, (480 * 20))

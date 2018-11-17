@@ -5,11 +5,15 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.bukkit.util.Players;
+import com.playares.factions.Factions;
 import com.playares.factions.addons.stats.holder.PlayerStatisticHolder;
 import com.playares.factions.claims.DefinedClaim;
 import com.playares.factions.claims.pillars.ClaimPillar;
 import com.playares.factions.claims.pillars.MapPillar;
 import com.playares.factions.claims.pillars.Pillar;
+import com.playares.factions.claims.shields.CombatShield;
+import com.playares.factions.claims.shields.ProtectionShield;
+import com.playares.factions.claims.shields.Shield;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.*;
@@ -26,6 +30,8 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class FactionPlayer implements MongoDocument<FactionPlayer> {
+    /** Factions instance **/
+    @Getter public final Factions plugin;
     /** Player Unique ID **/
     @Getter public UUID uniqueId;
     /** Player Username **/
@@ -42,10 +48,13 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     @Getter public Set<PlayerTimer> timers;
     /** Contains all active pillars **/
     @Getter public Set<Pillar> pillars;
+    /** Contains all shield blocks being rendered to the player **/
+    @Getter public Set<Shield> shields;
     /** Contains all Player Statistics **/
     @Getter public PlayerStatisticHolder stats;
 
-    public FactionPlayer() {
+    public FactionPlayer(Factions plugin) {
+        this.plugin = plugin;
         this.uniqueId = null;
         this.username = null;
         this.balance = 0.0;
@@ -57,7 +66,8 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.stats = null;
     }
 
-    public FactionPlayer(Player player) {
+    public FactionPlayer(Factions plugin, Player player) {
+        this.plugin = plugin;
         this.uniqueId = player.getUniqueId();
         this.username = player.getName();
         this.balance = 0.0; // TODO: Get from economyconfig
@@ -69,7 +79,8 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.stats = new PlayerStatisticHolder();
     }
 
-    public FactionPlayer(UUID uniqueId, String username) {
+    public FactionPlayer(Factions plugin, UUID uniqueId, String username) {
+        this.plugin = plugin;
         this.uniqueId = uniqueId;
         this.username = username;
         this.balance = 0.0;
@@ -163,6 +174,23 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     }
 
     /**
+     * Returns a Set collection of Shield Blocks matching the given type
+     * @param type Shield Type
+     * @return Set containing shield blocks matching type
+     */
+    public Set<Shield> getShieldBlocks(Shield.ShieldType type) {
+        if (type.equals(Shield.ShieldType.COMBAT)) {
+            return shields.stream().filter(s -> s instanceof CombatShield).collect(Collectors.toSet());
+        }
+
+        if (type.equals(Shield.ShieldType.PROTECTION)) {
+            return shields.stream().filter(s -> s instanceof ProtectionShield).collect(Collectors.toSet());
+        }
+
+        return null;
+    }
+
+    /**
      * Returns a ClaimPillar matching the provided type
      * @param type Type
      * @return ClaimPillar
@@ -185,6 +213,14 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     }
 
     /**
+     * Hides all shields for this player
+     */
+    public void hideAllShields() {
+        shields.forEach(Shield::hide);
+        shields.clear();
+    }
+
+    /**
      * Returns true if this player has ClaimPillars
      * @return True if ClaimPillars found
      */
@@ -204,6 +240,30 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         return !pillars
                 .stream()
                 .filter(pillar -> pillar instanceof MapPillar)
+                .collect(Collectors.toList())
+                .isEmpty();
+    }
+
+    /**
+     * Returns true if this player has CombatShields
+     * @return True if CombatShields found
+     */
+    public boolean hasCombatShields() {
+        return !shields
+                .stream()
+                .filter(shield -> shield instanceof CombatShield)
+                .collect(Collectors.toList())
+                .isEmpty();
+    }
+
+    /**
+     * Returns true if this player has ProtectionShields
+     * @return True if ProtectionShields found
+     */
+    public boolean hasProtectionShields() {
+        return !shields
+                .stream()
+                .filter(shield -> shield instanceof ProtectionShield)
                 .collect(Collectors.toList())
                 .isEmpty();
     }
@@ -246,6 +306,44 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         pillars.removeAll(toRemove);
     }
 
+    /**
+     * Hides all combat shields for this player
+     */
+    public void hideAllCombatShields() {
+        final List<Shield> toRemove = Lists.newArrayList();
+
+        shields
+                .stream()
+                .filter(shield -> shield instanceof CombatShield)
+                .forEach(combatShield -> {
+
+                    combatShield.hide();
+                    toRemove.add(combatShield);
+
+                });
+
+        shields.removeAll(toRemove);
+    }
+
+    /**
+     * Hides all protection shields for this player
+     */
+    public void hideAllProtectionShields() {
+        final List<Shield> toRemove = Lists.newArrayList();
+
+        shields
+                .stream()
+                .filter(shield -> shield instanceof ProtectionShield)
+                .forEach(protShield -> {
+
+                    protShield.hide();
+                    toRemove.add(protShield);
+
+                });
+
+        shields.removeAll(toRemove);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public FactionPlayer fromDocument(Document document) {
@@ -271,12 +369,12 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
                 }
 
                 else if (type.equals(PlayerTimer.PlayerTimerType.COMBAT)) {
-                    final CombatTagTimer timer = new CombatTagTimer(uniqueId, remainingSeconds);
+                    final CombatTagTimer timer = new CombatTagTimer(plugin, uniqueId, remainingSeconds);
                     this.timers.add(timer);
                 }
 
                 else if (type.equals(PlayerTimer.PlayerTimerType.PROTECTION)) {
-                    final ProtectionTimer timer = new ProtectionTimer(uniqueId, remainingSeconds);
+                    final ProtectionTimer timer = new ProtectionTimer(plugin, uniqueId, remainingSeconds);
                     this.timers.add(timer);
                 }
 

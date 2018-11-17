@@ -98,8 +98,8 @@ public final class PlayerManager {
         FactionPlayer profile = PlayerDAO.getPlayer(plugin.getMongo(), Filters.eq("id", uniqueId));
 
         if (profile == null) {
-            profile = new FactionPlayer(uniqueId, username);
-            profile.getTimers().add(new ProtectionTimer(uniqueId, plugin.getFactionConfig().getTimerProtection()));
+            profile = new FactionPlayer(plugin, uniqueId, username);
+            profile.getTimers().add(new ProtectionTimer(plugin, uniqueId, plugin.getFactionConfig().getTimerProtection()));
         }
 
         return profile;

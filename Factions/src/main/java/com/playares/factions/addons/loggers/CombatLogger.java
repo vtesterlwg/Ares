@@ -49,6 +49,7 @@ public final class CombatLogger extends EntityVillager {
         }
 
         final CraftLivingEntity living = (CraftLivingEntity)getBukkitEntity();
+
         living.setHealth(player.getHealth());
         living.setFallDistance(player.getFallDistance());
         living.setNoDamageTicks(player.getNoDamageTicks());

@@ -81,6 +81,10 @@ public final class ClaimManager {
         return ImmutableList.copyOf(claimRepository.stream().filter(claim -> claim.getOwnerId().equals(faction.getUniqueId())).collect(Collectors.toList()));
     }
 
+    public ImmutableList<DefinedClaim> getClaimsNearby(Locatable location, double distance) {
+        return ImmutableList.copyOf(claimRepository.stream().filter(claim -> claim.buffer(location, distance)).collect(Collectors.toList()));
+    }
+
     public ImmutableList<DefinedClaim> getClaimsNearby(Locatable location) {
         final List<DefinedClaim> result = Lists.newArrayList();
 

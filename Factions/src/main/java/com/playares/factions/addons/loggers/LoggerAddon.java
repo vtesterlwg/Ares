@@ -45,20 +45,14 @@ import java.util.Map;
 import java.util.UUID;
 
 public final class LoggerAddon implements Addon, Listener {
-    @Getter
-    public final Factions plugin;
-
-    @Getter @Setter
-    public boolean enabled;
-
-    @Getter @Setter
-    public int loggerDuration;
-
-    @Getter @Setter
-    public int enemyCheckRadius;
-
-    @Getter
-    public final Map<UUID, CombatLogger> loggers;
+    @Getter public final Factions plugin;
+    @Getter @Setter public boolean enabled;
+    /* Duration combat loggers should be alive for */
+    @Getter @Setter public int loggerDuration;
+    /* Radius to check for enemy players when performing a logger check */
+    @Getter @Setter public int enemyCheckRadius;
+    /* Map containing currently active combat-loggers */
+    @Getter public final Map<UUID, CombatLogger> loggers;
 
     public LoggerAddon(Factions plugin) {
         this.plugin = plugin;
@@ -378,13 +372,13 @@ public final class LoggerAddon implements Addon, Listener {
             final PlayerTimer existing = attackerProfile.getTimer(PlayerTimer.PlayerTimerType.COMBAT);
 
             if (existing == null) {
-                attackerProfile.addTimer(new CombatTagTimer(attacker.getUniqueId(), plugin.getFactionConfig().getTimerCombatTagAttacker()));
+                attackerProfile.addTimer(new CombatTagTimer(plugin, attacker.getUniqueId(), plugin.getFactionConfig().getTimerCombatTagAttacker()));
                 attacker.sendMessage(ChatColor.RED + "Combat Tag: " + ChatColor.BLUE + Time.convertToHHMMSS(plugin.getFactionConfig().getTimerCombatTagAttacker() * 1000L));
             } else if (existing.getExpire() < ((plugin.getFactionConfig().getTimerCombatTagAttacker() * 1000L) + Time.now())) {
                 existing.setExpire((plugin.getFactionConfig().getTimerCombatTagAttacker() * 1000L) + Time.now());
             }
         } else {
-            attackerProfile.addTimer(new CombatTagTimer(attacker.getUniqueId(), plugin.getFactionConfig().getTimerCombatTagAttacker()));
+            attackerProfile.addTimer(new CombatTagTimer(plugin, attacker.getUniqueId(), plugin.getFactionConfig().getTimerCombatTagAttacker()));
             attacker.sendMessage(ChatColor.RED + "Combat Tag: " + ChatColor.BLUE + Time.convertToHHMMSS(plugin.getFactionConfig().getTimerCombatTagAttacker() * 1000L));
         }
 
@@ -395,13 +389,13 @@ public final class LoggerAddon implements Addon, Listener {
                 final PlayerTimer existing = attackedProfile.getTimer(PlayerTimer.PlayerTimerType.COMBAT);
 
                 if (existing == null) {
-                    attackedProfile.addTimer(new CombatTagTimer(attacked.getUniqueId(), plugin.getFactionConfig().getTimerCombatTagAttacked()));
+                    attackedProfile.addTimer(new CombatTagTimer(plugin, attacked.getUniqueId(), plugin.getFactionConfig().getTimerCombatTagAttacked()));
                     attacked.sendMessage(ChatColor.RED + "Combat Tag: " + ChatColor.BLUE + Time.convertToHHMMSS(plugin.getFactionConfig().getTimerCombatTagAttacked() * 1000L));
                 } else if (existing.getExpire() < ((plugin.getFactionConfig().getTimerCombatTagAttacked() * 1000L) + Time.now())) {
                     existing.setExpire((plugin.getFactionConfig().getTimerCombatTagAttacked() * 1000L) + Time.now());
                 }
             } else {
-                attackedProfile.addTimer(new CombatTagTimer(attacked.getUniqueId(), plugin.getFactionConfig().getTimerCombatTagAttacked()));
+                attackedProfile.addTimer(new CombatTagTimer(plugin, attacked.getUniqueId(), plugin.getFactionConfig().getTimerCombatTagAttacked()));
                 attacked.sendMessage(ChatColor.RED + "Combat Tag: " + ChatColor.BLUE + Time.convertToHHMMSS(plugin.getFactionConfig().getTimerCombatTagAttacked() * 1000L));
             }
         }
