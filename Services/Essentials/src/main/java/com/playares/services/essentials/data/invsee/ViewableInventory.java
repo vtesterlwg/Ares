@@ -2,7 +2,7 @@ package com.playares.services.essentials.data.invsee;
 
 import com.google.common.collect.Lists;
 import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.item.ItemBuilder;
 import com.playares.commons.bukkit.menu.ClickableItem;
 import com.playares.commons.bukkit.menu.Menu;
@@ -29,7 +29,7 @@ public final class ViewableInventory extends Menu implements Listener {
     @Getter
     public BukkitTask updateTask;
 
-    public ViewableInventory(AresPlugin plugin, Player viewer, Player viewed) {
+    public ViewableInventory(RiotPlugin plugin, Player viewer, Player viewed) {
         super(plugin, viewer, viewed.getName(), 6);
         this.viewed = viewed;
     }

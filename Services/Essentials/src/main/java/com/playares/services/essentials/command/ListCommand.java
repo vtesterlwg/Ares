@@ -6,9 +6,9 @@ import co.aikar.commands.annotation.Description;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.services.ranks.RankService;
-import com.playares.services.ranks.data.AresRank;
+import com.playares.services.ranks.data.RiotRank;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,9 +20,9 @@ import java.util.Map;
 
 public final class ListCommand extends BaseCommand {
     @Getter
-    public final AresPlugin plugin;
+    public final RiotPlugin plugin;
 
-    public ListCommand(AresPlugin plugin) {
+    public ListCommand(RiotPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -43,10 +43,10 @@ public final class ListCommand extends BaseCommand {
             return;
         }
 
-        final List<AresRank> ranks = rankService.getSortedRanks();
+        final List<RiotRank> ranks = rankService.getSortedRanks();
         final List<String> rankNames = Lists.newArrayList();
         final List<String> response = Lists.newArrayList();
-        final Map<AresRank, List<String>> players = Maps.newHashMap();
+        final Map<RiotRank, List<String>> players = Maps.newHashMap();
 
         ranks.forEach(rank -> {
             rankNames.add(rank.getDisplayName());
@@ -54,7 +54,7 @@ public final class ListCommand extends BaseCommand {
         });
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            final AresRank rank = rankService.getHighestRank(player);
+            final RiotRank rank = rankService.getHighestRank(player);
 
             if (!players.containsKey(rank)) {
                 continue;
@@ -63,7 +63,7 @@ public final class ListCommand extends BaseCommand {
             players.get(rank).add(player.getName());
         }
 
-        for (AresRank rank : ranks) {
+        for (RiotRank rank : ranks) {
             final List<String> names = players.get(rank);
             response.add(Joiner.on(ChatColor.RESET + ", ").join(names));
         }

@@ -1,8 +1,8 @@
 package com.playares.services.proxyessentials;
 
 import co.aikar.commands.BungeeCommandManager;
-import com.playares.commons.bungee.AresProxy;
-import com.playares.commons.bungee.service.AresService;
+import com.playares.commons.bungee.RiotProxy;
+import com.playares.commons.bungee.service.RiotService;
 import com.playares.services.proxyessentials.chat.StaffChatHandler;
 import com.playares.services.proxyessentials.chat.StaffChatManager;
 import com.playares.services.proxyessentials.command.HelpopCommand;
@@ -20,9 +20,9 @@ import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
-public final class ProxyEssentialsService implements AresService, Listener {
+public final class ProxyEssentialsService implements RiotService, Listener {
     @Getter
-    public final AresProxy proxy;
+    public final RiotProxy proxy;
 
     @Getter
     protected ReportManager reportManager;
@@ -42,7 +42,7 @@ public final class ProxyEssentialsService implements AresService, Listener {
     @Getter
     protected StaffChatHandler staffChatHandler;
 
-    public ProxyEssentialsService(AresProxy proxy) {
+    public ProxyEssentialsService(RiotProxy proxy) {
         this.proxy = proxy;
     }
 

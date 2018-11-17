@@ -6,11 +6,11 @@ import com.playares.commons.base.connect.mongodb.MongoDB;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
-public final class AresProfileDAO {
+public final class RiotProfileDAO {
     private static final String DB_NAME = "ares";
     private static final String DB_COLL = "profiles";
 
-    public static void insertProfile(MongoDB database, AresProfile profile) {
+    public static void insertProfile(MongoDB database, RiotProfile profile) {
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
         final Document existing;
 
@@ -28,7 +28,7 @@ public final class AresProfileDAO {
         collection.insertOne(profile.toDocument());
     }
 
-    public static void deleteProfile(MongoDB database, AresProfile profile) {
+    public static void deleteProfile(MongoDB database, RiotProfile profile) {
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
         final Document existing;
 
@@ -45,7 +45,7 @@ public final class AresProfileDAO {
         collection.deleteOne(existing);
     }
 
-    public static AresProfile getProfile(MongoDB database, Bson filter) {
+    public static RiotProfile getProfile(MongoDB database, Bson filter) {
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
         final Document existing;
 
@@ -59,6 +59,6 @@ public final class AresProfileDAO {
             return null;
         }
 
-        return new AresProfile().fromDocument(existing);
+        return new RiotProfile().fromDocument(existing);
     }
 }

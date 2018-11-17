@@ -1,10 +1,10 @@
 package com.playares.commons.bukkit.service;
 
 import co.aikar.commands.BaseCommand;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import org.bukkit.event.Listener;
 
-public interface AresService {
+public interface RiotService {
     /**
      * Start the service
      */
@@ -23,7 +23,7 @@ public interface AresService {
     /**
      * @return Returns the owner of this service
      */
-    AresPlugin getOwner();
+    RiotPlugin getOwner();
 
     /**
      * Registers a listener under the owner of this service

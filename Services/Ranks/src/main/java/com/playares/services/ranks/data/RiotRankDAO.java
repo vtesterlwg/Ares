@@ -9,11 +9,11 @@ import org.bson.Document;
 
 import java.util.List;
 
-public final class AresRankDAO {
+public final class RiotRankDAO {
     private static final String DB_NAME = "ares";
     private static final String DB_COLL = "ranks";
 
-    public static void insertRank(MongoDB database, AresRank rank) {
+    public static void insertRank(MongoDB database, RiotRank rank) {
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
         final Document existing;
 
@@ -31,7 +31,7 @@ public final class AresRankDAO {
         collection.insertOne(rank.toDocument());
     }
 
-    public static void deleteRank(MongoDB database, AresRank rank) {
+    public static void deleteRank(MongoDB database, RiotRank rank) {
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
         final Document existing;
 
@@ -48,8 +48,8 @@ public final class AresRankDAO {
         collection.deleteOne(existing);
     }
 
-    public static List<AresRank> getRanks(MongoDB database) {
-        final List<AresRank> result = Lists.newArrayList();
+    public static List<RiotRank> getRanks(MongoDB database) {
+        final List<RiotRank> result = Lists.newArrayList();
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
         final MongoCursor<Document> cursor;
 
@@ -60,7 +60,7 @@ public final class AresRankDAO {
         cursor = collection.find().iterator();
 
         while (cursor.hasNext()) {
-            result.add(new AresRank().fromDocument(cursor.next()));
+            result.add(new RiotRank().fromDocument(cursor.next()));
         }
 
         return result;

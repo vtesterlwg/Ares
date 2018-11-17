@@ -1,13 +1,13 @@
 package com.playares.services.customitems;
 
 import com.google.common.collect.Maps;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.item.custom.CustomBlock;
 import com.playares.commons.bukkit.item.custom.CustomItem;
 import com.playares.commons.bukkit.item.custom.event.CustomBlockPlaceEvent;
 import com.playares.commons.bukkit.item.custom.event.CustomItemInteractEvent;
 import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.service.AresService;
+import com.playares.commons.bukkit.service.RiotService;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.commons.bukkit.util.Scheduler;
 import lombok.Getter;
@@ -30,14 +30,14 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Map;
 import java.util.Optional;
 
-public final class CustomItemService implements AresService, Listener {
+public final class CustomItemService implements RiotService, Listener {
     @Getter
-    public final AresPlugin owner;
+    public final RiotPlugin owner;
 
     @Getter
     public final Map<Class<? extends CustomItem>, CustomItem> registry;
 
-    public CustomItemService(AresPlugin owner) {
+    public CustomItemService(RiotPlugin owner) {
         this.owner = owner;
         this.registry = Maps.newConcurrentMap();
     }

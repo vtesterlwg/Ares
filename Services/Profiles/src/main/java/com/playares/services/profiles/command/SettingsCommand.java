@@ -5,7 +5,7 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
 import com.playares.commons.bukkit.menu.Menu;
 import com.playares.services.profiles.ProfileService;
-import com.playares.services.profiles.data.AresProfile;
+import com.playares.services.profiles.data.RiotProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -20,7 +20,7 @@ public final class SettingsCommand extends BaseCommand {
     @Description("Access your Global Settings")
     public void onCommand(Player player) {
         final Menu menu = profileService.getMenuHandler().createSettingsMenu(player);
-        final AresProfile profile = profileService.getProfile(player.getUniqueId());
+        final RiotProfile profile = profileService.getProfile(player.getUniqueId());
 
         if (profile == null) {
             player.sendMessage(ChatColor.RED + "Could not find your Ares Profile");

@@ -2,7 +2,7 @@ package com.playares.commons.bukkit.menu;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ import java.util.Set;
 
 public class Menu implements Listener {
     @Nonnull @Getter
-    public AresPlugin plugin;
+    public RiotPlugin plugin;
 
     @Nonnull @Getter
     public final Player player;
@@ -31,7 +31,7 @@ public class Menu implements Listener {
     @Nonnull @Getter
     public final Set<ClickableItem> items;
 
-    public Menu(@Nonnull AresPlugin plugin, @Nonnull Player player, @Nonnull String title, int rows) {
+    public Menu(@Nonnull RiotPlugin plugin, @Nonnull Player player, @Nonnull String title, int rows) {
         Preconditions.checkArgument((rows > 0 && rows < 7), "Rows must be 1-7");
         this.plugin = plugin;
         this.player = player;

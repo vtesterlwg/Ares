@@ -6,7 +6,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.google.common.collect.Maps;
 import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.service.AresService;
+import com.playares.commons.bukkit.service.RiotService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,9 +17,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 
-public abstract class AresPlugin extends JavaPlugin {
+public abstract class RiotPlugin extends JavaPlugin {
     @Getter
-    public Map<Class<? extends AresService>, AresService> services;
+    public Map<Class<? extends RiotService>, RiotService> services;
 
     @Getter
     public MongoDB mongo;
@@ -34,13 +34,13 @@ public abstract class AresPlugin extends JavaPlugin {
      * Registers a new Ares Service
      * @param service Ares Service
      */
-    public void registerService(AresService service) {
+    public void registerService(RiotService service) {
         if (services == null) {
             services = Maps.newHashMap();
         }
 
         services.put(service.getClass(), service);
-        Logger.print("Registered new Ares Service: " + service.getName());
+        Logger.print("Registered new Riot Service: " + service.getName());
     }
 
     /**
@@ -113,7 +113,7 @@ public abstract class AresPlugin extends JavaPlugin {
      * @param clazz Class Type
      * @return Ares Service
      */
-    public AresService getService(Class<? extends AresService> clazz) {
+    public RiotService getService(Class<? extends RiotService> clazz) {
         if (!services.containsKey(clazz)) {
             return null;
         }

@@ -1,12 +1,12 @@
 package com.playares.commons.bukkit.util;
 
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public final class Entities {
-    public static void addMeta(AresPlugin plugin, Entity entity, String key, String value) {
+    public static void addMeta(RiotPlugin plugin, Entity entity, String key, String value) {
         entity.setMetadata(key, new FixedMetadataValue(plugin, value));
     }
 

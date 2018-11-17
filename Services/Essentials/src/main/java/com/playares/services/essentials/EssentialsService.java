@@ -2,8 +2,8 @@ package com.playares.services.essentials;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.playares.commons.bukkit.AresPlugin;
-import com.playares.commons.bukkit.service.AresService;
+import com.playares.commons.bukkit.RiotPlugin;
+import com.playares.commons.bukkit.service.RiotService;
 import com.playares.services.essentials.command.*;
 import com.playares.services.essentials.data.kit.Kit;
 import com.playares.services.essentials.data.kit.KitHandler;
@@ -21,9 +21,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 
-public final class EssentialsService implements AresService {
+public final class EssentialsService implements RiotService {
     @Getter
-    public final AresPlugin owner;
+    public final RiotPlugin owner;
 
     @Getter
     protected KitManager kitManager;
@@ -46,7 +46,7 @@ public final class EssentialsService implements AresService {
     @Getter
     protected FileConfiguration essentialsConfig;
 
-    public EssentialsService(AresPlugin owner) {
+    public EssentialsService(RiotPlugin owner) {
         this.owner = owner;
     }
 

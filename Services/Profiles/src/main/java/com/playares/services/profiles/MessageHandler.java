@@ -3,7 +3,7 @@ package com.playares.services.profiles;
 import com.google.common.collect.Maps;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.logger.Logger;
-import com.playares.services.profiles.data.AresProfile;
+import com.playares.services.profiles.data.RiotProfile;
 import com.playares.services.ranks.RankService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -62,8 +62,8 @@ public final class MessageHandler implements Listener {
             return;
         }
 
-        final AresProfile senderProfile = profileService.getProfile(sender.getUniqueId());
-        final AresProfile receiverProfile = profileService.getProfile(receiverName);
+        final RiotProfile senderProfile = profileService.getProfile(sender.getUniqueId());
+        final RiotProfile receiverProfile = profileService.getProfile(receiverName);
 
         if (senderProfile.getSettings().isHidingPrivateMessages()) {
             promise.failure("You have private messages disabled. You can turn them back on in your Global Settings.");

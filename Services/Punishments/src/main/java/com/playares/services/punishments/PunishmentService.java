@@ -1,9 +1,9 @@
 package com.playares.services.punishments;
 
 import com.playares.commons.base.util.IPS;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.event.ProcessedChatEvent;
-import com.playares.commons.bukkit.service.AresService;
+import com.playares.commons.bukkit.service.RiotService;
 import com.playares.services.punishments.command.*;
 import com.playares.services.punishments.data.Punishment;
 import com.playares.services.punishments.data.PunishmentType;
@@ -17,9 +17,9 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import java.util.List;
 import java.util.UUID;
 
-public final class PunishmentService implements AresService, Listener {
+public final class PunishmentService implements RiotService, Listener {
     @Getter
-    public final AresPlugin owner;
+    public final RiotPlugin owner;
 
     @Getter
     protected final PunishmentHandler punishmentHandler;
@@ -27,7 +27,7 @@ public final class PunishmentService implements AresService, Listener {
     @Getter
     protected final PunishmentManager punishmentManager;
 
-    public PunishmentService(AresPlugin owner) {
+    public PunishmentService(RiotPlugin owner) {
         this.owner = owner;
         this.punishmentHandler = new PunishmentHandler(this);
         this.punishmentManager = new PunishmentManager(this);

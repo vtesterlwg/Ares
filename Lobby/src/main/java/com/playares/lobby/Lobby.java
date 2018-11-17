@@ -2,10 +2,10 @@ package com.playares.lobby;
 
 import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import org.bukkit.event.Listener;
 
-public final class Lobby extends AresPlugin implements Listener {
+public final class Lobby extends RiotPlugin implements Listener {
     @Override
     public void onEnable() {
         final PaperCommandManager commandManager = new PaperCommandManager(this);

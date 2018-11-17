@@ -17,7 +17,7 @@ import com.playares.factions.factions.ServerFaction;
 import com.playares.factions.timers.FactionTimer;
 import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
 import com.playares.services.profiles.ProfileService;
-import com.playares.services.profiles.data.AresProfile;
+import com.playares.services.profiles.data.RiotProfile;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -299,7 +299,7 @@ public final class FactionDisplayHandler {
                 final List<String> usernames = Lists.newArrayList();
 
                 for (PlayerFaction.FactionProfile member : pf.getMembersByRank(rank)) {
-                    final AresProfile profile = profileService.getProfileBlocking(member.getUniqueId());
+                    final RiotProfile profile = profileService.getProfileBlocking(member.getUniqueId());
 
                     if (profile != null) {
                         usernames.add(profile.getUsername());

@@ -5,16 +5,16 @@ import com.google.common.collect.Sets;
 import com.mongodb.client.model.Filters;
 import com.playares.commons.base.promise.Promise;
 import com.playares.commons.base.util.IPS;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.event.ProcessedChatEvent;
 import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.service.AresService;
+import com.playares.commons.bukkit.service.RiotService;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.services.profiles.command.IgnoreCommand;
 import com.playares.services.profiles.command.MessageCommand;
 import com.playares.services.profiles.command.SettingsCommand;
-import com.playares.services.profiles.data.AresProfile;
-import com.playares.services.profiles.data.AresProfileDAO;
+import com.playares.services.profiles.data.RiotProfile;
+import com.playares.services.profiles.data.RiotProfileDAO;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -28,12 +28,12 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public final class ProfileService implements AresService, Listener {
+public final class ProfileService implements RiotService, Listener {
     @Getter
-    public AresPlugin owner;
+    public RiotPlugin owner;
 
     @Getter
-    public Set<AresProfile> profiles;
+    public Set<RiotProfile> profiles;
 
     @Getter
     public final MenuHandler menuHandler;
@@ -44,7 +44,7 @@ public final class ProfileService implements AresService, Listener {
     @Getter
     public final MessageHandler messageHandler;
 
-    public ProfileService(AresPlugin owner) {
+    public ProfileService(RiotPlugin owner) {
         this.owner = owner;
         this.profiles = Sets.newConcurrentHashSet();
         this.menuHandler = new MenuHandler(owner);
@@ -66,57 +66,57 @@ public final class ProfileService implements AresService, Listener {
     public void stop() {
         PlayerQuitEvent.getHandlerList().unregister(messageHandler);
 
-        profiles.forEach(profile -> AresProfileDAO.insertProfile(getOwner().getMongo(), profile));
+        profiles.forEach(profile -> RiotProfileDAO.insertProfile(getOwner().getMongo(), profile));
     }
 
-    public AresProfile getProfile(UUID uniqueId) {
+    public RiotProfile getProfile(UUID uniqueId) {
         return profiles.stream().filter(profile -> profile.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
-    public AresProfile getProfile(String username) {
+    public RiotProfile getProfile(String username) {
         return profiles.stream().filter(profile -> profile.getUsername().equalsIgnoreCase(username)).findFirst().orElse(null);
     }
 
-    public void getProfile(UUID uniqueId, Promise<AresProfile> promise) {
+    public void getProfile(UUID uniqueId, Promise<RiotProfile> promise) {
         if (getProfile(uniqueId) != null) {
             promise.ready(getProfile(uniqueId));
             return;
         }
 
         new Scheduler(getOwner()).async(() -> {
-            final AresProfile profile = AresProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("id", uniqueId));
+            final RiotProfile profile = RiotProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("id", uniqueId));
 
             new Scheduler(getOwner()).sync(() -> promise.ready(profile)).run();
         }).run();
     }
 
-    public void getProfile(String username, Promise<AresProfile> promise) {
+    public void getProfile(String username, Promise<RiotProfile> promise) {
         if (getProfile(username) != null) {
             promise.ready(getProfile(username));
             return;
         }
 
         new Scheduler(getOwner()).async(() -> {
-            final AresProfile profile = AresProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("username", username));
+            final RiotProfile profile = RiotProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("username", username));
 
             new Scheduler(getOwner()).sync(() -> promise.ready(profile)).run();
         }).run();
     }
 
-    public AresProfile getProfileBlocking(UUID uniqueId) {
+    public RiotProfile getProfileBlocking(UUID uniqueId) {
         if (getProfile(uniqueId) != null) {
             return getProfile(uniqueId);
         }
 
-        return AresProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("id", uniqueId));
+        return RiotProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("id", uniqueId));
     }
 
-    public AresProfile getProfileBlocking(String username) {
+    public RiotProfile getProfileBlocking(String username) {
         if (getProfile(username) != null) {
             return getProfile(username);
         }
 
-        return AresProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("username", username));
+        return RiotProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("username", username));
     }
 
     @EventHandler (priority = EventPriority.HIGHEST)
@@ -125,10 +125,10 @@ public final class ProfileService implements AresService, Listener {
         final String username = event.getName();
         final String address = event.getAddress().getHostAddress();
         boolean update = false;
-        AresProfile profile = AresProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("id", uniqueId));
+        RiotProfile profile = RiotProfileDAO.getProfile(getOwner().getMongo(), Filters.eq("id", uniqueId));
 
         if (profile == null) {
-            profile = new AresProfile(uniqueId, username);
+            profile = new RiotProfile(uniqueId, username);
         }
 
         if (!profile.getUsername().equals(username)) {
@@ -144,7 +144,7 @@ public final class ProfileService implements AresService, Listener {
         }
 
         if (update) {
-            AresProfileDAO.insertProfile(getOwner().getMongo(), profile);
+            RiotProfileDAO.insertProfile(getOwner().getMongo(), profile);
         }
 
         profiles.add(profile);
@@ -153,7 +153,7 @@ public final class ProfileService implements AresService, Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
-        final AresProfile profile = getProfile(player.getUniqueId());
+        final RiotProfile profile = getProfile(player.getUniqueId());
 
         if (profile == null) {
             return;
@@ -161,13 +161,13 @@ public final class ProfileService implements AresService, Listener {
 
         profiles.remove(profile);
 
-        new Scheduler(getOwner()).async(() -> AresProfileDAO.insertProfile(getOwner().getMongo(), profile)).run();
+        new Scheduler(getOwner()).async(() -> RiotProfileDAO.insertProfile(getOwner().getMongo(), profile)).run();
     }
 
     @EventHandler (priority = EventPriority.LOW)
     public void onProcessedChat(ProcessedChatEvent event) {
         final Player player = event.getPlayer();
-        final AresProfile profile = getProfile(player.getUniqueId());
+        final RiotProfile profile = getProfile(player.getUniqueId());
         final List<Player> toRemove = Lists.newArrayList();
 
         if (profile == null) {
@@ -185,7 +185,7 @@ public final class ProfileService implements AresService, Listener {
         }
 
         for (Player recipient : event.getRecipients()) {
-            final AresProfile viewerProfile = getProfile(recipient.getUniqueId());
+            final RiotProfile viewerProfile = getProfile(recipient.getUniqueId());
 
             if (viewerProfile.getSettings().isHidingGlobalChat()) {
                 toRemove.add(recipient);

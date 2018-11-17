@@ -1,6 +1,6 @@
 package com.playares.commons.bukkit.util;
 
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitTask;
@@ -9,14 +9,14 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class Scheduler {
-    @Nonnull @Getter public AresPlugin owner;
+    @Nonnull @Getter public RiotPlugin owner;
     private boolean async;
     @Nullable private Runnable task;
     @Nonnull private RunCycle cycle;
     private long delay;
     private long interval;
 
-    public Scheduler(@Nonnull AresPlugin owner) {
+    public Scheduler(@Nonnull RiotPlugin owner) {
         this.owner = owner;
         this.cycle = RunCycle.ONCE;
     }
@@ -62,9 +62,7 @@ public final class Scheduler {
 
     public enum RunCycle {
         ONCE,
-
         DELAYED,
-
         REPEATING
     }
 }

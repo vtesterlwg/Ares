@@ -32,11 +32,11 @@ public final class PunishmentManager {
         final List<String> response = Lists.newArrayList();
 
         if (punishment.getType().equals(PunishmentType.BLACKLIST)) {
-            response.add(ChatColor.RED + "Your account has been blacklisted from the Ares Network");
+            response.add(ChatColor.RED + "Your account has been blacklisted from RiotMC");
         }
 
         if (punishment.getType().equals(PunishmentType.BAN)) {
-            response.add(ChatColor.RED + "Your account has been banned from the Ares Network");
+            response.add(ChatColor.RED + "Your account has been banned from RiotMC");
 
             if (punishment.isForever()) {
                 response.add(ChatColor.RED + "This punishment will " + ChatColor.RED + "" + ChatColor.UNDERLINE + "never" + ChatColor.RED + " expire");
@@ -45,7 +45,7 @@ public final class PunishmentManager {
             }
         }
 
-        response.add(ChatColor.RED + "Appeal at https://www.playares.com/appeal");
+        response.add(ChatColor.RED + "Appeal at https://www.riotmc.com/appeal");
         return Joiner.on(ChatColor.RESET + "\n").join(response);
     }
 
@@ -62,7 +62,7 @@ public final class PunishmentManager {
             response.add(ChatColor.RED + "This punishment will expire in " + Time.convertToRemaining(punishment.getExpireDate() - Time.now()));
         }
 
-        response.add(ChatColor.RED + "Appeal at https://www.playares.com/appeal");
+        response.add(ChatColor.RED + "Appeal at https://www.riotmc.com/appeal");
         return Joiner.on(ChatColor.RESET + "\n").join(response);
     }
 

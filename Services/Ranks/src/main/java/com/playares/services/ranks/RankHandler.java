@@ -2,8 +2,8 @@ package com.playares.services.ranks;
 
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.util.Scheduler;
-import com.playares.services.ranks.data.AresRank;
-import com.playares.services.ranks.data.AresRankDAO;
+import com.playares.services.ranks.data.RiotRank;
+import com.playares.services.ranks.data.RiotRankDAO;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 
@@ -16,28 +16,28 @@ public final class RankHandler {
     }
 
     public void createRank(String name, SimplePromise promise) {
-        final AresRank existing = rankService.getRank(name);
+        final RiotRank existing = rankService.getRank(name);
 
         if (existing != null) {
             promise.failure("Rank name is already in use");
             return;
         }
 
-        final AresRank rank = new AresRank(name);
+        final RiotRank rank = new RiotRank(name);
         rankService.getRanks().add(rank);
         promise.success();
     }
 
-    public void deleteRank(AresRank rank, SimplePromise promise) {
+    public void deleteRank(RiotRank rank, SimplePromise promise) {
         new Scheduler(rankService.getOwner()).async(() -> {
             rankService.getRanks().remove(rank);
-            AresRankDAO.deleteRank(rankService.getOwner().getMongo(), rank);
+            RiotRankDAO.deleteRank(rankService.getOwner().getMongo(), rank);
             new Scheduler(rankService.getOwner()).sync(promise::success).run();
         }).run();
     }
 
     public void setDisplay(String rankName, String displayName, SimplePromise promise) {
-        final AresRank rank = rankService.getRank(rankName);
+        final RiotRank rank = rankService.getRank(rankName);
         final String converted = ChatColor.translateAlternateColorCodes('&', displayName);
 
         if (rank == null) {
@@ -49,7 +49,7 @@ public final class RankHandler {
 
         if (rank.isSetup()) {
             new Scheduler(rankService.getOwner()).async(() -> {
-                AresRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
+                RiotRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
                 new Scheduler(rankService.getOwner()).sync(promise::success).run();
             }).run();
 
@@ -60,7 +60,7 @@ public final class RankHandler {
     }
 
     public void setPrefix(String rankName, String prefix, SimplePromise promise) {
-        final AresRank rank = rankService.getRank(rankName);
+        final RiotRank rank = rankService.getRank(rankName);
         final String converted = ChatColor.translateAlternateColorCodes('&', prefix);
 
         if (rank == null) {
@@ -72,7 +72,7 @@ public final class RankHandler {
 
         if (rank.isSetup()) {
             new Scheduler(rankService.getOwner()).async(() -> {
-                AresRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
+                RiotRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
                 new Scheduler(rankService.getOwner()).sync(promise::success).run();
             }).run();
 
@@ -83,7 +83,7 @@ public final class RankHandler {
     }
 
     public void setPermission(String rankName, String permission, SimplePromise promise) {
-        final AresRank rank = rankService.getRank(rankName);
+        final RiotRank rank = rankService.getRank(rankName);
 
         if (rank == null) {
             promise.failure("Rank not found");
@@ -94,7 +94,7 @@ public final class RankHandler {
 
         if (rank.isSetup()) {
             new Scheduler(rankService.getOwner()).async(() -> {
-                AresRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
+                RiotRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
                 new Scheduler(rankService.getOwner()).sync(promise::success).run();
             }).run();
 
@@ -105,7 +105,7 @@ public final class RankHandler {
     }
 
     public void setWeight(String rankName, int weight, SimplePromise promise) {
-        final AresRank rank = rankService.getRank(rankName);
+        final RiotRank rank = rankService.getRank(rankName);
 
         if (rank == null) {
             promise.failure("Rank not found");
@@ -116,7 +116,7 @@ public final class RankHandler {
 
         if (rank.isSetup()) {
             new Scheduler(rankService.getOwner()).async(() -> {
-                AresRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
+                RiotRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
                 new Scheduler(rankService.getOwner()).sync(promise::success).run();
             }).run();
 
@@ -127,7 +127,7 @@ public final class RankHandler {
     }
 
     public void setStaff(String rankName, boolean staff, SimplePromise promise) {
-        final AresRank rank = rankService.getRank(rankName);
+        final RiotRank rank = rankService.getRank(rankName);
 
         if (rank == null) {
             promise.failure("Rank not found");
@@ -138,7 +138,7 @@ public final class RankHandler {
 
         if (rank.isSetup()) {
             new Scheduler(rankService.getOwner()).async(() -> {
-                AresRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
+                RiotRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
                 new Scheduler(rankService.getOwner()).sync(promise::success).run();
             }).run();
 
@@ -149,7 +149,7 @@ public final class RankHandler {
     }
 
     public void setEveryone(String rankName, boolean everyone, SimplePromise promise) {
-        final AresRank rank = rankService.getRank(rankName);
+        final RiotRank rank = rankService.getRank(rankName);
 
         if (rank == null) {
             promise.failure("Rank not found");
@@ -160,7 +160,7 @@ public final class RankHandler {
 
         if (rank.isSetup()) {
             new Scheduler(rankService.getOwner()).async(() -> {
-                AresRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
+                RiotRankDAO.insertRank(rankService.getOwner().getMongo(), rank);
                 new Scheduler(rankService.getOwner()).sync(promise::success).run();
             }).run();
 

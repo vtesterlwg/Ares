@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.ChatColor;
 
-public final class AresRank implements MongoDocument<AresRank> {
+public final class RiotRank implements MongoDocument<RiotRank> {
     @Getter @Setter
     public String name;
 
@@ -28,7 +28,7 @@ public final class AresRank implements MongoDocument<AresRank> {
     @Getter @Setter
     public boolean everyone;
 
-    public AresRank() {
+    public RiotRank() {
         this.name = null;
         this.displayName = null;
         this.prefix = null;
@@ -38,7 +38,7 @@ public final class AresRank implements MongoDocument<AresRank> {
         this.everyone = false;
     }
 
-    public AresRank(String name) {
+    public RiotRank(String name) {
         this.name = name;
         this.displayName = null;
         this.prefix = null;
@@ -57,7 +57,7 @@ public final class AresRank implements MongoDocument<AresRank> {
         return displayName;
     }
 
-    public AresRank fromDocument(Document document) {
+    public RiotRank fromDocument(Document document) {
         this.name = document.getString("name");
         this.displayName = ChatColor.translateAlternateColorCodes('&', document.getString("display_name"));
         this.prefix = ChatColor.translateAlternateColorCodes('&', document.getString("prefix"));

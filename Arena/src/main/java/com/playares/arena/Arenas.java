@@ -25,7 +25,7 @@ import com.playares.arena.spectator.SpectatorHandler;
 import com.playares.arena.team.TeamHandler;
 import com.playares.arena.team.TeamManager;
 import com.playares.commons.base.connect.mongodb.MongoDB;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.services.classes.ClassService;
 import com.playares.services.customevents.CustomEventService;
@@ -38,7 +38,7 @@ import com.playares.services.ranks.RankService;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public final class Arenas extends AresPlugin {
+public final class Arenas extends RiotPlugin {
     @Getter protected MatchManager matchManager;
     @Getter protected MatchHandler matchHandler;
     @Getter protected PlayerManager playerManager;

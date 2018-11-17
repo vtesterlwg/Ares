@@ -1,20 +1,20 @@
 package com.playares.services.customentity;
 
 import com.mojang.datafixers.types.Type;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.service.AresService;
+import com.playares.commons.bukkit.service.RiotService;
 import lombok.Getter;
 import net.minecraft.server.v1_13_R2.*;
 
 import java.util.Map;
 import java.util.function.Function;
 
-public final class CustomEntityService implements AresService {
+public final class CustomEntityService implements RiotService {
     @Getter
-    public AresPlugin owner;
+    public RiotPlugin owner;
 
-    public CustomEntityService(AresPlugin owner) {
+    public CustomEntityService(RiotPlugin owner) {
         this.owner = owner;
     }
 

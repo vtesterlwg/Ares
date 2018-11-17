@@ -3,13 +3,13 @@ package com.playares.services.ranks;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.event.ProcessedChatEvent;
 import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.service.AresService;
+import com.playares.commons.bukkit.service.RiotService;
 import com.playares.services.ranks.command.RankCommand;
-import com.playares.services.ranks.data.AresRank;
-import com.playares.services.ranks.data.AresRankDAO;
+import com.playares.services.ranks.data.RiotRank;
+import com.playares.services.ranks.data.RiotRankDAO;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -23,17 +23,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public final class RankService implements AresService, Listener {
+public final class RankService implements RiotService, Listener {
     @Getter
-    public final AresPlugin owner;
+    public final RiotPlugin owner;
 
     @Getter
-    public final Set<AresRank> ranks;
+    public final Set<RiotRank> ranks;
 
     @Getter
     public final RankHandler rankHandler;
 
-    public RankService(AresPlugin owner) {
+    public RankService(RiotPlugin owner) {
         this.owner = owner;
         this.ranks = Sets.newConcurrentHashSet();
         this.rankHandler = new RankHandler(this);
@@ -43,7 +43,7 @@ public final class RankService implements AresService, Listener {
         getOwner().getCommandManager().getCommandCompletions().registerAsyncCompletion("ranks", c -> {
             final List<String> rankNames = Lists.newArrayList();
 
-            for (AresRank rank : ranks) {
+            for (RiotRank rank : ranks) {
                 if (rank.getName() == null) {
                     continue;
                 }
@@ -57,7 +57,7 @@ public final class RankService implements AresService, Listener {
         registerCommand(new RankCommand(this));
         registerListener(this);
 
-        this.ranks.addAll(AresRankDAO.getRanks(getOwner().getMongo()));
+        this.ranks.addAll(RiotRankDAO.getRanks(getOwner().getMongo()));
         Logger.print("Loaded " + this.ranks.size() + " Ranks");
     }
 
@@ -69,49 +69,49 @@ public final class RankService implements AresService, Listener {
         return "Ranks";
     }
 
-    public AresRank getRank(String name) {
+    public RiotRank getRank(String name) {
         return ranks.stream().filter(rank -> rank.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
-    public List<AresRank> getSortedRanks() {
-        final List<AresRank> result = Lists.newArrayList(ranks.stream().filter(AresRank::isSetup).collect(Collectors.toList()));
+    public List<RiotRank> getSortedRanks() {
+        final List<RiotRank> result = Lists.newArrayList(ranks.stream().filter(RiotRank::isSetup).collect(Collectors.toList()));
 
-        result.sort(Comparator.comparingInt(AresRank::getWeight));
+        result.sort(Comparator.comparingInt(RiotRank::getWeight));
         Collections.reverse(result);
 
         return result;
     }
 
-    public List<AresRank> getDefaultRanks() {
+    public List<RiotRank> getDefaultRanks() {
         return ranks.stream().filter(rank -> rank.isEveryone() && rank.isSetup()).collect(Collectors.toList());
     }
 
-    public List<AresRank> getStaffRanks() {
+    public List<RiotRank> getStaffRanks() {
         return ranks.stream().filter(rank -> rank.isStaff() && rank.isSetup()).collect(Collectors.toList());
     }
 
-    public List<AresRank> getRanks(Player player) {
+    public List<RiotRank> getRanks(Player player) {
         return ranks.stream()
-                .filter(AresRank::isSetup)
+                .filter(RiotRank::isSetup)
                 .filter(rank -> rank.isEveryone() ||
                 (rank.getPermission() != null && player.hasPermission(rank.getPermission()))).collect(Collectors.toList());
     }
 
-    public AresRank getHighestRank(Player player) {
-        final List<AresRank> result = getRanks(player);
+    public RiotRank getHighestRank(Player player) {
+        final List<RiotRank> result = getRanks(player);
 
         if (result.isEmpty()) {
             return null;
         }
 
-        result.sort(Comparator.comparingInt(AresRank::getWeight));
+        result.sort(Comparator.comparingInt(RiotRank::getWeight));
         Collections.reverse(result);
 
         return result.get(0);
     }
 
     public String getDisplayName(Player player) {
-        final AresRank rank = getHighestRank(player);
+        final RiotRank rank = getHighestRank(player);
 
         if (rank == null || rank.getPrefix() == null) {
             return player.getName();
@@ -121,7 +121,7 @@ public final class RankService implements AresService, Listener {
     }
 
     public boolean isStaff(Player player) {
-        for (AresRank rank : getRanks(player)) {
+        for (RiotRank rank : getRanks(player)) {
             if (rank.isStaff()) {
                 return true;
             }

@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-public final class AresProfile implements MongoDocument<AresProfile> {
+public final class RiotProfile implements MongoDocument<RiotProfile> {
     @Getter
     public UUID uniqueId;
 
@@ -27,7 +27,7 @@ public final class AresProfile implements MongoDocument<AresProfile> {
     @Getter
     public AresProfileSettings settings;
 
-    public AresProfile() {
+    public RiotProfile() {
         this.uniqueId = null;
         this.username = null;
         this.address = 0;
@@ -35,7 +35,7 @@ public final class AresProfile implements MongoDocument<AresProfile> {
         this.settings = new AresProfileSettings();
     }
 
-    public AresProfile(UUID uniqueId, String username) {
+    public RiotProfile(UUID uniqueId, String username) {
         this.uniqueId = uniqueId;
         this.username = username;
         this.address = 0;
@@ -43,7 +43,7 @@ public final class AresProfile implements MongoDocument<AresProfile> {
         this.settings = new AresProfileSettings();
     }
 
-    public AresProfile(UUID uniqueId, String username, int address, long createTimestamp, AresProfileSettings settings) {
+    public RiotProfile(UUID uniqueId, String username, int address, long createTimestamp, AresProfileSettings settings) {
         this.uniqueId = uniqueId;
         this.username = username;
         this.address = address;
@@ -51,7 +51,7 @@ public final class AresProfile implements MongoDocument<AresProfile> {
         this.settings = settings;
     }
 
-    public AresProfile fromDocument(Document document) {
+    public RiotProfile fromDocument(Document document) {
         this.uniqueId = (UUID)document.get("id");
         this.username = document.getString("username");
         this.address = document.getInteger("address");

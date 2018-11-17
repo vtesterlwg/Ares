@@ -6,7 +6,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.services.ranks.RankService;
-import com.playares.services.ranks.data.AresRank;
+import com.playares.services.ranks.data.RiotRank;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -168,7 +168,7 @@ public final class RankCommand extends BaseCommand {
     @CommandCompletion("@ranks")
     @Description("Delete a rank")
     public void onDeleteRank(Player player, String name) {
-        final AresRank rank = rankService.getRank(name);
+        final RiotRank rank = rankService.getRank(name);
 
         if (rank == null) {
             player.sendMessage(ChatColor.RED + "Rank not found");

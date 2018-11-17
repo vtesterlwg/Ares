@@ -1,10 +1,10 @@
 package com.playares.services.profiles;
 
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.item.ItemBuilder;
 import com.playares.commons.bukkit.menu.ClickableItem;
 import com.playares.commons.bukkit.menu.Menu;
-import com.playares.services.profiles.data.AresProfile;
+import com.playares.services.profiles.data.RiotProfile;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -14,9 +14,9 @@ import java.util.Arrays;
 
 public final class MenuHandler {
     @Getter
-    public final AresPlugin plugin;
+    public final RiotPlugin plugin;
 
-    public MenuHandler(AresPlugin plugin) {
+    public MenuHandler(RiotPlugin plugin) {
         this.plugin = plugin;
     }
 
@@ -24,7 +24,7 @@ public final class MenuHandler {
         return new Menu(plugin, viewer, "Global Settings", 1);
     }
 
-    public void showSettingsMenu(AresProfile.AresProfileSettings settings, Menu menu) {
+    public void showSettingsMenu(RiotProfile.AresProfileSettings settings, Menu menu) {
         if (menu.isOpen()) {
             menu.clearInventory();
         }

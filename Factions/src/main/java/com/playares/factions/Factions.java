@@ -3,7 +3,7 @@ package com.playares.factions;
 import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.playares.commons.base.connect.mongodb.MongoDB;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.addons.AddonManager;
 import com.playares.factions.claims.ClaimManager;
@@ -24,7 +24,7 @@ import com.playares.services.punishments.PunishmentService;
 import com.playares.services.ranks.RankService;
 import lombok.Getter;
 
-public final class Factions extends AresPlugin {
+public final class Factions extends RiotPlugin {
     /** Core factions configuration **/
     @Getter protected FactionConfig factionConfig;
     /** Stores all data/handling for Factions **/

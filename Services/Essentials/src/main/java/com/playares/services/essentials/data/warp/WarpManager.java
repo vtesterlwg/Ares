@@ -1,7 +1,7 @@
 package com.playares.services.essentials.data.warp;
 
 import com.google.common.collect.Sets;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.logger.Logger;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -10,7 +10,7 @@ import java.util.Set;
 
 public final class WarpManager {
     @Getter
-    public final AresPlugin plugin;
+    public final RiotPlugin plugin;
 
     @Getter
     public final Set<Warp> warps;
@@ -18,7 +18,7 @@ public final class WarpManager {
     @Getter
     public final YamlConfiguration warpsConfig;
 
-    public WarpManager(AresPlugin plugin) {
+    public WarpManager(RiotPlugin plugin) {
         this.plugin = plugin;
         this.warps = Sets.newConcurrentHashSet();
         this.warpsConfig = plugin.getConfig("warps");

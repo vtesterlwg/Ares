@@ -6,7 +6,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.logger.Logger;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -57,7 +57,7 @@ public final class Players {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(text));
     }
 
-    public static void teleportWithVehicle(AresPlugin plugin, Player player, Location location) {
+    public static void teleportWithVehicle(RiotPlugin plugin, Player player, Location location) {
         final Entity vehicle = player.getVehicle();
 
         if (vehicle == null) {
@@ -74,7 +74,7 @@ public final class Players {
         }).delay(5L).run();
     }
 
-    public static void sendSignChange(AresPlugin plugin, Player player, Location location, String[] lines, long duration) {
+    public static void sendSignChange(RiotPlugin plugin, Player player, Location location, String[] lines, long duration) {
         final Block block = location.getBlock();
 
         if (!(block.getState() instanceof Sign)) {

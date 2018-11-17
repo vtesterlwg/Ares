@@ -5,7 +5,7 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Syntax;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.services.essentials.data.invsee.ViewableInventory;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
 
 public final class InvSeeCommand extends BaseCommand {
     @Getter
-    public final AresPlugin plugin;
+    public final RiotPlugin plugin;
 
-    public InvSeeCommand(AresPlugin plugin) {
+    public InvSeeCommand(RiotPlugin plugin) {
         this.plugin = plugin;
     }
 

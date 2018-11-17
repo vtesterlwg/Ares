@@ -1,7 +1,7 @@
 package com.playares.commons.bukkit.util;
 
 import com.google.common.base.Preconditions;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -34,7 +34,7 @@ public final class Worlds {
         location.getWorld().strikeLightningEffect(location);
     }
 
-    public static void spawnFirework(AresPlugin plugin, Location location, int power, long detonate, FireworkEffect... effects) {
+    public static void spawnFirework(RiotPlugin plugin, Location location, int power, long detonate, FireworkEffect... effects) {
         final Firework firework = (Firework)location.getWorld().spawnEntity(location, EntityType.FIREWORK);
         final FireworkMeta meta = firework.getFireworkMeta();
 

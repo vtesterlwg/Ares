@@ -2,8 +2,8 @@ package com.playares.services.classes;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.google.common.collect.Maps;
-import com.playares.commons.bukkit.AresPlugin;
-import com.playares.commons.bukkit.service.AresService;
+import com.playares.commons.bukkit.RiotPlugin;
+import com.playares.commons.bukkit.service.RiotService;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.services.classes.data.classes.*;
 import com.playares.services.classes.data.effects.ClassEffectable;
@@ -29,9 +29,9 @@ import org.bukkit.potion.PotionEffect;
 import java.util.Map;
 import java.util.UUID;
 
-public final class ClassService implements AresService, Listener {
+public final class ClassService implements RiotService, Listener {
     @Getter
-    public final AresPlugin owner;
+    public final RiotPlugin owner;
 
     @Getter
     public final Map<UUID, AresClass> activeClasses;
@@ -39,7 +39,7 @@ public final class ClassService implements AresService, Listener {
     @Getter
     public final Map<Class <? extends AresClass>, AresClass> classes;
 
-    public ClassService(AresPlugin owner) {
+    public ClassService(RiotPlugin owner) {
         this.owner = owner;
         this.activeClasses = Maps.newConcurrentMap();
         this.classes = Maps.newHashMap();

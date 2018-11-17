@@ -1,7 +1,7 @@
 package com.playares.services.essentials.data.kit;
 
 import com.google.common.collect.Sets;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.ItemSerializer;
 import lombok.Getter;
@@ -12,7 +12,7 @@ import java.util.Set;
 
 public final class KitManager {
     @Getter
-    public final AresPlugin plugin;
+    public final RiotPlugin plugin;
 
     @Getter
     public final Set<Kit> kits;
@@ -20,7 +20,7 @@ public final class KitManager {
     @Getter
     public final YamlConfiguration kitsConfig;
 
-    public KitManager(AresPlugin plugin) {
+    public KitManager(RiotPlugin plugin) {
         this.plugin = plugin;
         this.kits = Sets.newConcurrentHashSet();
         this.kitsConfig = plugin.getConfig("kits");

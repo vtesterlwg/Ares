@@ -1,9 +1,9 @@
 package com.playares.services.customevents;
 
 import com.google.common.collect.Lists;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.event.*;
-import com.playares.commons.bukkit.service.AresService;
+import com.playares.commons.bukkit.service.RiotService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,11 +20,11 @@ import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.List;
 
-public final class CustomEventService implements AresService, Listener {
+public final class CustomEventService implements RiotService, Listener {
     @Getter
-    public final AresPlugin owner;
+    public final RiotPlugin owner;
 
-    public CustomEventService(AresPlugin owner) {
+    public CustomEventService(RiotPlugin owner) {
         this.owner = owner;
     }
 

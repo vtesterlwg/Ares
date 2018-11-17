@@ -1,8 +1,8 @@
 package com.playares.services.automatedrestarts;
 
 import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.AresPlugin;
-import com.playares.commons.bukkit.service.AresService;
+import com.playares.commons.bukkit.RiotPlugin;
+import com.playares.commons.bukkit.service.RiotService;
 import com.playares.commons.bukkit.util.Scheduler;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,12 +10,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
 import org.spigotmc.RestartCommand;
 
-public final class AutomatedRestartService implements AresService {
+public final class AutomatedRestartService implements RiotService {
     static final String PREFIX = ChatColor.DARK_RED + "[" + ChatColor.RED + "Rebooting" + ChatColor.DARK_RED + "]";
     static int DEFAULT_REBOOT_TIME = 300; // TODO: Make configurable
 
     @Getter
-    public final AresPlugin owner;
+    public final RiotPlugin owner;
 
     @Getter
     public final RebootHandler handler;
@@ -32,7 +32,7 @@ public final class AutomatedRestartService implements AresService {
     @Getter @Setter
     public BukkitTask checkTask;
 
-    public AutomatedRestartService(AresPlugin owner, int nextRebootTimeSeconds) {
+    public AutomatedRestartService(RiotPlugin owner, int nextRebootTimeSeconds) {
         this.owner = owner;
         this.handler = new RebootHandler(this);
         this.rebootCommenceTime = Time.now() + (nextRebootTimeSeconds * 1000);

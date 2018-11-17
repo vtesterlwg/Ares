@@ -6,7 +6,7 @@ import com.google.common.collect.Maps;
 import com.google.common.io.ByteStreams;
 import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bungee.logging.Logger;
-import com.playares.commons.bungee.service.AresService;
+import com.playares.commons.bungee.service.RiotService;
 import lombok.Getter;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -17,9 +17,9 @@ import net.md_5.bungee.config.YamlConfiguration;
 import java.io.*;
 import java.util.Map;
 
-public abstract class AresProxy extends Plugin {
+public abstract class RiotProxy extends Plugin {
     @Getter
-    public Map<Class<? extends AresService>, AresService> services;
+    public Map<Class<? extends RiotService>, RiotService> services;
 
     @Getter
     public MongoDB mongo;
@@ -27,13 +27,13 @@ public abstract class AresProxy extends Plugin {
     @Getter
     public BungeeCommandManager commandManager;
 
-    public void registerService(AresService service) {
+    public void registerService(RiotService service) {
         if (services == null) {
             services = Maps.newHashMap();
         }
 
         services.put(service.getClass(), service);
-        Logger.print("Registered new Ares Service: " + service.getName());
+        Logger.print("Registered new Riot Service: " + service.getName());
     }
 
     public void registerListener(Listener listener) {

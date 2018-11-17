@@ -1,6 +1,6 @@
 package com.playares.commons.bukkit.timer;
 
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.RiotPlugin;
 import com.playares.commons.bukkit.util.Scheduler;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import org.bukkit.scheduler.BukkitTask;
 
 public final class BossTimer {
     @Getter
-    public final AresPlugin plugin;
+    public final RiotPlugin plugin;
 
     @Getter
     public final BossBar bossbar;
@@ -24,7 +24,7 @@ public final class BossTimer {
     @Getter
     public BukkitTask updateTask;
 
-    public BossTimer(AresPlugin plugin, String text, BarColor color, BarStyle style, BossTimerDuration duration) {
+    public BossTimer(RiotPlugin plugin, String text, BarColor color, BarStyle style, BossTimerDuration duration) {
         this.plugin = plugin;
         this.bossbar = Bukkit.createBossBar(text, color, style);
         this.duration = duration;

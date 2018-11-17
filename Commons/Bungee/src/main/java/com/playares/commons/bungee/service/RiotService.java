@@ -1,17 +1,17 @@
 package com.playares.commons.bungee.service;
 
 import co.aikar.commands.BaseCommand;
-import com.playares.commons.bungee.AresProxy;
+import com.playares.commons.bungee.RiotProxy;
 import net.md_5.bungee.api.plugin.Listener;
 
-public interface AresService {
+public interface RiotService {
     void start();
 
     void stop();
 
     String getName();
 
-    AresProxy getProxy();
+    RiotProxy getProxy();
 
     default void registerListener(Listener listener) {
         getProxy().registerListener(listener);

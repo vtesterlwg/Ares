@@ -2,7 +2,7 @@ package com.playares.services.profiles;
 
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.logger.Logger;
-import com.playares.services.profiles.data.AresProfile;
+import com.playares.services.profiles.data.RiotProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ public final class IgnoreHandler {
     public final ProfileService profileService;
 
     public void unignorePlayer(Player player, String name, SimplePromise promise) {
-        final AresProfile profile = profileService.getProfile(player.getUniqueId());
+        final RiotProfile profile = profileService.getProfile(player.getUniqueId());
 
         profileService.getProfile(name, ignoredProfile -> {
             if (ignoredProfile == null) {
@@ -33,7 +33,7 @@ public final class IgnoreHandler {
     }
 
     public void ignorePlayer(Player player, String name, SimplePromise promise) {
-        final AresProfile profile = profileService.getProfile(player.getUniqueId());
+        final RiotProfile profile = profileService.getProfile(player.getUniqueId());
 
         profileService.getProfile(name, ignoredProfile -> {
             if (ignoredProfile == null) {
