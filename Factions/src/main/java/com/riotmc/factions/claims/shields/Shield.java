@@ -18,7 +18,7 @@ public interface Shield {
     void setDrawn(boolean b);
 
     default void draw() {
-        if (!isDrawn()) {
+        if (isDrawn()) {
             return;
         }
 

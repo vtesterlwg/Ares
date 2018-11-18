@@ -51,6 +51,7 @@ public final class Factions extends RiotPlugin {
         registerListener(new PlayerListener(this));
         registerListener(new ChatListener(this));
         registerListener(new CombatListener(this));
+        registerListener(new ShieldListener(this));
 
         // Database
         registerMongo(new MongoDB(factionConfig.getDatabaseURI()));

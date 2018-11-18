@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.riotmc.commons.base.connect.mongodb.MongoDocument;
+import com.riotmc.commons.bukkit.location.BLocatable;
 import com.riotmc.commons.bukkit.util.Players;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.stats.holder.PlayerStatisticHolder;
@@ -63,6 +64,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
+        this.shields = Sets.newConcurrentHashSet();
         this.stats = null;
     }
 
@@ -76,6 +78,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
+        this.shields = Sets.newConcurrentHashSet();
         this.stats = new PlayerStatisticHolder();
     }
 
@@ -89,6 +92,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
+        this.shields = Sets.newConcurrentHashSet();
         this.stats = new PlayerStatisticHolder();
     }
 
@@ -342,6 +346,19 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
                 });
 
         shields.removeAll(toRemove);
+    }
+
+    /**
+     * Returns a shield block at the provided Block Location
+     * @param location Block Location
+     * @return Shield
+     */
+    public Shield getShieldBlockAt(BLocatable location) {
+        if (shields.isEmpty()) {
+            return null;
+        }
+
+        return shields.stream().filter(shield -> shield.getLocation().distance(location) < 1.0).findFirst().orElse(null);
     }
 
     @SuppressWarnings("unchecked")
