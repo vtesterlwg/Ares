@@ -1,8 +1,8 @@
 package com.riotmc.arena.arena.cont;
 
 import com.google.common.collect.Lists;
-import com.playares.commons.bukkit.location.PLocatable;
 import com.riotmc.arena.arena.Arena;
+import com.riotmc.commons.bukkit.location.PLocatable;
 import lombok.Getter;
 import lombok.Setter;
 

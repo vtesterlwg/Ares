@@ -6,7 +6,7 @@ import co.aikar.commands.annotation.Description;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.playares.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.RiotPlugin;
 import com.riotmc.services.ranks.RankService;
 import com.riotmc.services.ranks.data.RiotRank;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.riotmc.factions.addons.autosave;
 
-import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.Addon;
 import lombok.Getter;

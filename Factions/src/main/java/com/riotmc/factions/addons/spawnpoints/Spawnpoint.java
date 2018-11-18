@@ -1,6 +1,6 @@
 package com.riotmc.factions.addons.spawnpoints;
 
-import com.playares.commons.bukkit.location.PLocatable;
+import com.riotmc.commons.bukkit.location.PLocatable;
 import lombok.Getter;
 
 import javax.annotation.Nonnull;

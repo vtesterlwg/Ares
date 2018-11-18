@@ -1,6 +1,6 @@
 package com.riotmc.arena.arena;
 
-import com.playares.commons.bukkit.location.PLocatable;
+import com.riotmc.commons.bukkit.location.PLocatable;
 
 import javax.annotation.Nonnull;
 import java.util.List;

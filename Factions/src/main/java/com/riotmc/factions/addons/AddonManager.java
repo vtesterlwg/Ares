@@ -1,7 +1,7 @@
 package com.riotmc.factions.addons;
 
 import com.google.common.collect.Maps;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.autosave.AutosaveAddon;
 import com.riotmc.factions.addons.loggers.LoggerAddon;

@@ -2,8 +2,8 @@ package com.riotmc.factions.util;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.playares.commons.bukkit.location.PLocatable;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.bukkit.location.PLocatable;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.factions.PlayerFaction;
 import org.bukkit.entity.Entity;

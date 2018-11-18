@@ -1,10 +1,10 @@
 package com.riotmc.arena.mode;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.logger.Logger;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.loadout.Loadout;
 import com.riotmc.arena.mode.cont.StandardMode;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.logger.Logger;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 

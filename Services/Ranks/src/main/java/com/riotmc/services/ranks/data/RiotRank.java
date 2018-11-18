@@ -1,6 +1,6 @@
 package com.riotmc.services.ranks.data;
 
-import com.playares.commons.base.connect.mongodb.MongoDocument;
+import com.riotmc.commons.base.connect.mongodb.MongoDocument;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;

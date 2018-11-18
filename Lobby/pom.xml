@@ -27,13 +27,13 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>com.playares:Bukkit</include>
-                                    <include>com.playares:Profiles</include>
-                                    <include>com.playares:Ranks</include>
-                                    <include>com.playares:CustomEvents</include>
-                                    <include>com.playares:Essentials</include>
-                                    <include>com.playares:Humbug</include>
-                                    <include>com.playares:Punishments</include>
+                                    <include>com.riotmc:Bukkit</include>
+                                    <include>com.riotmc:Profiles</include>
+                                    <include>com.riotmc:Ranks</include>
+                                    <include>com.riotmc:CustomEvents</include>
+                                    <include>com.riotmc:Essentials</include>
+                                    <include>com.riotmc:Humbug</include>
+                                    <include>com.riotmc:Punishments</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

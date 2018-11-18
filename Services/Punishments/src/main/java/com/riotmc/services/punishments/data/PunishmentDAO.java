@@ -6,7 +6,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
-import com.playares.commons.base.connect.mongodb.MongoDB;
+import com.riotmc.commons.base.connect.mongodb.MongoDB;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 

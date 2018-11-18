@@ -1,8 +1,8 @@
 package com.riotmc.services.profiles;
 
 import com.google.common.collect.Maps;
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.services.profiles.data.RiotProfile;
 import com.riotmc.services.ranks.RankService;
 import lombok.Getter;

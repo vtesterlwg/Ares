@@ -1,6 +1,6 @@
 package com.riotmc.factions.addons.stats.holder;
 
-import com.playares.commons.base.connect.mongodb.MongoDocument;
+import com.riotmc.commons.base.connect.mongodb.MongoDocument;
 import lombok.Getter;
 import org.bson.Document;
 

@@ -3,10 +3,10 @@ package com.riotmc.arena.arena;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.playares.commons.bukkit.location.PLocatable;
-import com.playares.commons.bukkit.logger.Logger;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.arena.cont.MainArena;
+import com.riotmc.commons.bukkit.location.PLocatable;
+import com.riotmc.commons.bukkit.logger.Logger;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 

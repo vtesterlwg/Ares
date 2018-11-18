@@ -27,8 +27,8 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>com.playares:Bungee</include>
-                                    <include>com.playares:ProxyEssentials</include>
+                                    <include>com.riotmc:Bungee</include>
+                                    <include>com.riotmc:ProxyEssentials</include>
                                 </includes>
                             </artifactSet>
                         </configuration>

@@ -2,7 +2,7 @@ package com.riotmc.factions.addons.stats.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
-import com.playares.commons.base.promise.SimplePromise;
+import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.factions.addons.stats.StatsHandler;
 import lombok.Getter;
 import org.bukkit.ChatColor;

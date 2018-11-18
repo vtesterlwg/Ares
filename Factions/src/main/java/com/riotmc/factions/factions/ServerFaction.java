@@ -1,7 +1,7 @@
 package com.riotmc.factions.factions;
 
-import com.playares.commons.base.connect.mongodb.MongoDocument;
-import com.playares.commons.bukkit.location.PLocatable;
+import com.riotmc.commons.base.connect.mongodb.MongoDocument;
+import com.riotmc.commons.bukkit.location.PLocatable;
 import com.riotmc.factions.Factions;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

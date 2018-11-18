@@ -1,9 +1,9 @@
 package com.riotmc.services.automatedrestarts;
 
-import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.service.RiotService;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.base.util.Time;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.service.RiotService;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;

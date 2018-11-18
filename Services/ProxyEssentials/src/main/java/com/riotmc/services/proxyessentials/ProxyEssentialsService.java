@@ -1,8 +1,8 @@
 package com.riotmc.services.proxyessentials;
 
 import co.aikar.commands.BungeeCommandManager;
-import com.playares.commons.bungee.RiotProxy;
-import com.playares.commons.bungee.service.RiotService;
+import com.riotmc.commons.bungee.RiotProxy;
+import com.riotmc.commons.bungee.service.RiotService;
 import com.riotmc.services.proxyessentials.chat.StaffChatHandler;
 import com.riotmc.services.proxyessentials.chat.StaffChatManager;
 import com.riotmc.services.proxyessentials.command.HelpopCommand;

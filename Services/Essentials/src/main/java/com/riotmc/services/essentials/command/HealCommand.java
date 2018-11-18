@@ -2,7 +2,7 @@ package com.riotmc.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
-import com.playares.commons.bukkit.util.Players;
+import com.riotmc.commons.bukkit.util.Players;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;

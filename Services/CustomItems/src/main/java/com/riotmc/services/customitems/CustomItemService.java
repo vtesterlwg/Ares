@@ -1,15 +1,15 @@
 package com.riotmc.services.customitems;
 
 import com.google.common.collect.Maps;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.item.custom.CustomBlock;
-import com.playares.commons.bukkit.item.custom.CustomItem;
-import com.playares.commons.bukkit.item.custom.event.CustomBlockPlaceEvent;
-import com.playares.commons.bukkit.item.custom.event.CustomItemInteractEvent;
-import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.service.RiotService;
-import com.playares.commons.bukkit.util.Players;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.item.custom.CustomBlock;
+import com.riotmc.commons.bukkit.item.custom.CustomItem;
+import com.riotmc.commons.bukkit.item.custom.event.CustomBlockPlaceEvent;
+import com.riotmc.commons.bukkit.item.custom.event.CustomItemInteractEvent;
+import com.riotmc.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.service.RiotService;
+import com.riotmc.commons.bukkit.util.Players;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

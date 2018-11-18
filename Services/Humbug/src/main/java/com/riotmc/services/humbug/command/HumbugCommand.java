@@ -5,7 +5,7 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.services.humbug.HumbugService;
 import lombok.Getter;
 import org.bukkit.ChatColor;

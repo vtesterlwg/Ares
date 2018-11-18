@@ -1,6 +1,6 @@
 package com.riotmc.arena.loadout;
 
-import com.playares.commons.bukkit.item.ItemBuilder;
+import com.riotmc.commons.bukkit.item.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;

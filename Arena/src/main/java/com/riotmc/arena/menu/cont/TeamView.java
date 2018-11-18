@@ -1,12 +1,12 @@
 package com.riotmc.arena.menu.cont;
 
 import com.google.common.collect.Lists;
-import com.playares.commons.bukkit.menu.ClickableItem;
-import com.playares.commons.bukkit.menu.Menu;
-import com.playares.commons.bukkit.util.Scheduler;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.player.ArenaPlayer;
 import com.riotmc.arena.team.Team;
+import com.riotmc.commons.bukkit.menu.ClickableItem;
+import com.riotmc.commons.bukkit.menu.Menu;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

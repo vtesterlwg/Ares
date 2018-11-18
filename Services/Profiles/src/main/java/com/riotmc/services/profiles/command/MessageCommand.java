@@ -3,7 +3,7 @@ package com.riotmc.services.profiles.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
-import com.playares.commons.base.promise.SimplePromise;
+import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.services.profiles.ProfileService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

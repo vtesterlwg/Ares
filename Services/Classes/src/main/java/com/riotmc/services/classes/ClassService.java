@@ -2,9 +2,9 @@ package com.riotmc.services.classes;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.google.common.collect.Maps;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.service.RiotService;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.service.RiotService;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.services.classes.data.classes.*;
 import com.riotmc.services.classes.data.effects.ClassEffectable;
 import com.riotmc.services.classes.event.*;

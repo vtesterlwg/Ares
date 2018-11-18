@@ -1,12 +1,12 @@
 package com.riotmc.factions.players.handlers;
 
 import com.google.common.collect.Lists;
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.item.ItemBuilder;
-import com.playares.commons.bukkit.menu.ClickableItem;
-import com.playares.commons.bukkit.menu.Menu;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.base.util.Time;
+import com.riotmc.commons.bukkit.item.ItemBuilder;
+import com.riotmc.commons.bukkit.menu.ClickableItem;
+import com.riotmc.commons.bukkit.menu.Menu;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.addons.stats.StatsAddon;
 import com.riotmc.factions.players.FactionPlayer;
 import com.riotmc.factions.players.PlayerDAO;

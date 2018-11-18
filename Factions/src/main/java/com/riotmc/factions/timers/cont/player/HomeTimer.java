@@ -1,6 +1,6 @@
 package com.riotmc.factions.timers.cont.player;
 
-import com.playares.commons.bukkit.util.Players;
+import com.riotmc.commons.bukkit.util.Players;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.factions.PlayerFaction;
 import com.riotmc.factions.timers.PlayerTimer;

@@ -1,9 +1,9 @@
 package com.riotmc.services.customentity;
 
 import com.mojang.datafixers.types.Type;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.service.RiotService;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.service.RiotService;
 import lombok.Getter;
 import net.minecraft.server.v1_13_R2.*;
 

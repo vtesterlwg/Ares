@@ -1,7 +1,7 @@
 package com.riotmc.services.proxyessentials.request;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bungee.logging.Logger;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bungee.logging.Logger;
 import com.riotmc.services.proxyessentials.ProxyEssentialsService;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;

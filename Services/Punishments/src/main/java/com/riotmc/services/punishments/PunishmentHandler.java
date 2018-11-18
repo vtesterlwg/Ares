@@ -1,9 +1,9 @@
 package com.riotmc.services.punishments;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.base.util.Time;
+import com.riotmc.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.services.profiles.ProfileService;
 import com.riotmc.services.punishments.data.Punishment;
 import com.riotmc.services.punishments.data.PunishmentDAO;

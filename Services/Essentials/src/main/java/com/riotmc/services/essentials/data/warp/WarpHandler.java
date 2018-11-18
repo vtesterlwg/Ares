@@ -1,7 +1,7 @@
 package com.riotmc.services.essentials.data.warp;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.location.PLocatable;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.location.PLocatable;
 import com.riotmc.services.essentials.EssentialsService;
 import lombok.Getter;
 import org.bukkit.entity.Player;

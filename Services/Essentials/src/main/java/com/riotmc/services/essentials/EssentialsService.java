@@ -2,8 +2,8 @@ package com.riotmc.services.essentials;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.service.RiotService;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.service.RiotService;
 import com.riotmc.services.essentials.command.*;
 import com.riotmc.services.essentials.data.kit.Kit;
 import com.riotmc.services.essentials.data.kit.KitHandler;

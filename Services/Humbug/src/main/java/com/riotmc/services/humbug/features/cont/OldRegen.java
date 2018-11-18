@@ -1,7 +1,7 @@
 package com.riotmc.services.humbug.features.cont;
 
 import com.google.common.collect.Sets;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.services.humbug.HumbugService;
 import com.riotmc.services.humbug.features.HumbugModule;
 import lombok.Getter;

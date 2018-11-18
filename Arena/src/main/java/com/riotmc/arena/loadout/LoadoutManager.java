@@ -1,11 +1,11 @@
 package com.riotmc.arena.loadout;
 
 import com.google.common.collect.Sets;
-import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.serialize.InventorySerializer;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.loadout.cont.ClassLoadout;
 import com.riotmc.arena.loadout.cont.StandardLoadout;
+import com.riotmc.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.serialize.InventorySerializer;
 import com.riotmc.services.classes.ClassService;
 import com.riotmc.services.classes.data.classes.*;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package com.riotmc.factions.claims.handler;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.item.custom.CustomItem;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.item.custom.CustomItem;
 import com.riotmc.factions.claims.ClaimManager;
 import com.riotmc.factions.claims.builder.DefinedClaimBuilder;
 import com.riotmc.factions.factions.Faction;

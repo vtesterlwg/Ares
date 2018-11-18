@@ -1,9 +1,6 @@
 package com.riotmc.arena.challenge;
 
 import com.google.common.base.Joiner;
-import com.playares.commons.base.promise.FailablePromise;
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.util.Scheduler;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.arena.Arena;
 import com.riotmc.arena.challenge.cont.DuelChallenge;
@@ -15,6 +12,9 @@ import com.riotmc.arena.player.ArenaPlayer;
 import com.riotmc.arena.player.PlayerStatus;
 import com.riotmc.arena.team.Team;
 import com.riotmc.arena.team.TeamStatus;
+import com.riotmc.commons.base.promise.FailablePromise;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;

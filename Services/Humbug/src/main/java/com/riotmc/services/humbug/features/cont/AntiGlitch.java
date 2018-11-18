@@ -1,7 +1,7 @@
 package com.riotmc.services.humbug.features.cont;
 
-import com.playares.commons.bukkit.event.PlayerBigMoveEvent;
-import com.playares.commons.bukkit.util.Players;
+import com.riotmc.commons.bukkit.event.PlayerBigMoveEvent;
+import com.riotmc.commons.bukkit.util.Players;
 import com.riotmc.services.humbug.HumbugService;
 import com.riotmc.services.humbug.features.HumbugModule;
 import lombok.Getter;

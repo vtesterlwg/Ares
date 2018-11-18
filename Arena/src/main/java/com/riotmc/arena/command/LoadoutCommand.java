@@ -2,8 +2,8 @@ package com.riotmc.arena.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
-import com.playares.commons.base.promise.SimplePromise;
 import com.riotmc.arena.Arenas;
+import com.riotmc.commons.base.promise.SimplePromise;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

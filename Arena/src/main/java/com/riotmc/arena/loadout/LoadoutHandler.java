@@ -1,10 +1,10 @@
 package com.riotmc.arena.loadout;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.logger.Logger;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.loadout.cont.ClassLoadout;
 import com.riotmc.arena.loadout.cont.StandardLoadout;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.services.classes.ClassService;
 import com.riotmc.services.classes.data.classes.*;
 import lombok.Getter;

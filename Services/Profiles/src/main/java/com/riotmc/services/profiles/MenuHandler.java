@@ -1,9 +1,9 @@
 package com.riotmc.services.profiles;
 
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.item.ItemBuilder;
-import com.playares.commons.bukkit.menu.ClickableItem;
-import com.playares.commons.bukkit.menu.Menu;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.item.ItemBuilder;
+import com.riotmc.commons.bukkit.menu.ClickableItem;
+import com.riotmc.commons.bukkit.menu.Menu;
 import com.riotmc.services.profiles.data.RiotProfile;
 import lombok.Getter;
 import org.bukkit.ChatColor;

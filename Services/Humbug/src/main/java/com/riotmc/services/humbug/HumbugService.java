@@ -1,9 +1,9 @@
 package com.riotmc.services.humbug;
 
 import com.google.common.collect.Sets;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.service.RiotService;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.service.RiotService;
 import com.riotmc.services.humbug.command.HumbugCommand;
 import com.riotmc.services.humbug.features.HumbugModule;
 import com.riotmc.services.humbug.features.cont.*;

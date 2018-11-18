@@ -1,6 +1,6 @@
 package com.riotmc.factions.listener;
 
-import com.playares.commons.bukkit.event.ProcessedChatEvent;
+import com.riotmc.commons.bukkit.event.ProcessedChatEvent;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.stats.StatsAddon;
 import com.riotmc.factions.factions.PlayerFaction;

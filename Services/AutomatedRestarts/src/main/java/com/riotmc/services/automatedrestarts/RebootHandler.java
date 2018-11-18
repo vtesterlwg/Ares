@@ -1,8 +1,8 @@
 package com.riotmc.services.automatedrestarts;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.base.util.Time;
+import com.riotmc.commons.bukkit.logger.Logger;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -1,12 +1,12 @@
 package com.riotmc.factions.addons.loggers;
 
 import com.google.common.collect.Maps;
-import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
-import com.playares.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
-import com.playares.commons.bukkit.event.PlayerSplashPlayerEvent;
-import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.base.util.Time;
+import com.riotmc.commons.bukkit.event.PlayerDamagePlayerEvent;
+import com.riotmc.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
+import com.riotmc.commons.bukkit.event.PlayerSplashPlayerEvent;
+import com.riotmc.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.Addon;
 import com.riotmc.factions.addons.loggers.event.CombatLogEvent;

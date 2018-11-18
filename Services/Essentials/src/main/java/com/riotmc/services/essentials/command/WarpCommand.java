@@ -4,7 +4,7 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
-import com.playares.commons.base.promise.SimplePromise;
+import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.services.essentials.EssentialsService;
 import com.riotmc.services.essentials.data.warp.Warp;
 import lombok.Getter;

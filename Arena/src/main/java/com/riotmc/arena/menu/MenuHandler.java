@@ -1,9 +1,5 @@
 package com.riotmc.arena.menu;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.item.ItemBuilder;
-import com.playares.commons.bukkit.menu.ClickableItem;
-import com.playares.commons.bukkit.menu.Menu;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.aftermatch.PlayerReport;
 import com.riotmc.arena.aftermatch.TeamReport;
@@ -14,6 +10,10 @@ import com.riotmc.arena.menu.cont.TeamView;
 import com.riotmc.arena.mode.Mode;
 import com.riotmc.arena.player.ArenaPlayer;
 import com.riotmc.arena.team.Team;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.item.ItemBuilder;
+import com.riotmc.commons.bukkit.menu.ClickableItem;
+import com.riotmc.commons.bukkit.menu.Menu;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

@@ -1,7 +1,7 @@
 package com.riotmc.factions.factions.handlers;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.factions.factions.FactionManager;
 import com.riotmc.factions.factions.PlayerFaction;
 import com.riotmc.factions.factions.ServerFaction;

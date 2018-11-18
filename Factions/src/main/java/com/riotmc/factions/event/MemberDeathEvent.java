@@ -1,6 +1,6 @@
 package com.riotmc.factions.event;
 
-import com.playares.commons.bukkit.location.PLocatable;
+import com.riotmc.commons.bukkit.location.PLocatable;
 import com.riotmc.factions.factions.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;

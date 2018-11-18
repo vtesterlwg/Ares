@@ -1,6 +1,6 @@
 package com.riotmc.factions.claims.shields;
 
-import com.playares.commons.bukkit.location.BLocatable;
+import com.riotmc.commons.bukkit.location.BLocatable;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;

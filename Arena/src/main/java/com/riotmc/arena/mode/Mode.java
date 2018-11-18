@@ -1,7 +1,7 @@
 package com.riotmc.arena.mode;
 
-import com.playares.commons.bukkit.util.Players;
 import com.riotmc.arena.loadout.Loadout;
+import com.riotmc.commons.bukkit.util.Players;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

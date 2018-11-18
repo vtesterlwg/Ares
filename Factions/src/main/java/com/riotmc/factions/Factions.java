@@ -2,9 +2,9 @@ package com.riotmc.factions;
 
 import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.playares.commons.base.connect.mongodb.MongoDB;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.base.connect.mongodb.MongoDB;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.factions.addons.AddonManager;
 import com.riotmc.factions.claims.ClaimManager;
 import com.riotmc.factions.commands.FactionCommand;

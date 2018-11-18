@@ -1,7 +1,7 @@
 package com.riotmc.services.profiles;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.services.profiles.data.RiotProfile;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

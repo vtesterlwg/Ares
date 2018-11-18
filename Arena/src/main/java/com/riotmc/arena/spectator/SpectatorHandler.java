@@ -1,6 +1,5 @@
 package com.riotmc.arena.spectator;
 
-import com.playares.commons.base.promise.SimplePromise;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.items.ExitSpectatorItem;
 import com.riotmc.arena.match.Match;
@@ -9,6 +8,7 @@ import com.riotmc.arena.match.cont.DuelMatch;
 import com.riotmc.arena.match.cont.TeamMatch;
 import com.riotmc.arena.player.ArenaPlayer;
 import com.riotmc.arena.player.PlayerStatus;
+import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.services.customitems.CustomItemService;
 import lombok.Getter;
 import org.bukkit.Bukkit;

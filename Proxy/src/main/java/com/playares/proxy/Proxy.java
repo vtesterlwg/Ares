@@ -1,7 +1,7 @@
 package com.playares.proxy;
 
 import co.aikar.commands.BungeeCommandManager;
-import com.playares.commons.bungee.RiotProxy;
+import com.riotmc.commons.bungee.RiotProxy;
 import com.riotmc.services.proxyessentials.ProxyEssentialsService;
 
 public final class Proxy extends RiotProxy {

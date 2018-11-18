@@ -5,7 +5,7 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Syntax;
-import com.playares.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.RiotPlugin;
 import com.riotmc.services.essentials.data.invsee.ViewableInventory;
 import lombok.Getter;
 import org.bukkit.Bukkit;

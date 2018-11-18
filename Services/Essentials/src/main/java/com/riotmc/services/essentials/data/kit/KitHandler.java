@@ -1,8 +1,8 @@
 package com.riotmc.services.essentials.data.kit;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.menu.ClickableItem;
-import com.playares.commons.bukkit.menu.Menu;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.menu.ClickableItem;
+import com.riotmc.commons.bukkit.menu.Menu;
 import com.riotmc.services.essentials.EssentialsService;
 import lombok.Getter;
 import org.bukkit.entity.Player;

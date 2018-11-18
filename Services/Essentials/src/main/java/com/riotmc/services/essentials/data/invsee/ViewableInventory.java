@@ -1,12 +1,12 @@
 package com.riotmc.services.essentials.data.invsee;
 
 import com.google.common.collect.Lists;
-import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.item.ItemBuilder;
-import com.playares.commons.bukkit.menu.ClickableItem;
-import com.playares.commons.bukkit.menu.Menu;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.base.util.Time;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.item.ItemBuilder;
+import com.riotmc.commons.bukkit.menu.ClickableItem;
+import com.riotmc.commons.bukkit.menu.Menu;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;

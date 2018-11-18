@@ -1,9 +1,9 @@
 package com.riotmc.services.customevents;
 
 import com.google.common.collect.Lists;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.event.*;
-import com.playares.commons.bukkit.service.RiotService;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.event.*;
+import com.riotmc.commons.bukkit.service.RiotService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

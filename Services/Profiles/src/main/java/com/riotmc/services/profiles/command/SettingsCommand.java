@@ -3,7 +3,7 @@ package com.riotmc.services.profiles.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
-import com.playares.commons.bukkit.menu.Menu;
+import com.riotmc.commons.bukkit.menu.Menu;
 import com.riotmc.services.profiles.ProfileService;
 import com.riotmc.services.profiles.data.RiotProfile;
 import lombok.AllArgsConstructor;

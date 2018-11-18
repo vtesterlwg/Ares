@@ -1,6 +1,6 @@
 package com.riotmc.factions.timers;
 
-import com.playares.commons.bukkit.timer.Timer;
+import com.riotmc.commons.bukkit.timer.Timer;
 import com.riotmc.factions.factions.PlayerFaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

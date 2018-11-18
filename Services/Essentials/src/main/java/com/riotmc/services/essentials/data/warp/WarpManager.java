@@ -1,8 +1,8 @@
 package com.riotmc.services.essentials.data.warp;
 
 import com.google.common.collect.Sets;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.logger.Logger;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 

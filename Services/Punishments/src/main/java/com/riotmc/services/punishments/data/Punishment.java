@@ -1,7 +1,7 @@
 package com.riotmc.services.punishments.data;
 
-import com.playares.commons.base.connect.mongodb.MongoDocument;
-import com.playares.commons.base.util.Time;
+import com.riotmc.commons.base.connect.mongodb.MongoDocument;
+import com.riotmc.commons.base.util.Time;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;

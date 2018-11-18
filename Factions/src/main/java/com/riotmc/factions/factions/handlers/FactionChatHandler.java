@@ -1,6 +1,6 @@
 package com.riotmc.factions.factions.handlers;
 
-import com.playares.commons.base.promise.SimplePromise;
+import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.factions.factions.FactionManager;
 import com.riotmc.factions.factions.PlayerFaction;
 import lombok.Getter;

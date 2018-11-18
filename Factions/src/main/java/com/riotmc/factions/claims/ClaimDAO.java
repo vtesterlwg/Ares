@@ -5,8 +5,8 @@ import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
-import com.playares.commons.base.connect.mongodb.MongoDB;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.base.connect.mongodb.MongoDB;
+import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.factions.Factions;
 import org.bson.Document;
 

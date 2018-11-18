@@ -1,6 +1,6 @@
 package com.riotmc.services.classes.event;
 
-import com.playares.commons.bukkit.location.PLocatable;
+import com.riotmc.commons.bukkit.location.PLocatable;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.LivingEntity;

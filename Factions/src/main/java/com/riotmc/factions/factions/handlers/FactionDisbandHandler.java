@@ -1,9 +1,9 @@
 package com.riotmc.factions.factions.handlers;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.location.PLocatable;
-import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.location.PLocatable;
+import com.riotmc.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.claims.ClaimDAO;
 import com.riotmc.factions.claims.DefinedClaim;
 import com.riotmc.factions.factions.Faction;

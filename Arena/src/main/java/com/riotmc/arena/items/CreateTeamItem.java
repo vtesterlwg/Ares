@@ -2,12 +2,12 @@ package com.riotmc.arena.items;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.playares.commons.base.promise.FailablePromise;
-import com.playares.commons.bukkit.item.custom.CustomItem;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.player.ArenaPlayer;
 import com.riotmc.arena.player.PlayerStatus;
 import com.riotmc.arena.team.Team;
+import com.riotmc.commons.base.promise.FailablePromise;
+import com.riotmc.commons.bukkit.item.custom.CustomItem;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

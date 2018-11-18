@@ -2,7 +2,7 @@ package com.riotmc.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.logger.Logger;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

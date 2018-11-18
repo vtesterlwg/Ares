@@ -2,7 +2,7 @@ package com.playares.lobby;
 
 import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.playares.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.RiotPlugin;
 import org.bukkit.event.Listener;
 
 public final class Lobby extends RiotPlugin implements Listener {

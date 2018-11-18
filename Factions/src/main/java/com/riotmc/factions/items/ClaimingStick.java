@@ -2,7 +2,7 @@ package com.riotmc.factions.items;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.playares.commons.bukkit.item.custom.CustomItem;
+import com.riotmc.commons.bukkit.item.custom.CustomItem;
 import com.riotmc.factions.Factions;
 import lombok.Getter;
 import org.bukkit.ChatColor;

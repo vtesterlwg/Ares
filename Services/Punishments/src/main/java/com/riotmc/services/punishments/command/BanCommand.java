@@ -2,7 +2,7 @@ package com.riotmc.services.punishments.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
-import com.playares.commons.base.promise.SimplePromise;
+import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.services.punishments.PunishmentService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

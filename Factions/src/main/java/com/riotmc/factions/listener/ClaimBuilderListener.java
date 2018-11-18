@@ -1,8 +1,8 @@
 package com.riotmc.factions.listener;
 
-import com.playares.commons.base.promise.FailablePromise;
-import com.playares.commons.bukkit.item.custom.event.CustomItemInteractEvent;
-import com.playares.commons.bukkit.location.BLocatable;
+import com.riotmc.commons.base.promise.FailablePromise;
+import com.riotmc.commons.bukkit.item.custom.event.CustomItemInteractEvent;
+import com.riotmc.commons.bukkit.location.BLocatable;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.claims.DefinedClaim;
 import com.riotmc.factions.claims.builder.DefinedClaimBuilder;

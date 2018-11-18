@@ -1,11 +1,11 @@
 package com.riotmc.arena.listener;
 
 import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.util.Players;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.player.ArenaPlayer;
 import com.riotmc.arena.player.PlayerStatus;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.util.Players;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

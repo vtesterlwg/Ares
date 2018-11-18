@@ -1,9 +1,9 @@
 package com.riotmc.factions.addons.stats;
 
 import com.mongodb.client.model.Filters;
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.base.util.Time;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.stats.holder.PlayerStatisticHolder;
 import com.riotmc.factions.players.FactionPlayer;

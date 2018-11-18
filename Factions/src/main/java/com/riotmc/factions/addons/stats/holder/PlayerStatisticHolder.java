@@ -1,8 +1,8 @@
 package com.riotmc.factions.addons.stats.holder;
 
 import com.google.common.collect.Maps;
-import com.playares.commons.base.connect.mongodb.MongoDocument;
-import com.playares.commons.base.util.Time;
+import com.riotmc.commons.base.connect.mongodb.MongoDocument;
+import com.riotmc.commons.base.util.Time;
 import lombok.Getter;
 import org.bson.Document;
 import org.bukkit.Material;

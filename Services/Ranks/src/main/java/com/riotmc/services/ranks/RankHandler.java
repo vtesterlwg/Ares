@@ -1,7 +1,7 @@
 package com.riotmc.services.ranks;
 
-import com.playares.commons.base.promise.SimplePromise;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.services.ranks.data.RiotRank;
 import com.riotmc.services.ranks.data.RiotRankDAO;
 import lombok.Getter;

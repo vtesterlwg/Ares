@@ -1,7 +1,7 @@
 package com.riotmc.factions.listener;
 
-import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.event.PlayerBigMoveEvent;
+import com.riotmc.commons.base.util.Time;
+import com.riotmc.commons.bukkit.event.PlayerBigMoveEvent;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.players.FactionPlayer;
 import com.riotmc.factions.timers.PlayerTimer;

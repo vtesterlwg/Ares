@@ -1,9 +1,9 @@
 package com.riotmc.services.punishments;
 
-import com.playares.commons.base.util.IPS;
-import com.playares.commons.bukkit.RiotPlugin;
-import com.playares.commons.bukkit.event.ProcessedChatEvent;
-import com.playares.commons.bukkit.service.RiotService;
+import com.riotmc.commons.base.util.IPS;
+import com.riotmc.commons.bukkit.RiotPlugin;
+import com.riotmc.commons.bukkit.event.ProcessedChatEvent;
+import com.riotmc.commons.bukkit.service.RiotService;
 import com.riotmc.services.punishments.command.*;
 import com.riotmc.services.punishments.data.Punishment;
 import com.riotmc.services.punishments.data.PunishmentType;

@@ -1,7 +1,7 @@
 package com.riotmc.factions.addons.spawnpoints;
 
 import com.google.common.collect.Sets;
-import com.playares.commons.bukkit.logger.Logger;
+import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.factions.Factions;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;

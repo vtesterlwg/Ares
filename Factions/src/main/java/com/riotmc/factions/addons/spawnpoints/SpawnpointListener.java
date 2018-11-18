@@ -1,7 +1,7 @@
 package com.riotmc.factions.addons.spawnpoints;
 
-import com.playares.commons.bukkit.location.BLocatable;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.bukkit.location.BLocatable;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.claims.DefinedClaim;
 import com.riotmc.factions.factions.ServerFaction;
 import lombok.Getter;

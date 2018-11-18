@@ -1,7 +1,7 @@
 package com.riotmc.factions.claims.pillars;
 
-import com.playares.commons.bukkit.location.BLocatable;
-import com.playares.commons.bukkit.util.Players;
+import com.riotmc.commons.bukkit.location.BLocatable;
+import com.riotmc.commons.bukkit.util.Players;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;

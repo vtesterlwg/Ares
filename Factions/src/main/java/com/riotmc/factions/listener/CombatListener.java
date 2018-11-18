@@ -1,10 +1,10 @@
 package com.riotmc.factions.listener;
 
-import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
-import com.playares.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
-import com.playares.commons.bukkit.event.PlayerSplashPlayerEvent;
-import com.playares.commons.bukkit.location.PLocatable;
-import com.playares.commons.bukkit.util.Players;
+import com.riotmc.commons.bukkit.event.PlayerDamagePlayerEvent;
+import com.riotmc.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
+import com.riotmc.commons.bukkit.event.PlayerSplashPlayerEvent;
+import com.riotmc.commons.bukkit.location.PLocatable;
+import com.riotmc.commons.bukkit.util.Players;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.loggers.CombatLogger;
 import com.riotmc.factions.addons.loggers.event.LoggerDeathEvent;

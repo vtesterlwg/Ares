@@ -2,8 +2,8 @@ package com.riotmc.factions.addons.stats;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
-import com.playares.commons.base.promise.Promise;
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.base.promise.Promise;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.factions.PlayerFaction;
 import com.riotmc.factions.players.FactionPlayer;

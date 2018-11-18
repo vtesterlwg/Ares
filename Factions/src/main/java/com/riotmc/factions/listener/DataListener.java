@@ -1,6 +1,6 @@
 package com.riotmc.factions.listener;
 
-import com.playares.commons.bukkit.util.Scheduler;
+import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.players.FactionPlayer;
 import com.riotmc.factions.players.PlayerDAO;

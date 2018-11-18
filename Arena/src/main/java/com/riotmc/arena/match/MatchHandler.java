@@ -1,10 +1,10 @@
 package com.riotmc.arena.match;
 
-import com.playares.commons.base.promise.SimplePromise;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.aftermatch.PlayerReport;
 import com.riotmc.arena.aftermatch.TeamReport;
 import com.riotmc.arena.match.cont.TeamMatch;
+import com.riotmc.commons.base.promise.SimplePromise;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
