@@ -1,5 +1,5 @@
 name: Factions
-main: Factions
+main: com.riotmc.factions.Factions
 version: 1.13
 depends: [ProtocolLib]
 api-version: 1.13
