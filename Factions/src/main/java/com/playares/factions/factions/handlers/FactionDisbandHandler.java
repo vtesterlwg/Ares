@@ -11,7 +11,7 @@ import com.playares.factions.factions.FactionDAO;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.players.FactionPlayer;
-import com.playares.services.profiles.ProfileService;
+import com.riotmc.services.profiles.ProfileService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

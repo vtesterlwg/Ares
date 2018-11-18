@@ -18,7 +18,7 @@ import com.playares.factions.players.FactionPlayer;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.CombatTagTimer;
 import com.playares.factions.util.FactionUtils;
-import com.playares.services.customentity.CustomEntityService;
+import com.riotmc.services.customentity.CustomEntityService;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_13_R2.EntityLiving;

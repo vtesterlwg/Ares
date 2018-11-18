@@ -6,7 +6,7 @@ import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.factions.ServerFaction;
 import com.playares.factions.players.FactionPlayer;
-import com.playares.services.profiles.ProfileService;
+import com.riotmc.services.profiles.ProfileService;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;

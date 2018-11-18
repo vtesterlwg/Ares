@@ -7,7 +7,7 @@ import com.playares.factions.claims.builder.DefinedClaimBuilder;
 import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.items.ClaimingStick;
-import com.playares.services.customitems.CustomItemService;
+import com.riotmc.services.customitems.CustomItemService;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 

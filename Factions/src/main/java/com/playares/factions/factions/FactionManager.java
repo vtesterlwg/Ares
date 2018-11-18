@@ -10,7 +10,7 @@ import com.playares.commons.bukkit.timer.Timer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.factions.handlers.*;
-import com.playares.services.profiles.ProfileService;
+import com.riotmc.services.profiles.ProfileService;
 import lombok.Getter;
 import org.bukkit.scheduler.BukkitTask;
 

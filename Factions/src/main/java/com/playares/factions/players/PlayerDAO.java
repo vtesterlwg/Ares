@@ -7,6 +7,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.model.Filters;
 import com.playares.commons.base.connect.mongodb.MongoDB;
+import com.playares.factions.Factions;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
@@ -22,11 +23,12 @@ public final class PlayerDAO {
      * Retrieves a FactionPlayer object from the database
      *
      * Will return null if no entry is found
+     * @param plugin Plugin
      * @param database MongoDB Database
      * @param filter Bson Filter
      * @return FactionPlayer
      */
-    public static FactionPlayer getPlayer(MongoDB database, Bson filter) {
+    public static FactionPlayer getPlayer(Factions plugin, MongoDB database, Bson filter) {
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
         final FindIterable<Document> iter;
         final Document existing;
@@ -42,7 +44,7 @@ public final class PlayerDAO {
             return null;
         }
 
-        return new FactionPlayer().fromDocument(existing);
+        return new FactionPlayer(plugin).fromDocument(existing);
     }
 
     /**
@@ -72,10 +74,11 @@ public final class PlayerDAO {
 
     /**
      * Retrieves every FactionPlayer in the database
+     * @param plugin Plugin
      * @param database MongoDB Database
      * @return ImmutableList containing every FactionPlayer found
      */
-    public static ImmutableList<FactionPlayer> getPlayers(MongoDB database) {
+    public static ImmutableList<FactionPlayer> getPlayers(Factions plugin, MongoDB database) {
         final List<FactionPlayer> result = Lists.newArrayList();
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
         final MongoCursor<Document> cursor;
@@ -87,7 +90,7 @@ public final class PlayerDAO {
         cursor = collection.find().iterator();
 
         while (cursor.hasNext()) {
-            result.add(new FactionPlayer().fromDocument(cursor.next()));
+            result.add(new FactionPlayer(plugin).fromDocument(cursor.next()));
         }
 
         return ImmutableList.copyOf(result);

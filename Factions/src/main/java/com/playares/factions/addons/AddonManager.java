@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.autosave.AutosaveAddon;
-import com.playares.factions.addons.dungeons.DungeonAddon;
 import com.playares.factions.addons.loggers.LoggerAddon;
 import com.playares.factions.addons.mining.MiningAddon;
 import com.playares.factions.addons.spawnpoints.SpawnpointAddon;
@@ -29,7 +28,6 @@ public final class AddonManager {
         registerAddon(new AutosaveAddon(plugin));
         registerAddon(new LoggerAddon(plugin));
         registerAddon(new SpawnpointAddon(plugin));
-        registerAddon(new DungeonAddon(plugin));
     }
 
     public void startAddons() {

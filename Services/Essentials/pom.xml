@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>Services</artifactId>
-        <groupId>com.playares</groupId>
-        <version>1.13.1</version>
+        <groupId>com.riotmc</groupId>
+        <version>1.13.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -32,11 +32,11 @@
     </repositories>
 
     <dependencies>
-        <!-- Ares Rank Service -->
+        <!-- RiotMC Rank Service -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Ranks</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -56,11 +56,11 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Ares Bukkit Commons -->
+        <!-- RiotMC Bukkit Commons -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Bukkit</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
         </dependency>
     </dependencies>
 

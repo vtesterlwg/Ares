@@ -8,7 +8,7 @@ import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.FactionManager;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.factions.ServerFaction;
-import com.playares.services.profiles.ProfileService;
+import com.riotmc.services.profiles.ProfileService;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;

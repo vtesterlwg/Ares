@@ -42,7 +42,7 @@ public final class PlayerDisplayHandler {
     public void displayLeaderboard(Player viewer, String category, SimplePromise promise) {
         new Scheduler(manager.getPlugin()).async(() -> {
             final StatsAddon addon = (StatsAddon)manager.getPlugin().getAddonManager().getAddon(StatsAddon.class);
-            final List<FactionPlayer> players = Lists.newArrayList(PlayerDAO.getPlayers(manager.getPlugin().getMongo()));
+            final List<FactionPlayer> players = Lists.newArrayList(PlayerDAO.getPlayers(manager.getPlugin(), manager.getPlugin().getMongo()));
             final FactionPlayer personalProfile = manager.getPlayer(viewer.getUniqueId());
 
             if (addon == null) {

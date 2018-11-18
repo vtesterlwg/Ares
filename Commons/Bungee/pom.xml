@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>Commons</artifactId>
-        <groupId>com.playares</groupId>
-        <version>1.13.1</version>
+        <groupId>com.riotmc</groupId>
+        <version>1.13.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -29,7 +29,7 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>com.playares:Base</include>
+                            <include>com.riotmc:Base</include>
                             <include>co.aikar</include>
                             <include>net.jodah</include>
                         </includes>
@@ -62,11 +62,11 @@
     </repositories>
 
     <dependencies>
-        <!-- Ares Base Commons -->
+        <!-- RiotMC Base Commons -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Base</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
         </dependency>
 
         <!-- Bungeecord API -->

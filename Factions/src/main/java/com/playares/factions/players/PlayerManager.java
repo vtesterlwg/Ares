@@ -13,7 +13,7 @@ import com.playares.factions.players.handlers.PlayerDisplayHandler;
 import com.playares.factions.players.handlers.PlayerTimerHandler;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.ProtectionTimer;
-import com.playares.services.automatedrestarts.AutomatedRestartService;
+import com.riotmc.services.automatedrestarts.AutomatedRestartService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
@@ -95,7 +95,7 @@ public final class PlayerManager {
      * @return FactionPlayer
      */
     public FactionPlayer loadPlayer(UUID uniqueId, String username) {
-        FactionPlayer profile = PlayerDAO.getPlayer(plugin.getMongo(), Filters.eq("id", uniqueId));
+        FactionPlayer profile = PlayerDAO.getPlayer(plugin, plugin.getMongo(), Filters.eq("id", uniqueId));
 
         if (profile == null) {
             profile = new FactionPlayer(plugin, uniqueId, username);

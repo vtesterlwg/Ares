@@ -8,7 +8,7 @@ import com.playares.factions.Factions;
 import com.playares.factions.addons.stats.holder.PlayerStatisticHolder;
 import com.playares.factions.players.FactionPlayer;
 import com.playares.factions.players.PlayerDAO;
-import com.playares.services.profiles.ProfileService;
+import com.riotmc.services.profiles.ProfileService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -94,7 +94,7 @@ public final class StatsHandler {
             new Scheduler(plugin).async(() -> {
                 final FactionPlayer profile = (plugin.getPlayerManager().getPlayer(aresProfile.getUniqueId()) != null ?
                         plugin.getPlayerManager().getPlayer(aresProfile.getUniqueId()) :
-                        PlayerDAO.getPlayer(plugin.getMongo(), Filters.eq("id", aresProfile.getUniqueId())));
+                        PlayerDAO.getPlayer(plugin, plugin.getMongo(), Filters.eq("id", aresProfile.getUniqueId())));
 
                 new Scheduler(plugin).sync(() -> {
                     if (profile == null) {

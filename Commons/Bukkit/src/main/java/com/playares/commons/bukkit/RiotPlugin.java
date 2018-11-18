@@ -31,8 +31,8 @@ public abstract class RiotPlugin extends JavaPlugin {
     public ProtocolManager protocol;
 
     /**
-     * Registers a new Ares Service
-     * @param service Ares Service
+     * Registers a new Riot Service
+     * @param service Riot Service
      */
     public void registerService(RiotService service) {
         if (services == null) {
@@ -111,7 +111,7 @@ public abstract class RiotPlugin extends JavaPlugin {
     /**
      * Obtain a registered service
      * @param clazz Class Type
-     * @return Ares Service
+     * @return Riot Service
      */
     public RiotService getService(Class<? extends RiotService> clazz) {
         if (!services.containsKey(clazz)) {

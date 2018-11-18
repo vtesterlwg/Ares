@@ -10,7 +10,7 @@ import com.playares.factions.factions.Faction;
 import com.playares.factions.factions.PlayerFaction;
 import com.playares.factions.items.ClaimingStick;
 import com.playares.factions.players.FactionPlayer;
-import com.playares.services.customitems.CustomItemService;
+import com.riotmc.services.customitems.CustomItemService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;

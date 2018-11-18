@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>Ares</artifactId>
-        <groupId>com.playares</groupId>
-        <version>1.13.1</version>
+        <artifactId>RiotMC</artifactId>
+        <groupId>com.riotmc</groupId>
+        <version>1.13.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -27,15 +27,15 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>com.playares:Bukkit</include>
-                                    <include>com.playares:Profiles</include>
-                                    <include>com.playares:Ranks</include>
-                                    <include>com.playares:CustomEvents</include>
-                                    <include>com.playares:CustomItems</include>
-                                    <include>com.playares:Essentials</include>
-                                    <include>com.playares:Humbug</include>
-                                    <include>com.playares:Punishments</include>
-                                    <include>com.playares:Classes</include>
+                                    <include>com.riotmc:Bukkit</include>
+                                    <include>com.riotmc:Profiles</include>
+                                    <include>com.riotmc:Ranks</include>
+                                    <include>com.riotmc:CustomEvents</include>
+                                    <include>com.riotmc:CustomItems</include>
+                                    <include>com.riotmc:Essentials</include>
+                                    <include>com.riotmc:Humbug</include>
+                                    <include>com.riotmc:Punishments</include>
+                                    <include>com.riotmc:Classes</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -81,7 +81,7 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>1.13.1-R0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Craftbukkit -->
@@ -92,43 +92,43 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Ares Bukkit Commons -->
+        <!-- RiotMC Bukkit Commons -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Bukkit</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- Ares Ranks Service -->
+        <!-- RiotMC Ranks Service -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Ranks</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- Ares Profiles Service -->
+        <!-- RiotMC Profiles Service -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Profiles</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- Ares Custom Event Service -->
+        <!-- RiotMC Custom Event Service -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>CustomEvents</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- Ares Essentials Service -->
+        <!-- RiotMC Essentials Service -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Essentials</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -140,35 +140,35 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- Ares Humbug Service -->
+        <!-- RiotMC Humbug Service -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Humbug</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- Ares Punishments Service -->
+        <!-- RiotMC Punishments Service -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Punishments</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- Custom Item Service -->
+        <!-- RiotMC Custom Item Service -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>CustomItems</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- AresClass Service -->
+        <!-- RiotMC Class Service -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Classes</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

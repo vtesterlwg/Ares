@@ -34,7 +34,7 @@ public final class StatsManager {
 
     public void getPlayerLeaderboard(Promise<ImmutableList<FactionPlayer>> promise) {
         new Scheduler(plugin).async(() -> {
-            final List<FactionPlayer> players = Lists.newArrayList(PlayerDAO.getPlayers(plugin.getMongo()));
+            final List<FactionPlayer> players = Lists.newArrayList(PlayerDAO.getPlayers(plugin, plugin.getMongo()));
 
 
         }).run();

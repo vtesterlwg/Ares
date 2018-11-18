@@ -5,8 +5,8 @@
 
     <parent>
         <artifactId>Commons</artifactId>
-        <groupId>com.playares</groupId>
-        <version>1.13.1</version>
+        <groupId>com.riotmc</groupId>
+        <version>1.13.2</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -31,7 +31,7 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>com.playares:Base</include>
+                            <include>com.riotmc:Base</include>
                             <include>co.aikar</include>
                             <include>net.jodah</include>
                         </includes>
@@ -80,15 +80,15 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
-        <!-- Ares Base Commons -->
+        <!-- RiotMC Base Commons -->
         <dependency>
-            <groupId>com.playares</groupId>
+            <groupId>com.riotmc</groupId>
             <artifactId>Base</artifactId>
-            <version>1.13.1</version>
+            <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 

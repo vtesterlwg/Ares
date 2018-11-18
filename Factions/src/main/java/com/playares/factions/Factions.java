@@ -12,16 +12,16 @@ import com.playares.factions.factions.FactionManager;
 import com.playares.factions.items.ClaimingStick;
 import com.playares.factions.listener.*;
 import com.playares.factions.players.PlayerManager;
-import com.playares.services.automatedrestarts.AutomatedRestartService;
-import com.playares.services.classes.ClassService;
-import com.playares.services.customentity.CustomEntityService;
-import com.playares.services.customevents.CustomEventService;
-import com.playares.services.customitems.CustomItemService;
-import com.playares.services.essentials.EssentialsService;
-import com.playares.services.humbug.HumbugService;
-import com.playares.services.profiles.ProfileService;
-import com.playares.services.punishments.PunishmentService;
-import com.playares.services.ranks.RankService;
+import com.riotmc.services.automatedrestarts.AutomatedRestartService;
+import com.riotmc.services.classes.ClassService;
+import com.riotmc.services.customentity.CustomEntityService;
+import com.riotmc.services.customevents.CustomEventService;
+import com.riotmc.services.customitems.CustomItemService;
+import com.riotmc.services.essentials.EssentialsService;
+import com.riotmc.services.humbug.HumbugService;
+import com.riotmc.services.profiles.ProfileService;
+import com.riotmc.services.punishments.PunishmentService;
+import com.riotmc.services.ranks.RankService;
 import lombok.Getter;
 
 public final class Factions extends RiotPlugin {

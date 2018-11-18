@@ -4,10 +4,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.playares</groupId>
-    <artifactId>Ares</artifactId>
+    <groupId>com.riotmc</groupId>
+    <artifactId>RiotMC</artifactId>
     <packaging>pom</packaging>
-    <version>1.13.1</version>
+    <version>1.13.2</version>
 
     <modules>
         <module>Commons</module>
