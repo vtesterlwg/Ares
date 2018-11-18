@@ -1,5 +1,5 @@
 name: Factions
-main: com.playares.factions.Factions
+main: Factions
 version: 1.13
 depends: [ProtocolLib]
 api-version: 1.13
