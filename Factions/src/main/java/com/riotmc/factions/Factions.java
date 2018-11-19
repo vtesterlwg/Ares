@@ -8,6 +8,7 @@ import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.factions.addons.AddonManager;
 import com.riotmc.factions.claims.ClaimManager;
 import com.riotmc.factions.commands.FactionCommand;
+import com.riotmc.factions.commands.PvPCommand;
 import com.riotmc.factions.commands.TimerCommand;
 import com.riotmc.factions.factions.FactionManager;
 import com.riotmc.factions.items.ClaimingStick;
@@ -66,6 +67,7 @@ public final class Factions extends RiotPlugin {
         registerCommandManager(commandManager);
         registerCommand(new FactionCommand(this));
         registerCommand(new TimerCommand(this));
+        registerCommand(new PvPCommand(this));
 
         // Register Services
         registerService(new ClassService(this));
