@@ -51,8 +51,8 @@ public abstract class Timer {
      * Freezes the timer
      */
     public void freeze() {
-        frozen = true;
         frozenTime = getRemaining();
+        frozen = true;
     }
 
     /**
