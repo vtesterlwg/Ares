@@ -67,9 +67,18 @@ public final class PlayerManager {
             }
         })).repeat(0L, 1L).run();
 
-        this.timerUpdater = new Scheduler(plugin).async(() -> playerRepository.stream().filter(profile -> !profile.getTimers().isEmpty()).forEach(profile -> profile.getTimers().stream().filter(Timer::isExpired).forEach(expired -> new Scheduler(plugin).sync(() -> {
+        this.timerUpdater = new Scheduler(plugin).async(() -> playerRepository
+                .stream()
+                .filter(profile -> !profile.getTimers().isEmpty())
+                .forEach(profile -> profile.getTimers()
+                        .stream()
+                        .filter(timer -> !timer.isFrozen())
+                        .filter(Timer::isExpired)
+                        .forEach(expired -> new Scheduler(plugin).sync(() -> {
+
             expired.onFinish();
             profile.getTimers().remove(expired);
+
         }).run()))).repeat(0L, 5L).run();
     }
 
