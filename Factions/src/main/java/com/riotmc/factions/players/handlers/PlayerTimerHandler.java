@@ -1,6 +1,7 @@
 package com.riotmc.factions.players.handlers;
 
 import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.base.util.Time;
 import com.riotmc.commons.bukkit.location.PLocatable;
 import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.commons.bukkit.util.Players;
@@ -11,11 +12,12 @@ import com.riotmc.factions.factions.ServerFaction;
 import com.riotmc.factions.players.FactionPlayer;
 import com.riotmc.factions.players.PlayerManager;
 import com.riotmc.factions.timers.PlayerTimer;
-import com.riotmc.factions.timers.cont.player.HomeTimer;
-import com.riotmc.factions.timers.cont.player.StuckTimer;
+import com.riotmc.factions.timers.cont.player.*;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public final class PlayerTimerHandler {
@@ -24,6 +26,208 @@ public final class PlayerTimerHandler {
 
     public PlayerTimerHandler(PlayerManager manager) {
         this.manager = manager;
+    }
+
+    /**
+     * Prints a list of all valid player timer types
+     * @param viewer Viewer
+     */
+    public void list(CommandSender viewer) {
+        viewer.sendMessage(ChatColor.GOLD + "Valid Player Timer Types: ");
+
+        for (PlayerTimer.PlayerTimerType type : PlayerTimer.PlayerTimerType.values()) {
+            viewer.sendMessage(type.getDisplayName());
+        }
+    }
+
+    /**
+     * Forcefully removes a timer from a players profile
+     * @param sender Command Sender
+     * @param username Modified Username
+     * @param timerName Modified Timer
+     * @param promise Promise
+     */
+    public void remove(CommandSender sender, String username, String timerName, SimplePromise promise) {
+        final Player player = Bukkit.getPlayer(username);
+        final PlayerTimer.PlayerTimerType type = PlayerTimer.PlayerTimerType.match(timerName.toUpperCase());
+
+        if (player == null) {
+            promise.failure("Player not found");
+            return;
+        }
+
+        if (type == null) {
+            promise.failure("Invalid timer type");
+            return;
+        }
+
+        final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            promise.failure("Failed to obtain " + player.getName() + "'s profile");
+            return;
+        }
+
+        final PlayerTimer existing = profile.getTimer(type);
+
+        if (existing == null) {
+            promise.failure("Player does not have this timer type");
+            return;
+        }
+
+        existing.onFinish();
+        profile.getTimers().remove(existing);
+
+        Logger.print(sender.getName() + " removed " + ChatColor.RESET + type.getDisplayName() + " timer from " + player.getName());
+        promise.success();
+    }
+
+    /**
+     * Applies a new timer to a player
+     * @param sender Command Sender
+     * @param username Modified Username
+     * @param timerName Timer Name
+     * @param time Time
+     * @param promise Promise
+     */
+    public void apply(CommandSender sender, String username, String timerName, String time, SimplePromise promise) {
+        final Player player = Bukkit.getPlayer(username);
+        final long duration = Time.parseTime(time);
+
+        if (player == null) {
+            promise.failure("Player not found");
+            return;
+        }
+
+        if (duration <= 0L) {
+            promise.failure("Invalid timer duration");
+            return;
+        }
+
+        final int toSeconds = (int)(duration / 1000L);
+        final PlayerTimer.PlayerTimerType type = PlayerTimer.PlayerTimerType.match(timerName.toUpperCase());
+
+        if (type == null) {
+            promise.failure("Invalid timer type");
+            return;
+        }
+
+        final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            promise.failure("Failed to obtain " + username + "'s profile");
+            return;
+        }
+
+        final PlayerTimer existing = profile.getTimer(type);
+
+        if (existing != null) {
+            existing.setExpire(Time.now() + duration);
+            player.sendMessage(type.getDisplayName() + ChatColor.GOLD + " has been applied to your account for " + ChatColor.YELLOW + Time.convertToRemaining(duration));
+            Logger.print(sender.getName() + " applied a " + ChatColor.RESET + type.getDisplayName() + " timer to " + player.getName() + " for " + Time.convertToRemaining(duration));
+            promise.success();
+            return;
+        }
+
+        if (type.equals(PlayerTimer.PlayerTimerType.COMBAT)) {
+            final DefinedClaim inside = profile.getCurrentClaim();
+
+            if (inside != null) {
+                final Faction insideFaction = manager.getPlugin().getFactionManager().getFactionById(inside.getOwnerId());
+
+                if (insideFaction instanceof ServerFaction) {
+                    final ServerFaction insideServerFaction = (ServerFaction)insideFaction;
+
+                    if (insideServerFaction.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+                        promise.failure(player.getName() + " is inside a safezone claim");
+                        return;
+                    }
+                }
+            }
+
+            final CombatTagTimer timer = new CombatTagTimer(manager.getPlugin(), player.getUniqueId(), toSeconds);
+            profile.addTimer(timer);
+            promise.success();
+        }
+
+        else if (type.equals(PlayerTimer.PlayerTimerType.CRAPPLE)) {
+            final CrappleTimer timer = new CrappleTimer(player.getUniqueId(), toSeconds);
+            profile.addTimer(timer);
+            promise.success();
+        }
+
+        else if (type.equals(PlayerTimer.PlayerTimerType.ENDERPEARL)) {
+            final EnderpearlTimer timer = new EnderpearlTimer(player.getUniqueId(), toSeconds);
+            profile.addTimer(timer);
+            promise.success();
+        }
+
+        else if (type.equals(PlayerTimer.PlayerTimerType.GAPPLE)) {
+            final GappleTimer timer = new GappleTimer(player.getUniqueId(), toSeconds);
+            profile.addTimer(timer);
+            promise.success();
+        }
+
+        else if (type.equals(PlayerTimer.PlayerTimerType.HOME)) {
+            final PlayerFaction faction = profile.getFaction();
+
+            if (faction == null) {
+                promise.failure(player.getName() + " is not in a faction");
+                return;
+            }
+
+            final HomeTimer timer = new HomeTimer(manager.getPlugin(), player.getUniqueId(), faction, toSeconds);
+            profile.addTimer(timer);
+            promise.success();
+        }
+
+        else if (type.equals(PlayerTimer.PlayerTimerType.PROTECTION)) {
+            final DefinedClaim inside = profile.getCurrentClaim();
+
+            if (inside != null) {
+                final Faction insideFaction = manager.getPlugin().getFactionManager().getFactionById(inside.getOwnerId());
+
+                if (insideFaction instanceof PlayerFaction) {
+                    promise.failure(player.getName() + " is inside a Player Faction Claim");
+                    return;
+                }
+
+                else if (insideFaction instanceof ServerFaction) {
+                    final ServerFaction insideServerFaction = (ServerFaction)insideFaction;
+
+                    if (insideServerFaction.getFlag().equals(ServerFaction.FactionFlag.EVENT)) {
+                        promise.failure(player.getName() + " is inside an Event Claim");
+                        return;
+                    }
+                }
+            }
+
+            final ProtectionTimer timer = new ProtectionTimer(manager.getPlugin(), player.getUniqueId(), toSeconds);
+            profile.addTimer(timer);
+            promise.success();
+        }
+
+        else if (type.equals(PlayerTimer.PlayerTimerType.STUCK)) {
+            final DefinedClaim inside = profile.getCurrentClaim();
+
+            if (inside == null) {
+                promise.failure(player.getName() + " is not inside a claim");
+                return;
+            }
+
+            final StuckTimer timer = new StuckTimer(manager.getPlugin(), player.getUniqueId(), toSeconds);
+            profile.addTimer(timer);
+            promise.success();
+        }
+
+        else if (type.equals(PlayerTimer.PlayerTimerType.TOTEM)) {
+            final TotemTimer timer = new TotemTimer(player.getUniqueId(), toSeconds);
+            profile.addTimer(timer);
+            promise.success();
+        }
+
+        player.sendMessage(type.getDisplayName() + ChatColor.GOLD + " has been applied to your account for " + ChatColor.YELLOW + Time.convertToRemaining(duration));
+        Logger.print(sender.getName() + " applied a " + ChatColor.RESET + type.getDisplayName() + " timer to " + player.getName() + " for " + Time.convertToRemaining(duration));
     }
 
     /**

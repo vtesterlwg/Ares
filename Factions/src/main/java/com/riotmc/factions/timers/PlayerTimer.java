@@ -46,5 +46,22 @@ public abstract class PlayerTimer extends Timer {
         @Getter public final boolean render;
         /** If true, the remaining time on this timer will be displayed in decimal format **/
         @Getter public final boolean decimal;
+
+        /**
+         * Returns a PlayerTimerType matching the provided name
+         * @param name Name
+         * @return PlayerTimerType
+         */
+        public static PlayerTimerType match(String name) {
+            final PlayerTimerType type;
+
+            try {
+                type = PlayerTimerType.valueOf(name);
+            } catch (IllegalArgumentException ex) {
+                return null;
+            }
+
+            return type;
+        }
     }
 }

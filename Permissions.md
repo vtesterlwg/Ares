@@ -60,6 +60,7 @@ factions.dtr.others - Set others faction DTR
 factions.flag.others - Set flag for other factions
 factions.spawn - Teleport to a spawnpoint
 factions.setspawn - Set a spawnpoint
+factions.timer.edit - Access /timer command
 
 autoreboot.schedule - Schedule reboot
 autoreboot.start - Start reboot process
