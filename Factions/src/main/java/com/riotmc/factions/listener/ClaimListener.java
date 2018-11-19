@@ -331,7 +331,7 @@ public final class ClaimListener implements Listener {
         if (owner instanceof PlayerFaction) {
             if (profile.getTimer(PlayerTimer.PlayerTimerType.PROTECTION) != null) {
                 player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
-                player.sendMessage(ChatColor.RED + "Your enderpearl landed in a claim you are not allowed to enter - Your enderpearl has been refunded");
+                player.sendMessage(ChatColor.RED + "Your enderpearl landed in a claim you are not allowed to enter");
 
                 profile.getTimers().remove(timer);
 
@@ -342,7 +342,7 @@ public final class ClaimListener implements Listener {
 
             if (profile.getTimer(PlayerTimer.PlayerTimerType.COMBAT) != null && sf.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
                 player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
-                player.sendMessage(ChatColor.RED + "Your enderpearl landed in a claim you are not allowed to enter - Your enderpearl has been refunded");
+                player.sendMessage(ChatColor.RED + "Your enderpearl landed in a claim you are not allowed to enter");
 
                 profile.getTimers().remove(timer);
 
@@ -407,6 +407,45 @@ public final class ClaimListener implements Listener {
                 event.getTo().getZ(),
                 event.getTo().getYaw(),
                 event.getTo().getPitch()));
+
+        if (expectedClaim == predictedClaim) {
+            return;
+        }
+
+        final PlayerChangeClaimEvent changeClaimEvent = new PlayerChangeClaimEvent(player, expectedClaim, predictedClaim);
+        Bukkit.getPluginManager().callEvent(changeClaimEvent);
+
+        if (changeClaimEvent.isCancelled()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        profile.setCurrentClaim(predictedClaim);
+    }
+
+    @EventHandler
+    public void onPlayerTeleport(PlayerTeleportEvent event) {
+        // We handle Ender Pearl teleportation above
+        if (event.getCause().equals(PlayerTeleportEvent.TeleportCause.ENDER_PEARL)) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            return;
+        }
+
+        final DefinedClaim expectedClaim = profile.getCurrentClaim();
+        final DefinedClaim predictedClaim = plugin.getClaimManager().getClaimAt(new PLocatable(
+                event.getTo().getWorld().getName(),
+                event.getTo().getX(),
+                event.getTo().getY(),
+                event.getTo().getZ(),
+                event.getTo().getYaw(),
+                event.getTo().getPitch()
+        ));
 
         if (expectedClaim == predictedClaim) {
             return;
