@@ -29,7 +29,7 @@ public final class PlayerListener implements Listener {
             player.setScoreboard(faction.getScoreboard());
 
             faction.registerFriendly(player);
-            faction.sendMessage(ChatColor.GREEN + "Member Online: " + ChatColor.WHITE + player.getName());
+            faction.sendMessage(ChatColor.YELLOW + "Member " + ChatColor.GREEN + "Online" + ChatColor.YELLOW + ": " + ChatColor.RESET + player.getName());
         }
     }
 
@@ -42,7 +42,7 @@ public final class PlayerListener implements Listener {
 
         if (faction != null) {
             faction.unregister(player);
-            faction.sendMessage(ChatColor.RED + "Member Offline: " + ChatColor.WHITE + player.getName());
+            faction.sendMessage(ChatColor.YELLOW + "Member " + ChatColor.RED + "Offline" + ChatColor.YELLOW + ": " + ChatColor.RESET + player.getName());
         }
     }
 }

@@ -14,6 +14,7 @@ import com.riotmc.factions.factions.ServerFaction;
 import com.riotmc.factions.players.FactionPlayer;
 import com.riotmc.factions.timers.PlayerTimer;
 import com.riotmc.factions.timers.cont.player.EnderpearlTimer;
+import com.riotmc.factions.timers.cont.player.ProtectionTimer;
 import com.riotmc.factions.util.FactionUtils;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -499,6 +500,46 @@ public final class ClaimListener implements Listener {
                     player.sendMessage(ChatColor.GOLD + "Now Entering: " + color + pf.getName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
                 }
             }
+        }
+    }
+
+    @EventHandler (priority = EventPriority.HIGH)
+    public void onPlayerChangeClaimTimerFreeze(PlayerChangeClaimEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+        final DefinedClaim to = event.getTo();
+        boolean toSafezone = false;
+
+        if (profile == null) {
+            return;
+        }
+
+        final ProtectionTimer existing = (ProtectionTimer)profile.getTimer(PlayerTimer.PlayerTimerType.PROTECTION);
+
+        if (existing == null) {
+            return;
+        }
+
+        if (to != null) {
+            final Faction insideFaction = plugin.getFactionManager().getFactionById(to.getOwnerId());
+
+            if (insideFaction instanceof ServerFaction) {
+                final ServerFaction insideServerFaction = (ServerFaction)insideFaction;
+
+                if (insideServerFaction.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+                    toSafezone = true;
+                }
+            }
+        }
+
+        if (toSafezone && !existing.isFrozen()) {
+            existing.freeze();
+        } else if (!toSafezone && existing.isFrozen()) {
+            existing.unfreeze();
         }
     }
 }
