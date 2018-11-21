@@ -43,6 +43,8 @@ public final class FactionConfig {
     @Getter public int maxClaims;
     /** Value of each block in the area of a claim **/
     @Getter public double claimBlockValue;
+    /** Percent refunded upon unclaiming land **/
+    @Getter public double refundedPercent;
     /** Distance (in blocks) that each unique faction claim must be from others **/
     @Getter public double playerClaimBuffer;
     /** Default distance (in blocks) that each unique faction claim must be from ServerFaction claims **/
@@ -88,6 +90,7 @@ public final class FactionConfig {
         this.claimMinSize = config.getInt("claims.min-size");
         this.maxClaims = config.getInt("claims.max-claims");
         this.claimBlockValue = config.getDouble("claims.block-value");
+        this.refundedPercent = config.getDouble("claims.refunded-percent");
         this.playerClaimBuffer = config.getDouble("claims.buffers.player");
         this.defaultServerClaimBuffer = config.getDouble("claims.buffers.server");
         this.timerCombatTagAttacked = config.getInt("timers.player.combat-tag.attacked");

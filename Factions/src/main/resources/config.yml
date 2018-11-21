@@ -39,12 +39,14 @@ factions:
 # Max-claims: Max amount of claims a faction is allowed to have. Any more than 3 and factions could
 # technically box others in or even make claims around whole events
 # Block-value: Value that each block holds when determining the cost of a claim (area * block-value)
+# Refunded-Percent: The amount refunded to a faction after unclaiming land (0.75 = 75%)
 # Buffers determine the distance (in blocks) you need to be from another factions claim when creating
 # a new claim.
 claims:
   min-size: 10
   max-claims: 3
   block-value: 10.0
+  refunded-percent: 0.75
   buffers:
     player: 16.0
     server: 250.0
