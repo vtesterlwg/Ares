@@ -1,10 +1,7 @@
 package com.riotmc.services.punishments.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandCompletion;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Syntax;
+import co.aikar.commands.annotation.*;
 import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.services.punishments.PunishmentService;
 import lombok.AllArgsConstructor;
@@ -22,6 +19,7 @@ public final class BlacklistCommand extends BaseCommand {
     @CommandAlias("blacklist")
     @CommandPermission("punishments.blacklist")
     @CommandCompletion("@players")
+    @Description("Blacklist a player from the network")
     @Syntax("<player> <reason>")
     public void onBlacklist(CommandSender sender, String name, String reason) {
         service.getPunishmentHandler().blacklist(sender, name, reason, new SimplePromise() {

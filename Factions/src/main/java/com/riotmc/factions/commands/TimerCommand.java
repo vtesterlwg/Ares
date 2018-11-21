@@ -21,7 +21,7 @@ public final class TimerCommand extends BaseCommand {
 
     @Subcommand("apply|give")
     @Description("Apply or modify a timer")
-    @Syntax("<username> <timer> <time>")
+    @Syntax("<player> <timer> <time>")
     public void onApply(CommandSender sender, String username, String timer, String time) {
         plugin.getPlayerManager().getTimerHandler().apply(sender, username, timer, time, new SimplePromise() {
             @Override
@@ -38,7 +38,7 @@ public final class TimerCommand extends BaseCommand {
 
     @Subcommand("remove")
     @Description("Remove an existing timer from a player")
-    @Syntax("<username> <timer>")
+    @Syntax("<player> <timer>")
     public void onRemove(CommandSender sender, String username, String timer) {
         plugin.getPlayerManager().getTimerHandler().remove(sender, username, timer, new SimplePromise() {
             @Override
