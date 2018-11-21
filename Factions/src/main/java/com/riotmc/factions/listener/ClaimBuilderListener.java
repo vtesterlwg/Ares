@@ -3,6 +3,7 @@ package com.riotmc.factions.listener;
 import com.riotmc.commons.base.promise.FailablePromise;
 import com.riotmc.commons.bukkit.item.custom.event.CustomItemInteractEvent;
 import com.riotmc.commons.bukkit.location.BLocatable;
+import com.riotmc.commons.bukkit.location.PLocatable;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.claims.DefinedClaim;
 import com.riotmc.factions.claims.builder.DefinedClaimBuilder;
@@ -10,6 +11,8 @@ import com.riotmc.factions.factions.Faction;
 import com.riotmc.factions.factions.PlayerFaction;
 import com.riotmc.factions.items.ClaimingStick;
 import com.riotmc.factions.players.FactionPlayer;
+import com.riotmc.factions.timers.PlayerTimer;
+import com.riotmc.factions.timers.cont.player.ProtectionTimer;
 import com.riotmc.services.customitems.CustomItemService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -124,6 +127,13 @@ public final class ClaimBuilderListener implements Listener {
                         pf.sendMessage(ChatColor.YELLOW + "" + definedClaim.getLxW()[0] + "x" + definedClaim.getLxW()[1] +
                                 ChatColor.GOLD + " claim created by " + ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD +
                                 " for " + ChatColor.GREEN + "$" + definedClaim.getValue());
+
+                        if (profile != null && profile.hasTimer(PlayerTimer.PlayerTimerType.PROTECTION) && definedClaim.inside(new PLocatable(player))) {
+                            final ProtectionTimer timer = (ProtectionTimer)profile.getTimer(PlayerTimer.PlayerTimerType.PROTECTION);
+                            timer.onFinish();
+                            profile.getTimers().remove(timer);
+                            player.sendMessage(ChatColor.RED + "Your PvP Protection has been removed because you created a claim while standing inside the claim");
+                        }
                     }
 
                     player.sendMessage(ChatColor.GREEN + "Claim created");
