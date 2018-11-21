@@ -448,8 +448,18 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("unclaim")
     @Description("Unclaim your land")
     @Syntax("[all]")
-    public void onUnclaim(Player player, @Flags("all") String all) {
+    public void onUnclaim(Player player, @Values("all") String all) {
+        plugin.getClaimManager().getDeleteHandler().unclaimAll(player, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Land unclaimed");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("rename")

@@ -85,11 +85,62 @@ public final class ClaimDeleteHandler {
                     faction.unsetHome();
                 }
 
-                faction.setBalance(faction.getBalance() + inside.getValue());
+                faction.setBalance(faction.getBalance() + (inside.getValue() * manager.getPlugin().getFactionConfig().getRefundedPercent()));
                 faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " has unclaimed land. " +
-                        ChatColor.GREEN + "$" + String.format("%.2f", inside.getValue()) + ChatColor.GOLD + " has been returned to your faction balance");
+                        ChatColor.GREEN + "$" + String.format("%.2f", (inside.getValue() * manager.getPlugin().getFactionConfig().getRefundedPercent())) + ChatColor.GOLD + " has been returned to your faction balance");
 
                 Logger.print(player.getName() + " unclaimed land for " + faction.getName() + " worth $" + inside.getValue());
+
+                promise.success();
+            }).run();
+        }).run();
+    }
+
+    public void unclaimAll(Player player, SimplePromise promise) {
+        final PlayerFaction faction = manager.getPlugin().getFactionManager().getFactionByPlayer(player.getUniqueId());
+        final boolean admin = player.hasPermission("factions.admin");
+
+        if (faction == null) {
+            promise.failure("You are not in a faction");
+            return;
+        }
+
+        final List<DefinedClaim> claims = getManager().getClaimsByOwner(faction);
+
+        if (faction.getMember(player.getUniqueId()).getRank().equals(PlayerFaction.FactionRank.MEMBER) && !admin) {
+            promise.failure("Members are not able to perform this action");
+            return;
+        }
+
+        if (claims.isEmpty()) {
+            promise.failure("Your faction does not have any claims");
+            return;
+        }
+
+        manager.getClaimRepository().removeAll(claims);
+
+        new Scheduler(manager.getPlugin()).async(() -> {
+            double refunded = 0.0;
+
+            for (DefinedClaim claim : claims) {
+                ClaimDAO.deleteDefinedClaim(manager.getPlugin().getMongo(), claim);
+                refunded += claim.getValue();
+            }
+
+            faction.setBalance(faction.getBalance() + (refunded * manager.getPlugin().getFactionConfig().getRefundedPercent()));
+
+            final double refundedFinal = refunded;
+
+            new Scheduler(manager.getPlugin()).sync(() -> {
+
+                if (faction.getHome() != null) {
+                    faction.unsetHome();
+                }
+
+                faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " has unclaimed all of your factions land. " +
+                        ChatColor.DARK_GREEN + "$" + String.format("%.2f", (refundedFinal * manager.getPlugin().getFactionConfig().getRefundedPercent())) + ChatColor.GOLD + " has been returned to your faction balance");
+
+                Logger.print(player.getName() + " unclaimed all land for " + faction.getName() + " worth $" + refundedFinal);
 
                 promise.success();
             }).run();
