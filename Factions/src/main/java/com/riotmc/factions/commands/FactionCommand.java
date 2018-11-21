@@ -5,6 +5,8 @@ import co.aikar.commands.annotation.*;
 import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.factions.Factions;
 import lombok.Getter;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -607,7 +609,7 @@ public final class FactionCommand extends BaseCommand {
         });
     }
 
-    @Subcommand("setdisplayname|sdn")
+    @Subcommand("setname|setdisplayname|sdn")
     @Description("Update a factions display name")
     @CommandPermission("factions.displayname.others")
     @Syntax("[faction] [displayName]")
@@ -676,6 +678,292 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("help")
     @Description("View a list of commands")
     public void onHelp(Player player) {
+        player.sendMessage(ChatColor.GOLD + "Factions Help");
+        player.sendMessage(" ");
+        player.sendMessage(ChatColor.GOLD + "Create");
 
+        player.sendMessage(new ComponentBuilder("/f create <name>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Creates a new faction under your ownership")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f invite <player>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Invite a player to join your faction")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f accept <faction>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Accepts an invitation received from a faction")
+                        .create()))
+                .create());
+
+        player.sendMessage(" ");
+        player.sendMessage(ChatColor.GOLD + "Claiming");
+
+        player.sendMessage(new ComponentBuilder("/f claim")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Begin the claiming process for your faction")
+                        .append("\nHover over the item you receive for more information")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f unclaim [all]")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Unclaim the land you are currently standing in for your faction")
+                        .append("\nWarning: If you provide the [all] flag, all of your claims will be removed")
+                        .color(net.md_5.bungee.api.ChatColor.RED)
+                        .append("\nYour faction will only be refunded 75% of the original claim value")
+                        .color(net.md_5.bungee.api.ChatColor.RED)
+                        .create()))
+                .create());
+
+        player.sendMessage(" ");
+        player.sendMessage(ChatColor.GOLD + "Subclaiming");
+
+        player.sendMessage(new ComponentBuilder("/f subclaim")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Creates a subclaim for the chest you are looking at")
+                        .append("\nIf the chest is already subclaimed you will open the existing configuration for that chest")
+                        .create()))
+                .create());
+
+        player.sendMessage(" ");
+        player.sendMessage(ChatColor.GOLD + "Management");
+
+        player.sendMessage(new ComponentBuilder("/f disband <name>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Disband your faction")
+                        .append("\nWarning: All claims will be removed and will be refunded to the unclaiming player's balance")
+                        .color(net.md_5.bungee.api.ChatColor.RED)
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f rename <name>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Rename your faction to a new name")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f uninvite <player>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Revoke a players existing invitation to join your faction")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f kick <player>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Kicks a player from your faction")
+                        .append("\nWarning: Re-inviting this player will consume a re-invite if they join before the next Palace event is captured")
+                        .color(net.md_5.bungee.api.ChatColor.RED)
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f leave")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Leave your faction")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f promote <player>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Promote a player to the next highest rank in your faction")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f demote <player>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Demote a player to the next lowest rank in your faction")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f sethome")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Set your faction home to your current location")
+                        .create()))
+                .create());
+
+        player.sendMessage(" ");
+        player.sendMessage(ChatColor.GOLD + "Economy");
+
+        player.sendMessage(new ComponentBuilder("/f deposit <amount/all>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Transfer money from your personal balance to your faction balance")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f withdraw <amount/all>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Transfer money from your factions balance to your personal balance")
+                        .create()))
+                .create());
+
+        player.sendMessage(" ");
+        player.sendMessage(ChatColor.GOLD + "Warps");
+
+        player.sendMessage(new ComponentBuilder("/f home")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Return to your faction home")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f stuck")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Warp out of the claim you are inside")
+                        .create()))
+                .create());
+
+        player.sendMessage(" ");
+        player.sendMessage(ChatColor.GOLD + "Display");
+
+        player.sendMessage(new ComponentBuilder("/f show [faction/player]")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Displays faction information")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f map")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Draws pillars around nearby faction claims")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f list [page]")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Displays a list of all factions")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f leaderboard [category]")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Displays the faction leaderboard")
+                        .append("\n ")
+                        .append("\nValid Categories:")
+                        .color(net.md_5.bungee.api.ChatColor.BLUE)
+                        .append("\n - Rating")
+                        .color(net.md_5.bungee.api.ChatColor.RESET)
+                        .append("\n - Kills")
+                        .append("\n - Deaths")
+                        .append("\n - MinorEvents")
+                        .append("\n - MajorEvents")
+                        .create()))
+                .create());
+
+        player.sendMessage(" ");
+        player.sendMessage(ChatColor.GOLD + "Misc");
+
+        player.sendMessage(new ComponentBuilder("/f announcement <message>")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Set your factions announcement to a new message")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f rally")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Notify all of your faction members of your current location")
+                        .create()))
+                .create());
+
+        player.sendMessage(new ComponentBuilder("/f chat [channel]")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Change your primary chat channel")
+                        .append("\n ")
+                        .append("\nValid Categories:")
+                        .color(net.md_5.bungee.api.ChatColor.BLUE)
+                        .append("\n - Global")
+                        .color(net.md_5.bungee.api.ChatColor.RESET)
+                        .append("\n - Faction")
+                        .append("\n - Officer")
+                        .create()))
+                .create());
+
+        if (player.hasPermission("factions.mod") || player.hasPermission("factions.admin") || player.isOp()) {
+            player.sendMessage(" ");
+            player.sendMessage(ChatColor.GOLD + "Staff");
+
+            player.sendMessage(new ComponentBuilder("/f create server <name>")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Creates a new server faction")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f disband <faction>")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Disband a named faction")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f rename <faction> <name>")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Rename a named faction")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f claim <faction>")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Begin claiming for a named faction")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f unclaim <faction> [all]")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Creates a new server faction")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f freeze <faction> <time>")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Freeze a factions power regeneration for a set amount of time")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f unfreeze <faction>")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Thaw a factions power regeneration")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f setdtr <faction> <dtr>")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Set a factions DTR to the specified value")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f unclaim <faction> [all]")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Creates a new server faction")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f setflag <faction> <flag>")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Set a Server Factions flag type")
+                            .append("\n ")
+                            .append("\nValid Flag Types:")
+                            .color(net.md_5.bungee.api.ChatColor.BLUE)
+                            .append("\n - Safezone")
+                            .color(net.md_5.bungee.api.ChatColor.RESET)
+                            .append("\n - Event")
+                            .append("\n - Landmark")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f setname <faction> <name>")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Updates only the display name for Server Factions")
+                            .create()))
+                    .create());
+
+            player.sendMessage(new ComponentBuilder("/f setbuffer <faction> <radius>")
+                    .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                    .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder("Set the buffer radius around a faction claim")
+                            .create()))
+                    .create());
+        }
+
+        player.sendMessage(ChatColor.RESET + " ");
+        player.sendMessage(ChatColor.YELLOW + "Hover over commands for more information");
     }
 }
