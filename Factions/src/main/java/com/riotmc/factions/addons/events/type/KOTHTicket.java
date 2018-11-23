@@ -15,8 +15,11 @@ public final class KOTHTicket implements RiotEvent, KOTHEvent {
     @Getter @Setter public KOTHTicketSession session;
 
     public KOTHTicket(String name, BLocatable cornerA, BLocatable cornerB) {
+        this.ownerId = null;
         this.name = name;
+        this.displayName = name;
         this.captureRegion = new CaptureRegion(cornerA, cornerB);
+        this.session = null;
     }
 
     public KOTHTicket(UUID ownerId, String name, String displayName, BLocatable cornerA, BLocatable cornerB) {
