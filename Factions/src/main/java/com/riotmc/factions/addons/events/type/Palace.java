@@ -9,7 +9,7 @@ import lombok.Setter;
 
 import java.util.UUID;
 
-public class Palace implements RiotEvent, KOTHEvent {
+public final class Palace implements RiotEvent, KOTHEvent {
     @Getter @Setter public UUID ownerId;
     @Getter @Setter public String name;
     @Getter @Setter public String displayName;
@@ -50,5 +50,20 @@ public class Palace implements RiotEvent, KOTHEvent {
 
     public boolean shouldLootRespawn() {
         return nextLootRespawn <= Time.now();
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void cancel() {
+
+    }
+
+    @Override
+    public void capture(PlayerFaction winner) {
+
     }
 }

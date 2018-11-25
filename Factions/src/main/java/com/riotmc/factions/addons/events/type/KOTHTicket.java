@@ -2,6 +2,7 @@ package com.riotmc.factions.addons.events.type;
 
 import com.riotmc.commons.bukkit.location.BLocatable;
 import com.riotmc.factions.addons.events.data.CaptureRegion;
+import com.riotmc.factions.factions.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -28,5 +29,20 @@ public final class KOTHTicket implements RiotEvent, KOTHEvent {
         this.displayName = displayName;
         this.captureRegion = new CaptureRegion(cornerA, cornerB);
         this.session = null;
+    }
+
+    @Override
+    public void start() {
+
+    }
+
+    @Override
+    public void cancel() {
+
+    }
+
+    @Override
+    public void capture(PlayerFaction winner) {
+
     }
 }
