@@ -2,18 +2,20 @@ package com.riotmc.factions.addons.events.type;
 
 import com.riotmc.commons.bukkit.location.BLocatable;
 import com.riotmc.factions.addons.events.data.CaptureRegion;
+import com.riotmc.factions.addons.events.data.KOTHTimerSession;
 import com.riotmc.factions.factions.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.UUID;
 
-public final class KOTHTimer implements RiotEvent, KOTHEvent {
+public final class KOTHTimer implements RiotEvent, KOTHEvent, Contestable {
     @Getter @Setter public UUID ownerId;
     @Getter @Setter public String name;
     @Getter @Setter public String displayName;
     @Getter @Setter public CaptureRegion captureRegion;
     @Getter @Setter public KOTHTimerSession session;
+    @Getter @Setter public boolean contested;
 
     public KOTHTimer(String name, BLocatable cornerA, BLocatable cornerB) {
         this.name = name;
