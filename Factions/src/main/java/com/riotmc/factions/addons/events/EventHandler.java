@@ -1,6 +1,7 @@
 package com.riotmc.factions.addons.events;
 
 import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.commons.bukkit.location.BLocatable;
 import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.commons.bukkit.timer.BossTimer;
 import com.riotmc.factions.addons.events.type.RiotEvent;
@@ -18,16 +19,45 @@ public final class EventHandler {
         this.manager = manager;
     }
 
-    public void create() {
+    public void create(String name, String displayName, BLocatable capCornerA, BLocatable capCornerB) {
 
     }
 
-    public void delete() {
+    public void delete(RiotEvent event, SimplePromise promise) {
+        if (!manager.getEventRepository().contains(event)) {
+            promise.failure("Event not found");
+            return;
+        }
 
+        if (manager.getActiveEvents().contains(event)) {
+            event.cancel();
+        }
+
+        manager.getEventRepository().remove(event);
+
+        // TODO: Wipe from file
+
+        Logger.print(event.getName() + " has been deleted");
+
+        promise.success();
     }
 
-    public void rename() {
+    public void rename(RiotEvent event, String name, SimplePromise promise) {
+        Logger.print(event.getName() + " has been renamed to '" + name + "'");
+        event.setName(name);
 
+        // TODO: Save to file
+
+        promise.success();
+    }
+
+    public void renameDisplay(RiotEvent event, String name, SimplePromise promise) {
+        Logger.print(event.getDisplayName() + ChatColor.RESET + " has been renamed to '" + ChatColor.translateAlternateColorCodes('&', name) + ChatColor.RESET + "'");
+        event.setDisplayName(ChatColor.translateAlternateColorCodes('&', name));
+
+        // TODO: Save to file
+
+        promise.success();
     }
 
     public void start(RiotEvent event, SimplePromise promise) {

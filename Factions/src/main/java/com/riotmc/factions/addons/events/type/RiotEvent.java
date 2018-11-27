@@ -11,6 +11,10 @@ public interface RiotEvent {
 
     String getDisplayName();
 
+    void setName(String name);
+
+    void setDisplayName(String displayName);
+
     void start();
 
     void cancel();

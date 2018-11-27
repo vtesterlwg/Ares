@@ -3,6 +3,7 @@ package com.riotmc.factions.addons.events.type;
 import com.riotmc.commons.base.util.Time;
 import com.riotmc.commons.bukkit.location.BLocatable;
 import com.riotmc.factions.addons.events.data.CaptureRegion;
+import com.riotmc.factions.addons.events.data.KOTHTicketSession;
 import com.riotmc.factions.factions.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
