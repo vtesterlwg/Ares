@@ -9,6 +9,10 @@ import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.commons.bukkit.timer.Timer;
 import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
+import com.riotmc.factions.addons.events.EventsAddon;
+import com.riotmc.factions.addons.events.type.KOTHTicket;
+import com.riotmc.factions.addons.events.type.KOTHTimer;
+import com.riotmc.factions.addons.events.type.RiotEvent;
 import com.riotmc.factions.players.handlers.PlayerDisplayHandler;
 import com.riotmc.factions.players.handlers.PlayerTimerHandler;
 import com.riotmc.factions.timers.PlayerTimer;
@@ -38,6 +42,7 @@ public final class PlayerManager {
 
     public PlayerManager(Factions plugin) {
         final AutomatedRestartService restartService = (AutomatedRestartService)plugin.getService(AutomatedRestartService.class);
+        final EventsAddon eventAddon = (EventsAddon)plugin.getAddonManager().getAddon(EventsAddon.class);
         this.plugin = plugin;
         this.timerHandler = new PlayerTimerHandler(this);
         this.displayHandler = new PlayerDisplayHandler(this);
@@ -46,9 +51,38 @@ public final class PlayerManager {
         this.displayUpdater = new Scheduler(plugin).async(() -> playerRepository.forEach(profile -> {
             List<String> hudElements = null;
 
+            if (eventAddon != null && !eventAddon.getManager().getActiveEvents().isEmpty()) {
+                hudElements = Lists.newArrayList();
+
+                for (RiotEvent event : eventAddon.getManager().getActiveEvents()) {
+                    if (event instanceof KOTHTicket) {
+                        final KOTHTicket koth = (KOTHTicket)event;
+
+                        if (koth.isContested()) {
+                            hudElements.add(koth.getDisplayName() + ChatColor.RESET + " " + ChatColor.RED + "Contested");
+                        } else {
+                            hudElements.add(koth.getDisplayName() + ChatColor.RESET + " " + ChatColor.RED + Time.convertToHHMMSS(koth.getSession().getTimer().getRemaining()));
+                        }
+                    }
+
+                    else if (event instanceof KOTHTimer) {
+                        final KOTHTimer koth = (KOTHTimer)event;
+
+                        if (koth.isContested()) {
+                            hudElements.add(koth.getDisplayName() + ChatColor.RESET + " " + ChatColor.RED + "Contested");
+                        } else {
+                            hudElements.add(koth.getDisplayName() + ChatColor.RESET + " " + ChatColor.RED + Time.convertToHHMMSS(koth.getSession().getTimer().getRemaining()));
+                        }
+                    }
+                }
+            }
+
             // Restarts are not part of the typical HUD elements
             if (restartService != null && restartService.isInProgress()) {
-                hudElements = Lists.newArrayList();
+                if (hudElements == null) {
+                    hudElements = Lists.newArrayList();
+                }
+
                 hudElements.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Reboot" + " " + ChatColor.RED + Time.convertToHHMMSS(restartService.getTimeUntilReboot()));
             }
 
