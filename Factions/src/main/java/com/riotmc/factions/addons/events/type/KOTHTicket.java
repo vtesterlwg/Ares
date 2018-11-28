@@ -33,6 +33,10 @@ public final class KOTHTicket implements RiotEvent, KOTHEvent, Contestable {
         this.session = null;
     }
 
+    public void tick(PlayerFaction faction) {
+        session.tick(faction);
+    }
+
     @Override
     public void start() {
 
