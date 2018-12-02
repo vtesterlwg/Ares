@@ -69,6 +69,11 @@ public class PLocatable implements Locatable, MongoDocument<PLocatable> {
     }
 
     @Override
+    public String toString() {
+        return Math.round(x) + ", " + Math.round(y) + ", " + Math.round(z) + ", " + getBukkit().getWorld().getEnvironment().name();
+    }
+
+    @Override
     public PLocatable fromDocument(Document document) {
         return new PLocatable(
                 document.getString("world"),

@@ -48,6 +48,11 @@ public class BLocatable implements Locatable, MongoDocument<BLocatable> {
     }
 
     @Override
+    public String toString() {
+        return Math.round(x) + ", " + Math.round(y) + ", " + Math.round(z) + ", " + getBukkit().getWorld().getEnvironment().name();
+    }
+
+    @Override
     public BLocatable fromDocument(Document document) {
         return new BLocatable(
                 document.getString("world"),
