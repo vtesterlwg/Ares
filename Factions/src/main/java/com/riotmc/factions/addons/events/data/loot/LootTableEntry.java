@@ -1,4 +1,4 @@
-package com.riotmc.factions.addons.events.data;
+package com.riotmc.factions.addons.events.data.loot;
 
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;

@@ -1,21 +1,21 @@
-package com.riotmc.factions.addons.events.data;
+package com.riotmc.factions.addons.events.data.sessions;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.riotmc.commons.base.util.Time;
-import com.riotmc.factions.addons.events.type.KOTHCounter;
-import com.riotmc.factions.addons.events.type.KOTHTicket;
+import com.riotmc.factions.addons.events.type.koth.KOTHCounter;
+import com.riotmc.factions.addons.events.type.koth.KOTHEvent;
 import com.riotmc.factions.factions.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 public final class KOTHTicketSession {
-    @Getter public final KOTHTicket event;
+    @Getter public final KOTHEvent event;
     @Getter @Setter public boolean active;
     @Getter @Setter public int winCondition;
     @Getter @Setter public int timerDuration;
@@ -24,7 +24,7 @@ public final class KOTHTicketSession {
     @Getter public Set<UUID> insidePlayers;
     @Getter public Map<PlayerFaction, Integer> tickets;
 
-    public KOTHTicketSession(KOTHTicket event, int winCondition, int timerDuration) {
+    public KOTHTicketSession(KOTHEvent event, int winCondition, int timerDuration) {
         this.event = event;
         this.active = false;
         this.winCondition = winCondition;
@@ -41,6 +41,13 @@ public final class KOTHTicketSession {
 
     public int getTickets(PlayerFaction faction) {
         return tickets.getOrDefault(faction, 0);
+    }
+
+    public ImmutableList<PlayerFaction> getTicketLeaderboard() {
+        final List<PlayerFaction> factions = Lists.newArrayList(tickets.keySet());
+        factions.sort(Comparator.comparingInt(this::getTickets));
+        Collections.reverse(factions);
+        return ImmutableList.copyOf(factions);
     }
 
     public void tick(PlayerFaction faction) {

@@ -1,4 +1,4 @@
-package com.riotmc.factions.addons.events.data;
+package com.riotmc.factions.addons.events.data.loot;
 
 import com.google.common.collect.ImmutableList;
 import com.riotmc.commons.bukkit.location.BLocatable;

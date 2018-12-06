@@ -1,4 +1,4 @@
-package com.riotmc.factions.addons.events.type;
+package com.riotmc.factions.addons.events.type.koth;
 
 import com.riotmc.factions.addons.events.data.CaptureRegion;
 

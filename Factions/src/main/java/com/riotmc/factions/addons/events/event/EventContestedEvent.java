@@ -11,7 +11,7 @@ public final class EventContestedEvent extends Event {
     @Getter
     public final Contestable event;
 
-    public final boolean state;
+    private final boolean state;
 
     public EventContestedEvent(Contestable event, boolean state) {
         this.event = event;

@@ -7,7 +7,11 @@ import com.riotmc.factions.addons.events.EventsAddon;
 import com.riotmc.factions.addons.events.event.EventContestedEvent;
 import com.riotmc.factions.addons.events.event.PlayerEnterCapzoneEvent;
 import com.riotmc.factions.addons.events.event.PlayerLeaveCapzoneEvent;
-import com.riotmc.factions.addons.events.type.*;
+import com.riotmc.factions.addons.events.type.Contestable;
+import com.riotmc.factions.addons.events.type.RiotEvent;
+import com.riotmc.factions.addons.events.type.koth.KOTHEvent;
+import com.riotmc.factions.addons.events.type.koth.KOTHTicket;
+import com.riotmc.factions.addons.events.type.koth.KOTHTimer;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -61,6 +65,19 @@ public final class CaptureRegionListener implements Listener {
 
             final EventContestedEvent contestEvent = new EventContestedEvent(contestable, contested);
             Bukkit.getPluginManager().callEvent(contestEvent);
+        }
+    }
+
+    @EventHandler
+    public void onContested(EventContestedEvent event) {
+        final Contestable contestable = event.getEvent();
+        final boolean state = event.getState();
+
+        if (!state && contestable instanceof KOTHEvent) {
+            final KOTHEvent koth = (KOTHEvent)contestable;
+            addon.getManager().getHandler().reset(koth);
+
+            // TODO: Determine if reset or uncontested
         }
     }
 
