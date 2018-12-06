@@ -4,6 +4,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
@@ -234,6 +235,63 @@ public final class Time {
         }
 
         return (result * 1000);
+    }
+
+    /**
+     * Loops through days, hours and minutes to find next closest time matching given day, hour and minute
+     * @param day Day of the week
+     * @param hour Hour of the day
+     * @param minute Minute of the hour
+     * @return Returns the time until a specific day, hour and minute combination can be matched again
+     */
+    public static long getTimeUntil(int day, int hour, int minute) {
+        final Calendar calendar = Calendar.getInstance();
+        final int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
+        final int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
+        final int currentMin = calendar.get(Calendar.MINUTE);
+
+        int dayCycles = 0;
+        int hourCycles = 0;
+        int minCycles = 0;
+        long ms = 0L;
+
+        for (int i = currentDay; i != day; i++) {
+            if (i >= 7) {
+                i = 0;
+            }
+
+            dayCycles++;
+        }
+
+        for (int i = currentHour; i != hour; i++) {
+            if (i >= 24) {
+                i = 0;
+            }
+
+            hourCycles++;
+        }
+
+        for (int i = currentMin; i != minute; i++) {
+            if (i >= 60) {
+                i = 0;
+            }
+
+            minCycles++;
+        }
+
+        if (dayCycles > 0) {
+            ms += ((3600 * 24) * dayCycles) * 1000L;
+        }
+
+        if (hourCycles > 0) {
+            ms += (3600 * hourCycles) * 1000L;
+        }
+
+        if (minCycles > 0) {
+            ms += (60 * minCycles) * 1000L;
+        }
+
+        return ms;
     }
 
     private Time() {
