@@ -1,4 +1,4 @@
-package com.riotmc.factions.addons.events.data;
+package com.riotmc.factions.addons.events.data.region;
 
 import com.google.common.base.Preconditions;
 import com.riotmc.commons.bukkit.location.BLocatable;

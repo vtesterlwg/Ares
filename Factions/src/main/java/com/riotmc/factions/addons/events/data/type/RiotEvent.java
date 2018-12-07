@@ -1,9 +1,9 @@
-package com.riotmc.factions.addons.events.type;
+package com.riotmc.factions.addons.events.data.type;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.riotmc.commons.base.util.Time;
-import com.riotmc.factions.addons.events.data.EventSchedule;
+import com.riotmc.factions.addons.events.data.schedule.EventSchedule;
 import com.riotmc.factions.factions.PlayerFaction;
 
 import java.util.Calendar;
@@ -20,15 +20,13 @@ public interface RiotEvent {
 
     List<EventSchedule> getSchedule();
 
-    void setName(String name);
-
-    void setDisplayName(String displayName);
+    void setDisplayName(String name);
 
     void start();
 
-    void cancel();
+    void stop();
 
-    void capture(PlayerFaction winner);
+    void capture(PlayerFaction faction);
 
     @SuppressWarnings("MagicConstant")
     default boolean shouldStart() {
@@ -45,24 +43,15 @@ public interface RiotEvent {
         return false;
     }
 
-    default long getTimeUntilNextSchedule() {
+    default long getTimeToNextSchedule() {
         Preconditions.checkArgument(getSchedule().isEmpty(), "Schedule is empty");
 
         final List<Long> times = Lists.newArrayList();
-        final Calendar calendar = Calendar.getInstance();
 
-        for (EventSchedule time : getSchedule()) {
-            calendar.set(Calendar.DAY_OF_WEEK, time.getDay());
-            calendar.set(Calendar.HOUR_OF_DAY, time.getHour());
-            calendar.set(Calendar.MINUTE, time.getMinute());
-
-            final long ms = Time.getTimeUntil(time.getDay(), time.getHour(), time.getMinute());
-
-            times.add(ms);
-        }
+        getSchedule().forEach(time -> times.add(Time.getTimeUntil(time.getDay(), time.getHour(), time.getMinute())));
 
         if (times.isEmpty()) {
-            return 0L;
+            return -1L;
         }
 
         times.sort(Comparator.naturalOrder());
