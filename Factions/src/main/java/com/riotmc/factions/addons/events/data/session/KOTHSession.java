@@ -3,6 +3,8 @@ package com.riotmc.factions.addons.events.data.session;
 import com.google.common.collect.Maps;
 import com.riotmc.commons.base.util.Time;
 import com.riotmc.commons.bukkit.location.BLocatable;
+import com.riotmc.factions.addons.events.data.timer.KOTHCountdownTimer;
+import com.riotmc.factions.addons.events.data.type.koth.KOTHEvent;
 import com.riotmc.factions.factions.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +12,7 @@ import lombok.Setter;
 import java.util.Map;
 
 public final class KOTHSession {
+    @Getter public final KOTHEvent event;
     @Getter @Setter public boolean active;
     @Getter @Setter public PlayerFaction capturingFaction;
     @Getter @Setter public long captureChestUnlockTime;
@@ -17,14 +20,17 @@ public final class KOTHSession {
     @Getter public final Map<PlayerFaction, Integer> leaderboard;
     @Getter @Setter public int ticketsNeededToWin;
     @Getter @Setter public int timerDuration;
+    @Getter @Setter public KOTHCountdownTimer timer;
 
-    public KOTHSession(int ticketsNeededToWin, int timerDuration) {
+    public KOTHSession(KOTHEvent event, int ticketsNeededToWin, int timerDuration) {
+        this.event = event;
         this.active = false;
         this.capturingFaction = null;
         this.captureChestUnlockTime = -1;
         this.leaderboard = Maps.newConcurrentMap();
         this.ticketsNeededToWin = ticketsNeededToWin;
         this.timerDuration = timerDuration;
+        this.timer = new KOTHCountdownTimer(event, timerDuration);
     }
 
     public boolean isCaptured() {

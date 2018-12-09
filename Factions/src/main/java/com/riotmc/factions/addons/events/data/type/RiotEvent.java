@@ -22,10 +22,6 @@ public interface RiotEvent {
 
     void setDisplayName(String name);
 
-    void start();
-
-    void stop();
-
     void capture(PlayerFaction faction);
 
     @SuppressWarnings("MagicConstant")
