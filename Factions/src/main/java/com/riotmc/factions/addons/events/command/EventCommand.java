@@ -81,8 +81,8 @@ public final class EventCommand extends BaseCommand {
     }
 
     @Subcommand("start")
-    public void onStart(Player player, String name) {
-        addon.getManager().getHandler().start(player, name, new SimplePromise() {
+    public void onStart(Player player, String name, int ticketsNeededToWin, int timerDuration) {
+        addon.getManager().getHandler().start(name, ticketsNeededToWin, timerDuration, new SimplePromise() {
             @Override
             public void success() {
                 player.sendMessage(ChatColor.GREEN + "Event started");
