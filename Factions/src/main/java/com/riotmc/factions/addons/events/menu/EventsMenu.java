@@ -33,7 +33,7 @@ public final class EventsMenu extends Menu {
 
     }
 
-    public void update() {
+    private void update() {
         final List<RiotEvent> events = addon.getManager().getEventsAlphabetical();
         int pos = 0;
 
@@ -67,7 +67,7 @@ public final class EventsMenu extends Menu {
 
                     // TODO: Add status here
 
-                    lore.add(ChatColor.GOLD + "Remaining Time" + ChatColor.YELLOW + ": " + koth.getSession().getTimer().getRemaining());
+                    lore.add(ChatColor.GOLD + "Remaining Time" + ChatColor.YELLOW + ": " + Time.convertToHHMMSS(koth.getSession().getTimer().getRemaining()));
 
                     if (koth.getSession().getTicketsNeededToWin() > 1) {
                         // TODO: Ticket Leaderboard
