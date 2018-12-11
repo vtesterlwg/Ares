@@ -2,6 +2,8 @@ package com.riotmc.factions.addons.events;
 
 import com.riotmc.commons.base.promise.FailablePromise;
 import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.factions.addons.events.builder.type.KOTHEventBuilder;
+import com.riotmc.factions.addons.events.builder.type.PalaceEventBuilder;
 import com.riotmc.factions.addons.events.menu.EventsMenu;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -14,11 +16,41 @@ public final class EventsHandler {
     }
 
     public void list(Player player, FailablePromise<EventsMenu> promise) {
+        if (manager.getEventRepository().isEmpty()) {
+            promise.failure("There are no events created");
+            return;
+        }
 
+        final EventsMenu menu = new EventsMenu(manager.getAddon(), manager.getAddon().getPlugin(), player, "Events", 1);
+        promise.success(menu);
     }
 
-    public void create(Player player, String name, SimplePromise promise) {
+    public void create(Player player, String type, SimplePromise promise) {
+        if (manager.getAddon().getBuilderManager().getBuilder(player) != null) {
+            promise.failure("You are already building an event");
+            return;
+        }
 
+        if (!type.equalsIgnoreCase("koth") && !type.equalsIgnoreCase("palace")) {
+            promise.failure("Invaid event type - Valid types: 'koth', 'palace'");
+            return;
+        }
+
+        if (type.equalsIgnoreCase("koth")) {
+            final KOTHEventBuilder builder = new KOTHEventBuilder(manager.getAddon(), player);
+            manager.getAddon().getBuilderManager().getBuilders().add(builder);
+            promise.success();
+            return;
+        }
+
+        if (type.equalsIgnoreCase("palace")) {
+            final PalaceEventBuilder builder = new PalaceEventBuilder(manager.getAddon(), player);
+            manager.getAddon().getBuilderManager().getBuilders().add(builder);
+            promise.success();
+            return;
+        }
+
+        // Add other event types here
     }
 
     public void delete(Player player, String name, SimplePromise promise) {

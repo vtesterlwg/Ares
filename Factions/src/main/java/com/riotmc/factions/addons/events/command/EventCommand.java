@@ -27,7 +27,7 @@ public final class EventCommand extends BaseCommand {
         addon.getManager().getHandler().list(player, new FailablePromise<EventsMenu>() {
             @Override
             public void success(@Nonnull EventsMenu eventsMenu) {
-                // TODO: Open menu
+                eventsMenu.open();
             }
 
             @Override
@@ -38,12 +38,10 @@ public final class EventCommand extends BaseCommand {
     }
 
     @Subcommand("create")
-    public void onCreate(Player player, String name) {
-        addon.getManager().getHandler().create(player, name, new SimplePromise() {
+    public void onCreate(Player player, @Values("koth|palace") String type) {
+        addon.getManager().getHandler().create(player, type, new SimplePromise() {
             @Override
-            public void success() {
-                player.sendMessage(ChatColor.GREEN + "Event created. Follow the instructions provided in chat to complete the configuration for this new event");
-            }
+            public void success() {}
 
             @Override
             public void failure(@Nonnull String reason) {

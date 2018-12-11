@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.autosave.AutosaveAddon;
+import com.riotmc.factions.addons.events.EventsAddon;
 import com.riotmc.factions.addons.loggers.LoggerAddon;
 import com.riotmc.factions.addons.mining.MiningAddon;
 import com.riotmc.factions.addons.spawnpoints.SpawnpointAddon;
@@ -23,6 +24,7 @@ public final class AddonManager {
         this.plugin = plugin;
         this.addons = Maps.newHashMap();
 
+        registerAddon(new EventsAddon(plugin));
         registerAddon(new MiningAddon(plugin));
         registerAddon(new StatsAddon(plugin));
         registerAddon(new AutosaveAddon(plugin));

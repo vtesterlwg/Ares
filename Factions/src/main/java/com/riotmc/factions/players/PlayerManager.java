@@ -10,9 +10,8 @@ import com.riotmc.commons.bukkit.timer.Timer;
 import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.events.EventsAddon;
-import com.riotmc.factions.addons.events.type.KOTHTicket;
-import com.riotmc.factions.addons.events.type.KOTHTimer;
-import com.riotmc.factions.addons.events.type.RiotEvent;
+import com.riotmc.factions.addons.events.data.type.RiotEvent;
+import com.riotmc.factions.addons.events.data.type.koth.KOTHEvent;
 import com.riotmc.factions.players.handlers.PlayerDisplayHandler;
 import com.riotmc.factions.players.handlers.PlayerTimerHandler;
 import com.riotmc.factions.timers.PlayerTimer;
@@ -55,24 +54,9 @@ public final class PlayerManager {
                 hudElements = Lists.newArrayList();
 
                 for (RiotEvent event : eventAddon.getManager().getActiveEvents()) {
-                    if (event instanceof KOTHTicket) {
-                        final KOTHTicket koth = (KOTHTicket)event;
-
-                        if (koth.isContested()) {
-                            hudElements.add(koth.getDisplayName() + ChatColor.RESET + " " + ChatColor.RED + "Contested");
-                        } else {
-                            hudElements.add(koth.getDisplayName() + ChatColor.RESET + " " + ChatColor.RED + Time.convertToHHMMSS(koth.getSession().getTimer().getRemaining()));
-                        }
-                    }
-
-                    else if (event instanceof KOTHTimer) {
-                        final KOTHTimer koth = (KOTHTimer)event;
-
-                        if (koth.isContested()) {
-                            hudElements.add(koth.getDisplayName() + ChatColor.RESET + " " + ChatColor.RED + "Contested");
-                        } else {
-                            hudElements.add(koth.getDisplayName() + ChatColor.RESET + " " + ChatColor.RED + Time.convertToHHMMSS(koth.getSession().getTimer().getRemaining()));
-                        }
+                    if (event instanceof KOTHEvent) {
+                        final KOTHEvent koth = (KOTHEvent)event;
+                        hudElements.add(event.getDisplayName() + " " + ChatColor.RED + Time.convertToHHMMSS(koth.getSession().getTimer().getRemaining()));
                     }
                 }
             }

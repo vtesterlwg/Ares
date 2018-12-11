@@ -83,10 +83,10 @@ public final class Factions extends RiotPlugin {
         startServices();
 
         // Data Managers
+        addonManager = new AddonManager(this);
         factionManager = new FactionManager(this);
         claimManager = new ClaimManager(this);
         playerManager = new PlayerManager(this);
-        addonManager = new AddonManager(this);
 
         // Data Loading
         factionManager.loadFactions();

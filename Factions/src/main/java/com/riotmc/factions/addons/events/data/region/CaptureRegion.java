@@ -12,7 +12,7 @@ public final class CaptureRegion {
     @Getter public final String worldName;
 
     public CaptureRegion(BLocatable cornerA, BLocatable cornerB) {
-        Preconditions.checkArgument(!cornerA.getWorldName().equals(cornerB.getWorldName()), "Corner worlds do not match");
+        Preconditions.checkArgument(cornerA.getWorldName().equals(cornerB.getWorldName()), "Corner worlds do not match");
         this.cornerA = cornerA;
         this.cornerB = cornerB;
         this.worldName = cornerA.getWorldName();

@@ -11,12 +11,16 @@ import java.util.Set;
 public final class EventBuilderManager {
     @Getter public final EventsAddon addon;
     @Getter public final EventBuilderHandler handler;
+    @Getter public final EventBuilderListener listener;
     @Getter public final Set<EventBuilder> builders;
 
     public EventBuilderManager(EventsAddon addon) {
         this.addon = addon;
         this.handler = new EventBuilderHandler(this);
+        this.listener = new EventBuilderListener(addon);
         this.builders = Sets.newConcurrentHashSet();
+
+        addon.getPlugin().registerListener(listener);
     }
 
     public EventBuilder getBuilder(Player player) {

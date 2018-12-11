@@ -44,7 +44,7 @@ public final class EventsManager {
     }
 
     public ImmutableList<RiotEvent> getActiveEvents() {
-        final List<RiotEvent> events = Lists.newArrayList(eventRepository);
+        final List<RiotEvent> events = Lists.newArrayList();
 
         for (RiotEvent event : eventRepository) {
             if (event instanceof KOTHEvent) {

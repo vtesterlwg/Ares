@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-public final class KOTHEvent implements RiotEvent {
+public class KOTHEvent implements RiotEvent {
     @Getter @Setter public UUID ownerId;
     @Getter @Setter public String name;
     @Getter @Setter public String displayName;

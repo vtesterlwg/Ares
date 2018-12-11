@@ -2,14 +2,18 @@ package com.riotmc.factions.addons.events.builder.type;
 
 import com.google.common.collect.Lists;
 import com.riotmc.commons.base.promise.FailablePromise;
-import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.commons.bukkit.location.BLocatable;
 import com.riotmc.factions.addons.events.EventsAddon;
+import com.riotmc.factions.addons.events.builder.EventBuilderWand;
 import com.riotmc.factions.addons.events.data.type.koth.KOTHEvent;
 import com.riotmc.factions.factions.ServerFaction;
+import com.riotmc.services.customitems.CustomItemService;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -23,11 +27,16 @@ public class KOTHEventBuilder implements EventBuilder {
     @Getter public String displayName;
     @Getter public BLocatable cornerA;
     @Getter public BLocatable cornerB;
+    @Getter public BLocatable lootChest;
 
     public KOTHEventBuilder(EventsAddon addon, Player player) {
         this.addon = addon;
         this.builder = player.getUniqueId();
         this.currentStep = KOTHBuilderStep.OWNER;
+
+        player.sendMessage(ChatColor.BLUE + "You are now building a King of the Hill Event");
+        player.sendMessage(ChatColor.YELLOW + "Start by providing the name of the Server Faction connected to this event.");
+        player.sendMessage(ChatColor.GRAY + "If there is no Server Faction connected to this event just provide 'none'");
     }
 
     public void setOwningFaction(String name, FailablePromise<String> promise) {
@@ -39,25 +48,31 @@ public class KOTHEventBuilder implements EventBuilder {
         }
 
         this.owningFaction = faction;
-
         setCurrentStep(KOTHBuilderStep.NAME);
-        promise.success("Owning faction has been set. Now provide the name for this event - This name must be unique as it will be the main identifier. This name will not be used for display.");
+        promise.success("Provide a unique name for this event");
     }
 
-    public void setName(String name, SimplePromise promise) {
+    public void setName(String name, FailablePromise<String> promise) {
         if (addon.getManager().getEventByName(name) != null) {
             promise.failure("Event with the name '" + name + "' already exists");
             return;
         }
 
         this.name = name;
-
         setCurrentStep(KOTHBuilderStep.DISPLAY_NAME);
-        promise.success();
+        promise.success("Provide a display name for this event");
     }
 
     public void setDisplayName(String name) {
+        final Player player = Bukkit.getPlayer(builder);
+        final CustomItemService customItemService = (CustomItemService)addon.getPlugin().getService(CustomItemService.class);
+
+        if (player != null && customItemService != null) {
+            customItemService.getItem(EventBuilderWand.class).ifPresent(item -> player.getInventory().addItem(item.getItem()));
+        }
+
         this.displayName = ChatColor.translateAlternateColorCodes('&', name);
+
         setCurrentStep(KOTHBuilderStep.CORNER_A);
     }
 
@@ -68,7 +83,26 @@ public class KOTHEventBuilder implements EventBuilder {
 
     public void setCornerB(BLocatable location) {
         this.cornerB = location;
+        setCurrentStep(KOTHBuilderStep.LOOT_CHEST);
+    }
+
+    public void setLootChest(BLocatable location, FailablePromise<String> promise) {
+        final Player player = Bukkit.getPlayer(builder);
+        final Block block = location.getBukkit();
+        final CustomItemService customItemService = (CustomItemService)addon.getPlugin().getService(CustomItemService.class);
+
+        if (block == null || !(block.getType().equals(Material.CHEST) || block.getType().equals(Material.TRAPPED_CHEST))) {
+            promise.failure("This block is not a chest");
+            return;
+        }
+
+        if (player != null && customItemService != null) {
+            customItemService.getItem(EventBuilderWand.class).ifPresent(item -> player.getInventory().remove(item.getItem()));
+        }
+
+        this.lootChest = location;
         setCurrentStep(KOTHBuilderStep.FINISHED);
+        promise.success("Event loot chest location has been set");
     }
 
     public void build(FailablePromise<KOTHEvent> promise) {
@@ -108,6 +142,6 @@ public class KOTHEventBuilder implements EventBuilder {
      */
 
     public enum KOTHBuilderStep {
-        OWNER, NAME, DISPLAY_NAME, CORNER_A, CORNER_B, FINISHED;
+        OWNER, NAME, DISPLAY_NAME, CORNER_A, CORNER_B, LOOT_CHEST, FINISHED;
     }
 }
