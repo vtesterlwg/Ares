@@ -2,6 +2,7 @@ package com.riotmc.factions.addons.events.data.type.koth;
 
 import com.google.common.collect.Lists;
 import com.riotmc.commons.bukkit.location.BLocatable;
+import com.riotmc.factions.addons.events.EventsAddon;
 import com.riotmc.factions.addons.events.data.region.CaptureRegion;
 import com.riotmc.factions.addons.events.data.schedule.EventSchedule;
 import com.riotmc.factions.addons.events.data.session.KOTHSession;
@@ -9,6 +10,8 @@ import com.riotmc.factions.addons.events.data.type.RiotEvent;
 import com.riotmc.factions.factions.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 
 import java.util.Collection;
 import java.util.List;
@@ -33,6 +36,9 @@ public class KOTHEvent implements RiotEvent {
 
     public void start(int ticketsNeededToWin, int timerDuration) {
         this.session = new KOTHSession(this, ticketsNeededToWin, timerDuration);
+        this.session.setActive(true);
+
+        Bukkit.broadcastMessage(EventsAddon.PREFIX + displayName + ChatColor.GOLD + " can now be contested");
     }
 
     @Override
