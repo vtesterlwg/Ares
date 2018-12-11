@@ -31,6 +31,7 @@ public final class KOTHSession {
         this.ticketsNeededToWin = ticketsNeededToWin;
         this.timerDuration = timerDuration;
         this.timer = new KOTHCountdownTimer(event, timerDuration);
+        this.timer.freeze();
     }
 
     public boolean isCaptured() {
