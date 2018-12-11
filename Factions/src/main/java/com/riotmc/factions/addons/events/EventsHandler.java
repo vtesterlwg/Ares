@@ -4,6 +4,8 @@ import com.riotmc.commons.base.promise.FailablePromise;
 import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.factions.addons.events.builder.type.KOTHEventBuilder;
 import com.riotmc.factions.addons.events.builder.type.PalaceEventBuilder;
+import com.riotmc.factions.addons.events.data.type.RiotEvent;
+import com.riotmc.factions.addons.events.data.type.koth.KOTHEvent;
 import com.riotmc.factions.addons.events.menu.EventsMenu;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -61,8 +63,25 @@ public final class EventsHandler {
 
     }
 
-    public void start(Player player, String name, SimplePromise promise) {
+    public void start(String name, int ticketsNeededToWin, int timerDuration, SimplePromise promise) {
+        final RiotEvent event = manager.getEventByName(name);
 
+        if (event == null) {
+            promise.failure("Event not found");
+            return;
+        }
+
+        if (event instanceof KOTHEvent) {
+            final KOTHEvent koth = (KOTHEvent)event;
+
+            if (koth.getSession() != null && koth.getSession().isActive()) {
+                promise.failure("Event is already activated");
+                return;
+            }
+
+            koth.start(ticketsNeededToWin, timerDuration);
+            promise.success();
+        }
     }
 
     public void stop(Player player, String name, SimplePromise promise) {
