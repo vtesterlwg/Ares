@@ -1,7 +1,7 @@
 package com.riotmc.factions.timers.cont.player;
 
 import com.riotmc.factions.Factions;
-import com.riotmc.factions.players.FactionPlayer;
+import com.riotmc.factions.players.data.FactionPlayer;
 import com.riotmc.factions.timers.PlayerTimer;
 import lombok.Getter;
 import org.bukkit.Bukkit;

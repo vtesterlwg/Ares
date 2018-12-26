@@ -62,6 +62,7 @@ factions.spawn - Teleport to a spawnpoint
 factions.setspawn - Set a spawnpoint
 factions.timer.edit - Access /timer command
 factions.events.builder - Access event builder functions
+factions.deathbans.bypass - Bypass deathbans from deaths (does not exempt combat loggers)
 
 autoreboot.schedule - Schedule reboot
 autoreboot.start - Start reboot process

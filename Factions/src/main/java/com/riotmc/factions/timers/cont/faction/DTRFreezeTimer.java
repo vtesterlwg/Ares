@@ -1,6 +1,6 @@
 package com.riotmc.factions.timers.cont.faction;
 
-import com.riotmc.factions.factions.PlayerFaction;
+import com.riotmc.factions.factions.data.PlayerFaction;
 import com.riotmc.factions.timers.FactionTimer;
 import org.bukkit.ChatColor;
 

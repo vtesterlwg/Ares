@@ -9,13 +9,13 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.scheduler.BukkitTask;
 
 public final class AutosaveAddon implements Addon {
-    @Getter
-    public final Factions plugin;
-
-    @Getter
-    public BukkitTask task;
-
+    /** Owning plugin **/
+    @Getter public final Factions plugin;
+    /** Updater Task **/
+    @Getter public BukkitTask task;
+    /** True if auto-saves are enabled **/
     private boolean enabled;
+    /** Interval that the autosave task should run at **/
     private int interval;
 
     public AutosaveAddon(Factions plugin) {
@@ -55,6 +55,7 @@ public final class AutosaveAddon implements Addon {
     public void stop() {
         if (task != null) {
             task.cancel();
+            task = null;
         }
     }
 }

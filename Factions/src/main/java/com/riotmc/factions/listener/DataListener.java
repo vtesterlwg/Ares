@@ -2,8 +2,8 @@ package com.riotmc.factions.listener;
 
 import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
-import com.riotmc.factions.players.FactionPlayer;
-import com.riotmc.factions.players.PlayerDAO;
+import com.riotmc.factions.players.dao.PlayerDAO;
+import com.riotmc.factions.players.data.FactionPlayer;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

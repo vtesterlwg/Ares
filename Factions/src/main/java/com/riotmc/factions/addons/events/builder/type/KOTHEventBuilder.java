@@ -6,7 +6,7 @@ import com.riotmc.commons.bukkit.location.BLocatable;
 import com.riotmc.factions.addons.events.EventsAddon;
 import com.riotmc.factions.addons.events.builder.EventBuilderWand;
 import com.riotmc.factions.addons.events.data.type.koth.KOTHEvent;
-import com.riotmc.factions.factions.ServerFaction;
+import com.riotmc.factions.factions.data.ServerFaction;
 import com.riotmc.services.customitems.CustomItemService;
 import lombok.Getter;
 import lombok.Setter;
@@ -128,7 +128,12 @@ public class KOTHEventBuilder implements EventBuilder {
             return;
         }
 
-        final KOTHEvent event = new KOTHEvent(owningFactionId, name, displayName, Lists.newArrayList(), cornerA, cornerB);
+        if (lootChest == null) {
+            promise.failure("Loot chest is not set");
+            return;
+        }
+
+        final KOTHEvent event = new KOTHEvent(owningFactionId, name, displayName, Lists.newArrayList(), lootChest, cornerA, cornerB);
         promise.success(event);
     }
 

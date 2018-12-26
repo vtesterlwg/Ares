@@ -3,6 +3,7 @@ package com.riotmc.factions.timers.cont.player;
 import com.riotmc.factions.timers.PlayerTimer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
@@ -16,8 +17,12 @@ public final class EnderpearlTimer extends PlayerTimer {
 
     @Override
     public void onFinish() {
-        if (Bukkit.getPlayer(owner) != null) {
-            Bukkit.getPlayer(owner).sendMessage(ChatColor.GREEN + "Your enderpearls have been unlocked");
+        final Player player = Bukkit.getPlayer(owner);
+
+        if (player == null) {
+            return;
         }
+
+        player.sendMessage(ChatColor.GREEN + "Your enderpearls have been unlocked");
     }
 }

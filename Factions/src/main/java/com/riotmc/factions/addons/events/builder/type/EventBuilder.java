@@ -2,7 +2,7 @@ package com.riotmc.factions.addons.events.builder.type;
 
 import com.riotmc.commons.base.promise.FailablePromise;
 import com.riotmc.commons.bukkit.location.BLocatable;
-import com.riotmc.factions.factions.ServerFaction;
+import com.riotmc.factions.factions.data.ServerFaction;
 
 import java.util.UUID;
 

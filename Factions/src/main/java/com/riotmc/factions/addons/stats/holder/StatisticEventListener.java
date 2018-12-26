@@ -1,8 +1,8 @@
 package com.riotmc.factions.addons.stats.holder;
 
 import com.riotmc.factions.Factions;
-import com.riotmc.factions.factions.PlayerFaction;
-import com.riotmc.factions.players.FactionPlayer;
+import com.riotmc.factions.factions.data.PlayerFaction;
+import com.riotmc.factions.players.data.FactionPlayer;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,8 +17,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 public final class StatisticEventListener implements Listener {
-    @Getter
-    public final Factions plugin;
+    @Getter public final Factions plugin;
 
     public StatisticEventListener(Factions plugin) {
         this.plugin = plugin;

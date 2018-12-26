@@ -9,12 +9,14 @@ import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.Addon;
+import com.riotmc.factions.addons.deathbans.DeathbanAddon;
+import com.riotmc.factions.addons.loggers.data.CombatLogger;
 import com.riotmc.factions.addons.loggers.event.CombatLogEvent;
 import com.riotmc.factions.addons.loggers.event.LoggerDeathEvent;
 import com.riotmc.factions.addons.loggers.event.PlayerDamageLoggerEvent;
-import com.riotmc.factions.claims.DefinedClaim;
-import com.riotmc.factions.factions.ServerFaction;
-import com.riotmc.factions.players.FactionPlayer;
+import com.riotmc.factions.claims.data.DefinedClaim;
+import com.riotmc.factions.factions.data.ServerFaction;
+import com.riotmc.factions.players.data.FactionPlayer;
 import com.riotmc.factions.timers.PlayerTimer;
 import com.riotmc.factions.timers.cont.player.CombatTagTimer;
 import com.riotmc.factions.util.FactionUtils;
@@ -101,6 +103,13 @@ public final class LoggerAddon implements Addon, Listener {
     @EventHandler (priority = EventPriority.MONITOR)
     public void onLoggerSpawn(CombatLogEvent event) {
         final Player player = event.getPlayer();
+        final DeathbanAddon deathbanAddon = (DeathbanAddon)getPlugin().getAddonManager().getAddon(DeathbanAddon.class);
+
+        if (deathbanAddon != null && deathbanAddon.getDeathbanManager().getRecentlyKicked().contains(player.getUniqueId())) {
+            event.setCancelled(true);
+            return;
+        }
+
         Bukkit.broadcastMessage(ChatColor.RED + "Combat-Logger: " + ChatColor.YELLOW + player.getName());
         Logger.print(player.getName() + " combat-logged");
     }

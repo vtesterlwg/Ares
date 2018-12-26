@@ -1,6 +1,6 @@
 package com.riotmc.factions.event;
 
-import com.riotmc.factions.claims.DefinedClaim;
+import com.riotmc.factions.claims.data.DefinedClaim;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.entity.Player;

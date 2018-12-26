@@ -10,7 +10,7 @@ import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.addons.events.EventsAddon;
 import com.riotmc.factions.addons.events.data.type.RiotEvent;
 import com.riotmc.factions.addons.events.data.type.koth.KOTHEvent;
-import com.riotmc.factions.factions.Faction;
+import com.riotmc.factions.factions.data.Faction;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

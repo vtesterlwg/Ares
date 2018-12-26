@@ -3,7 +3,7 @@ package com.riotmc.factions.listener;
 import com.riotmc.commons.base.util.Time;
 import com.riotmc.commons.bukkit.event.PlayerBigMoveEvent;
 import com.riotmc.factions.Factions;
-import com.riotmc.factions.players.FactionPlayer;
+import com.riotmc.factions.players.data.FactionPlayer;
 import com.riotmc.factions.timers.PlayerTimer;
 import com.riotmc.factions.timers.cont.player.*;
 import lombok.Getter;

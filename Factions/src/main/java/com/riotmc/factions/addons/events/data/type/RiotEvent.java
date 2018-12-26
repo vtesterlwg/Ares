@@ -3,8 +3,9 @@ package com.riotmc.factions.addons.events.data.type;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.riotmc.commons.base.util.Time;
+import com.riotmc.commons.bukkit.location.BLocatable;
 import com.riotmc.factions.addons.events.data.schedule.EventSchedule;
-import com.riotmc.factions.factions.PlayerFaction;
+import com.riotmc.factions.factions.data.PlayerFaction;
 
 import java.util.Calendar;
 import java.util.Comparator;
@@ -19,6 +20,8 @@ public interface RiotEvent {
     String getDisplayName();
 
     List<EventSchedule> getSchedule();
+
+    BLocatable getCaptureChestLocation();
 
     void setDisplayName(String name);
 

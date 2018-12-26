@@ -2,7 +2,7 @@ package com.riotmc.factions.timers.cont.player;
 
 import com.riotmc.commons.bukkit.util.Players;
 import com.riotmc.factions.Factions;
-import com.riotmc.factions.factions.PlayerFaction;
+import com.riotmc.factions.factions.data.PlayerFaction;
 import com.riotmc.factions.timers.PlayerTimer;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -41,6 +41,6 @@ public final class HomeTimer extends PlayerTimer {
         }
 
         Players.teleportWithVehicle(plugin, player, faction.getHome().getBukkit());
-        player.sendMessage(ChatColor.GREEN + "Returned to faction home");
+        player.sendMessage(ChatColor.GREEN + "You have been returned to your faction home");
     }
 }

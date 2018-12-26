@@ -2,10 +2,9 @@ package com.riotmc.factions.addons.events.data.session;
 
 import com.google.common.collect.Maps;
 import com.riotmc.commons.base.util.Time;
-import com.riotmc.commons.bukkit.location.BLocatable;
 import com.riotmc.factions.addons.events.data.timer.KOTHCountdownTimer;
 import com.riotmc.factions.addons.events.data.type.koth.KOTHEvent;
-import com.riotmc.factions.factions.PlayerFaction;
+import com.riotmc.factions.factions.data.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,7 +15,6 @@ public final class KOTHSession {
     @Getter @Setter public boolean active;
     @Getter @Setter public PlayerFaction capturingFaction;
     @Getter @Setter public long captureChestUnlockTime;
-    @Getter @Setter public BLocatable captureChestLocation;
     @Getter public final Map<PlayerFaction, Integer> leaderboard;
     @Getter @Setter public int ticketsNeededToWin;
     @Getter @Setter public int timerDuration;

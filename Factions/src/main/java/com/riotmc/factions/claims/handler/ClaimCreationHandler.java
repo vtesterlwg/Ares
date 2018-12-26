@@ -2,10 +2,10 @@ package com.riotmc.factions.claims.handler;
 
 import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.commons.bukkit.item.custom.CustomItem;
-import com.riotmc.factions.claims.ClaimManager;
 import com.riotmc.factions.claims.builder.DefinedClaimBuilder;
-import com.riotmc.factions.factions.Faction;
-import com.riotmc.factions.factions.PlayerFaction;
+import com.riotmc.factions.claims.manager.ClaimManager;
+import com.riotmc.factions.factions.data.Faction;
+import com.riotmc.factions.factions.data.PlayerFaction;
 import com.riotmc.factions.items.ClaimingStick;
 import com.riotmc.services.customitems.CustomItemService;
 import lombok.Getter;
