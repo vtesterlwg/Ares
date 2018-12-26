@@ -1,7 +1,7 @@
 package com.riotmc.factions.listener;
 
 import com.riotmc.factions.Factions;
-import com.riotmc.factions.factions.PlayerFaction;
+import com.riotmc.factions.factions.data.PlayerFaction;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

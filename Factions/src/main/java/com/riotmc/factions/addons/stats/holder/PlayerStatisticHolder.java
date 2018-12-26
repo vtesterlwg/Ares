@@ -10,14 +10,9 @@ import org.bukkit.Material;
 import java.util.Map;
 
 public final class PlayerStatisticHolder implements StatisticHolder, MongoDocument<PlayerStatisticHolder> {
-    @Getter
-    public int kills, deaths, minorEventCaptures, majorEventCaptures;
-
-    @Getter
-    public Map<Material, Integer> minedOres;
-
-    @Getter
-    public long playtime;
+    @Getter public int kills, deaths, minorEventCaptures, majorEventCaptures;
+    @Getter public Map<Material, Integer> minedOres;
+    @Getter public long playtime;
 
     public PlayerStatisticHolder() {
         this.kills = 0;

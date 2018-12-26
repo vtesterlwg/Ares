@@ -1,7 +1,7 @@
 package com.riotmc.factions.listener;
 
 import com.riotmc.factions.Factions;
-import com.riotmc.factions.players.FactionPlayer;
+import com.riotmc.factions.players.data.FactionPlayer;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

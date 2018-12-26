@@ -4,52 +4,124 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Values;
+import com.riotmc.commons.base.promise.FailablePromise;
+import com.riotmc.commons.base.promise.SimplePromise;
+import com.riotmc.factions.addons.events.EventsAddon;
+import com.riotmc.factions.addons.events.menu.EventsMenu;
+import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-@CommandAlias("event|e")
+import javax.annotation.Nonnull;
+
+@CommandAlias("event|events|e")
 public final class EventCommand extends BaseCommand {
-    /*
-    /event list
-    /event create <name> <displayName> <kothticket/kothtimer/palace>
-    /event rename <name> <newName>
-    /event delete <name>
-    /event start <name>
-    /event stop <name>
-    /event set <timer/wincondition> <amount>
-     */
+    @Getter public final EventsAddon addon;
+
+    public EventCommand(EventsAddon addon) {
+        this.addon = addon;
+    }
 
     @Subcommand("list")
     public void onList(Player player) {
+        addon.getManager().getHandler().list(player, new FailablePromise<EventsMenu>() {
+            @Override
+            public void success(@Nonnull EventsMenu eventsMenu) {
+                eventsMenu.open();
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("create")
-    public void onCreate(String name, String displayName, String type) {
+    public void onCreate(Player player, @Values("koth|palace") String type) {
+        addon.getManager().getHandler().create(player, type, new SimplePromise() {
+            @Override
+            public void success() {}
 
-    }
-
-    @Subcommand("rename")
-    public void onRename(String name, String newName) {
-
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("delete")
-    public void onDelete(String name) {
+    public void onDelete(Player player, String name) {
+        addon.getManager().getHandler().delete(player, name, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Event deleted");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("rename")
+    public void onRename(Player player, String currentName, String newName) {
+        addon.getManager().getHandler().rename(player, currentName, newName, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Event renamed");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("start")
-    public void onStart(String name) {
+    public void onStart(Player player, String name, int ticketsNeededToWin, int timerDuration) {
+        addon.getManager().getHandler().start(name, ticketsNeededToWin, timerDuration, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Event started");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("stop")
-    public void onStop(String name) {
+    public void onStop(Player player, String name) {
+        addon.getManager().getHandler().stop(player, name, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Event stopped");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("set")
-    public void onSet(@Values("set") String set, @Values("timer|wincondition") String value, int amount) {
+    public void onSet(Player player, String name, @Values("timer|wincondition|wc") String type, int value) {
+        addon.getManager().getHandler().set(player, name, type, value, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Event value updated");
+            }
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 }

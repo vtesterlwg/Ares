@@ -7,12 +7,12 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
+/**
+ * Fires when a player combat-logs
+ */
 public final class CombatLogEvent extends PlayerEvent implements Cancellable {
-    @Getter
-    public static final HandlerList handlerList = new HandlerList();
-
-    @Getter @Setter
-    public boolean cancelled;
+    @Getter public static final HandlerList handlerList = new HandlerList();
+    @Getter @Setter public boolean cancelled;
 
     public CombatLogEvent(Player who) {
         super(who);

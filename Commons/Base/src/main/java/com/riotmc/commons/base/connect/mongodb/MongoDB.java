@@ -56,10 +56,10 @@ public final class MongoDB implements Connectable {
     }
 
     /**
-     * Returns a Mongo Collection matching the given name in the given database, creates a new one if not found
+     * Returns a Mongo Collection matching the given name in the given db, creates a new one if not found
      * @param database Database Name
      * @param collection Collection Name
-     * @return MongoCollection instance matching provided name in the given database
+     * @return MongoCollection instance matching provided name in the given db
      */
     @Nullable
     public MongoCollection<Document> getCollection(@Nonnull String database, String collection) {

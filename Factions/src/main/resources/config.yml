@@ -79,6 +79,19 @@ lives:
     Ultra: 10
     Partner: 10
 
+# Deathban configuration
+# If disabled, players will respawn normally
+# The durations are in seconds
+deathbans:
+  enabled: true
+  durations:
+    sotw:
+      min: 300
+      max: 3600
+    normal:
+      min: 300
+      max: 86400
+
 # Crowbar configuration
 crowbars:
   enabled: true
@@ -87,22 +100,6 @@ crowbars:
     - 'SKELETON'
     - 'SPIDER'
     - 'CAVE_SPIDER'
-
-# Deathban configuration
-# If disabled, players will respawn normally
-# The durations are in seconds
-deathbans:
-  enabled: true
-  durations:
-    SOTW:
-      min: 300
-      max: 3600
-    NORMAL:
-      min: 300
-      max: 86400
-    EOTW:
-      min: 86400
-      max: 86400
 
 # Economy configuration
 economy:

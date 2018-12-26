@@ -5,8 +5,7 @@ import lombok.Getter;
 import org.bson.Document;
 
 public final class FactionStatisticHolder implements StatisticHolder, MongoDocument<FactionStatisticHolder> {
-    @Getter
-    public int kills, deaths, minorEventCaptures, majorEventCaptures;
+    @Getter public int kills, deaths, minorEventCaptures, majorEventCaptures;
 
     public FactionStatisticHolder() {
         this.kills = 0;

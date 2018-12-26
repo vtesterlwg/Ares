@@ -7,7 +7,7 @@ import co.aikar.commands.annotation.Syntax;
 import co.aikar.commands.annotation.Values;
 import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.factions.Factions;
-import com.riotmc.factions.players.FactionPlayer;
+import com.riotmc.factions.players.data.FactionPlayer;
 import com.riotmc.factions.timers.PlayerTimer;
 import com.riotmc.factions.timers.cont.player.ProtectionTimer;
 import lombok.Getter;

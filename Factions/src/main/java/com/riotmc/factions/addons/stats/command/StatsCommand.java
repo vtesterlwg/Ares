@@ -3,7 +3,7 @@ package com.riotmc.factions.addons.stats.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.riotmc.commons.base.promise.SimplePromise;
-import com.riotmc.factions.addons.stats.StatsHandler;
+import com.riotmc.factions.addons.stats.handler.StatsHandler;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

@@ -1,7 +1,7 @@
 package com.riotmc.factions.event;
 
 import com.riotmc.commons.bukkit.location.PLocatable;
-import com.riotmc.factions.factions.PlayerFaction;
+import com.riotmc.factions.factions.data.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.event.Event;

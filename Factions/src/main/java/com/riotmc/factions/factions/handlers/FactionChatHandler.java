@@ -1,8 +1,8 @@
 package com.riotmc.factions.factions.handlers;
 
 import com.riotmc.commons.base.promise.SimplePromise;
-import com.riotmc.factions.factions.FactionManager;
-import com.riotmc.factions.factions.PlayerFaction;
+import com.riotmc.factions.factions.data.PlayerFaction;
+import com.riotmc.factions.factions.manager.FactionManager;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

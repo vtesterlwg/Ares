@@ -2,6 +2,9 @@ package com.riotmc.factions.addons.spawnpoints;
 
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.Addon;
+import com.riotmc.factions.addons.spawnpoints.command.SpawnCommand;
+import com.riotmc.factions.addons.spawnpoints.listener.SpawnpointListener;
+import com.riotmc.factions.addons.spawnpoints.manager.SpawnpointManager;
 import lombok.Getter;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPortalEvent;

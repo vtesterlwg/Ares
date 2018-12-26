@@ -47,7 +47,7 @@ public final class StuckTimer extends PlayerTimer {
                 final Location fixed = block.getLocation().add(0, 2.0, 0);
 
                 player.teleport(fixed);
-                player.sendMessage(ChatColor.GREEN + "You have been teleported outside the claim");
+                player.sendMessage(ChatColor.GREEN + "You have been teleported outside all claims");
 
                 Logger.print(player.getName() + " finished the unstuck process");
             }).run();

@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.riotmc.commons.bukkit.location.PLocatable;
 import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
-import com.riotmc.factions.factions.PlayerFaction;
+import com.riotmc.factions.factions.data.PlayerFaction;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 

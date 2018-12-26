@@ -2,10 +2,10 @@ package com.riotmc.factions.factions.handlers;
 
 import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.commons.bukkit.logger.Logger;
-import com.riotmc.factions.factions.FactionManager;
-import com.riotmc.factions.factions.PlayerFaction;
-import com.riotmc.factions.factions.ServerFaction;
-import com.riotmc.factions.players.FactionPlayer;
+import com.riotmc.factions.factions.data.PlayerFaction;
+import com.riotmc.factions.factions.data.ServerFaction;
+import com.riotmc.factions.factions.manager.FactionManager;
+import com.riotmc.factions.players.data.FactionPlayer;
 import com.riotmc.services.profiles.ProfileService;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.ClickEvent;
