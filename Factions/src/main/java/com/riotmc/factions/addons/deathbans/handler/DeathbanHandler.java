@@ -25,6 +25,19 @@ public final class DeathbanHandler {
         this.manager = manager;
     }
 
+    public void clear(SimplePromise promise) {
+        Logger.warn("Clearing all deathbans");
+
+        new Scheduler(manager.getAddon().getPlugin()).async(() -> {
+            DeathbanDAO.clearDeathbans(manager.getAddon().getPlugin().getMongo());
+
+            new Scheduler(manager.getAddon().getPlugin()).sync(() -> {
+                Logger.print("Cleared deathbans");
+                promise.success();
+            }).run();
+        }).run();
+    }
+
     public void deathban(UUID uniqueId, int seconds, boolean permanent) {
         final long ms = (seconds * 1000L);
         final Deathban deathban = new Deathban(uniqueId, Time.now() + ms, permanent);

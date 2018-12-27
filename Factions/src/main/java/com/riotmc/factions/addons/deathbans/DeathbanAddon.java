@@ -2,6 +2,7 @@ package com.riotmc.factions.addons.deathbans;
 
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.Addon;
+import com.riotmc.factions.addons.deathbans.command.DeathbanCommand;
 import com.riotmc.factions.addons.deathbans.command.LivesCommand;
 import com.riotmc.factions.addons.deathbans.command.ReviveCommand;
 import com.riotmc.factions.addons.deathbans.listener.DeathbanListener;
@@ -34,6 +35,7 @@ public final class DeathbanAddon implements Addon {
 
         plugin.getCommandManager().registerCommand(new LivesCommand(this));
         plugin.getCommandManager().registerCommand(new ReviveCommand(this));
+        plugin.getCommandManager().registerCommand(new DeathbanCommand(this));
 
         plugin.registerListener(new DeathbanListener(this));
     }
