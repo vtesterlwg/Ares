@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nonnull;
 import javax.annotation.Syntax;
 
-@CommandAlias("lives|live|life|lifes")
 public final class LivesCommand extends BaseCommand {
     @Getter public DeathbanAddon addon;
 
@@ -24,6 +23,7 @@ public final class LivesCommand extends BaseCommand {
         this.addon = addon;
     }
 
+    @CommandAlias("lives|live|life|lifes")
     @Description("View lives profiles")
     @Syntax("<name>")
     public void onLives(Player player) {
@@ -42,6 +42,7 @@ public final class LivesCommand extends BaseCommand {
         });
     }
 
+    @CommandAlias("lives|live|life|lifes")
     @Description("View lives profiles")
     @Syntax("<name>")
     public void onLives(Player player, String username) {
@@ -60,6 +61,7 @@ public final class LivesCommand extends BaseCommand {
         });
     }
 
+    @CommandAlias("lives|live|life|lifes")
     @Description("Give a player lives")
     @Syntax("give <name> <amount>")
     public void onModify(CommandSender sender, @Values("give|set") String modifier, String username, int amount) {

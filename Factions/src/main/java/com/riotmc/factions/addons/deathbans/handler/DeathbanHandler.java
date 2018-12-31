@@ -1,6 +1,7 @@
 package com.riotmc.factions.addons.deathbans.handler;
 
 import com.mongodb.client.model.Filters;
+import com.riotmc.commons.base.promise.FailablePromise;
 import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.commons.base.util.Time;
 import com.riotmc.commons.bukkit.logger.Logger;
@@ -13,6 +14,7 @@ import com.riotmc.factions.addons.deathbans.manager.DeathbanManager;
 import com.riotmc.services.profiles.ProfileService;
 import com.riotmc.services.profiles.data.RiotProfile;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -23,6 +25,35 @@ public final class DeathbanHandler {
 
     public DeathbanHandler(DeathbanManager manager) {
         this.manager = manager;
+    }
+
+    public void status(String username, FailablePromise<String> promise) {
+        final ProfileService profileService = (ProfileService)manager.getAddon().getPlugin().getService(ProfileService.class);
+
+        if (profileService == null) {
+            promise.failure("Failed to obtain Profile Service");
+            return;
+        }
+
+        profileService.getProfile(username, riotProfile -> {
+            if (riotProfile == null) {
+                promise.failure("Player not found");
+                return;
+            }
+
+            new Scheduler(manager.getAddon().getPlugin()).async(() -> {
+                final Deathban deathban = DeathbanDAO.getDeathban(manager.getAddon().getPlugin().getMongo(), riotProfile.getUniqueId());
+
+                new Scheduler(manager.getAddon().getPlugin()).sync(() -> {
+                    if (deathban == null) {
+                        promise.failure("This player is not deathbanned");
+                        return;
+                    }
+
+                    promise.success(ChatColor.YELLOW + riotProfile.getUsername() + ChatColor.GOLD + " is deathbanned for " + ChatColor.RED + Time.convertToRemaining(deathban.getTimeUntilUndeathban()));
+                }).run();
+            }).run();
+        });
     }
 
     public void clear(SimplePromise promise) {
@@ -55,6 +86,31 @@ public final class DeathbanHandler {
                 }
             }).run();
         }).run();
+    }
+
+    public void deathban(String username, String time, boolean permanent, SimplePromise promise) {
+        final ProfileService profileService = (ProfileService)manager.getAddon().getPlugin().getService(ProfileService.class);
+        final long ms = Time.parseTime(time);
+
+        if (ms <= 0) {
+            promise.failure("Invalid time format");
+            return;
+        }
+
+        if (profileService == null) {
+            promise.failure("Failed to obtain Profile Service");
+            return;
+        }
+
+        profileService.getProfile(username, riotProfile -> {
+            if (riotProfile == null) {
+                promise.failure("Player not found");
+                return;
+            }
+
+            deathban(riotProfile.getUniqueId(), (int)(ms / 1000L), permanent);
+            promise.success();
+        });
     }
 
     public void revive(CommandSender commandSender, String username, SimplePromise promise) {

@@ -9,6 +9,8 @@ import com.riotmc.factions.addons.deathbans.DeathbanAddon;
 import com.riotmc.factions.addons.deathbans.dao.DeathbanDAO;
 import com.riotmc.factions.addons.deathbans.data.Deathban;
 import com.riotmc.factions.addons.deathbans.handler.DeathbanHandler;
+import com.riotmc.factions.addons.states.ServerStateAddon;
+import com.riotmc.factions.addons.states.data.ServerState;
 import com.riotmc.factions.players.dao.PlayerDAO;
 import com.riotmc.factions.players.data.FactionPlayer;
 import lombok.Getter;
@@ -44,23 +46,26 @@ public final class DeathbanManager {
     }
 
     public int calculateDeathbanDuration(UUID uniqueId) {
-        // TODO: Change duration based on server state, right now we're just always using NORMAL
+        final ServerStateAddon serverStates = (ServerStateAddon)addon.getPlugin().getAddonManager().getAddon(ServerStateAddon.class);
+        final ServerState state = (serverStates != null) ? serverStates.getCurrentState() : ServerState.NORMAL;
+        final int min = (state.equals(ServerState.SOTW)) ? addon.getConfiguration().getSotwMinDeathban() : addon.getConfiguration().getNormalMinDeathban();
+        final int max = (state.equals(ServerState.SOTW)) ? addon.getConfiguration().getSotwMaxDeathban() : addon.getConfiguration().getNormalMaxDeathban();
         FactionPlayer factionPlayer = addon.getPlugin().getPlayerManager().getPlayer(uniqueId);
 
         if (factionPlayer == null) {
             factionPlayer = PlayerDAO.getPlayer(addon.getPlugin(), addon.getPlugin().getMongo(), Filters.eq("id", uniqueId));
 
             if (factionPlayer == null) {
-                return addon.getConfiguration().getNormalMinDeathban();
+                return min;
             }
         }
 
         final int playtimeToSec = (int)(factionPlayer.getStats().getPlaytime() / 1000L);
-        int duration = addon.getConfiguration().getNormalMinDeathban();
+        int duration = min;
 
-        if (playtimeToSec > addon.getConfiguration().getNormalMinDeathban()) {
-            if (playtimeToSec > addon.getConfiguration().getNormalMaxDeathban()) {
-                duration = addon.getConfiguration().getNormalMaxDeathban();
+        if (playtimeToSec > min) {
+            if (playtimeToSec > max) {
+                duration = max;
             } else {
                 duration = playtimeToSec;
             }

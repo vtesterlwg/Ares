@@ -4,6 +4,7 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.riotmc.commons.base.connect.mongodb.MongoDB;
+import com.riotmc.commons.base.util.Time;
 import com.riotmc.factions.addons.deathbans.data.Deathban;
 import org.bson.Document;
 
@@ -22,7 +23,7 @@ public final class DeathbanDAO {
             return null;
         }
 
-        iter = collection.find(Filters.eq("id", ownerId));
+        iter = collection.find(Filters.and(Filters.eq("id", ownerId), Filters.gt("unban", Time.now()), Filters.eq("permanent", false)));
         existing = iter.first();
 
         if (existing == null) {
