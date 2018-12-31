@@ -191,7 +191,6 @@ public final class FactionManageHandler {
 
             if (Bukkit.getPlayer(aresProfile.getUniqueId()) != null) {
                 Bukkit.getPlayer(aresProfile.getUniqueId()).sendMessage(ChatColor.GREEN + "You have been promoted!");
-                return;
             }
 
             faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " promoted " + ChatColor.DARK_GREEN + aresProfile.getUsername() + ChatColor.GOLD + " to " + ChatColor.BLUE + StringUtils.capitalise(newRank.name().toLowerCase()));
@@ -258,7 +257,6 @@ public final class FactionManageHandler {
 
             if (Bukkit.getPlayer(aresProfile.getUniqueId()) != null) {
                 Bukkit.getPlayer(aresProfile.getUniqueId()).sendMessage(ChatColor.RED + "You have been demoted!");
-                return;
             }
 
             faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " demoted " + ChatColor.DARK_GREEN + aresProfile.getUsername() + ChatColor.GOLD + " to " + ChatColor.BLUE + StringUtils.capitalise(newRank.name().toLowerCase()));
