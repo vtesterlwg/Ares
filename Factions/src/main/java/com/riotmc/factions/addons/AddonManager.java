@@ -9,22 +9,21 @@ import com.riotmc.factions.addons.events.EventsAddon;
 import com.riotmc.factions.addons.loggers.LoggerAddon;
 import com.riotmc.factions.addons.mining.MiningAddon;
 import com.riotmc.factions.addons.spawnpoints.SpawnpointAddon;
+import com.riotmc.factions.addons.states.ServerStateAddon;
 import com.riotmc.factions.addons.stats.StatsAddon;
 import lombok.Getter;
 
 import java.util.Map;
 
 public final class AddonManager {
-    @Getter
-    public final Factions plugin;
-
-    @Getter
-    public final Map<Class<? extends Addon>, Addon> addons;
+    @Getter public final Factions plugin;
+    @Getter public final Map<Class<? extends Addon>, Addon> addons;
 
     public AddonManager(Factions plugin) {
         this.plugin = plugin;
         this.addons = Maps.newHashMap();
 
+        registerAddon(new ServerStateAddon(plugin));
         registerAddon(new DeathbanAddon(plugin));
         registerAddon(new EventsAddon(plugin));
         registerAddon(new MiningAddon(plugin));
