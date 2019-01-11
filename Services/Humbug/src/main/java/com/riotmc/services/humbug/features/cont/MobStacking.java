@@ -27,33 +27,15 @@ import java.util.Map;
 import java.util.UUID;
 
 public final class MobStacking implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
-
-    @Getter @Setter
-    public String tagPrefix;
-
-    @Getter @Setter
-    public int stackInterval;
-
-    @Getter @Setter
-    public int maxStackSize;
-
-    @Getter @Setter
-    public int breedCooldown;
-
-    @Getter
-    public List<String> stackTypes;
-
-    @Getter
-    public final List<UUID> stackSkip;
-
-    @Getter
-    public final Map<UUID, Long> breedCooldowns;
-
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
+    @Getter @Setter public String tagPrefix;
+    @Getter @Setter public int stackInterval;
+    @Getter @Setter public int maxStackSize;
+    @Getter @Setter public int breedCooldown;
+    @Getter public List<String> stackTypes;
+    @Getter public final List<UUID> stackSkip;
+    @Getter public final Map<UUID, Long> breedCooldowns;
     private BukkitTask stackTask;
 
     private final ImmutableMap<EntityType, List<Material>> breedMaterials = ImmutableMap.<EntityType, List<Material>>builder()

@@ -17,20 +17,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.projectiles.ProjectileSource;
 
 public final class XPBonuses implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
-
-    @Getter @Setter
-    public double lootingMultiplier;
-
-    @Getter @Setter
-    public double fortuneMutliplier;
-
-    @Getter @Setter
-    public double bottleMultiplier;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
+    @Getter @Setter public double lootingMultiplier;
+    @Getter @Setter public double fortuneMutliplier;
+    @Getter @Setter public double bottleMultiplier;
 
     public XPBonuses(HumbugService humbug) {
         this.humbug = humbug;

@@ -21,26 +21,13 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 
 public final class AntiGrief implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
-
-    @Getter @Setter
-    public boolean fireSpreadDisabled;
-
-    @Getter @Setter
-    public boolean entityGriefDisabled;
-
-    @Getter @Setter
-    public boolean cobblestoneGeneratorDisabled;
-
-    @Getter @Setter
-    public boolean destroyingMobSpawnsDisabled;
-
-    @Getter @Setter
-    public boolean spawnNetherPortalPlatform;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
+    @Getter @Setter public boolean fireSpreadDisabled;
+    @Getter @Setter public boolean entityGriefDisabled;
+    @Getter @Setter public boolean cobblestoneGeneratorDisabled;
+    @Getter @Setter public boolean destroyingMobSpawnsDisabled;
+    @Getter @Setter public boolean spawnNetherPortalPlatform;
 
     public AntiGrief(HumbugService humbug) {
         this.humbug = humbug;
@@ -67,9 +54,7 @@ public final class AntiGrief implements HumbugModule, Listener {
     }
 
     @Override
-    public void stop() {
-
-    }
+    public void stop() {}
 
     @EventHandler
     public void onBlockExplode(BlockExplodeEvent event) {

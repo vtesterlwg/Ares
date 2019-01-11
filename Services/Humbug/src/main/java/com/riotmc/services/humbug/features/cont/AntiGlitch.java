@@ -19,20 +19,11 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 public final class AntiGlitch implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
-
-    @Getter @Setter
-    public boolean disablePearlClipping;
-
-    @Getter @Setter
-    public boolean disableElytraClipping;
-
-    @Getter @Setter
-    public boolean disableSwimClipping;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
+    @Getter @Setter public boolean disablePearlClipping;
+    @Getter @Setter public boolean disableElytraClipping;
+    @Getter @Setter public boolean disableSwimClipping;
 
     public AntiGlitch(HumbugService humbug) {
         this.humbug = humbug;
