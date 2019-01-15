@@ -1,4 +1,4 @@
-package com.riotmc.factions.addons.deathbans.data;
+package com.riotmc.services.deathban.data;
 
 import com.riotmc.commons.base.connect.mongodb.MongoDocument;
 import lombok.Getter;
@@ -16,12 +16,6 @@ public final class LivesPlayer implements MongoDocument<LivesPlayer> {
         this.uniqueId = null;
         this.standardLives = 0;
         this.soulboundLives = 0;
-    }
-
-    public LivesPlayer(UUID uniqueId, int standardLives, int soulboundLives) {
-        this.uniqueId = uniqueId;
-        this.standardLives = standardLives;
-        this.soulboundLives = soulboundLives;
     }
 
     @Override

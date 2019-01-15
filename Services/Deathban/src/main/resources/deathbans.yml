@@ -1,0 +1,9 @@
+settings:
+  enforce-deathbans: true
+  deathban-durations:
+    sotw:
+      min: 60
+      max: 3600
+    normal: 60
+    max: 21600
+  life-use-delay: 300

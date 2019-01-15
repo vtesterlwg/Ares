@@ -6,8 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.List;
 
 public final class FactionConfig {
-    @Getter
-    public Factions plugin;
+    @Getter public Factions plugin;
 
     FactionConfig(Factions plugin) {
         this.plugin = plugin;

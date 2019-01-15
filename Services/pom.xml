@@ -25,5 +25,6 @@
         <module>Classes</module>
         <module>AutomatedRestarts</module>
         <module>CustomEntity</module>
+        <module>Deathban</module>
     </modules>
 </project>

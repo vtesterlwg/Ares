@@ -1,10 +1,10 @@
-package com.riotmc.factions.addons.deathbans.dao;
+package com.riotmc.services.deathban.dao;
 
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.riotmc.commons.base.connect.mongodb.MongoDB;
-import com.riotmc.factions.addons.deathbans.data.LivesPlayer;
+import com.riotmc.services.deathban.data.LivesPlayer;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
