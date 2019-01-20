@@ -52,7 +52,7 @@ public final class ViewableInventory extends Menu implements Listener {
             final ItemStack health = new ItemBuilder()
                     .setMaterial(Material.GLISTERING_MELON_SLICE)
                     .setName(ChatColor.RED + "Health")
-                    .addLore(ChatColor.YELLOW + "" + (viewed.getHealth() / 2) + ChatColor.GOLD + "/" + ChatColor.YELLOW + "10.0")
+                    .addLore(ChatColor.YELLOW + "" + String.format("%.2f", (viewed.getHealth() / 2)) + ChatColor.GOLD + "/" + ChatColor.YELLOW + "10.0")
                     .build();
 
             final ItemStack food = new ItemBuilder()
@@ -94,7 +94,7 @@ public final class ViewableInventory extends Menu implements Listener {
         }).repeat(0L, 20L).run();
     }
 
-    public void stopUpdater() {
+    private void stopUpdater() {
         if (updateTask != null) {
             updateTask.cancel();
         }
