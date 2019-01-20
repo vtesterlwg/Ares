@@ -18,8 +18,10 @@ import com.riotmc.factions.players.data.FactionPlayer;
 import com.riotmc.factions.timers.PlayerTimer;
 import com.riotmc.factions.timers.cont.faction.DTRFreezeTimer;
 import lombok.Getter;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity;
 import org.bukkit.entity.AreaEffectCloud;
@@ -335,8 +337,31 @@ public final class CombatListener implements Listener {
 
         event.setDeathMessage(null);
 
+        // Fixes 'fell 0 blocks' caused by dying from pearl damage
+        if (reason.equals(EntityDamageEvent.DamageCause.FALL)) {
+            final double fallDistance = Math.round(player.getFallDistance());
+
+            if (fallDistance <= 1.0) {
+                if (killer != null) {
+                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " slain by " + ChatColor.GOLD + killer.getName());
+                } else {
+                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " died");
+                }
+
+                return;
+            }
+        }
+
         if (killer != null) {
             final String distance = String.format("%.2f", player.getLocation().distance(killer.getLocation()));
+            final String using = (
+                    killer.getInventory().getItemInMainHand() != null &&
+                    killer.getInventory().getItemInMainHand().getType().isItem() &&
+                    !killer.getInventory().getItemInMainHand().getType().equals(Material.AIR) &&
+                    !killer.getInventory().getItemInMainHand().getType().equals(Material.CAVE_AIR) &&
+                    !killer.getInventory().getItemInMainHand().getType().equals(Material.VOID_AIR)) ?
+                    ChatColor.RED + " using a " + ChatColor.YELLOW + StringUtils.capitaliseAllWords(killer.getInventory().getItemInMainHand().getType().getKey().getKey().replace("_", " "))
+                    : "";
 
             switch (reason) {
                 case FIRE:
@@ -373,7 +398,7 @@ public final class CombatListener implements Listener {
                 case FLY_INTO_WALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " hit a wall going too fast thanks to " + ChatColor.GOLD + killer.getName()); break;
                 case WITHER: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " withered away thanks to " + ChatColor.GOLD + killer.getName()); break;
                 case STARVATION: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " starved to death thanks to " + ChatColor.GOLD + killer.getName()); break;
-                default: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " slain by " + ChatColor.GOLD + killer.getName());
+                default: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " slain by " + ChatColor.GOLD + killer.getName() + using);
             }
 
             return;
