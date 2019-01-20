@@ -19,6 +19,7 @@ import com.riotmc.services.classes.ClassService;
 import com.riotmc.services.customentity.CustomEntityService;
 import com.riotmc.services.customevents.CustomEventService;
 import com.riotmc.services.customitems.CustomItemService;
+import com.riotmc.services.deathban.DeathbanService;
 import com.riotmc.services.essentials.EssentialsService;
 import com.riotmc.services.humbug.HumbugService;
 import com.riotmc.services.profiles.ProfileService;
@@ -79,6 +80,7 @@ public final class Factions extends RiotPlugin {
         registerService(new ProfileService(this));
         registerService(new PunishmentService(this));
         registerService(new RankService(this));
+        registerService(new DeathbanService(this));
         registerService(new AutomatedRestartService(this, 42300));
         startServices();
 
