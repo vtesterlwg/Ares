@@ -7,6 +7,7 @@ import com.mongodb.client.model.Filters;
 import com.riotmc.commons.base.util.Time;
 import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.commons.bukkit.timer.Timer;
+import com.riotmc.commons.bukkit.util.Players;
 import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.events.EventsAddon;
@@ -20,6 +21,7 @@ import com.riotmc.factions.timers.PlayerTimer;
 import com.riotmc.factions.timers.cont.player.ProtectionTimer;
 import com.riotmc.services.automatedrestarts.AutomatedRestartService;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -37,9 +39,11 @@ public final class PlayerManager {
     /** Handles Faction Timers **/
     @Getter public final Set<FactionPlayer> playerRepository;
     /** Performs HUD rendering **/
-    @Getter public final BukkitTask displayUpdater;
+    @Getter public final BukkitTask actionBarUpdated;
     /** Performs timer updating **/
     @Getter public final BukkitTask timerUpdater;
+    /** Performs tab rendering **/
+    @Getter public final BukkitTask tabUpdater;
 
     public PlayerManager(Factions plugin) {
         final AutomatedRestartService restartService = (AutomatedRestartService)plugin.getService(AutomatedRestartService.class);
@@ -49,7 +53,7 @@ public final class PlayerManager {
         this.displayHandler = new PlayerDisplayHandler(this);
         this.playerRepository = Sets.newConcurrentHashSet();
 
-        this.displayUpdater = new Scheduler(plugin).async(() -> playerRepository.forEach(profile -> {
+        this.actionBarUpdated = new Scheduler(plugin).async(() -> playerRepository.forEach(profile -> {
             List<String> hudElements = null;
 
             if (eventAddon != null && !eventAddon.getManager().getActiveEvents().isEmpty()) {
@@ -106,14 +110,19 @@ public final class PlayerManager {
             profile.getTimers().remove(expired);
 
         }).run()))).repeat(0L, 5L).run();
+
+        this.tabUpdater = new Scheduler(plugin).async(() -> {
+            // TODO: Add koth info and other display information
+            Bukkit.getOnlinePlayers().forEach(player -> Players.sendTablist(plugin.getProtocol(), player, ChatColor.DARK_RED + "" + ChatColor.BOLD + "RiotMC", ChatColor.RED + "riotmc.com"));
+        }).repeat(0L, 60 * 20L).run();
     }
 
     /**
      * Cancels all tasks running under this manager
      */
     public void cancelTasks() {
-        if (this.displayUpdater != null) {
-            this.displayUpdater.cancel();
+        if (this.actionBarUpdated != null) {
+            this.actionBarUpdated.cancel();
         }
 
         if (this.timerUpdater != null) {
