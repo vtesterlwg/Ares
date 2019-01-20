@@ -9,7 +9,6 @@ import com.riotmc.commons.bukkit.logger.Logger;
 import com.riotmc.commons.bukkit.util.Scheduler;
 import com.riotmc.factions.Factions;
 import com.riotmc.factions.addons.Addon;
-import com.riotmc.factions.addons.deathbans.DeathbanAddon;
 import com.riotmc.factions.addons.loggers.data.CombatLogger;
 import com.riotmc.factions.addons.loggers.event.CombatLogEvent;
 import com.riotmc.factions.addons.loggers.event.LoggerDeathEvent;
@@ -21,6 +20,7 @@ import com.riotmc.factions.timers.PlayerTimer;
 import com.riotmc.factions.timers.cont.player.CombatTagTimer;
 import com.riotmc.factions.util.FactionUtils;
 import com.riotmc.services.customentity.CustomEntityService;
+import com.riotmc.services.deathban.DeathbanService;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_13_R2.EntityLiving;
@@ -103,9 +103,9 @@ public final class LoggerAddon implements Addon, Listener {
     @EventHandler (priority = EventPriority.MONITOR)
     public void onLoggerSpawn(CombatLogEvent event) {
         final Player player = event.getPlayer();
-        final DeathbanAddon deathbanAddon = (DeathbanAddon)getPlugin().getAddonManager().getAddon(DeathbanAddon.class);
+        final DeathbanService deathbanService = (DeathbanService)getPlugin().getService(DeathbanService.class);
 
-        if (deathbanAddon != null && deathbanAddon.getDeathbanManager().getRecentlyKicked().contains(player.getUniqueId())) {
+        if (deathbanService != null && deathbanService.getRecentlyKicked().contains(player.getUniqueId())) {
             event.setCancelled(true);
             return;
         }

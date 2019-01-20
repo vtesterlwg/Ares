@@ -1,5 +1,6 @@
 package com.riotmc.services.deathban;
 
+import com.google.common.collect.Sets;
 import com.mongodb.client.model.Filters;
 import com.riotmc.commons.base.promise.FailablePromise;
 import com.riotmc.commons.base.promise.SimplePromise;
@@ -26,17 +27,20 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import javax.annotation.Nonnull;
+import java.util.Set;
 import java.util.UUID;
 
 public final class DeathbanService implements RiotService {
     @Getter public final RiotPlugin owner;
     @Getter public DeathbanConfig configuration;
     @Getter public DeathbanListener deathbanListener;
+    @Getter public final Set<UUID> recentlyKicked;
 
     public DeathbanService(RiotPlugin owner) {
         this.owner = owner;
         this.configuration = new DeathbanConfig(this);
         this.deathbanListener = new DeathbanListener(this);
+        this.recentlyKicked = Sets.newConcurrentHashSet();
     }
 
     @Override
@@ -413,6 +417,22 @@ public final class DeathbanService implements RiotService {
                 }
             });
         });
+    }
+
+    public void deathban(UUID uniqueId, int seconds, boolean sotw, boolean permanent) {
+        if (!getConfiguration().isDeathbanEnforced()) {
+            return;
+        }
+
+        // TODO: Finish
+
+        new Scheduler(owner).async(() -> {
+            final Deathban existing = DeathbanDAO.getDeathban(owner.getMongo(), uniqueId);
+
+            if (existing != null) {
+                DeathbanDAO.deleteDeathban(owner.getMongo(), existing);
+            }
+        }).run();
     }
 
     public String getDeathbanKickMessage(Deathban deathban) {

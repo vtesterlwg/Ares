@@ -38,6 +38,7 @@
                                     <include>com.riotmc:Classes</include>
                                     <include>com.riotmc:AutomatedRestarts</include>
                                     <include>com.riotmc:CustomEntity</include>
+                                    <include>com.riotmc:Deathban</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -186,6 +187,14 @@
         <dependency>
             <groupId>com.riotmc</groupId>
             <artifactId>CustomEntity</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- RiotMC Deathban Service -->
+        <dependency>
+            <groupId>com.riotmc</groupId>
+            <artifactId>Deathban</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
