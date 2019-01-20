@@ -9,10 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Evoker;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -106,7 +103,13 @@ public final class MemeItems implements HumbugModule, Listener {
 
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event) {
+        final Player player = event.getPlayer();
+
         if (!isEnabled() || !isChorusFruitTeleportDisabled()) {
+            return;
+        }
+
+        if (player.hasPermission("humbug.bypass")) {
             return;
         }
 
@@ -117,6 +120,8 @@ public final class MemeItems implements HumbugModule, Listener {
 
     @EventHandler
     public void onPlayerFish(PlayerFishEvent event) {
+        final Player player = event.getPlayer();
+
         if (!isEnabled() || !isFishingPlayersDisabled()) {
             return;
         }
@@ -125,12 +130,22 @@ public final class MemeItems implements HumbugModule, Listener {
             return;
         }
 
+        if (player.hasPermission("humbug.bypass")) {
+            return;
+        }
+
         event.setCancelled(true);
     }
 
     @EventHandler
     public void onEntityEffect(EntityPotionEffectEvent event) {
+        final Entity entity = event.getEntity();
+
         if (!isEnabled() || !isDolphinsGraceDisabled()) {
+            return;
+        }
+
+        if (entity instanceof Player && entity.hasPermission("humbug.bypass")) {
             return;
         }
 
@@ -182,6 +197,11 @@ public final class MemeItems implements HumbugModule, Listener {
             return;
         }
 
+        if (player.hasPermission("humbug.bypass")) {
+            return;
+        }
+
+        player.sendMessage(ChatColor.RED + "This item is disabled while flying");
         event.setCancelled(true);
     }
 
@@ -235,9 +255,12 @@ public final class MemeItems implements HumbugModule, Listener {
             return;
         }
 
-        event.setCancelled(true);
+        if (player.hasPermission("humbug.bypass")) {
+            return;
+        }
+
         player.sendMessage(ChatColor.RED + "This item can not be moved to your off-hand");
-        return;
+        event.setCancelled(true);
     }
 
     @EventHandler
@@ -251,6 +274,10 @@ public final class MemeItems implements HumbugModule, Listener {
         }
 
         final Player player = (Player)event.getWhoClicked();
+
+        if (player.hasPermission("humbug.bypass")) {
+            return;
+        }
 
         for (Integer i : event.getNewItems().keySet()) {
             final ItemStack item = event.getNewItems().get(i);
@@ -289,6 +316,10 @@ public final class MemeItems implements HumbugModule, Listener {
             return;
         }
 
+        if (player.hasPermission("humbug.bypass")) {
+            return;
+        }
+
         player.sendMessage(ChatColor.RED + "This item can not be moved to your off-hand");
         event.setCancelled(true);
     }
@@ -302,11 +333,11 @@ public final class MemeItems implements HumbugModule, Listener {
         final Player player = (Player)event.getWhoClicked();
         final ItemStack item = event.getCurrentItem();
 
-        if (player.hasPermission("humbug.bypass")) {
+        if (!item.getType().equals(Material.END_CRYSTAL)) {
             return;
         }
 
-        if (!item.getType().equals(Material.END_CRYSTAL)) {
+        if (player.hasPermission("humbug.bypass")) {
             return;
         }
 
