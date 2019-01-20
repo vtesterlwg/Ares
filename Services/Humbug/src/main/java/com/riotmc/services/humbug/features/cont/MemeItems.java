@@ -20,6 +20,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerFishEvent;
@@ -33,38 +34,18 @@ import java.util.List;
 import java.util.Random;
 
 public final class MemeItems implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
-
-    @Getter @Setter
-    public boolean chorusFruitTeleportDisabled;
-
-    @Getter @Setter
-    public boolean enderchestDisabled;
-
-    @Getter @Setter
-    public boolean fishingPlayersDisabled;
-
-    @Getter @Setter
-    public boolean dolphinsGraceDisabled;
-
-    @Getter @Setter
-    public boolean naturalPhantomsDisabled;
-
-    @Getter @Setter
-    public boolean disableFireworkElytra;
-
-    @Getter @Setter
-    public boolean lowerTotemDropChances;
-
-    @Getter @Setter
-    public double totemDropChance;
-
-    @Getter @Setter
-    public boolean unbalancedOffhandDisabled;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
+    @Getter @Setter public boolean chorusFruitTeleportDisabled;
+    @Getter @Setter public boolean enderchestDisabled;
+    @Getter @Setter public boolean fishingPlayersDisabled;
+    @Getter @Setter public boolean dolphinsGraceDisabled;
+    @Getter @Setter public boolean naturalPhantomsDisabled;
+    @Getter @Setter public boolean disableFireworkElytra;
+    @Getter @Setter public boolean lowerTotemDropChances;
+    @Getter @Setter public double totemDropChance;
+    @Getter @Setter public boolean unbalancedOffhandDisabled;
+    @Getter @Setter public boolean craftingEndCrystalDisabled;
 
     public MemeItems(HumbugService humbug) {
         this.humbug = humbug;
@@ -82,6 +63,7 @@ public final class MemeItems implements HumbugModule, Listener {
         this.lowerTotemDropChances = humbug.getHumbugConfig().getBoolean("meme-items.lower-totem-drop-chances.enabled");
         this.totemDropChance = humbug.getHumbugConfig().getDouble("meme-items.lower-totem-drop-chances.chances");
         this.unbalancedOffhandDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-unbalanced-offhand");
+        this.craftingEndCrystalDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-end-crystal-crafting");
     }
 
     @Override
@@ -308,6 +290,27 @@ public final class MemeItems implements HumbugModule, Listener {
         }
 
         player.sendMessage(ChatColor.RED + "This item can not be moved to your off-hand");
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onCraft(CraftItemEvent event) {
+        if (!(event.getWhoClicked() instanceof Player)) {
+            return;
+        }
+
+        final Player player = (Player)event.getWhoClicked();
+        final ItemStack item = event.getCurrentItem();
+
+        if (player.hasPermission("humbug.bypass")) {
+            return;
+        }
+
+        if (!item.getType().equals(Material.END_CRYSTAL)) {
+            return;
+        }
+
+        player.sendMessage(ChatColor.RED + "This item can not be crafted");
         event.setCancelled(true);
     }
 }

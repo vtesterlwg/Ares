@@ -3,6 +3,8 @@ rank.delete - Ability to use /rank delete
 rank.configure - Configure ranks
 chat.ignorebypass - Bypass being ignored/disabled private messages
 
+humbug.bypass - Bypass humbug limitations
+
 essentials.gamemode - Change gamemodes
 essentials.gamemode.others - Change others gamemodes
 essentials.heal - Heal yourself
