@@ -11,8 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public final class PlayerListener implements Listener {
-    @Getter
-    public Factions plugin;
+    @Getter public Factions plugin;
 
     public PlayerListener(Factions plugin) {
         this.plugin = plugin;

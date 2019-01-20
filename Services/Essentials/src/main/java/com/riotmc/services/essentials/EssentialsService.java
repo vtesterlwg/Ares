@@ -22,29 +22,14 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.List;
 
 public final class EssentialsService implements RiotService {
-    @Getter
-    public final RiotPlugin owner;
-
-    @Getter
-    protected KitManager kitManager;
-
-    @Getter
-    protected KitHandler kitHandler;
-
-    @Getter
-    protected WarpManager warpManager;
-
-    @Getter
-    protected WarpHandler warpHandler;
-
-    @Getter
-    protected VanishManager vanishManager;
-
-    @Getter
-    protected VanishHandler vanishHandler;
-
-    @Getter
-    protected FileConfiguration essentialsConfig;
+    @Getter public final RiotPlugin owner;
+    @Getter protected KitManager kitManager;
+    @Getter protected KitHandler kitHandler;
+    @Getter protected WarpManager warpManager;
+    @Getter protected WarpHandler warpHandler;
+    @Getter protected VanishManager vanishManager;
+    @Getter protected VanishHandler vanishHandler;
+    @Getter protected FileConfiguration essentialsConfig;
 
     public EssentialsService(RiotPlugin owner) {
         this.owner = owner;
