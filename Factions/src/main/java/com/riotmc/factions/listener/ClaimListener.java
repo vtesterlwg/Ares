@@ -95,50 +95,50 @@ public final class ClaimListener implements Listener {
     public void onPistonRetract(BlockPistonRetractEvent event) {
         final Block piston = event.getBlock();
         final DefinedClaim pistonClaim = plugin.getClaimManager().getClaimAt(new BLocatable(piston));
-        final List<Block> toRemove = Lists.newArrayList();
 
         for (Block affected : event.getBlocks()) {
             final DefinedClaim affectedClaim = plugin.getClaimManager().getClaimAt(new BLocatable(affected));
 
             if (pistonClaim == null && affectedClaim != null) {
-                toRemove.add(affected);
+                event.setCancelled(true);
+                return;
             }
 
             else if (pistonClaim != null && affectedClaim == null) {
-                toRemove.add(affected);
+                event.setCancelled(true);
+                return;
             }
 
             else if (pistonClaim != null && !pistonClaim.getUniqueId().equals(affectedClaim.getUniqueId())) {
-                toRemove.add(affected);
+                event.setCancelled(true);
+                return;
             }
         }
-
-        event.getBlocks().removeAll(toRemove);
     }
 
     @EventHandler
     public void onPistonExtend(BlockPistonExtendEvent event) {
         final Block piston = event.getBlock();
         final DefinedClaim pistonClaim = plugin.getClaimManager().getClaimAt(new BLocatable(piston));
-        final List<Block> toRemove = Lists.newArrayList();
 
         for (Block affected : event.getBlocks()) {
             final DefinedClaim affectedClaim = plugin.getClaimManager().getClaimAt(new BLocatable(affected));
 
             if (pistonClaim == null && affectedClaim != null) {
-                toRemove.add(affected);
+                event.setCancelled(true);
+                return;
             }
 
             else if (pistonClaim != null && affectedClaim == null) {
-                toRemove.add(affected);
+                event.setCancelled(true);
+                return;
             }
 
             else if (pistonClaim != null && !pistonClaim.getUniqueId().equals(affectedClaim.getUniqueId())) {
-                toRemove.add(affected);
+                event.setCancelled(true);
+                return;
             }
         }
-
-        event.getBlocks().removeAll(toRemove);
     }
 
     @EventHandler
