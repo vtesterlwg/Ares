@@ -1,5 +1,5 @@
 name: Lobby
-main: com.playares.lobby.Lobby
+main: com.riotmc.lobby.Lobby
 version: 1.13
 depend: [ProtocolLib]
 api-version: 1.13
