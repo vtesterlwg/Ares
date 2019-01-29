@@ -47,6 +47,7 @@ meme-items:
     disable-firework-elytra: true
     disable-unbalanced-offhand: true
     disable-end-crystal-crafting: true
+    disable-endermite-spawning: true
     lower-totem-drop-chances:
         enabled: true
         chances: 0.04

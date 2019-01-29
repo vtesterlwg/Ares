@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -43,6 +44,7 @@ public final class MemeItems implements HumbugModule, Listener {
     @Getter @Setter public double totemDropChance;
     @Getter @Setter public boolean unbalancedOffhandDisabled;
     @Getter @Setter public boolean craftingEndCrystalDisabled;
+    @Getter @Setter public boolean endermiteSpawningDisabled;
 
     public MemeItems(HumbugService humbug) {
         this.humbug = humbug;
@@ -61,6 +63,7 @@ public final class MemeItems implements HumbugModule, Listener {
         this.totemDropChance = humbug.getHumbugConfig().getDouble("meme-items.lower-totem-drop-chances.chances");
         this.unbalancedOffhandDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-unbalanced-offhand");
         this.craftingEndCrystalDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-end-crystal-crafting");
+        this.endermiteSpawningDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-endermite-spawning");
     }
 
     @Override
@@ -342,6 +345,29 @@ public final class MemeItems implements HumbugModule, Listener {
         }
 
         player.sendMessage(ChatColor.RED + "This item can not be crafted");
+        event.setCancelled(true);
+    }
+
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void onEndermiteSpawn(CreatureSpawnEvent event) {
+        final LivingEntity entity = event.getEntity();
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (!(entity instanceof Endermite)) {
+            return;
+        }
+
+        if (!isEndermiteSpawningDisabled()) {
+            return;
+        }
+
+        if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.ENDER_PEARL)) {
+            return;
+        }
+
         event.setCancelled(true);
     }
 }
