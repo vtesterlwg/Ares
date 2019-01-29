@@ -10,13 +10,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockFormEvent;
-import org.bukkit.event.block.BlockSpreadEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 
@@ -28,6 +26,7 @@ public final class AntiGrief implements HumbugModule, Listener {
     @Getter @Setter public boolean cobblestoneGeneratorDisabled;
     @Getter @Setter public boolean destroyingMobSpawnsDisabled;
     @Getter @Setter public boolean spawnNetherPortalPlatform;
+    @Getter @Setter public boolean pushableLiquidsDisabled;
 
     public AntiGrief(HumbugService humbug) {
         this.humbug = humbug;
@@ -41,6 +40,7 @@ public final class AntiGrief implements HumbugModule, Listener {
         this.cobblestoneGeneratorDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-cobble-generators");
         this.destroyingMobSpawnsDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-mob-spawner-breaking");
         this.spawnNetherPortalPlatform = humbug.getHumbugConfig().getBoolean("anti-grief.spawn-nether-portal-platform");
+        this.pushableLiquidsDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-pushable-liquid");
     }
 
     @Override
@@ -130,5 +130,25 @@ public final class AntiGrief implements HumbugModule, Listener {
                 }
             }
         }).delay(1L).run();
+    }
+
+    @EventHandler
+    public void onBlockMove(BlockPistonExtendEvent event) {
+        if (event.isCancelled() || isPushableLiquidsDisabled()) {
+            return;
+        }
+
+        for (Block block : event.getBlocks()) {
+            if (!(block.getState().getData() instanceof Waterlogged)) {
+                continue;
+            }
+
+            if (!block.getType().name().contains("_FENCE")) {
+                continue;
+            }
+
+            event.setCancelled(true);
+            return;
+        }
     }
 }
