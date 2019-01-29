@@ -106,7 +106,7 @@ public final class PlayerTimerListener implements Listener {
 
     @EventHandler
     public void onPlayerRevive(EntityResurrectEvent event) {
-        if (!(event.getEntity() instanceof Player)) {
+        if (!(event.getEntity() instanceof Player) || event.isCancelled()) {
             return;
         }
 
