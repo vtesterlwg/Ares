@@ -50,6 +50,9 @@ arena.loadout.list - List loadouts
 arena.setlobby - Update arena lobby location
 arena.admin - Admin access to Arena
 
+// NEW ARENA PERMS
+arena.admin - Admin access to Arena
+
 factions.admin - Access all of the factions plugin
 factions.mod - Basic moderation commands for factions
 factions.create.server - Create a server faction

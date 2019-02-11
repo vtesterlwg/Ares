@@ -1,5 +1,6 @@
 limits:
-  team-size: 20
+  team-size: 30
+
 timers:
   invite-expire: 30
   challenge-expire: 30

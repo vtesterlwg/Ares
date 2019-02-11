@@ -3,30 +3,30 @@ package com.riotmc.arena.player;
 import com.google.common.collect.Sets;
 import com.riotmc.arena.Arenas;
 import lombok.Getter;
+import org.bukkit.entity.Player;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Set;
 import java.util.UUID;
 
 public final class PlayerManager {
-    @Nonnull @Getter
-    public final Arenas plugin;
+    @Getter public final Arenas plugin;
+    @Getter public final PlayerHandler handler;
+    @Getter public final Set<ArenaPlayer> players;
 
-    @Nonnull @Getter
-    public final Set<ArenaPlayer> players;
-
-    public PlayerManager(@Nonnull Arenas plugin) {
+    public PlayerManager(Arenas plugin) {
         this.plugin = plugin;
+        this.handler = new PlayerHandler(this);
         this.players = Sets.newConcurrentHashSet();
     }
 
-    @Nullable
+    public ArenaPlayer getPlayer(Player bukkitPlayer) {
+        return players.stream().filter(player -> player.getUniqueId().equals(bukkitPlayer.getUniqueId())).findFirst().orElse(null);
+    }
+
     public ArenaPlayer getPlayer(UUID uniqueId) {
         return players.stream().filter(player -> player.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
-    @Nullable
     public ArenaPlayer getPlayer(String username) {
         return players.stream().filter(player -> player.getUsername().equalsIgnoreCase(username)).findFirst().orElse(null);
     }

@@ -1,12 +1,10 @@
-package com.riotmc.arena.items;
+package com.riotmc.arena.item;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.riotmc.arena.Arenas;
 import com.riotmc.arena.player.ArenaPlayer;
-import com.riotmc.arena.player.PlayerStatus;
 import com.riotmc.arena.team.Team;
-import com.riotmc.commons.base.promise.FailablePromise;
+import com.riotmc.commons.base.promise.SimplePromise;
 import com.riotmc.commons.bukkit.item.custom.CustomItem;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -18,66 +16,72 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
-public final class CreateTeamItem implements CustomItem {
-    @Getter
-    public final Arenas plugin;
+public final class LeaveDisbandTeamItem implements CustomItem {
+    @Getter public final Arenas plugin;
 
-    public CreateTeamItem(Arenas plugin) {
+    public LeaveDisbandTeamItem(Arenas plugin) {
         this.plugin = plugin;
     }
 
     @Override
     public Material getMaterial() {
-        return Material.CLOCK;
+        return Material.BARRIER;
     }
 
     @Override
     public String getName() {
-        return ChatColor.BLUE + "Create Team";
+        return ChatColor.RED + "Leave/Disband Team";
     }
 
     @Override
     public List<String> getLore() {
         final List<String> lore = Lists.newArrayList();
 
-        lore.add(ChatColor.AQUA + "Right-click while holding this item");
-        lore.add(ChatColor.AQUA + "to create a new team");
+        lore.add(ChatColor.YELLOW + "Right-click while holding this item");
+        lore.add(ChatColor.YELLOW + "to leave/disband your team");
 
         return lore;
     }
 
     @Override
     public Map<Enchantment, Integer> getEnchantments() {
-        return Maps.newHashMap();
+        return null;
     }
 
     @Override
     public Runnable getRightClick(Player who) {
         return () -> {
-            final ArenaPlayer player = plugin.getPlayerManager().getPlayer(who.getUniqueId());
+            final ArenaPlayer player = plugin.getPlayerManager().getPlayer(who);
 
             if (player == null) {
                 who.sendMessage(ChatColor.RED + "Failed to obtain your profile");
                 return;
             }
 
-            if (player.getTeam() != null) {
-                who.sendMessage(ChatColor.RED + "You are already on a team");
+            final Team team = plugin.getTeamManager().getTeam(player);
+
+            if (team == null) {
+                who.sendMessage(ChatColor.RED + "You are not on a team");
                 return;
             }
 
-            if (!player.getStatus().equals(PlayerStatus.LOBBY)) {
-                who.sendMessage(ChatColor.RED + "You are not in the lobby");
+            if (team.isLeader(player)) {
+                plugin.getTeamManager().getHandler().disband(player, new SimplePromise() {
+                    @Override
+                    public void success() {}
+
+                    @Override
+                    public void failure(@Nonnull String reason) {
+                        who.sendMessage(ChatColor.RED + reason);
+                    }
+                });
+
                 return;
             }
 
-            plugin.getTeamHandler().createTeam(player, new FailablePromise<Team>() {
+            plugin.getTeamManager().getHandler().leave(player, new SimplePromise() {
                 @Override
-                public void success(@Nonnull Team team) {
-                    plugin.getTeamManager().getTeams().add(team);
-                    plugin.getPlayerHandler().giveLobbyItems(player);
-                    who.sendMessage(ChatColor.GREEN + "Team created");
-                }
+                public void success() {}
 
                 @Override
                 public void failure(@Nonnull String reason) {

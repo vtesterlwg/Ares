@@ -2,11 +2,9 @@ package com.riotmc.arena.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandCompletion;
 import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Subcommand;
 import com.riotmc.arena.Arenas;
-import com.riotmc.arena.player.ArenaPlayer;
 import com.riotmc.commons.base.promise.SimplePromise;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -14,30 +12,20 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 
-@CommandAlias("team|t")
+@CommandAlias("team|t|party|p")
 public final class TeamCommand extends BaseCommand {
-    @Nonnull @Getter
-    public final Arenas plugin;
+    @Getter public final Arenas plugin;
 
-    public TeamCommand(@Nonnull Arenas plugin) {
+    public TeamCommand(Arenas plugin) {
         this.plugin = plugin;
     }
 
     @Subcommand("open")
-    @Description("Open your team for others to join")
+    @Description("Allow anyone to join your team")
     public void onOpen(Player player) {
-        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
-
-        if (profile == null) {
-            player.sendMessage(ChatColor.RED + "Failed to obtain your profile");
-            return;
-        }
-
-        plugin.getTeamHandler().openTeam(profile, new SimplePromise() {
+        plugin.getTeamManager().getHandler().open(player, new SimplePromise() {
             @Override
-            public void success() {
-                player.sendMessage(ChatColor.GREEN + "Team opened");
-            }
+            public void success() {}
 
             @Override
             public void failure(@Nonnull String reason) {
@@ -47,20 +35,11 @@ public final class TeamCommand extends BaseCommand {
     }
 
     @Subcommand("close")
-    @Description("Limit access for your team to invite only")
+    @Description("Allow players to only join with an invitation")
     public void onClose(Player player) {
-        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
-
-        if (profile == null) {
-            player.sendMessage(ChatColor.RED + "Failed to obtain your profile");
-            return;
-        }
-
-        plugin.getTeamHandler().closeTeam(profile, new SimplePromise() {
+        plugin.getTeamManager().getHandler().close(player, new SimplePromise() {
             @Override
-            public void success() {
-                player.sendMessage(ChatColor.GREEN + "Team closed");
-            }
+            public void success() {}
 
             @Override
             public void failure(@Nonnull String reason) {
@@ -70,22 +49,9 @@ public final class TeamCommand extends BaseCommand {
     }
 
     @Subcommand("invite|inv")
-    @CommandCompletion("@players")
-    public void onInvite(Player player, String name) {
-        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
-        final ArenaPlayer invited = plugin.getPlayerManager().getPlayer(name);
-
-        if (profile == null) {
-            player.sendMessage(ChatColor.RED + "Failed to obtain your profile");
-            return;
-        }
-
-        if (invited == null) {
-            player.sendMessage(ChatColor.RED + "Player not found");
-            return;
-        }
-
-        plugin.getTeamHandler().invitePlayer(profile, invited, new SimplePromise() {
+    @Description("Send a player an invitation to join your team")
+    public void onInvite(Player player, String username) {
+        plugin.getTeamManager().getHandler().invite(player, username, new SimplePromise() {
             @Override
             public void success() {}
 
@@ -96,23 +62,10 @@ public final class TeamCommand extends BaseCommand {
         });
     }
 
-    @Subcommand("join")
-    @CommandCompletion("@players")
-    public void onJoin(Player player, String name) {
-        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
-        final ArenaPlayer target = plugin.getPlayerManager().getPlayer(name);
-
-        if (profile == null) {
-            player.sendMessage(ChatColor.RED + "Failed to obtain your profile");
-            return;
-        }
-
-        if (target == null) {
-            player.sendMessage(ChatColor.RED + "Player not found");
-            return;
-        }
-
-        plugin.getTeamHandler().joinTeam(profile, target, new SimplePromise() {
+    @Subcommand("join|accept")
+    @Description("Accept an invitation you have received to join a team")
+    public void onJoin(Player player, String team) {
+        plugin.getTeamManager().getHandler().accept(player, team, new SimplePromise() {
             @Override
             public void success() {}
 
@@ -123,27 +76,28 @@ public final class TeamCommand extends BaseCommand {
         });
     }
 
-    @Subcommand("kick")
-    @CommandCompletion("@players")
-    public void onKick(Player player, String name) {
-        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
-        final ArenaPlayer target = plugin.getPlayerManager().getPlayer(name);
-
-        if (profile == null) {
-            player.sendMessage(ChatColor.RED + "Failed to obtain your profile");
-            return;
-        }
-
-        if (target == null) {
-            player.sendMessage(ChatColor.RED + "Player not found");
-            return;
-        }
-
-        plugin.getTeamHandler().kickFromTeam(profile, target, new SimplePromise() {
+    @Subcommand("leave")
+    @Description("Leave your team")
+    public void onLeave(Player player) {
+        plugin.getTeamManager().getHandler().leave(player, new SimplePromise() {
             @Override
             public void success() {
-                player.sendMessage(ChatColor.GREEN + "Player has been kicked");
+                player.sendMessage(ChatColor.YELLOW + "You have left the team");
             }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("kick|remove")
+    @Description("Remove a player from your team")
+    public void onKick(Player player, String username) {
+        plugin.getTeamManager().getHandler().kick(player, username, new SimplePromise() {
+            @Override
+            public void success() {}
 
             @Override
             public void failure(@Nonnull String reason) {
