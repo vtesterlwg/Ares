@@ -114,7 +114,7 @@ public final class EssentialsService implements AresService {
         registerCommand(new WeatherCommand());
         registerCommand(new ItemCommand());
         registerCommand(new InvSeeCommand(owner));
-        registerCommand(new ListCommand(owner));
+        registerCommand(new ListCommand(this));
         registerCommand(new WarpCommand(this));
         registerCommand(new KitCommand(this));
         registerCommand(new BroadcastCommand(this));

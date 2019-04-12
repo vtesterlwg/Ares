@@ -14,9 +14,9 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
+// TODO: Rewrite
 public final class KitCommand extends BaseCommand {
-    @Getter
-    public EssentialsService essentials;
+    @Getter public EssentialsService essentials;
 
     public KitCommand(EssentialsService essentials) {
         this.essentials = essentials;

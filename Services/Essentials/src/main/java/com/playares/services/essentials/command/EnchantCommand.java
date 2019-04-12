@@ -30,8 +30,8 @@ public final class EnchantCommand extends BaseCommand {
         }
 
         hand.addUnsafeEnchantment(enchantment, level);
-        player.sendMessage(ChatColor.GREEN + "Applied " + enchantment.getKey().getKey());
-        Logger.print(player.getName() + " applied " + enchantment.getName() + " " + level + " to their " + hand.getType().name());
+        player.sendMessage(ChatColor.YELLOW + "Item in your hand has been enchanted with " + ChatColor.WHITE + enchantment.getKey().getKey() + " " + level);
+        Logger.print(player.getName() + " applied " + enchantment.getKey().getKey() + " " + level + " to their " + hand.getType().name());
     }
 
     @Subcommand("armor|a")
@@ -40,7 +40,6 @@ public final class EnchantCommand extends BaseCommand {
     @Syntax("<enchantment> <level>")
     public void onEnchantArmor(Player player, String enchant, int level) {
         final Enchantment enchantment = Items.getEnchantmentByName(enchant);
-        int updated = 0;
 
         if (enchantment == null) {
             player.sendMessage(ChatColor.RED + "Enchantment not found");
@@ -53,10 +52,9 @@ public final class EnchantCommand extends BaseCommand {
             }
 
             armor.addUnsafeEnchantment(enchantment, level);
-            updated++;
+            player.sendMessage(ChatColor.YELLOW + "Your " + ChatColor.WHITE + armor.getI18NDisplayName() + ChatColor.YELLOW + " has been enchanted with " + ChatColor.WHITE + enchantment.getKey().getKey() + " " + level);
         }
 
-        player.sendMessage(ChatColor.GREEN + "Applied " + enchantment.getKey().getKey() + " to " + updated + " items");
         Logger.print(player.getName() + " applied " + enchantment.getName() + " to their armor");
     }
 }

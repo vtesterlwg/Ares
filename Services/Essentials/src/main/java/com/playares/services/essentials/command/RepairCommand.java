@@ -22,7 +22,7 @@ public final class RepairCommand extends BaseCommand {
         }
 
         hand.setDurability((short)0);
-        player.sendMessage(ChatColor.GREEN + "Item has been repaired");
+        player.sendMessage(ChatColor.YELLOW + "Item in your hand has been repaired");
         Logger.print(player.getName() + " repaired the item in their hand");
     }
 
@@ -31,7 +31,6 @@ public final class RepairCommand extends BaseCommand {
     @Description("Repair your armor")
     @Syntax("armor")
     public void onRepairArmor(Player player) {
-        int updated = 0;
 
         for (ItemStack armor : player.getInventory().getArmorContents()) {
             if (armor == null) {
@@ -39,10 +38,9 @@ public final class RepairCommand extends BaseCommand {
             }
 
             armor.setDurability((short)0);
-            updated++;
+            player.sendMessage(ChatColor.YELLOW + "Your " + ChatColor.WHITE + armor.getType().getKey().getKey() + ChatColor.YELLOW + " has been repaired");
         }
 
-        player.sendMessage(ChatColor.GREEN + "Repaired " + updated + " items");
         Logger.print(player.getName() + " repaired their armor");
     }
 }

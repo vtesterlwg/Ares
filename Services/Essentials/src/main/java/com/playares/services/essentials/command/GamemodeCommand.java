@@ -3,11 +3,13 @@ package com.playares.services.essentials.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.base.promise.SimplePromise;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.util.StringUtil;
 
 public final class GamemodeCommand extends BaseCommand {
     private void updateGamemode(Player player, String mode, SimplePromise promise) {
@@ -45,7 +47,7 @@ public final class GamemodeCommand extends BaseCommand {
     public void onCommand(final Player player, String mode) {
         updateGamemode(player, mode, new SimplePromise() {
             public void success() {
-                player.sendMessage(ChatColor.GREEN + "Gamemode has been updated");
+                player.sendMessage(ChatColor.YELLOW + "Your gamemode has been updated to " + ChatColor.WHITE + StringUtils.capitalize(player.getGameMode().name().toLowerCase().replace("_", " ")));
             }
 
             public void failure(String reason) {
@@ -69,7 +71,7 @@ public final class GamemodeCommand extends BaseCommand {
 
         updateGamemode(toUpdate, mode, new SimplePromise() {
             public void success() {
-                sender.sendMessage(ChatColor.GREEN + toUpdate.getName() + "'s gamemode has been updated");
+                sender.sendMessage(ChatColor.YELLOW + "You have updated " + ChatColor.WHITE + toUpdate.getName() + ChatColor.YELLOW + "'s gamemode to " + ChatColor.WHITE + StringUtils.capitalize(toUpdate.getGameMode().name().toLowerCase().replace("_", " ")));
             }
 
             public void failure(String reason) {

@@ -21,7 +21,7 @@ public final class EffectCommand extends BaseCommand {
     public void onRemove(Player player, String name) {
         if (name.equalsIgnoreCase("all")) {
             player.getActivePotionEffects().clear();
-            player.sendMessage(ChatColor.GREEN + "Removed all potion effects");
+            player.sendMessage(ChatColor.YELLOW + "Your potion effects have been cleared");
             Logger.print(player.getName() + " removed all of their potion effects");
             return;
         }
@@ -36,7 +36,7 @@ public final class EffectCommand extends BaseCommand {
         final String fancyName = StringUtils.capitaliseAllWords(type.getName().toLowerCase().replace("_", " "));
 
         player.removePotionEffect(type);
-        player.sendMessage(ChatColor.GREEN + "Removed effect " + fancyName);
+        player.sendMessage(ChatColor.YELLOW + "Removed effect " + ChatColor.WHITE + fancyName);
         Logger.print(player.getName() + " removed effect " + fancyName + " from themselves");
     }
 
@@ -55,8 +55,8 @@ public final class EffectCommand extends BaseCommand {
 
         if (name.equalsIgnoreCase("all")) {
             player.getActivePotionEffects().clear();
-            player.sendMessage(ChatColor.GREEN + "Removed all potion effects");
-            sender.sendMessage(ChatColor.GREEN + "Removed all potion effects from " + player.getName());
+            player.sendMessage(ChatColor.YELLOW + "Your potion effects have been cleared");
+            sender.sendMessage(ChatColor.YELLOW + "You have removed " + ChatColor.WHITE + "all" + ChatColor.YELLOW + " potion effects from " + ChatColor.WHITE + player.getName());
             Logger.print(sender.getName() + " removed all of " + player.getName() + "'s potion effects");
             return;
         }
@@ -71,13 +71,13 @@ public final class EffectCommand extends BaseCommand {
         final String fancyName = StringUtils.capitaliseAllWords(type.getName().toLowerCase().replace("_", " "));
 
         player.removePotionEffect(type);
-        player.sendMessage(ChatColor.GREEN + "Removed effect " + fancyName + "");
-        sender.sendMessage(ChatColor.GREEN + "Removed effect " + fancyName + " from " + player.getName());
+        player.sendMessage(ChatColor.YELLOW + "Removed effect " + ChatColor.WHITE + fancyName);
+        sender.sendMessage(ChatColor.YELLOW + "Removed effect " + ChatColor.WHITE + fancyName + ChatColor.YELLOW + " from " + ChatColor.WHITE + player.getName());
         Logger.print(sender.getName() + " removed effect " + fancyName + " from " + player.getName());
     }
 
-    @Subcommand("apply")
-    @Description("Apply an effect to yourself")
+    @Subcommand("give")
+    @Description("Give an effect to yourself")
     @CommandPermission("essentials.effect")
     @CommandCompletion("@potions")
     @Syntax("<effect> <amplifier> <duration>")
@@ -93,11 +93,11 @@ public final class EffectCommand extends BaseCommand {
         final String fancyName = StringUtils.capitaliseAllWords(type.getName().toLowerCase().replace("_", " "));
 
         player.addPotionEffect(effect);
-        player.sendMessage(ChatColor.GREEN + "Applied " + fancyName + " " + amplifier + " for " + duration + " seconds");
+        player.sendMessage(ChatColor.YELLOW + "You have been given " + ChatColor.WHITE + fancyName + " " + amplifier + ChatColor.YELLOW + " for " + ChatColor.WHITE + duration + " seconds");
         Logger.print(player.getName() + " applied effect " + fancyName + amplifier + " to themselves for " + duration + " seconds");
     }
 
-    @Subcommand("apply")
+    @Subcommand("give")
     @Description("Apply an effect to a player")
     @CommandPermission("essentials.effect.others")
     @CommandCompletion("@potions @players")
@@ -121,8 +121,8 @@ public final class EffectCommand extends BaseCommand {
         final String fancyName = StringUtils.capitaliseAllWords(type.getName().toLowerCase().replace("_", " "));
 
         player.addPotionEffect(effect);
-        player.sendMessage(ChatColor.GREEN + "Applied " + fancyName + " " + amplifier + " for " + duration + " seconds");
-        sender.sendMessage(ChatColor.GREEN + "Applied " + fancyName + " " + amplifier + " for " + duration + " seconds to " + player.getName());
+        player.sendMessage(ChatColor.YELLOW + "You have been given " + ChatColor.WHITE + fancyName + " " + amplifier + ChatColor.YELLOW + " for " + ChatColor.WHITE + duration + " seconds" + ChatColor.YELLOW + " by " + ChatColor.WHITE + sender.getName());
+        sender.sendMessage(ChatColor.YELLOW + "You have given " + ChatColor.WHITE + fancyName + " " + amplifier + ChatColor.YELLOW + " to " + ChatColor.WHITE + player.getName() + ChatColor.YELLOW + " for " + ChatColor.WHITE + duration + " seconds");
         Logger.print(sender.getName() + " applied effect " + fancyName + amplifier + " to " + player.getName() + " for " + duration + " seconds");
     }
 }

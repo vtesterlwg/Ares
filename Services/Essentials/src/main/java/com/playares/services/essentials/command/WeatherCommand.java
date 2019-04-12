@@ -24,7 +24,7 @@ public final class WeatherCommand extends BaseCommand {
             world.setThundering(false);
             world.setStorm(false);
             world.setWeatherDuration(Integer.MAX_VALUE);
-            player.sendMessage(ChatColor.GREEN + "Weather is now clear");
+            player.sendMessage(ChatColor.YELLOW + "Weather is now " + ChatColor.WHITE + "clear");
             Logger.print(player.getName() + " set the weather to clear");
             return;
         }
@@ -33,7 +33,7 @@ public final class WeatherCommand extends BaseCommand {
             world.setThundering(false);
             world.setStorm(true);
             world.setWeatherDuration(Integer.MAX_VALUE);
-            player.sendMessage(ChatColor.GREEN + "Weather is now rainy");
+            player.sendMessage(ChatColor.YELLOW + "Weather is now " + ChatColor.WHITE + "rainy");
             Logger.print(player.getName() + " set the weather to rainy");
             return;
         }
@@ -42,7 +42,7 @@ public final class WeatherCommand extends BaseCommand {
             world.setThundering(true);
             world.setStorm(true);
             world.setWeatherDuration(Integer.MAX_VALUE);
-            player.sendMessage(ChatColor.GREEN + "Weather is now thundering");
+            player.sendMessage(ChatColor.YELLOW + "Weather is now " + ChatColor.WHITE + "thundering");
             Logger.print(player.getName() + " set the weather to thundering");
         }
     }

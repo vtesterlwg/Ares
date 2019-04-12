@@ -25,7 +25,7 @@ public final class TeleportCommand extends BaseCommand {
         }
 
         player.teleport(destination);
-        player.sendMessage(ChatColor.GREEN + "Teleported to " + destination.getName());
+        player.sendMessage(ChatColor.YELLOW + "You have been teleported to " + ChatColor.WHITE + destination.getName());
         Logger.print(player.getName() + " teleported to " + destination.getName());
     }
 
@@ -38,7 +38,7 @@ public final class TeleportCommand extends BaseCommand {
             toTeleport.sendMessage(ChatColor.GREEN + "Teleported to " + player.getName());
         });
 
-        player.sendMessage(ChatColor.GREEN + "Teleported " + Bukkit.getOnlinePlayers().size() + " players to your location");
+        player.sendMessage(ChatColor.YELLOW + "You have summoned " + ChatColor.WHITE + Bukkit.getOnlinePlayers().size() + ChatColor.YELLOW + " to your current location");
         Logger.warn(player.getName() + " teleported " + Bukkit.getOnlinePlayers().size() + " to them");
     }
 
@@ -62,7 +62,7 @@ public final class TeleportCommand extends BaseCommand {
         }
 
         from.teleport(to);
-        from.sendMessage(ChatColor.GREEN + sender.getName() + " teleported you to " + to.getName());
+        from.sendMessage(ChatColor.YELLOW + "You have been summoned to " + ChatColor.WHITE + to.getName());
         Logger.print(sender.getName() + " teleported " + from.getName() + " to " + to.getName());
     }
 
@@ -72,7 +72,7 @@ public final class TeleportCommand extends BaseCommand {
     @CommandPermission("essentials.teleport.coords")
     public void onTeleportCoords(Player player, double x, double y, double z) {
         player.teleport(new Location(player.getWorld(), x, y, z));
-        player.sendMessage(ChatColor.GREEN + "Teleported to " + x + " " + y + " " + z);
+        player.sendMessage(ChatColor.YELLOW + "You have teleported to " + ChatColor.WHITE + x + ", " + y + ", " + z);
         Logger.print(player.getName() + " teleported to coordinates " + x + " " + y + " " + z);
     }
 
@@ -90,7 +90,7 @@ public final class TeleportCommand extends BaseCommand {
         }
 
         player.teleport(new Location(world, x, y, z));
-        player.sendMessage(ChatColor.GREEN + "Teleport to " + world.getName() + " " + x + " " + y + " " + z);
-        Logger.print(player.getName() + " teleported to " + world.getName() + " " + x + " " + y + " " + z);
+        player.sendMessage(ChatColor.YELLOW + "You have been teleported to " + world.getName() + ", " + x + ", " + y + ", " + z);
+        Logger.print(player.getName() + " teleported to " + world.getName() + ", " + x + ", " + y + ", " + z);
     }
 }

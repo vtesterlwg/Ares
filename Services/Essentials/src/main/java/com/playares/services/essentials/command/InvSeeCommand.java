@@ -12,8 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 public final class InvSeeCommand extends BaseCommand {
-    @Getter
-    public final AresPlugin plugin;
+    @Getter public final AresPlugin plugin;
 
     public InvSeeCommand(AresPlugin plugin) {
         this.plugin = plugin;

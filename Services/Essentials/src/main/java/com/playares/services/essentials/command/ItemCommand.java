@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.StringUtil;
 
 public final class ItemCommand extends BaseCommand {
     @CommandAlias("item|i|give")
@@ -24,7 +25,7 @@ public final class ItemCommand extends BaseCommand {
 
         final ItemStack item = new ItemStack(material);
         player.getInventory().addItem(item);
-        player.sendMessage(ChatColor.GREEN + "Given " + ChatColor.AQUA + StringUtils.capitaliseAllWords(material.name().toLowerCase().replace("_", " ")));
+        player.sendMessage(ChatColor.YELLOW + "You have been given " + ChatColor.WHITE + StringUtils.capitaliseAllWords(material.name().toLowerCase().replace("_", " ")));
     }
 
     @CommandAlias("item|i|give")
@@ -42,6 +43,6 @@ public final class ItemCommand extends BaseCommand {
 
         final ItemStack item = new ItemStack(material, amount);
         player.getInventory().addItem(item);
-        player.sendMessage(ChatColor.GREEN + "Given " + amount + " " + ChatColor.AQUA + StringUtils.capitaliseAllWords(material.name().toLowerCase().replace("_", " ")));
+        player.sendMessage(ChatColor.YELLOW + "You have been given " + amount + " " + ChatColor.WHITE + StringUtils.capitaliseAllWords(material.name().toLowerCase().replace("_", " ")));
     }
 }

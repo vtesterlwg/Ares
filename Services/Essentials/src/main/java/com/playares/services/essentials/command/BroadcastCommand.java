@@ -12,11 +12,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 public final class BroadcastCommand extends BaseCommand {
-    @Getter
-    public final String prefix;
-
-    @Getter
-    public final String playerPrefixFormat;
+    @Getter public final String prefix;
+    @Getter public final String playerPrefixFormat;
 
     public BroadcastCommand(EssentialsService essentialsService) {
         prefix = ChatColor.translateAlternateColorCodes('&', essentialsService.getEssentialsConfig().getString("broadcasts.global-prefix"));

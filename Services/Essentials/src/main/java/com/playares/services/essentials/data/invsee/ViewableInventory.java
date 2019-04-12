@@ -38,7 +38,7 @@ public final class ViewableInventory extends Menu implements Listener {
         updateTask = new Scheduler(plugin).sync(() -> {
             if (viewed == null || !viewed.isOnline() || viewed.isDead()) {
                 getPlayer().closeInventory();
-                getPlayer().sendMessage(ChatColor.RED + "Player has died or logged out");
+                getPlayer().sendMessage(ChatColor.RED + "Player has died or is no longer online");
                 return;
             }
 

@@ -24,7 +24,7 @@ public final class HealCommand extends BaseCommand {
         Players.resetFlySpeed(player);
         Players.resetWalkSpeed(player);
 
-        player.sendMessage(ChatColor.GREEN + "You have been healed");
+        player.sendMessage(ChatColor.YELLOW + "You have been healed");
     }
 
     @CommandAlias("heal")
@@ -50,7 +50,7 @@ public final class HealCommand extends BaseCommand {
         Players.resetFlySpeed(player);
         Players.resetWalkSpeed(player);
 
-        player.sendMessage(ChatColor.GREEN + "You have been healed");
-        sender.sendMessage(ChatColor.GREEN + player.getName() + " has been healed");
+        player.sendMessage(ChatColor.YELLOW + "You have been healed");
+        sender.sendMessage(ChatColor.YELLOW + "You have healed " + ChatColor.WHITE + player.getName());
     }
 }

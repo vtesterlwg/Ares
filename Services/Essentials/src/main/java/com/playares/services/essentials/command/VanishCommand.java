@@ -23,11 +23,11 @@ public final class VanishCommand extends BaseCommand {
     public void onVanish(Player player) {
         if (essentials.getVanishManager().isVanished(player)) {
             essentials.getVanishHandler().showPlayer(player, true);
-            player.sendMessage(ChatColor.DARK_AQUA + "Players can now see you");
+            player.sendMessage(ChatColor.YELLOW + "You are now " + ChatColor.WHITE + "visible");
             return;
         }
 
         essentials.getVanishHandler().hidePlayer(player, true);
-        player.sendMessage(ChatColor.DARK_AQUA + "Players will no longer see or hear you");
+        player.sendMessage(ChatColor.YELLOW + "You are now " + ChatColor.WHITE + "invisible");
     }
 }

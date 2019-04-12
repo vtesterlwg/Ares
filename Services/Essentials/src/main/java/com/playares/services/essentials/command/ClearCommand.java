@@ -15,7 +15,7 @@ public final class ClearCommand extends BaseCommand {
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
         player.updateInventory();
-        player.sendMessage(ChatColor.GREEN + "Your inventory has been cleared");
+        player.sendMessage(ChatColor.YELLOW + "Your inventory has been cleared");
     }
 
     @CommandAlias("clear")
@@ -34,6 +34,6 @@ public final class ClearCommand extends BaseCommand {
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
         player.updateInventory();
-        player.sendMessage(ChatColor.GREEN + "Your inventory has been cleared");
+        player.sendMessage(ChatColor.YELLOW + "Your inventory has been cleared by " + ChatColor.WHITE + sender.getName());
     }
 }

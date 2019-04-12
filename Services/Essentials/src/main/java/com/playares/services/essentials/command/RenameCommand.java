@@ -29,7 +29,7 @@ public final class RenameCommand extends BaseCommand {
         meta.setDisplayName(converted);
         hand.setItemMeta(meta);
 
-        player.sendMessage(ChatColor.GREEN + "Applied name '" + converted + ChatColor.GREEN + "' to item");
+        player.sendMessage(ChatColor.YELLOW + "The item in your hand has been renamed to " + converted);
         Logger.print(player.getName() + " renamed the item in their hand to " + converted);
     }
 }

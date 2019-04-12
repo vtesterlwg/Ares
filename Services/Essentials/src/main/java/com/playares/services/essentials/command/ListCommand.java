@@ -7,6 +7,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.playares.commons.bukkit.AresPlugin;
+import com.playares.services.essentials.EssentialsService;
 import com.playares.services.ranks.RankService;
 import com.playares.services.ranks.data.AresRank;
 import lombok.Getter;
@@ -19,25 +20,33 @@ import java.util.List;
 import java.util.Map;
 
 public final class ListCommand extends BaseCommand {
-    @Getter
-    public final AresPlugin plugin;
+    @Getter public final AresPlugin plugin;
+    @Getter public final EssentialsService service;
 
-    public ListCommand(AresPlugin plugin) {
-        this.plugin = plugin;
+    public ListCommand(EssentialsService service) {
+        this.plugin = service.getOwner();
+        this.service = service;
     }
 
     @CommandAlias("list")
     @Description("View a list of all online players")
     public void onList(CommandSender sender) {
         final RankService rankService = (RankService)plugin.getService(RankService.class);
+        final boolean canSeeVanished = sender.hasPermission("essentials.vanish");
 
         // Fallback if the service is not found or no ranks to display
         if (rankService == null || rankService.getRanks().isEmpty() || rankService.getDefaultRanks().isEmpty()) {
             final List<String> usernames = Lists.newArrayList();
 
-            Bukkit.getOnlinePlayers().forEach(player -> usernames.add(player.getName()));
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                if (!canSeeVanished && service.getVanishManager().isVanished(player)) {
+                    continue;
+                }
 
-            sender.sendMessage(ChatColor.RED + "" + usernames.size() + ChatColor.GOLD + " players online");
+                usernames.add(player.getName());
+            }
+
+            sender.sendMessage(ChatColor.WHITE + "" + usernames.size() + ChatColor.YELLOW + " players are on this server");
             sender.sendMessage(Joiner.on(ChatColor.RESET + ", ").join(usernames));
 
             return;
@@ -60,6 +69,10 @@ public final class ListCommand extends BaseCommand {
                 continue;
             }
 
+            if (!canSeeVanished && service.getVanishManager().isVanished(player)) {
+                continue;
+            }
+
             players.get(rank).add(player.getName());
         }
 
@@ -68,7 +81,7 @@ public final class ListCommand extends BaseCommand {
             response.add(Joiner.on(ChatColor.RESET + ", ").join(names));
         }
 
-        sender.sendMessage(ChatColor.RED + "" + Bukkit.getOnlinePlayers().size() + ChatColor.GOLD + " players online");
+        sender.sendMessage(ChatColor.WHITE + "" + Bukkit.getOnlinePlayers().size() + ChatColor.YELLOW + " players are on this server");
         sender.sendMessage(Joiner.on(ChatColor.RESET + ", ").join(rankNames));
         sender.sendMessage(Joiner.on(ChatColor.RESET + ", ").join(response));
     }
