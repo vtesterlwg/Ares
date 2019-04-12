@@ -5,7 +5,7 @@
 
     <parent>
         <artifactId>Commons</artifactId>
-        <groupId>com.riotmc</groupId>
+        <groupId>com.playares</groupId>
         <version>1.13.2</version>
     </parent>
 
@@ -33,7 +33,7 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>com.riotmc:Base</include>
+                            <include>com.playares:Base</include>
                             <include>co.aikar</include>
                             <include>net.jodah</include>
                         </includes>
@@ -86,9 +86,9 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- RiotMC Base Commons -->
+        <!-- Ares Base Commons -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>Base</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>

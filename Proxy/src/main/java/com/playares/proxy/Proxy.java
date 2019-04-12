@@ -1,10 +1,10 @@
 package com.playares.proxy;
 
 import co.aikar.commands.BungeeCommandManager;
-import com.riotmc.commons.bungee.RiotProxy;
-import com.riotmc.services.proxyessentials.ProxyEssentialsService;
+import com.playares.commons.bungee.AresProxy;
+import com.playares.services.proxyessentials.ProxyEssentialsService;
 
-public final class Proxy extends RiotProxy {
+public final class Proxy extends AresProxy {
     @Override
     public void onEnable() {
         registerCommandManager(new BungeeCommandManager(this));

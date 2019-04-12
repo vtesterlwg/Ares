@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>Commons</artifactId>
-        <groupId>com.riotmc</groupId>
+        <groupId>com.playares</groupId>
         <version>1.13.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -29,7 +29,7 @@
                 <configuration>
                     <artifactSet>
                         <includes>
-                            <include>com.riotmc:Base</include>
+                            <include>com.playares:Base</include>
                             <include>co.aikar</include>
                             <include>net.jodah</include>
                         </includes>
@@ -62,9 +62,9 @@
     </repositories>
 
     <dependencies>
-        <!-- RiotMC Base Commons -->
+        <!-- Ares Base Commons -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>Base</artifactId>
             <version>1.13.2</version>
         </dependency>

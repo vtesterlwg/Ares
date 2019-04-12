@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>RiotMC</artifactId>
-        <groupId>com.riotmc</groupId>
+        <artifactId>Ares</artifactId>
+        <groupId>com.playares</groupId>
         <version>1.13.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -27,13 +27,13 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>com.riotmc:Bukkit</include>
-                                    <include>com.riotmc:Profiles</include>
-                                    <include>com.riotmc:Ranks</include>
-                                    <include>com.riotmc:CustomEvents</include>
-                                    <include>com.riotmc:Essentials</include>
-                                    <include>com.riotmc:Humbug</include>
-                                    <include>com.riotmc:Punishments</include>
+                                    <include>com.playares:Bukkit</include>
+                                    <include>com.playares:Profiles</include>
+                                    <include>com.playares:Ranks</include>
+                                    <include>com.playares:CustomEvents</include>
+                                    <include>com.playares:Essentials</include>
+                                    <include>com.playares:Humbug</include>
+                                    <include>com.playares:Punishments</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -74,41 +74,41 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- RiotMC Bukkit Commons -->
+        <!-- Ares Bukkit Commons -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>Bukkit</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- RiotMC Ranks Service -->
+        <!-- Ares Ranks Service -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>Ranks</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- RiotMC Profiles Service -->
+        <!-- Ares Profiles Service -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>Profiles</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- RiotMC Custom Event Service -->
+        <!-- Ares Custom Event Service -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>CustomEvents</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- RiotMC Essentials Service -->
+        <!-- Ares Essentials Service -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>Essentials</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>
@@ -122,17 +122,17 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- RiotMC Humbug Service -->
+        <!-- Ares Humbug Service -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>Humbug</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>
 
-        <!-- RiotMC Punishments Service -->
+        <!-- Ares Punishments Service -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>Punishments</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>

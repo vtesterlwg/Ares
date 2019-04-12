@@ -3,8 +3,8 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>RiotMC</artifactId>
-        <groupId>com.riotmc</groupId>
+        <artifactId>Ares</artifactId>
+        <groupId>com.playares</groupId>
         <version>1.13.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -27,8 +27,8 @@
                         <configuration>
                             <artifactSet>
                                 <includes>
-                                    <include>com.riotmc:Bungee</include>
-                                    <include>com.riotmc:ProxyEssentials</include>
+                                    <include>com.playares:Bungee</include>
+                                    <include>com.playares:ProxyEssentials</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -53,16 +53,16 @@
     </repositories>
 
     <dependencies>
-        <!-- RiotMC Base Commons -->
+        <!-- Ares Base Commons -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>Base</artifactId>
             <version>1.13.2</version>
         </dependency>
 
-        <!-- RiotMC Bungee Commons -->
+        <!-- Ares Bungee Commons -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>Bungee</artifactId>
             <version>1.13.2</version>
         </dependency>
@@ -95,7 +95,7 @@
 
         <!-- Proxy Essentials Service -->
         <dependency>
-            <groupId>com.riotmc</groupId>
+            <groupId>com.playares</groupId>
             <artifactId>ProxyEssentials</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>
