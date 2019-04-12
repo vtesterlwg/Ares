@@ -17,20 +17,11 @@ import javax.annotation.Nullable;
  * Fires when a custom item is interacted with
  */
 public final class CustomItemInteractEvent extends PlayerEvent implements Cancellable {
-    @Getter
-    public static final HandlerList handlerList = new HandlerList();
-
-    @Nonnull @Getter
-    public final CustomItem item;
-
-    @Nonnull @Getter
-    public final Action action;
-
-    @Nullable @Getter
-    public final Block clickedBlock;
-
-    @Getter @Setter
-    public boolean cancelled;
+    @Getter public static final HandlerList handlerList = new HandlerList();
+    @Nonnull @Getter public final CustomItem item;
+    @Nonnull @Getter public final Action action;
+    @Nullable @Getter public final Block clickedBlock;
+    @Getter @Setter public boolean cancelled;
 
     public CustomItemInteractEvent(Player who, @Nonnull CustomItem item, @Nonnull Action action, @Nullable Block clickedBlock) {
         super(who);

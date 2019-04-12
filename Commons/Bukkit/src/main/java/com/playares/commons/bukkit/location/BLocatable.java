@@ -8,22 +8,16 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 
 import javax.annotation.Nonnull;
+import java.util.Objects;
 
 /**
  * Represents a single block location
  */
 public class BLocatable implements Locatable, MongoDocument<BLocatable> {
-    @Nonnull @Getter @Setter
-    public String worldName;
-
-    @Getter @Setter
-    double x;
-
-    @Getter @Setter
-    double y;
-
-    @Getter @Setter
-    double z;
+    @Nonnull @Getter @Setter public String worldName;
+    @Getter @Setter double x;
+    @Getter @Setter double y;
+    @Getter @Setter double z;
 
     public BLocatable(@Nonnull Block block) {
         this.worldName = block.getWorld().getName();
@@ -44,7 +38,7 @@ public class BLocatable implements Locatable, MongoDocument<BLocatable> {
             throw new NullPointerException("World not found for Block Locatable");
         }
 
-        return Bukkit.getWorld(worldName).getBlockAt((int)getX(), (int)getY(), (int)getZ());
+        return Objects.requireNonNull(Bukkit.getWorld(worldName)).getBlockAt((int)getX(), (int)getY(), (int)getZ());
     }
 
     @Override

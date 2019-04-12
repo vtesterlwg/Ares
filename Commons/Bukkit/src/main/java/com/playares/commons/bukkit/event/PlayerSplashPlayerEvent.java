@@ -15,20 +15,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 public final class PlayerSplashPlayerEvent extends Event implements Cancellable {
-    @Getter
-    public static final HandlerList handlerList = new HandlerList();
-    
-    @Getter
-    public final Player damager;
-    
-    @Getter
-    public final Player damaged;
-    
-    @Getter
-    public final ThrownPotion potion;
-    
-    @Getter @Setter
-    public boolean cancelled;
+    @Getter public static final HandlerList handlerList = new HandlerList();
+    @Getter public final Player damager;
+    @Getter public final Player damaged;
+    @Getter public final ThrownPotion potion;
+    @Getter @Setter public boolean cancelled;
     
     public PlayerSplashPlayerEvent(Player damager, Player damaged, ThrownPotion potion) {
         this.damager = damager;

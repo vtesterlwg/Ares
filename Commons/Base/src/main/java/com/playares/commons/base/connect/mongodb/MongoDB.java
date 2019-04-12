@@ -12,11 +12,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public final class MongoDB implements Connectable {
-    @Nonnull
-    private final String uri;
-
-    @Nullable @Getter
-    public MongoClient client;
+    @Nonnull private final String uri;
+    @Nullable @Getter public MongoClient client;
 
     /**
      * Creates a new MongoDB instance

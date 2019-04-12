@@ -3,13 +3,9 @@ package com.playares.commons.bukkit.location;
 import javax.annotation.Nonnull;
 
 public interface Locatable {
-    @Nonnull
-    String getWorldName();
-
+    @Nonnull String getWorldName();
     double getX();
-
     double getY();
-
     double getZ();
 
     /**

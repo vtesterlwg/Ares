@@ -15,23 +15,12 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 public final class PlayerDamagePlayerEvent extends Event implements Cancellable {
-    @Getter
-    public static final HandlerList handlerList = new HandlerList();
-
-    @Getter
-    public final Player damager;
-
-    @Getter
-    public final Player damaged;
-
-    @Getter
-    public final DamageType type;
-
-    @Getter
-    public final double damage;
-
-    @Getter @Setter
-    public boolean cancelled;
+    @Getter public static final HandlerList handlerList = new HandlerList();
+    @Getter public final Player damager;
+    @Getter public final Player damaged;
+    @Getter public final DamageType type;
+    @Getter public final double damage;
+    @Getter @Setter public boolean cancelled;
 
     public PlayerDamagePlayerEvent(@Nonnull Player damager, @Nonnull Player damaged, @Nonnull DamageType type, double damage) {
         this.damager = damager;

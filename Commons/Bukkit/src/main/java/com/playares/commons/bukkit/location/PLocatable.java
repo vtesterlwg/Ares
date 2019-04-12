@@ -15,23 +15,12 @@ import javax.annotation.Nullable;
  * Represents a living entity location
  */
 public class PLocatable implements Locatable, MongoDocument<PLocatable> {
-    @Nullable @Getter @Setter
-    public String worldName;
-
-    @Getter @Setter
-    public double x;
-
-    @Getter @Setter
-    public double y;
-
-    @Getter @Setter
-    public double z;
-
-    @Getter @Setter
-    public float yaw;
-
-    @Getter @Setter
-    public float pitch;
+    @Nullable @Getter @Setter public String worldName;
+    @Getter @Setter public double x;
+    @Getter @Setter public double y;
+    @Getter @Setter public double z;
+    @Getter @Setter public float yaw;
+    @Getter @Setter public float pitch;
 
     public PLocatable() {
         this.worldName = null;
@@ -61,7 +50,7 @@ public class PLocatable implements Locatable, MongoDocument<PLocatable> {
     }
 
     public Location getBukkit() {
-        if (Bukkit.getWorld(worldName) == null) {
+        if (worldName == null || Bukkit.getWorld(worldName) == null) {
             throw new NullPointerException("World not found for Player Locatable");
         }
 

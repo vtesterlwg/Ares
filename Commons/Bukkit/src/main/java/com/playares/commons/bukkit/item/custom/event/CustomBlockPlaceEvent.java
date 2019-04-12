@@ -14,14 +14,9 @@ import javax.annotation.Nonnull;
  * Fires when a custom block is placed
  */
 public final class CustomBlockPlaceEvent extends PlayerEvent implements Cancellable {
-    @Getter
-    public static final HandlerList handlerList = new HandlerList();
-
-    @Nonnull @Getter
-    public final CustomBlock block;
-
-    @Getter @Setter
-    public boolean cancelled;
+    @Getter public static final HandlerList handlerList = new HandlerList();
+    @Nonnull @Getter public final CustomBlock block;
+    @Getter @Setter public boolean cancelled;
 
     public CustomBlockPlaceEvent(Player who, CustomBlock block) {
         super(who);

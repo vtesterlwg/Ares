@@ -16,17 +16,10 @@ import javax.annotation.ParametersAreNonnullByDefault;
  */
 @ParametersAreNonnullByDefault
 public final class PlayerBigMoveEvent extends PlayerEvent implements Cancellable {
-    @Getter
-    public static HandlerList handlerList = new HandlerList();
-
-    @Getter
-    public final Location from;
-
-    @Getter
-    public final Location to;
-
-    @Getter @Setter
-    public boolean cancelled;
+    @Getter public static HandlerList handlerList = new HandlerList();
+    @Getter public final Location from;
+    @Getter public final Location to;
+    @Getter @Setter public boolean cancelled;
 
     public PlayerBigMoveEvent(@Nonnull Player who, @Nonnull Location from, @Nonnull Location to) {
         super(who);

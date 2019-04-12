@@ -19,17 +19,10 @@ import java.util.Collection;
 import java.util.Set;
 
 public class Menu implements Listener {
-    @Nonnull @Getter
-    public AresPlugin plugin;
-
-    @Nonnull @Getter
-    public final Player player;
-
-    @Nonnull @Getter
-    public final Inventory inventory;
-
-    @Nonnull @Getter
-    public final Set<ClickableItem> items;
+    @Nonnull @Getter public AresPlugin plugin;
+    @Nonnull @Getter public final Player player;
+    @Nonnull @Getter public final Inventory inventory;
+    @Nonnull @Getter public final Set<ClickableItem> items;
 
     public Menu(@Nonnull AresPlugin plugin, @Nonnull Player player, @Nonnull String title, int rows) {
         Preconditions.checkArgument((rows > 0 && rows < 7), "Rows must be 1-7");

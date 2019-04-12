@@ -14,18 +14,10 @@ import java.util.Set;
  */
 public final class ProcessedChatEvent extends PlayerEvent implements Cancellable {
     @Getter public static final HandlerList handlerList = new HandlerList();
-
-    @Getter @Setter
-    public String displayName;
-
-    @Getter @Setter
-    public String message;
-
-    @Getter
-    public final Set<Player> recipients;
-
-    @Getter @Setter
-    public boolean cancelled;
+    @Getter @Setter public String displayName;
+    @Getter @Setter public String message;
+    @Getter public final Set<Player> recipients;
+    @Getter @Setter public boolean cancelled;
 
     public ProcessedChatEvent(Player who, String message, Set<Player> recipients) {
         super(who);
