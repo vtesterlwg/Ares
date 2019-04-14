@@ -16,6 +16,7 @@
         <module>Services</module>
         <module>Arena</module>
         <module>Proxy</module>
+        <module>MineZ</module>
     </modules>
 
     <dependencies>

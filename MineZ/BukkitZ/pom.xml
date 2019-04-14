@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>MineZ</artifactId>
+        <groupId>com.playares</groupId>
+        <version>1.13.2</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>BukkitZ</artifactId>
+
+    <build>
+        <plugins>
+            <!-- Maven Shade -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.1.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.playares:Bukkit</include>
+                                    <include>com.playares:Profiles</include>
+                                    <include>com.playares:Ranks</include>
+                                    <include>com.playares:CustomEvents</include>
+                                    <include>com.playares:CustomItems</include>
+                                    <include>com.playares:Essentials</include>
+                                    <include>com.playares:Humbug</include>
+                                    <include>com.playares:Punishments</include>
+                                    <include>com.playares:AutomatedRestarts</include>
+                                    <include>com.playares:CustomEntity</include>
+                                    <include>com.playares:Deathban</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <!-- Paper -->
+        <repository>
+            <id>papermc</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
+        </repository>
+
+        <!-- ProtocolLib -->
+        <repository>
+            <id>dmulloy2-repo</id>
+            <url>http://repo.dmulloy2.net/nexus/repository/public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Paper -->
+        <dependency>
+            <groupId>com.destroystokyo.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.13.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Bukkit -->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>bukkit</artifactId>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Craftbukkit -->
+        <dependency>
+            <groupId>org.bukkit</groupId>
+            <artifactId>craftbukkit</artifactId>
+            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Ares Bukkit Commons -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Bukkit</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Ranks Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Ranks</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Profiles Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Profiles</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Custom Event Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>CustomEvents</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Essentials Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Essentials</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- ProtocolLib -->
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib-API</artifactId>
+            <version>4.3.0</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- Ares Humbug Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Humbug</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Punishments Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Punishments</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Custom Item Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>CustomItems</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Automated Restart Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>AutomatedRestarts</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Custom Entity Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>CustomEntity</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Deathban Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Deathban</artifactId>
+            <version>1.13.2</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+</project>

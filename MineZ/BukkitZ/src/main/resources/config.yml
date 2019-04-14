@@ -1,0 +1,8 @@
+# Database connect URI, use 'mongodb://localhost' for default connection
+database: 'mongodb://localhost'
+
+server-configuration:
+  server-id: 1
+  bungee-name: 'mz1'
+  pve: false
+  premium-only: false
