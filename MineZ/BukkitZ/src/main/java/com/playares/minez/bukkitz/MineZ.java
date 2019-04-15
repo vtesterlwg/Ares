@@ -8,6 +8,7 @@ import com.playares.minez.bukkitz.command.MZCommand;
 import com.playares.minez.bukkitz.data.listener.PlayerDataListener;
 import com.playares.minez.bukkitz.data.manager.PlayerManager;
 import com.playares.minez.bukkitz.data.manager.ServerManager;
+import com.playares.minez.bukkitz.listener.ThirstListener;
 import com.playares.services.customentity.CustomEntityService;
 import com.playares.services.customevents.CustomEventService;
 import com.playares.services.customitems.CustomItemService;
@@ -40,6 +41,7 @@ public final class MineZ extends AresPlugin {
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
         registerListener(new PlayerDataListener(this));
+        registerListener(new ThirstListener(this));
 
         registerService(new CustomEventService(this));
         registerService(new CustomItemService(this));

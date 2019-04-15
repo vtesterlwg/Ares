@@ -18,7 +18,7 @@ public final class PlayerDataListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final MZPlayer test = new MZPlayer(player);
+        final MZPlayer test = new MZPlayer(plugin, player);
 
         plugin.getPlayerManager().getPlayers().add(test);
     }

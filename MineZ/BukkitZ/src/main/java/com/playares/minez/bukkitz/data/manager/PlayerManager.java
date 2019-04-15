@@ -9,6 +9,7 @@ import lombok.Getter;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Set;
+import java.util.UUID;
 
 public final class PlayerManager {
     @Getter public final MineZ plugin;
@@ -21,10 +22,22 @@ public final class PlayerManager {
 
         this.updater = new Scheduler(plugin).sync(() -> {
             for (MZPlayer player : players) {
-                if (player.getNextThirstTick() <= Time.now()) {
+                if (plugin.getMZConfig().isThirstEnabled() && player.getNextThirstTick() <= Time.now()) {
                     player.tickThirst();
+                }
+
+                if (plugin.getMZConfig().isBleedEnabled() && player.isBleeding() && player.getNextBleedTick() <= Time.now()) {
+                    player.tickBleed();
                 }
             }
         }).repeat(0L, 1L).run();
+    }
+
+    public MZPlayer getLocalPlayer(UUID uniqueId) {
+        return players.stream().filter(player -> player.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
+    }
+
+    public MZPlayer getLocalPlayer(String username) {
+        return players.stream().filter(player -> player.getUsername().equalsIgnoreCase(username)).findFirst().orElse(null);
     }
 }

@@ -3,6 +3,7 @@ package com.playares.minez.bukkitz.data;
 import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.location.PLocatable;
+import com.playares.minez.bukkitz.MineZ;
 import lombok.Getter;
 import lombok.Setter;
 import org.bson.Document;
@@ -13,6 +14,7 @@ import org.bukkit.entity.Player;
 import java.util.UUID;
 
 public final class MZPlayer implements MongoDocument<MZPlayer> {
+    @Getter public final MineZ plugin;
     @Getter public final UUID uniqueId;
     @Getter @Setter public String username;
     @Getter @Setter public double thirst;
@@ -21,14 +23,15 @@ public final class MZPlayer implements MongoDocument<MZPlayer> {
     @Getter @Setter public long nextThirstTick;
     @Getter @Setter public long nextBleedTick;
 
-    public MZPlayer(Player player) {
+    public MZPlayer(MineZ plugin, Player player) {
+        this.plugin = plugin;
         this.uniqueId = player.getUniqueId();
         this.username = player.getName();
         this.thirst = 20.0;
         this.bleeding = false;
         this.logoutLocation = null;
-        this.nextThirstTick = Time.now() + 3000L;
-        this.nextBleedTick = Time.now() + 3000L;
+        this.nextThirstTick = Time.now() + (plugin.getMZConfig().getThirstInterval() * 1000L);
+        this.nextBleedTick = Time.now() + (plugin.getMZConfig().getBleedInterval() * 1000L);
     }
 
     public Player getPlayer() {
@@ -42,13 +45,12 @@ public final class MZPlayer implements MongoDocument<MZPlayer> {
             return;
         }
 
-        final double temperature = player.getLocation().getBlock().getTemperature();
+        final double temperature = (player.getLocation().getBlock().getTemperature() > 0.0) ? player.getLocation().getBlock().getTemperature() : 0.2;
 
-        this.nextThirstTick = Time.now() + Math.round(3000 / temperature);
+        this.nextThirstTick = Time.now() + Math.round((plugin.getMZConfig().getThirstInterval() * 1000L) / temperature);
         this.thirst -= 0.1;
 
         player.setLevel((int)(Math.round(thirst)));
-        player.sendMessage(ChatColor.AQUA + "Losing thirst in " + Time.convertToDecimal(this.nextThirstTick - Time.now()));
 
         if (this.thirst <= 0.0) {
             player.damage(1.0);
@@ -65,15 +67,17 @@ public final class MZPlayer implements MongoDocument<MZPlayer> {
         }
     }
 
-    public void tickBleed(int nextTickDelay) {
+    public void tickBleed() {
         final Player player = getPlayer();
 
-        this.nextBleedTick = Time.now() + (nextTickDelay * 1000L);
-
-        if (player != null) {
-            player.damage(1.0);
-            player.sendMessage(ChatColor.DARK_RED + "That hurts... I need to find a bandage to stop the bleeding!");
+        if (player == null) {
+            return;
         }
+
+        this.nextBleedTick = Time.now() + (plugin.getMZConfig().getBleedInterval() * 1000L);
+
+        player.damage(1.0);
+        player.sendMessage(ChatColor.DARK_RED + "That hurts... I need to find a bandage to stop the bleeding!");
     }
 
     @Override
