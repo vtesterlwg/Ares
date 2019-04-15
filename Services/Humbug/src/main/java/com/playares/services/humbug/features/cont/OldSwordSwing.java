@@ -86,7 +86,7 @@ public final class OldSwordSwing implements HumbugModule, Listener {
                         double init = ((CraftPlayer)damager).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
 
                         if (!damager.isOnGround() && damager.getVelocity().getY() < 0) {
-                            init *= 1.5;
+                            init *= 1.25;
                             Worlds.spawnParticle(damaged.getLocation().add(0, 1.0, 0), Particle.CRIT, 8);
                         }
 
