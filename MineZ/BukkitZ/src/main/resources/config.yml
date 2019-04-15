@@ -6,3 +6,11 @@ server-configuration:
   bungee-name: 'mz1'
   pve: false
   premium-only: false
+
+mechanics:
+  bleeding:
+    enabled: true
+    interval: 5
+  thirst:
+    enabled: true
+    interval: 3

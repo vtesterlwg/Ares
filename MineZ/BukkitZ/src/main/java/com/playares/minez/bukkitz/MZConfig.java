@@ -6,7 +6,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 public final class MZConfig {
     @Getter public MineZ plugin;
 
-    public MZConfig(MineZ plugin) {
+    MZConfig(MineZ plugin) {
         this.plugin = plugin;
     }
 
@@ -15,8 +15,12 @@ public final class MZConfig {
     @Getter public String bungeeName;
     @Getter public boolean PvE;
     @Getter public boolean premiumOnly;
+    @Getter public boolean bleedEnabled;
+    @Getter public int bleedInterval;
+    @Getter public boolean thirstEnabled;
+    @Getter public int thirstInterval;
 
-    public void loadValues() {
+    void loadValues() {
         final YamlConfiguration config = plugin.getConfig("config");
 
         this.databaseURI = config.getString("database");
@@ -24,5 +28,9 @@ public final class MZConfig {
         this.bungeeName = config.getString("server-configuration.bungee-name");
         this.PvE = config.getBoolean("server-configuration.pve");
         this.premiumOnly = config.getBoolean("server-configuration.premium-only");
+        this.bleedEnabled = config.getBoolean("mechanics.bleeding.enabled");
+        this.bleedInterval = config.getInt("mechanics.bleeding.interval");
+        this.thirstEnabled = config.getBoolean("mechanics.thirst.enabled");
+        this.thirstInterval = config.getInt("mechanics.thirst.interval");
     }
 }
