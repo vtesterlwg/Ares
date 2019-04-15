@@ -29,7 +29,7 @@ public final class ServerManager {
             final int onlineCount = Bukkit.getServer().getOnlinePlayers().size();
 
             new Scheduler(plugin).async(() -> {
-                ImmutableSet<MZServer> pulledServers = ServerDAO.pullServers(thisServer.getId(), plugin.getMongo());
+                final ImmutableSet<MZServer> pulledServers = ServerDAO.pullServers(thisServer.getId(), plugin.getMongo());
 
                 thisServer.setBungeeName(plugin.getMZConfig().getBungeeName());
                 thisServer.setServerStatus(whitelisted ? MZServer.MZServerStatus.WHITELISTED : MZServer.MZServerStatus.ONLINE);
