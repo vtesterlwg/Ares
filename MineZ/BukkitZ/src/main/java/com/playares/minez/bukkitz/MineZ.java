@@ -5,6 +5,8 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.minez.bukkitz.command.MZCommand;
+import com.playares.minez.bukkitz.data.listener.PlayerDataListener;
+import com.playares.minez.bukkitz.data.manager.PlayerManager;
 import com.playares.minez.bukkitz.data.manager.ServerManager;
 import com.playares.services.customentity.CustomEntityService;
 import com.playares.services.customevents.CustomEventService;
@@ -19,6 +21,7 @@ import lombok.Getter;
 public final class MineZ extends AresPlugin {
     @Getter protected MZConfig MZConfig;
     @Getter public ServerManager serverManager;
+    @Getter public PlayerManager playerManager;
 
     @Override
     public void onEnable() {
@@ -36,6 +39,8 @@ public final class MineZ extends AresPlugin {
 
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 
+        registerListener(new PlayerDataListener(this));
+
         registerService(new CustomEventService(this));
         registerService(new CustomItemService(this));
         registerService(new CustomEntityService(this));
@@ -47,6 +52,7 @@ public final class MineZ extends AresPlugin {
         startServices();
 
         this.serverManager = new ServerManager(this);
+        this.playerManager = new PlayerManager(this);
     }
 
     @Override
