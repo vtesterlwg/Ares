@@ -8,6 +8,8 @@ import com.playares.minez.bukkitz.command.MZCommand;
 import com.playares.minez.bukkitz.data.listener.PlayerDataListener;
 import com.playares.minez.bukkitz.data.manager.PlayerManager;
 import com.playares.minez.bukkitz.data.manager.ServerManager;
+import com.playares.minez.bukkitz.item.BandageItem;
+import com.playares.minez.bukkitz.listener.CombatListener;
 import com.playares.minez.bukkitz.listener.ThirstListener;
 import com.playares.services.customentity.CustomEntityService;
 import com.playares.services.customevents.CustomEventService;
@@ -42,6 +44,7 @@ public final class MineZ extends AresPlugin {
 
         registerListener(new PlayerDataListener(this));
         registerListener(new ThirstListener(this));
+        registerListener(new CombatListener(this));
 
         registerService(new CustomEventService(this));
         registerService(new CustomItemService(this));
@@ -55,6 +58,8 @@ public final class MineZ extends AresPlugin {
 
         this.serverManager = new ServerManager(this);
         this.playerManager = new PlayerManager(this);
+
+        registerItems();
     }
 
     @Override
@@ -62,5 +67,13 @@ public final class MineZ extends AresPlugin {
         serverManager.closeServer();
 
         stopServices();
+    }
+
+    private void registerItems() {
+        final CustomItemService itemService = (CustomItemService)getService(CustomItemService.class);
+
+        if (itemService != null) {
+            itemService.registerNewItem(new BandageItem(this));
+        }
     }
 }

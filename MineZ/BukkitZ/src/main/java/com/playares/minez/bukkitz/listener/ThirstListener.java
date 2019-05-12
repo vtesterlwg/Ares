@@ -39,7 +39,6 @@ public final class ThirstListener implements Listener {
 
         if (mzPlayer != null) {
             mzPlayer.setThirst(20.0);
-            player.setLevel(20);
             player.sendMessage(ChatColor.AQUA + "Ah, much better!");
         }
     }

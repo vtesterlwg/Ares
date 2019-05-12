@@ -37,7 +37,6 @@
                                     <include>com.playares:Punishments</include>
                                     <include>com.playares:AutomatedRestarts</include>
                                     <include>com.playares:CustomEntity</include>
-                                    <include>com.playares:Deathban</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -178,14 +177,6 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>CustomEntity</artifactId>
-            <version>1.13.2</version>
-            <scope>compile</scope>
-        </dependency>
-
-        <!-- Ares Deathban Service -->
-        <dependency>
-            <groupId>com.playares</groupId>
-            <artifactId>Deathban</artifactId>
             <version>1.13.2</version>
             <scope>compile</scope>
         </dependency>

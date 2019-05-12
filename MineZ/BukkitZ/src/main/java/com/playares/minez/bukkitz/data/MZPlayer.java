@@ -17,7 +17,7 @@ public final class MZPlayer implements MongoDocument<MZPlayer> {
     @Getter public final MineZ plugin;
     @Getter public final UUID uniqueId;
     @Getter @Setter public String username;
-    @Getter @Setter public double thirst;
+    @Getter public double thirst;
     @Getter @Setter public boolean bleeding;
     @Getter @Setter public PLocatable logoutLocation;
     @Getter @Setter public long nextThirstTick;
@@ -61,7 +61,7 @@ public final class MZPlayer implements MongoDocument<MZPlayer> {
         final double rounded = Math.round(thirst * 100.0) / 100.0;
 
         if (rounded == 10.0) {
-            player.sendMessage(ChatColor.YELLOW + "My throat feels a bitch parched...");
+            player.sendMessage(ChatColor.YELLOW + "My throat feels a bit parched...");
         } else if (rounded== 3.0) {
             player.sendMessage(ChatColor.YELLOW + "I need to find water soon...");
         }
@@ -78,6 +78,16 @@ public final class MZPlayer implements MongoDocument<MZPlayer> {
 
         player.damage(1.0);
         player.sendMessage(ChatColor.DARK_RED + "That hurts... I need to find a bandage to stop the bleeding!");
+    }
+
+    public void setThirst(double val) {
+        this.thirst = val;
+
+        final Player player = getPlayer();
+
+        if (player != null) {
+            player.setLevel((int)(Math.round(val)));
+        }
     }
 
     @Override

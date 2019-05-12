@@ -28,4 +28,9 @@ public final class MZCommand extends BaseCommand {
     public void openServerSelector(Player player) {
         new ServerMenu(plugin, player).open();
     }
+
+    @Subcommand("test")
+    public void onTest(Player player) {
+        // give bandage from item manager
+    }
 }
