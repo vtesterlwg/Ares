@@ -22,7 +22,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.entity.Player;
-import org.bukkit.scoreboard.NameTagVisibility;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
@@ -424,8 +423,9 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
 
         final Team friendly = this.scoreboard.registerNewTeam("friendly");
 
+        friendly.setPrefix(ChatColor.DARK_GREEN + "");
         friendly.setColor(ChatColor.DARK_GREEN);
-        friendly.setNameTagVisibility(NameTagVisibility.ALWAYS);
+        friendly.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.ALWAYS);
         friendly.setCanSeeFriendlyInvisibles(true);
     }
 

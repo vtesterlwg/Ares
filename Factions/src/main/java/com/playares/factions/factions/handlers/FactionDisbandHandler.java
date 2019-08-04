@@ -184,6 +184,7 @@ public final class FactionDisbandHandler {
             return;
         }
 
+        faction.unregister(player);
         faction.getMembers().remove(faction.getMember(player.getUniqueId()));
         faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " has " + ChatColor.RED + "left" + ChatColor.GOLD + " the faction");
 
