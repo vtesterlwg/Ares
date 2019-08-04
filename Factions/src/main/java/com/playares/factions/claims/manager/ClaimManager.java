@@ -24,23 +24,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class ClaimManager {
-    @Getter
-    public Factions plugin;
-
-    @Getter
-    public ClaimCreationHandler creationHandler;
-
-    @Getter
-    public ClaimDeleteHandler deleteHandler;
-
-    @Getter
-    public ClaimMapHandler mapHandler;
-
-    @Getter
-    public Set<DefinedClaim> claimRepository;
-
-    @Getter
-    public Set<DefinedClaimBuilder> claimBuilders;
+    @Getter public Factions plugin;
+    @Getter public ClaimCreationHandler creationHandler;
+    @Getter public ClaimDeleteHandler deleteHandler;
+    @Getter public ClaimMapHandler mapHandler;
+    @Getter public Set<DefinedClaim> claimRepository;
+    @Getter public Set<DefinedClaimBuilder> claimBuilders;
 
     public ClaimManager(Factions plugin) {
         this.plugin = plugin;

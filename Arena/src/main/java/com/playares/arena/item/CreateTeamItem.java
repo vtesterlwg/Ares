@@ -24,7 +24,7 @@ public final class CreateTeamItem implements CustomItem {
 
     @Override
     public Material getMaterial() {
-        return Material.CLOCK;
+        return Material.WATCH;
     }
 
     @Override

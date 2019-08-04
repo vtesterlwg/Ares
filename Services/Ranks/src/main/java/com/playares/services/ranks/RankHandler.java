@@ -8,8 +8,7 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 
 public final class RankHandler {
-    @Getter
-    public RankService rankService;
+    @Getter public RankService rankService;
 
     public RankHandler(RankService rankService) {
         this.rankService = rankService;

@@ -15,7 +15,6 @@ import com.playares.factions.addons.events.data.type.AresEvent;
 import com.playares.factions.addons.events.data.type.koth.KOTHEvent;
 import com.playares.factions.players.dao.PlayerDAO;
 import com.playares.factions.players.data.FactionPlayer;
-import com.playares.factions.players.handlers.PlayerDisplayHandler;
 import com.playares.factions.players.handlers.PlayerTimerHandler;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.ProtectionTimer;
@@ -34,8 +33,6 @@ public final class PlayerManager {
     @Getter public final Factions plugin;
     /** Handles Player Timers **/
     @Getter public final PlayerTimerHandler timerHandler;
-    /** Handles Player Displays **/
-    @Getter public final PlayerDisplayHandler displayHandler;
     /** Handles Faction Timers **/
     @Getter public final Set<FactionPlayer> playerRepository;
     /** Performs HUD rendering **/
@@ -50,7 +47,6 @@ public final class PlayerManager {
         final EventsAddon eventAddon = (EventsAddon)plugin.getAddonManager().getAddon(EventsAddon.class);
         this.plugin = plugin;
         this.timerHandler = new PlayerTimerHandler(this);
-        this.displayHandler = new PlayerDisplayHandler(this);
         this.playerRepository = Sets.newConcurrentHashSet();
 
         this.actionBarUpdated = new Scheduler(plugin).async(() -> playerRepository.forEach(profile -> {

@@ -31,14 +31,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class MiningAddon implements Addon, Listener {
-    @Getter
-    public final Factions plugin;
-
-    @Getter
-    public boolean enabled;
-
-    @Getter
-    public final Set<Findable> findables;
+    @Getter public final Factions plugin;
+    @Getter public boolean enabled;
+    @Getter public final Set<Findable> findables;
 
     private final Random random;
 

@@ -38,7 +38,7 @@ public final class RepairCommand extends BaseCommand {
             }
 
             armor.setDurability((short)0);
-            player.sendMessage(ChatColor.YELLOW + "Your " + ChatColor.WHITE + armor.getType().getKey().getKey() + ChatColor.YELLOW + " has been repaired");
+            player.sendMessage(ChatColor.YELLOW + "Your " + ChatColor.WHITE + armor.getType().name().replace("_", " ") + ChatColor.YELLOW + " has been repaired");
         }
 
         Logger.print(player.getName() + " repaired their armor");

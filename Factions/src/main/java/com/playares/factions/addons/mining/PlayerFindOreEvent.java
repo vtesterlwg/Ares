@@ -12,17 +12,10 @@ import org.bukkit.event.player.PlayerEvent;
 import java.util.List;
 
 public final class PlayerFindOreEvent extends PlayerEvent implements Cancellable {
-    @Getter
-    public static final HandlerList handlerList = new HandlerList();
-
-    @Getter
-    public final Material material;
-
-    @Getter
-    public final List<Block> blocks;
-
-    @Getter @Setter
-    public boolean cancelled;
+    @Getter public static final HandlerList handlerList = new HandlerList();
+    @Getter public final Material material;
+    @Getter public final List<Block> blocks;
+    @Getter @Setter public boolean cancelled;
 
     public PlayerFindOreEvent(Player player, Material material, List<Block> blocks) {
         super(player);

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>Ares</artifactId>
         <groupId>com.playares</groupId>
-        <version>1.13.2</version>
+        <version>1.12.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -74,15 +74,7 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!-- Bukkit -->
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>bukkit</artifactId>
-            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -90,7 +82,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -98,7 +90,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Bukkit</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -106,7 +98,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Ranks</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -114,7 +106,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Profiles</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -122,7 +114,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>CustomEvents</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -130,7 +122,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Essentials</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -146,7 +138,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Humbug</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -154,7 +146,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Punishments</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -162,7 +154,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>CustomItems</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -170,7 +162,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>AutomatedRestarts</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -178,7 +170,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>CustomEntity</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -186,7 +178,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Deathban</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

@@ -13,8 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public final class ClaimingStick implements CustomItem {
-    @Getter
-    public final Factions plugin;
+    @Getter public final Factions plugin;
 
     public ClaimingStick(Factions plugin) {
         this.plugin = plugin;

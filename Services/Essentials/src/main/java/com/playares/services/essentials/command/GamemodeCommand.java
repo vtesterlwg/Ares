@@ -9,7 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
 
 public final class GamemodeCommand extends BaseCommand {
     private void updateGamemode(Player player, String mode, SimplePromise promise) {

@@ -47,7 +47,8 @@ public final class EventsMenu extends Menu {
                 final KOTHEvent koth = (KOTHEvent)event;
                 final boolean active = koth.getSession() != null && koth.getSession().isActive();
 
-                builder.setMaterial(active ? Material.GREEN_CONCRETE : Material.RED_CONCRETE);
+                builder.setMaterial(Material.CONCRETE);
+                builder.setData(active ? (short)5 : (short)14);
 
                 lore.add(ChatColor.GOLD + "Type" + ChatColor.YELLOW + ": " + ChatColor.BLUE + "King of the Hill");
                 lore.add(ChatColor.GOLD + "Status" + ChatColor.YELLOW + ": " + (active ? ChatColor.GREEN + "Active" : ChatColor.RED + "Inactive"));

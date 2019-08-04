@@ -50,7 +50,7 @@ public final class ViewableInventory extends Menu implements Listener {
             )));
 
             final ItemStack health = new ItemBuilder()
-                    .setMaterial(Material.GLISTERING_MELON_SLICE)
+                    .setMaterial(Material.SPECKLED_MELON)
                     .setName(ChatColor.RED + "Health")
                     .addLore(ChatColor.YELLOW + "" + String.format("%.2f", (viewed.getHealth() / 2)) + ChatColor.GOLD + "/" + ChatColor.YELLOW + "10.0")
                     .build();

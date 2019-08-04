@@ -7,26 +7,13 @@ import org.bson.Document;
 import org.bukkit.ChatColor;
 
 public final class AresRank implements MongoDocument<AresRank> {
-    @Getter @Setter
-    public String name;
-
-    @Getter @Setter
-    public String displayName;
-
-    @Getter @Setter
-    public String prefix;
-
-    @Getter @Setter
-    public String permission;
-
-    @Getter @Setter
-    public int weight;
-
-    @Getter @Setter
-    public boolean staff;
-
-    @Getter @Setter
-    public boolean everyone;
+    @Getter @Setter public String name;
+    @Getter @Setter public String displayName;
+    @Getter @Setter public String prefix;
+    @Getter @Setter public String permission;
+    @Getter @Setter public int weight;
+    @Getter @Setter public boolean staff;
+    @Getter @Setter public boolean everyone;
 
     public AresRank() {
         this.name = null;

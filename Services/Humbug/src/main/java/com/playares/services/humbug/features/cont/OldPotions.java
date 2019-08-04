@@ -17,20 +17,11 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public final class OldPotions implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean oldHealthEnabled;
-
-    @Getter @Setter
-    public boolean oldStrengthEnabled;
-
-    @Getter @Setter
-    public boolean oldRegenEnabled;
-
-    @Getter @Setter
-    public boolean enabled;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean oldHealthEnabled;
+    @Getter @Setter public boolean oldStrengthEnabled;
+    @Getter @Setter public boolean oldRegenEnabled;
+    @Getter @Setter public boolean enabled;
 
     public OldPotions(HumbugService humbug) {
         this.humbug = humbug;

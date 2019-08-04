@@ -8,8 +8,8 @@ import org.bukkit.inventory.ItemStack;
 
 @AllArgsConstructor
 public enum TrackableType {
-    SWORD(ImmutableList.of(Material.WOODEN_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLDEN_SWORD, Material.DIAMOND_SWORD)),
-    PICKAXE(ImmutableList.of(Material.WOODEN_PICKAXE, Material.STONE_PICKAXE, Material.IRON_PICKAXE, Material.GOLDEN_PICKAXE, Material.DIAMOND_PICKAXE));
+    SWORD(ImmutableList.of(Material.WOOD_SWORD, Material.STONE_SWORD, Material.IRON_SWORD, Material.GOLD_SWORD, Material.DIAMOND_SWORD)),
+    PICKAXE(ImmutableList.of(Material.WOOD_PICKAXE, Material.STONE_PICKAXE, Material.IRON_PICKAXE, Material.GOLD_PICKAXE, Material.DIAMOND_PICKAXE));
 
     @Getter
     public ImmutableList<Material> materials;

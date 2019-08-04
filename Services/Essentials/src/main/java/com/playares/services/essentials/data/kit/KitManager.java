@@ -11,14 +11,9 @@ import org.bukkit.inventory.ItemStack;
 import java.util.Set;
 
 public final class KitManager {
-    @Getter
-    public final AresPlugin plugin;
-
-    @Getter
-    public final Set<Kit> kits;
-
-    @Getter
-    public final YamlConfiguration kitsConfig;
+    @Getter public final AresPlugin plugin;
+    @Getter public final Set<Kit> kits;
+    @Getter public final YamlConfiguration kitsConfig;
 
     public KitManager(AresPlugin plugin) {
         this.plugin = plugin;

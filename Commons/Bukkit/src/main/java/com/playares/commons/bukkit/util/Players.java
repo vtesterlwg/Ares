@@ -31,7 +31,11 @@ public final class Players {
     }
 
     public static void sendBlockChange(Player player, Location location, Material material) {
-        player.sendBlockChange(location, material.createBlockData());
+        player.sendBlockChange(location, material, (byte)0);
+    }
+
+    public static void sendBlockChange(Player player, Location location, Material material, byte data) {
+        player.sendBlockChange(location, material, data);
     }
 
     public static void spawnEffect(Player player, Location location, Effect effect) {

@@ -11,23 +11,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
 public final class CustomRecipes implements HumbugModule {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
-
-    @Getter @Setter
-    public boolean xpBottleEnabled;
-
-    @Getter @Setter
-    public boolean horseArmorEnabled;
-
-    @Getter @Setter
-    public boolean saddleEnabled;
-
-    @Getter @Setter
-    public boolean glistMelonEnabled;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
+    @Getter @Setter public boolean xpBottleEnabled;
+    @Getter @Setter public boolean horseArmorEnabled;
+    @Getter @Setter public boolean saddleEnabled;
+    @Getter @Setter public boolean glistMelonEnabled;
 
     public CustomRecipes(HumbugService humbug) {
         this.humbug = humbug;
@@ -53,12 +42,12 @@ public final class CustomRecipes implements HumbugModule {
             return;
         }
 
-        final ShapedRecipe xpBottleRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(),"ARES.EXP_BOTTLE"), new ItemStack(Material.EXPERIENCE_BOTTLE));
-        final ShapedRecipe ironHorseRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(), "ARES.IRON_HORSE_ARMOR"), new ItemStack(Material.IRON_HORSE_ARMOR));
-        final ShapedRecipe goldHorseRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(), "ARES.GOLDEN_HORSE_ARMOR"), new ItemStack(Material.GOLDEN_HORSE_ARMOR));
-        final ShapedRecipe diamondHorseRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(), "ARES.DIAMOND_HORSE_ARMOR"), new ItemStack(Material.DIAMOND_HORSE_ARMOR));
+        final ShapedRecipe xpBottleRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(),"ARES.EXP_BOTTLE"), new ItemStack(Material.EXP_BOTTLE));
+        final ShapedRecipe ironHorseRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(), "ARES.IRON_HORSE_ARMOR"), new ItemStack(Material.IRON_BARDING));
+        final ShapedRecipe goldHorseRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(), "ARES.GOLDEN_HORSE_ARMOR"), new ItemStack(Material.GOLD_BARDING));
+        final ShapedRecipe diamondHorseRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(), "ARES.DIAMOND_HORSE_ARMOR"), new ItemStack(Material.DIAMOND_BARDING));
         final ShapedRecipe saddleRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(), "ARES.SADDLE"), new ItemStack(Material.SADDLE));
-        final ShapedRecipe glistMelonRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(), "ARES.GLIST_MELON"), new ItemStack(Material.GLISTERING_MELON_SLICE));
+        final ShapedRecipe glistMelonRecipe = new ShapedRecipe(new NamespacedKey(getHumbug().getOwner(), "ARES.GLIST_MELON"), new ItemStack(Material.SPECKLED_MELON));
 
         xpBottleRecipe.shape("*");
         xpBottleRecipe.setIngredient('*', Material.EMERALD);
@@ -91,11 +80,11 @@ public final class CustomRecipes implements HumbugModule {
         saddleRecipe
                 .setIngredient('A', Material.AIR)
                 .setIngredient('L', Material.LEATHER)
-                .setIngredient('R', Material.LEAD);
+                .setIngredient('R', Material.LEASH);
 
         glistMelonRecipe.shape("MG");
         glistMelonRecipe
-                .setIngredient('M', Material.MELON_SLICE)
+                .setIngredient('M', Material.MELON)
                 .setIngredient('G', Material.GOLD_NUGGET);
 
         // TODO: Find a better way to do this

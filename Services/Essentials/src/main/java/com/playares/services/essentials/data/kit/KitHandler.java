@@ -9,8 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public final class KitHandler {
-    @Getter
-    public final EssentialsService essentials;
+    @Getter public final EssentialsService essentials;
 
     public KitHandler(EssentialsService essentials) {
         this.essentials = essentials;

@@ -9,12 +9,14 @@ import org.bukkit.entity.Player;
 public final class CombatShield implements Shield {
     @Getter public final Player viewer;
     @Getter public final Material material;
+    @Getter public final short data;
     @Getter public final BLocatable location;
     @Getter @Setter public boolean drawn;
 
     public CombatShield(Player viewer, BLocatable location) {
         this.viewer = viewer;
-        this.material = Material.RED_STAINED_GLASS;
+        this.material = Material.STAINED_GLASS;
+        this.data = (short)14;
         this.location = location;
         this.drawn = false;
     }

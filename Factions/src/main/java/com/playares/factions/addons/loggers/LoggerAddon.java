@@ -23,12 +23,12 @@ import com.playares.services.customentity.CustomEntityService;
 import com.playares.services.deathban.DeathbanService;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.server.v1_13_R2.EntityLiving;
+import net.minecraft.server.v1_12_R1.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.craftbukkit.v1_13_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -79,7 +79,7 @@ public final class LoggerAddon implements Addon, Listener {
         final CustomEntityService service = (CustomEntityService)plugin.getService(CustomEntityService.class);
 
         if (service != null) {
-            service.register("combat_logger", "villager", CombatLogger.class, CombatLogger::new);
+            service.register(120, "combat_logger", CombatLogger.class);
         } else {
             Logger.error("Could not find Custom Entity Service, Combat Loggers will not spawn!");
         }
@@ -173,8 +173,10 @@ public final class LoggerAddon implements Addon, Listener {
                     effect.getType().equals(PotionEffectType.SLOW) ||
                     effect.getType().equals(PotionEffectType.WEAKNESS) ||
                     effect.getType().equals(PotionEffectType.HARM)) {
+
                 isDebuff = true;
                 break;
+
             }
         }
 
@@ -203,11 +205,14 @@ public final class LoggerAddon implements Addon, Listener {
             return;
         }
 
-        if (!cloud.getBasePotionData().getType().getEffectType().equals(PotionEffectType.HARM) &&
+        if (
+                !cloud.getBasePotionData().getType().getEffectType().equals(PotionEffectType.HARM) &&
                 !cloud.getBasePotionData().getType().getEffectType().equals(PotionEffectType.WEAKNESS) &&
                 !cloud.getBasePotionData().getType().getEffectType().equals(PotionEffectType.SLOW) &&
                 !cloud.getBasePotionData().getType().getEffectType().equals(PotionEffectType.POISON)) {
+
             return;
+
         }
 
         performAttack(attacker, attacked);

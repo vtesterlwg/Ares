@@ -8,9 +8,7 @@ import org.bukkit.inventory.ItemStack;
 public final class Items {
     public static Enchantment getEnchantmentByName(String name) {
         for (Enchantment enchantment : Enchantment.values()) {
-            final String snip = enchantment.getKey().getKey().substring(0, 4);
-
-            if (name.startsWith(snip)) {
+            if (name.startsWith(enchantment.getName())) {
                 return enchantment;
             }
         }
@@ -68,12 +66,12 @@ public final class Items {
 
     public static boolean isInteractable(Material material) {
         return
-                material.name().endsWith("_CHEST") || material.equals(Material.CRAFTING_TABLE) || material.equals(Material.FURNACE) ||
-                material.equals(Material.ENCHANTING_TABLE) || material.name().endsWith("ANVIL") || material.equals(Material.ITEM_FRAME) ||
-                material.name().endsWith("_BED") || material.equals(Material.LEVER) || material.name().endsWith("_PLATE") ||
-                material.name().endsWith("_BUTTON") || material.name().endsWith("_TRAPDOOR") || material.name().endsWith("_FENCE_GATE") ||
-                material.equals(Material.DAYLIGHT_DETECTOR) || material.equals(Material.HOPPER) || material.equals(Material.DROPPER) || material.name().endsWith("_DOOR") || material.equals(Material.REPEATER) ||
-                material.equals(Material.COMPARATOR) || material.equals(Material.BEACON) || material.equals(Material.CAULDRON) ||
-                material.equals(Material.FLOWER_POT) || material.name().endsWith("SHULKER_BOX");
+                        material.name().endsWith("_CHEST") || material.equals(Material.WORKBENCH) || material.equals(Material.FURNACE) ||
+                        material.equals(Material.ENCHANTMENT_TABLE) || material.name().endsWith("ANVIL") || material.equals(Material.ITEM_FRAME) ||
+                        material.name().endsWith("_BED") || material.equals(Material.LEVER) || material.name().endsWith("_PLATE") ||
+                        material.name().endsWith("_BUTTON") || material.name().endsWith("_TRAPDOOR") || material.name().endsWith("_FENCE_GATE") ||
+                        material.equals(Material.DAYLIGHT_DETECTOR) || material.equals(Material.HOPPER) || material.equals(Material.DROPPER) || material.name().endsWith("_DOOR") || material.equals(Material.DIODE) ||
+                        material.equals(Material.REDSTONE_COMPARATOR) || material.equals(Material.REDSTONE_COMPARATOR_OFF) || material.equals(Material.REDSTONE_COMPARATOR_ON) ||
+                        material.equals(Material.BEACON) || material.equals(Material.CAULDRON) || material.equals(Material.FLOWER_POT) || material.name().endsWith("SHULKER_BOX");
     }
 }

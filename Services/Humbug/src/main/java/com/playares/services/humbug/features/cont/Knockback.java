@@ -28,20 +28,11 @@ import java.util.List;
 import java.util.UUID;
 
 public final class Knockback implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public double horizontal;
-
-    @Getter @Setter
-    public double vertical;
-
-    @Getter
-    public final List<UUID> recentSprinters;
-
-    @Getter @Setter
-    public boolean enabled;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public double horizontal;
+    @Getter @Setter public double vertical;
+    @Getter public final List<UUID> recentSprinters;
+    @Getter @Setter public boolean enabled;
 
     public Knockback(HumbugService humbug) {
         this.humbug = humbug;

@@ -5,13 +5,13 @@
     <parent>
         <artifactId>Services</artifactId>
         <groupId>com.playares</groupId>
-        <version>1.13.2</version>
+        <version>1.12.2</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>Ranks</artifactId>
-    <version>1.13.2</version>
+    <version>1.12.2</version>
 
     <build>
         <plugins>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>com.destroystokyo.paper</groupId>
             <artifactId>paper-api</artifactId>
-            <version>1.13.1-R0.1-SNAPSHOT</version>
+            <version>1.12.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -39,7 +39,7 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Bukkit</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
         </dependency>
     </dependencies>
 </project>

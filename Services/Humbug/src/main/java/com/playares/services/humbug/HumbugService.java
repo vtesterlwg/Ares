@@ -13,14 +13,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.Set;
 
 public final class HumbugService implements AresService {
-    @Getter
-    public final AresPlugin owner;
-
-    @Getter
-    protected Set<HumbugModule> modules;
-
-    @Getter
-    protected YamlConfiguration humbugConfig;
+    @Getter public final AresPlugin owner;
+    @Getter protected Set<HumbugModule> modules;
+    @Getter protected YamlConfiguration humbugConfig;
 
     public HumbugService(AresPlugin owner) {
         this.owner = owner;

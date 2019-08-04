@@ -18,8 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 public final class PunishmentManager {
-    @Getter
-    public final PunishmentService service;
+    @Getter public final PunishmentService service;
 
     public PunishmentManager(PunishmentService service) {
         this.service = service;

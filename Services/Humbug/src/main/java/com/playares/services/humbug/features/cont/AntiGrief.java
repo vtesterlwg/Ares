@@ -10,7 +10,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -93,7 +92,7 @@ public final class AntiGrief implements HumbugModule, Listener {
             return;
         }
 
-        if (!block.getType().equals(Material.SPAWNER)) {
+        if (!block.getType().equals(Material.MOB_SPAWNER)) {
             return;
         }
 
@@ -139,10 +138,6 @@ public final class AntiGrief implements HumbugModule, Listener {
         }
 
         for (Block block : event.getBlocks()) {
-            if (!(block.getState().getData() instanceof Waterlogged)) {
-                continue;
-            }
-
             if (!block.getType().name().contains("_FENCE")) {
                 continue;
             }

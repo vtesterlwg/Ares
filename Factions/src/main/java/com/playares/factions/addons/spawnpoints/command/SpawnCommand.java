@@ -15,8 +15,7 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nonnull;
 
 public final class SpawnCommand extends BaseCommand {
-    @Getter
-    public final Factions plugin;
+    @Getter public final Factions plugin;
 
     public SpawnCommand(Factions plugin) {
         this.plugin = plugin;

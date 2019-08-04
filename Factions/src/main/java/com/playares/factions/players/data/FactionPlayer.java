@@ -7,7 +7,6 @@ import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.bukkit.location.BLocatable;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.factions.Factions;
-import com.playares.factions.addons.stats.holder.PlayerStatisticHolder;
 import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.claims.pillars.ClaimPillar;
 import com.playares.factions.claims.pillars.MapPillar;
@@ -51,8 +50,6 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     @Getter public Set<Pillar> pillars;
     /** Contains all shield blocks being rendered to the player **/
     @Getter public Set<Shield> shields;
-    /** Contains all Player Statistics **/
-    @Getter public PlayerStatisticHolder stats;
 
     public FactionPlayer(Factions plugin) {
         this.plugin = plugin;
@@ -65,7 +62,6 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.shields = Sets.newConcurrentHashSet();
-        this.stats = null;
     }
 
     public FactionPlayer(Factions plugin, Player player) {
@@ -79,7 +75,6 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.shields = Sets.newConcurrentHashSet();
-        this.stats = new PlayerStatisticHolder();
     }
 
     public FactionPlayer(Factions plugin, UUID uniqueId, String username) {
@@ -93,7 +88,6 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.shields = Sets.newConcurrentHashSet();
-        this.stats = new PlayerStatisticHolder();
     }
 
     /**
@@ -370,7 +364,6 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = document.getString("username");
         this.balance = document.getDouble("balance");
         this.faction = null;
-        this.stats = new PlayerStatisticHolder().fromDocument(document.get("stats", Document.class));
 
         // Load timers
         convertedTimers.keySet().forEach(timerName -> {
@@ -420,7 +413,6 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
                 .append("id", uniqueId)
                 .append("username", username)
                 .append("balance", balance)
-                .append("timers", convertedTimers)
-                .append("stats", stats.toDocument());
+                .append("timers", convertedTimers);
     }
 }

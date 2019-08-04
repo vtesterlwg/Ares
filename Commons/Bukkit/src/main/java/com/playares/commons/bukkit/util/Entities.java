@@ -20,7 +20,6 @@ public final class Entities {
             case CAVE_SPIDER: return true;
             case SILVERFISH: return true;
             case ENDERMITE: return true;
-            case PHANTOM: return true;
         }
 
         return false;
@@ -32,7 +31,6 @@ public final class Entities {
             case ZOMBIE: return true;
             case WITHER: return true;
             case PIG_ZOMBIE: return true;
-            case DROWNED: return true;
             case ZOMBIE_VILLAGER: return true;
             case ZOMBIE_HORSE: return true;
             case SKELETON_HORSE: return true;

@@ -127,8 +127,6 @@ public final class ShieldListener implements Listener {
                                     .filter(b -> b.distance(location) <= 5.0)
                                     .filter(b ->
                                             b.getBukkit().getType().equals(Material.AIR) ||
-                                            b.getBukkit().getType().equals(Material.CAVE_AIR) ||
-                                            b.getBukkit().getType().equals(Material.VOID_AIR) ||
                                             b.getBukkit().getType().equals(Material.WATER))
                                     .collect(Collectors.toList()));
                         }
@@ -170,11 +168,7 @@ public final class ShieldListener implements Listener {
                             perimeters.addAll(claim.getPerimeter(rounded)
                                     .stream()
                                     .filter(b -> b.distance(location) <= 5.0)
-                                    .filter(b ->
-                                            b.getBukkit().getType().equals(Material.AIR) ||
-                                                    b.getBukkit().getType().equals(Material.CAVE_AIR) ||
-                                                    b.getBukkit().getType().equals(Material.VOID_AIR) ||
-                                                    b.getBukkit().getType().equals(Material.WATER))
+                                    .filter(b -> b.getBukkit().getType().equals(Material.AIR) || b.getBukkit().getType().equals(Material.WATER))
                                     .collect(Collectors.toList()));
                         }
                     }

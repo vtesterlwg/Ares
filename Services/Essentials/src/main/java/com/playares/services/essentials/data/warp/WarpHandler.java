@@ -7,8 +7,7 @@ import lombok.Getter;
 import org.bukkit.entity.Player;
 
 public final class WarpHandler {
-    @Getter
-    public final EssentialsService essentials;
+    @Getter public final EssentialsService essentials;
 
     public WarpHandler(EssentialsService essentials) {
         this.essentials = essentials;

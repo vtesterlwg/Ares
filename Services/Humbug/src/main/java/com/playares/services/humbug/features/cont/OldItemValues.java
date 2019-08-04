@@ -15,20 +15,16 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 public final class OldItemValues implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
 
     @Getter @Setter
     public ImmutableMap<Material, Double> weaponValues = ImmutableMap.<Material, Double>builder()
-            .put(Material.WOODEN_AXE, 2.4).put(Material.STONE_AXE, 2.6).put(Material.IRON_AXE, 2.8).put(Material.GOLDEN_AXE, 2.8).put(Material.DIAMOND_AXE, 3.0)
-            .put(Material.WOODEN_SHOVEL, 1.0).put(Material.STONE_SHOVEL, 1.0).put(Material.IRON_SHOVEL, 1.0).put(Material.GOLDEN_SHOVEL, 1.0).put(Material.DIAMOND_SHOVEL, 1.0)
-            .put(Material.WOODEN_PICKAXE, 1.0).put(Material.STONE_PICKAXE, 1.0).put(Material.IRON_PICKAXE, 1.0).put(Material.GOLDEN_PICKAXE, 1.0).put(Material.DIAMOND_PICKAXE, 1.0)
-            .put(Material.WOODEN_HOE, 1.0).put(Material.STONE_HOE, 1.0).put(Material.IRON_HOE, 1.0).put(Material.GOLDEN_HOE, 1.0).put(Material.DIAMOND_HOE, 1.0)
-            .put(Material.WOODEN_SWORD, 1.5).put(Material.STONE_SWORD, 1.5).put(Material.IRON_SWORD, 1.5).put(Material.GOLDEN_SWORD, 1.5).put(Material.DIAMOND_SWORD, 1.5)
-            .put(Material.TRIDENT, 2.0)
+            .put(Material.WOOD_AXE, 2.4).put(Material.STONE_AXE, 2.6).put(Material.IRON_AXE, 2.8).put(Material.GOLD_AXE, 2.8).put(Material.DIAMOND_AXE, 3.0)
+            .put(Material.WOOD_SPADE, 1.0).put(Material.STONE_SPADE, 1.0).put(Material.IRON_SPADE, 1.0).put(Material.GOLD_SPADE, 1.0).put(Material.DIAMOND_SPADE, 1.0)
+            .put(Material.WOOD_PICKAXE, 1.0).put(Material.STONE_PICKAXE, 1.0).put(Material.IRON_PICKAXE, 1.0).put(Material.GOLD_PICKAXE, 1.0).put(Material.DIAMOND_PICKAXE, 1.0)
+            .put(Material.WOOD_HOE, 1.0).put(Material.STONE_HOE, 1.0).put(Material.IRON_HOE, 1.0).put(Material.GOLD_HOE, 1.0).put(Material.DIAMOND_HOE, 1.0)
+            .put(Material.WOOD_SWORD, 1.5).put(Material.STONE_SWORD, 1.5).put(Material.IRON_SWORD, 1.5).put(Material.GOLD_SWORD, 1.5).put(Material.DIAMOND_SWORD, 1.5)
             .build();
 
     public OldItemValues(HumbugService humbug) {

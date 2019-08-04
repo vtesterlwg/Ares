@@ -23,7 +23,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftLivingEntity;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
 import org.bukkit.entity.AreaEffectCloud;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
@@ -36,8 +36,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public final class CombatListener implements Listener {
-    @Getter
-    public final Factions plugin;
+    @Getter public final Factions plugin;
 
     public CombatListener(Factions plugin) {
         this.plugin = plugin;
@@ -300,7 +299,7 @@ public final class CombatListener implements Listener {
         }
 
         logger.getBukkitEntity().getWorld().strikeLightningEffect(logger.getBukkitEntity().getLocation());
-        Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_BOLT_THUNDER));
+        Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_THUNDER));
     }
 
     @EventHandler
@@ -333,7 +332,7 @@ public final class CombatListener implements Listener {
         }
 
         player.getWorld().strikeLightningEffect(player.getLocation());
-        Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_BOLT_THUNDER));
+        Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_THUNDER));
 
         event.setDeathMessage(null);
 
@@ -357,10 +356,8 @@ public final class CombatListener implements Listener {
             final String using = (
                     killer.getInventory().getItemInMainHand() != null &&
                     killer.getInventory().getItemInMainHand().getType().isItem() &&
-                    !killer.getInventory().getItemInMainHand().getType().equals(Material.AIR) &&
-                    !killer.getInventory().getItemInMainHand().getType().equals(Material.CAVE_AIR) &&
-                    !killer.getInventory().getItemInMainHand().getType().equals(Material.VOID_AIR)) ?
-                    ChatColor.RED + " using a " + ChatColor.YELLOW + StringUtils.capitaliseAllWords(killer.getInventory().getItemInMainHand().getType().getKey().getKey().replace("_", " "))
+                    !killer.getInventory().getItemInMainHand().getType().equals(Material.AIR)) ?
+                    ChatColor.RED + " using a " + ChatColor.YELLOW + StringUtils.capitaliseAllWords(killer.getInventory().getItemInMainHand().getType().name().replace("_", " "))
                     : "";
 
             switch (reason) {

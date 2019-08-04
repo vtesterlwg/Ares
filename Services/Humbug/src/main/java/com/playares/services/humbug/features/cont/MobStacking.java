@@ -43,13 +43,13 @@ public final class MobStacking implements HumbugModule, Listener {
             .put(EntityType.SHEEP, ImmutableList.of(Material.WHEAT))
             .put(EntityType.MUSHROOM_COW, ImmutableList.of(Material.WHEAT))
             .put(EntityType.HORSE, ImmutableList.of(Material.GOLDEN_APPLE, Material.GOLDEN_CARROT))
-            .put(EntityType.CHICKEN, ImmutableList.of(Material.BEETROOT_SEEDS, Material.MELON_SEEDS, Material.PUMPKIN_SEEDS, Material.WHEAT_SEEDS))
-            .put(EntityType.PIG, ImmutableList.of(Material.CARROT, Material.CARROTS, Material.POTATOES, Material.POTATO, Material.BEETROOT))
-            .put(EntityType.WOLF, ImmutableList.of(Material.PORKCHOP, Material.COOKED_PORKCHOP, Material.BEEF, Material.COOKED_BEEF, Material.CHICKEN, Material.COOKED_CHICKEN, Material.MUTTON, Material.COOKED_MUTTON, Material.ROTTEN_FLESH))
-            .put(EntityType.OCELOT, ImmutableList.of(Material.SALMON, Material.TROPICAL_FISH, Material.PUFFERFISH, Material.COD))
-            .put(EntityType.RABBIT, ImmutableList.of(Material.DANDELION, Material.CARROTS, Material.CARROT, Material.GOLDEN_CARROT))
+            .put(EntityType.CHICKEN, ImmutableList.of(Material.BEETROOT_SEEDS, Material.MELON_SEEDS, Material.PUMPKIN_SEEDS, Material.SEEDS))
+            .put(EntityType.PIG, ImmutableList.of(Material.CARROT, Material.CARROT_ITEM, Material.POTATO_ITEM, Material.POTATO, Material.BEETROOT))
+            .put(EntityType.WOLF, ImmutableList.of(Material.PORK, Material.GRILLED_PORK, Material.RAW_BEEF, Material.COOKED_BEEF, Material.RAW_CHICKEN, Material.COOKED_CHICKEN, Material.MUTTON, Material.COOKED_MUTTON, Material.ROTTEN_FLESH))
+            .put(EntityType.OCELOT, ImmutableList.of(Material.RAW_FISH, Material.COOKED_FISH))
+            .put(EntityType.RABBIT, ImmutableList.of(Material.YELLOW_FLOWER, Material.CARROT_ITEM, Material.CARROT, Material.GOLDEN_CARROT))
             .put(EntityType.LLAMA, ImmutableList.of(Material.HAY_BLOCK))
-            .put(EntityType.TURTLE, ImmutableList.of(Material.SEAGRASS)).build();
+            .build();
 
     public MobStacking(HumbugService humbug) {
         this.humbug = humbug;

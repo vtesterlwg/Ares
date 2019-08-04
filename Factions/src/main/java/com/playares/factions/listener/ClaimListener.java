@@ -35,8 +35,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public final class ClaimListener implements Listener {
-    @Getter
-    public final Factions plugin;
+    @Getter public final Factions plugin;
 
     public ClaimListener(Factions plugin) {
         this.plugin = plugin;
@@ -148,7 +147,7 @@ public final class ClaimListener implements Listener {
         final Block block = event.getClickedBlock();
         final boolean admin = player.hasPermission("factions.admin");
 
-        if (block == null || (block.getType().equals(Material.AIR) || block.getType().equals(Material.CAVE_AIR) || block.getType().equals(Material.VOID_AIR))) {
+        if (block == null || (block.getType().equals(Material.AIR))) {
             return;
         }
 

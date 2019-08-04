@@ -9,17 +9,10 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 
 public final class PlayerChangeClaimEvent extends PlayerEvent implements Cancellable {
-    @Getter
-    public static final HandlerList handlerList = new HandlerList();
-
-    @Getter
-    public final DefinedClaim from;
-
-    @Getter
-    public final DefinedClaim to;
-
-    @Getter @Setter
-    public boolean cancelled;
+    @Getter public static final HandlerList handlerList = new HandlerList();
+    @Getter public final DefinedClaim from;
+    @Getter public final DefinedClaim to;
+    @Getter @Setter public boolean cancelled;
 
     public PlayerChangeClaimEvent(Player who, DefinedClaim from, DefinedClaim to) {
         super(who);

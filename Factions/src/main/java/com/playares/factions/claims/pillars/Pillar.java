@@ -10,15 +10,10 @@ import java.util.List;
 
 public interface Pillar {
     Player getViewer();
-
     Material getMaterial();
-
     BLocatable getStartLocation();
-
     List<BLocatable> getBlocks();
-
     boolean isDrawn();
-
     void setDrawn(boolean b);
 
     default void draw() {
@@ -33,7 +28,7 @@ public interface Pillar {
         while (y < finishY) {
             final Block block = getStartLocation().getBukkit().getWorld().getBlockAt((int)getStartLocation().getX(), y, (int)getStartLocation().getZ());
 
-            if (block == null || !(block.getType().equals(Material.AIR) || block.getType().equals(Material.CAVE_AIR))) {
+            if (block == null || !(block.getType().equals(Material.AIR))) {
                 y++;
                 continue;
             }

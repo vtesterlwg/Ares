@@ -24,14 +24,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class RankService implements AresService, Listener {
-    @Getter
-    public final AresPlugin owner;
-
-    @Getter
-    public final Set<AresRank> ranks;
-
-    @Getter
-    public final RankHandler rankHandler;
+    @Getter public final AresPlugin owner;
+    @Getter public final Set<AresRank> ranks;
+    @Getter public final RankHandler rankHandler;
 
     public RankService(AresPlugin owner) {
         this.owner = owner;

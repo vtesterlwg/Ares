@@ -10,20 +10,11 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public final class ClaimPillar implements Pillar {
-    @Getter
-    public final Player viewer;
-
-    @Getter
-    public final ClaimPillarType type;
-
-    @Getter
-    public final BLocatable startLocation;
-
-    @Getter
-    public final List<BLocatable> blocks;
-
-    @Getter @Setter
-    public boolean drawn;
+    @Getter public final Player viewer;
+    @Getter public final ClaimPillarType type;
+    @Getter public final BLocatable startLocation;
+    @Getter public final List<BLocatable> blocks;
+    @Getter @Setter public boolean drawn;
 
     public ClaimPillar(Player viewer, ClaimPillarType type, BLocatable startLocation) {
         this.viewer = viewer;

@@ -16,14 +16,9 @@ import java.util.Set;
 import java.util.UUID;
 
 public final class OldRegen implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
-
-    @Getter
-    public final Set<UUID> recentHeals;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
+    @Getter public final Set<UUID> recentHeals;
 
     public OldRegen(HumbugService humbug) {
         this.humbug = humbug;

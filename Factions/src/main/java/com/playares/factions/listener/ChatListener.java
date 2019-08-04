@@ -2,9 +2,7 @@ package com.playares.factions.listener;
 
 import com.playares.commons.bukkit.event.ProcessedChatEvent;
 import com.playares.factions.Factions;
-import com.playares.factions.addons.stats.StatsAddon;
 import com.playares.factions.factions.data.PlayerFaction;
-import com.playares.factions.players.data.FactionPlayer;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -20,18 +18,16 @@ public final class ChatListener implements Listener {
         this.plugin = plugin;
     }
 
-    private String getPublicFormat(PlayerFaction faction, int elo, String displayName, String message, Player receiver) {
+    private String getPublicFormat(PlayerFaction faction, String displayName, String message, Player receiver) {
         if (faction == null) {
-            return ChatColor.BLUE + "[" + elo + "]" + ChatColor.RESET + displayName + ChatColor.RESET + ": " + message;
+            return displayName + ChatColor.RESET + ": " + message;
         }
 
         if (faction.getMember(receiver.getUniqueId()) != null) {
-            return ChatColor.DARK_GREEN + "[" + faction.getName() + "]" + ChatColor.BLUE + "[" + elo + "]" + ChatColor.RESET +
-                    displayName + ChatColor.RESET + ": " + message;
+            return ChatColor.DARK_GREEN + "[" + faction.getName() + "]" + displayName + ChatColor.RESET + ": " + message;
         }
 
-        return ChatColor.GOLD + "[" + ChatColor.YELLOW + faction.getName() + ChatColor.GOLD + "]" + ChatColor.BLUE + "[" + elo + "]" + ChatColor.RESET +
-                displayName + ChatColor.RESET + ": " + message;
+        return ChatColor.GOLD + "[" + ChatColor.YELLOW + faction.getName() + ChatColor.GOLD + "]" + displayName + ChatColor.RESET + ": " + message;
     }
 
     private String getFactionFormat(String displayName, String message) {
@@ -44,11 +40,8 @@ public final class ChatListener implements Listener {
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onChat(ProcessedChatEvent event) {
-        final StatsAddon statsAddon = (StatsAddon)plugin.getAddonManager().getAddon(StatsAddon.class);
-        final FactionPlayer factionPlayer = plugin.getPlayerManager().getPlayer(event.getPlayer().getUniqueId());
         final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(event.getPlayer().getUniqueId());
         final boolean admin = event.getPlayer().hasPermission("factions.admin");
-        final int elo = (factionPlayer != null && statsAddon != null) ? statsAddon.getStatsManager().getELO(factionPlayer) : 0;
 
         event.setCancelled(true);
 
@@ -57,12 +50,12 @@ public final class ChatListener implements Listener {
 
             if (profile != null) {
                 if (profile.getChannel().equals(PlayerFaction.ChatChannel.PUBLIC) && !event.getMessage().startsWith("@")) {
-                    event.getRecipients().forEach(p -> p.sendMessage(getPublicFormat(faction, elo, event.getDisplayName(), event.getMessage(), p)));
+                    event.getRecipients().forEach(p -> p.sendMessage(getPublicFormat(faction, event.getDisplayName(), event.getMessage(), p)));
                     return;
                 }
 
                 if (event.getMessage().startsWith("!") && !profile.getChannel().equals(PlayerFaction.ChatChannel.PUBLIC)) {
-                    event.getRecipients().forEach(p -> p.sendMessage(getPublicFormat(faction, elo, event.getDisplayName(), event.getMessage().replaceFirst("!", ""), p)));
+                    event.getRecipients().forEach(p -> p.sendMessage(getPublicFormat(faction, event.getDisplayName(), event.getMessage().replaceFirst("!", ""), p)));
                     return;
                 }
 
@@ -97,6 +90,6 @@ public final class ChatListener implements Listener {
             }
         }
 
-        event.getRecipients().forEach(p -> p.sendMessage(getPublicFormat(null, elo, event.getDisplayName(), event.getMessage(), p)));
+        event.getRecipients().forEach(p -> p.sendMessage(getPublicFormat(null, event.getDisplayName(), event.getMessage(), p)));
     }
 }

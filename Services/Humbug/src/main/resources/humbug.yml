@@ -57,7 +57,6 @@ anti-glitch:
     enabled: true
     disable-pearl-clipping: true
     disable-elytra-clipping: true
-    disable-swim-clipping: true
 
 # Enabling XP Bonuses allows for additional experience multipliers by using enchantments such as Fortune and Looting
 xp-bonuses:

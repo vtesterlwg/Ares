@@ -16,11 +16,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.vehicle.VehicleExitEvent;
 
 public final class Elevators implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
 
     public Elevators(HumbugService humbug) {
         this.humbug = humbug;
@@ -77,7 +74,7 @@ public final class Elevators implements HumbugModule, Listener {
         for (int y = location.getBlockY(); y < location.getWorld().getMaxHeight(); y++) {
             final Block block = location.getWorld().getBlockAt(location.getBlockX(), y, location.getBlockZ());
 
-            if (block != null && (block.getType().equals(Material.AIR) || block.getType().equals(Material.CAVE_AIR))) {
+            if (block != null && block.getType().equals(Material.AIR)) {
                 return block.getLocation();
             }
         }

@@ -10,20 +10,11 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public final class MapPillar implements Pillar {
-    @Getter
-    public final Player viewer;
-
-    @Getter
-    public final BLocatable startLocation;
-
-    @Getter
-    public final List<BLocatable> blocks;
-
-    @Getter
-    public final Material material;
-
-    @Getter @Setter
-    public boolean drawn;
+    @Getter public final Player viewer;
+    @Getter public final BLocatable startLocation;
+    @Getter public final List<BLocatable> blocks;
+    @Getter public final Material material;
+    @Getter @Setter public boolean drawn;
 
     public MapPillar(Player viewer, BLocatable startLocation, Material material) {
         this.viewer = viewer;

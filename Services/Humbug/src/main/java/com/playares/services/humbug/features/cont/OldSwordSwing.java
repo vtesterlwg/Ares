@@ -12,10 +12,10 @@ import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
 import lombok.Setter;
-import net.minecraft.server.v1_13_R2.GenericAttributes;
+import net.minecraft.server.v1_12_R1.GenericAttributes;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -26,14 +26,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public final class OldSwordSwing implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
-
-    @Getter @Setter
-    public int hitDelayTicks;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
+    @Getter @Setter public int hitDelayTicks;
 
     public OldSwordSwing(HumbugService humbug) {
         this.humbug = humbug;

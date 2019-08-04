@@ -62,7 +62,7 @@ public final class EssentialsService implements AresService {
            final List<String> enchants = Lists.newArrayList();
 
            for (Enchantment enchant : Enchantment.values()) {
-               enchants.add(enchant.getKey().getKey().toLowerCase());
+               enchants.add(enchant.getName().toLowerCase());
            }
 
            return ImmutableList.copyOf(enchants);
@@ -72,10 +72,6 @@ public final class EssentialsService implements AresService {
            final List<String> items = Lists.newArrayList();
 
            for (Material material : Material.values()) {
-               if (material.name().startsWith("LEGACY_")) {
-                   continue;
-               }
-
                items.add(material.name().toLowerCase());
            }
 

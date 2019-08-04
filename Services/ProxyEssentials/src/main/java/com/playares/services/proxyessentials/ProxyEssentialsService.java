@@ -21,26 +21,13 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 public final class ProxyEssentialsService implements AresService, Listener {
-    @Getter
-    public final AresProxy proxy;
-
-    @Getter
-    protected ReportManager reportManager;
-
-    @Getter
-    protected ReportHandler reportHandler;
-
-    @Getter
-    protected RequestManager requestManager;
-
-    @Getter
-    protected RequestHandler requestHandler;
-
-    @Getter
-    protected StaffChatManager staffChatManager;
-
-    @Getter
-    protected StaffChatHandler staffChatHandler;
+    @Getter public final AresProxy proxy;
+    @Getter protected ReportManager reportManager;
+    @Getter protected ReportHandler reportHandler;
+    @Getter protected RequestManager requestManager;
+    @Getter protected RequestHandler requestHandler;
+    @Getter protected StaffChatManager staffChatManager;
+    @Getter protected StaffChatHandler staffChatHandler;
 
     public ProxyEssentialsService(AresProxy proxy) {
         this.proxy = proxy;

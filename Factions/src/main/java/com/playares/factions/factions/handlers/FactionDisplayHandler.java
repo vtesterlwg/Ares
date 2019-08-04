@@ -5,11 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.base.util.Time;
-import com.playares.commons.bukkit.item.ItemBuilder;
-import com.playares.commons.bukkit.menu.ClickableItem;
-import com.playares.commons.bukkit.menu.Menu;
 import com.playares.commons.bukkit.util.Scheduler;
-import com.playares.factions.addons.stats.StatsAddon;
 import com.playares.factions.factions.data.Faction;
 import com.playares.factions.factions.data.PlayerFaction;
 import com.playares.factions.factions.data.ServerFaction;
@@ -21,16 +17,10 @@ import com.playares.services.profiles.data.AresProfile;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -228,10 +218,8 @@ public final class FactionDisplayHandler {
             return;
         }
 
-        final StatsAddon addon = (StatsAddon)manager.getPlugin().getAddonManager().getAddon(StatsAddon.class);
         final PlayerFaction pf = (PlayerFaction)faction;
         final String dtr = String.format("%.2f", pf.getDeathsTilRaidable());
-        final int elo = (addon != null) ? addon.getStatsManager().getELO(pf) : 0;
         String formattedDTR;
 
         if (pf.getDeathsTilRaidable() >= pf.getMaxDTR()) {
@@ -264,22 +252,6 @@ public final class FactionDisplayHandler {
                     ChatColor.BLUE + (int)(Math.round(pf.getHome().getY())) + ChatColor.YELLOW + ", " +
                     ChatColor.BLUE + (int)(Math.round(pf.getHome().getZ())));
         }
-
-        viewer.sendMessage(new ComponentBuilder("")
-                .append(TextComponent.fromLegacyText(spacer + ChatColor.GOLD + "Rating" + ChatColor.YELLOW + ": " + ChatColor.BLUE + elo))
-                .event(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-                        new ComponentBuilder("Statistics")
-                                .color(net.md_5.bungee.api.ChatColor.DARK_PURPLE)
-                                .append("\n").color(net.md_5.bungee.api.ChatColor.RESET)
-                                .append(TextComponent.fromLegacyText(ChatColor.GOLD + "Kills" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getStats().getKills()))
-                                .append("\n").color(net.md_5.bungee.api.ChatColor.RESET)
-                                .append(TextComponent.fromLegacyText(ChatColor.GOLD + "Deaths" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getStats().getDeaths()))
-                                .append("\n").color(net.md_5.bungee.api.ChatColor.RESET)
-                                .append(TextComponent.fromLegacyText(ChatColor.GOLD + "Minor Event Captures" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getStats().getMinorEventCaptures()))
-                                .append("\n").color(net.md_5.bungee.api.ChatColor.RESET)
-                                .append(TextComponent.fromLegacyText(ChatColor.GOLD + "Major Event Captures" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getStats().getMajorEventCaptures()))
-                                .create()))
-                .create());
 
         viewer.sendMessage(spacer + ChatColor.GOLD + "Balance" + ChatColor.YELLOW + ": " + ChatColor.BLUE + "$" + String.format("%.2f", pf.getBalance()));
         viewer.sendMessage(spacer + ChatColor.GOLD + "Deaths Until Raid-able" + ChatColor.YELLOW + ": " + formattedDTR);
@@ -353,178 +325,6 @@ public final class FactionDisplayHandler {
                 }
 
                 viewer.sendMessage(ChatColor.YELLOW + "------------------------------------------------");
-            }).run();
-        }).run();
-    }
-
-    /**
-     * Displays the faction leaderboard for the provided category
-     * @param player Player
-     * @param category Category
-     * @param promise Promise
-     */
-    public void displayLeaderboard(Player player, String category, SimplePromise promise) {
-        final StatsAddon addon = (StatsAddon)manager.getPlugin().getAddonManager().getAddon(StatsAddon.class);
-        final List<PlayerFaction> factions = Lists.newArrayList(manager.getPlayerFactions());
-        final PlayerFaction personalFaction = manager.getFactionByPlayer(player.getUniqueId());
-
-        if (addon == null) {
-            promise.failure("Failed to obtain Stats Addon");
-            return;
-        }
-
-        if (factions.isEmpty()) {
-            promise.failure("There are no factions on the leaderboard");
-            return;
-        }
-
-        new Scheduler(manager.getPlugin()).async(() -> {
-            final String fancyCategory;
-
-            if (category.equalsIgnoreCase("elo") || category.equalsIgnoreCase("rating") || category.equalsIgnoreCase("e") || category.equalsIgnoreCase("r")) {
-                factions.sort(Comparator.comparingInt(f -> f.getStats().calculateELO(addon)));
-                fancyCategory = "Rating";
-            } else if (category.equalsIgnoreCase("kill") || category.equalsIgnoreCase("kills") || category.equalsIgnoreCase("k")) {
-                factions.sort(Comparator.comparingInt(f -> f.getStats().getKills()));
-                fancyCategory = "Kills";
-            } else if (category.equalsIgnoreCase("death") || category.equalsIgnoreCase("deaths") || category.equalsIgnoreCase("d")) {
-                factions.sort(Comparator.comparingInt(f -> f.getStats().getDeaths()));
-                fancyCategory = "Deaths";
-            } else if (category.equalsIgnoreCase("minorevent") || category.equalsIgnoreCase("minorevents") || category.equalsIgnoreCase("minor")) {
-                factions.sort(Comparator.comparingInt(f -> f.getStats().getMinorEventCaptures()));
-                fancyCategory = "Minor Event Captures";
-            } else if (category.equalsIgnoreCase("majorevent") || category.equalsIgnoreCase("majorevents") || category.equalsIgnoreCase("major")) {
-                factions.sort(Comparator.comparingInt(f -> f.getStats().getMajorEventCaptures()));
-                fancyCategory = "Major Event Captures";
-            } else {
-                new Scheduler(manager.getPlugin()).sync(() -> promise.failure("Invalid category")).run();
-                return;
-            }
-
-            Collections.reverse(factions);
-
-            final Menu menu = new Menu(manager.getPlugin(), player, "Factions Leaderboard: " + fancyCategory, 6);
-            final List<PlayerFaction> top = (factions.size() >= 3 ? factions.subList(0, 2) : factions.subList(0, factions.size()));
-
-            new Scheduler(manager.getPlugin()).sync(() -> {
-                int pos = 1;
-                int slot = 10;
-
-                for (PlayerFaction faction : top) {
-                    final ItemBuilder builder = new ItemBuilder().setMaterial(Material.PLAYER_HEAD);
-                    ChatColor color = ChatColor.RESET;
-
-                    if (pos == 1) {
-                        color = ChatColor.GOLD;
-                    } else if (pos == 2) {
-                        color = ChatColor.GRAY;
-                    } else if (pos == 3) {
-                        color = ChatColor.RED;
-                    }
-
-                    builder.setName(color + "#" + pos + ChatColor.RESET + " - " + ChatColor.YELLOW + faction.getName());
-
-                    final List<String> lore = Lists.newArrayList();
-                    lore.add(ChatColor.GOLD + "Rating: " + ChatColor.YELLOW + faction.getStats().calculateELO(addon));
-                    lore.add(ChatColor.GOLD + "Kills: " + ChatColor.YELLOW + faction.getStats().getKills());
-                    lore.add(ChatColor.GOLD + "Deaths: " + ChatColor.YELLOW + faction.getStats().getDeaths());
-                    lore.add(ChatColor.GOLD + "Minor Event Captures: " + ChatColor.YELLOW + faction.getStats().getMinorEventCaptures());
-                    lore.add(ChatColor.GOLD + "Major Event Captures: " + ChatColor.YELLOW + faction.getStats().getMajorEventCaptures());
-
-                    builder.addLore(lore);
-
-                    final ItemStack icon = builder.build();
-                    final SkullMeta meta = (SkullMeta)icon.getItemMeta();
-                    final int currentSlot = slot;
-
-                    new Scheduler(manager.getPlugin()).async(() -> {
-                        final PlayerFaction.FactionProfile leader = faction.getMembersByRank(PlayerFaction.FactionRank.LEADER).get(0);
-                        final OfflinePlayer offlinePlayer = (leader != null) ? Bukkit.getOfflinePlayer(leader.getUniqueId()) : null;
-
-                        new Scheduler(manager.getPlugin()).sync(() -> {
-                            meta.setOwningPlayer(offlinePlayer);
-                            icon.setItemMeta(meta);
-                            menu.addItem(new ClickableItem(icon, currentSlot, click -> displayFactionInfo(player, faction)));
-                        }).run();
-                    }).run();
-
-                    pos++;
-                    slot += 3;
-                }
-
-                if (personalFaction != null) {
-                    final ItemBuilder builder = new ItemBuilder().setMaterial(Material.PLAYER_HEAD);
-                    final List<String> lore = Lists.newArrayList();
-                    int personalPos = 1;
-
-                    for (PlayerFaction faction : factions) {
-                        if (faction.getUniqueId().equals(personalFaction.getUniqueId())) {
-                            break;
-                        }
-
-                        personalPos++;
-                    }
-
-                    builder.setName(ChatColor.GREEN + "(You) " + ChatColor.RESET + "#" + personalPos + " - " + ChatColor.YELLOW + personalFaction.getName());
-                    lore.add(ChatColor.GOLD + "Rating: " + ChatColor.YELLOW + personalFaction.getStats().calculateELO(addon));
-                    lore.add(ChatColor.GOLD + "Kills: " + ChatColor.YELLOW + personalFaction.getStats().getKills());
-                    lore.add(ChatColor.GOLD + "Deaths: " + ChatColor.YELLOW + personalFaction.getStats().getDeaths());
-                    lore.add(ChatColor.GOLD + "Minor Event Captures: " + ChatColor.YELLOW + personalFaction.getStats().getMinorEventCaptures());
-                    lore.add(ChatColor.GOLD + "Major Event Captures: " + ChatColor.YELLOW + personalFaction.getStats().getMajorEventCaptures());
-
-                    builder.addLore(lore);
-
-                    final ItemStack icon = builder.build();
-                    final SkullMeta meta = (SkullMeta)icon.getItemMeta();
-
-                    new Scheduler(manager.getPlugin()).async(() -> {
-                        final PlayerFaction.FactionProfile leader = personalFaction.getMembersByRank(PlayerFaction.FactionRank.LEADER).get(0);
-                        final OfflinePlayer offlinePlayer = (leader != null) ? Bukkit.getOfflinePlayer(leader.getUniqueId()) : null;
-
-                        new Scheduler(manager.getPlugin()).sync(() -> {
-                            meta.setOwningPlayer(offlinePlayer);
-                            icon.setItemMeta(meta);
-                            menu.addItem(new ClickableItem(icon, 40, click -> displayFactionInfo(player, personalFaction)));
-                        }).run();
-                    }).run();
-                }
-
-                final ItemStack goldBorder = new ItemBuilder().setMaterial(Material.YELLOW_STAINED_GLASS_PANE).setName(ChatColor.GOLD + "1st Place").build();
-                final ItemStack silverBorder = new ItemBuilder().setMaterial(Material.WHITE_STAINED_GLASS_PANE).setName(ChatColor.GRAY + "2nd Place").build();
-                final ItemStack bronzeBorder = new ItemBuilder().setMaterial(Material.ORANGE_STAINED_GLASS_PANE).setName(ChatColor.RED + "3rd Place").build();
-
-                // Gold Border
-                menu.addItem(new ClickableItem(goldBorder, 0, click -> {}));
-                menu.addItem(new ClickableItem(goldBorder, 1, click -> {}));
-                menu.addItem(new ClickableItem(goldBorder, 2, click -> {}));
-                menu.addItem(new ClickableItem(goldBorder, 9, click -> {}));
-                menu.addItem(new ClickableItem(goldBorder, 11, click -> {}));
-                menu.addItem(new ClickableItem(goldBorder, 18, click -> {}));
-                menu.addItem(new ClickableItem(goldBorder, 19, click -> {}));
-                menu.addItem(new ClickableItem(goldBorder, 20, click -> {}));
-
-                // Silver Border
-                menu.addItem(new ClickableItem(silverBorder, 3, click -> {}));
-                menu.addItem(new ClickableItem(silverBorder, 4, click -> {}));
-                menu.addItem(new ClickableItem(silverBorder, 5, click -> {}));
-                menu.addItem(new ClickableItem(silverBorder, 12, click -> {}));
-                menu.addItem(new ClickableItem(silverBorder, 14, click -> {}));
-                menu.addItem(new ClickableItem(silverBorder, 21, click -> {}));
-                menu.addItem(new ClickableItem(silverBorder, 22, click -> {}));
-                menu.addItem(new ClickableItem(silverBorder, 23, click -> {}));
-
-                // Bronze Border
-                menu.addItem(new ClickableItem(bronzeBorder, 6, click -> {}));
-                menu.addItem(new ClickableItem(bronzeBorder, 7, click -> {}));
-                menu.addItem(new ClickableItem(bronzeBorder, 8, click -> {}));
-                menu.addItem(new ClickableItem(bronzeBorder, 15, click -> {}));
-                menu.addItem(new ClickableItem(bronzeBorder, 17, click -> {}));
-                menu.addItem(new ClickableItem(bronzeBorder, 24, click -> {}));
-                menu.addItem(new ClickableItem(bronzeBorder, 25, click -> {}));
-                menu.addItem(new ClickableItem(bronzeBorder, 26, click -> {}));
-
-                menu.fill(new ItemBuilder().setMaterial(Material.GRAY_STAINED_GLASS_PANE).setName(ChatColor.DARK_GRAY + "made u look").build());
-                menu.open();
             }).run();
         }).run();
     }

@@ -5,7 +5,7 @@
     <parent>
         <artifactId>Services</artifactId>
         <groupId>com.playares</groupId>
-        <version>1.13.2</version>
+        <version>1.12.2</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -42,21 +42,21 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Base</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
         </dependency>
 
         <!-- Ares Bungee Commons -->
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Bungee</artifactId>
-            <version>1.13.2</version>
+            <version>1.12.2</version>
         </dependency>
 
         <!-- Bungeecord API -->
         <dependency>
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>1.13-SNAPSHOT</version>
+            <version>1.12-SNAPSHOT</version>
             <type>jar</type>
             <scope>provided</scope>
         </dependency>
@@ -65,7 +65,7 @@
         <dependency>
             <groupId>net.md-5</groupId>
             <artifactId>bungeecord-api</artifactId>
-            <version>1.13-SNAPSHOT</version>
+            <version>1.12-SNAPSHOT</version>
             <type>javadoc</type>
             <scope>provided</scope>
         </dependency>

@@ -11,14 +11,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.Set;
 
 public final class SpawnpointManager {
-    @Getter
-    public final Factions plugin;
-
-    @Getter
-    public final SpawnpointHandler handler;
-
-    @Getter
-    public final Set<Spawnpoint> spawnpoints;
+    @Getter public final Factions plugin;
+    @Getter public final SpawnpointHandler handler;
+    @Getter public final Set<Spawnpoint> spawnpoints;
 
     public SpawnpointManager(Factions plugin) {
         this.plugin = plugin;

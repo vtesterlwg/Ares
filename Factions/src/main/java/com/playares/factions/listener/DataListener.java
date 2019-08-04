@@ -14,8 +14,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public final class DataListener implements Listener {
-    @Getter
-    public final Factions plugin;
+    @Getter public final Factions plugin;
 
     public DataListener(Factions plugin) {
         this.plugin = plugin;
@@ -40,8 +39,6 @@ public final class DataListener implements Listener {
         if (profile == null) {
             return;
         }
-
-        profile.getStats().addPlaytime(player.getLastPlayed());
 
         new Scheduler(plugin).async(() -> {
             PlayerDAO.savePlayer(plugin.getMongo(), profile);

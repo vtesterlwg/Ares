@@ -18,14 +18,9 @@ import java.util.List;
 import java.util.UUID;
 
 public final class PunishmentService implements AresService, Listener {
-    @Getter
-    public final AresPlugin owner;
-
-    @Getter
-    protected final PunishmentHandler punishmentHandler;
-
-    @Getter
-    protected final PunishmentManager punishmentManager;
+    @Getter public final AresPlugin owner;
+    @Getter protected final PunishmentHandler punishmentHandler;
+    @Getter protected final PunishmentManager punishmentManager;
 
     public PunishmentService(AresPlugin owner) {
         this.owner = owner;
@@ -68,7 +63,6 @@ public final class PunishmentService implements AresService, Listener {
         if (!bans.isEmpty()) {
             event.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
             event.setKickMessage(getPunishmentManager().getKickMessage(bans.get(0)));
-            return;
         }
     }
 

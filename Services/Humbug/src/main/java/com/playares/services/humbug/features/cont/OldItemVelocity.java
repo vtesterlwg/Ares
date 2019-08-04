@@ -13,20 +13,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 public final class OldItemVelocity implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
-
-    @Getter @Setter
-    public boolean enabled;
-
-    @Getter @Setter
-    public double pearlVelocity;
-
-    @Getter @Setter
-    public double potionForwardVelocity;
-
-    @Getter @Setter
-    public double potionUpwardVelocity;
+    @Getter public final HumbugService humbug;
+    @Getter @Setter public boolean enabled;
+    @Getter @Setter public double pearlVelocity;
+    @Getter @Setter public double potionForwardVelocity;
+    @Getter @Setter public double potionUpwardVelocity;
 
     public OldItemVelocity(HumbugService humbug) {
         this.humbug = humbug;

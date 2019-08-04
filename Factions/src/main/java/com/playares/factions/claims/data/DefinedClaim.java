@@ -18,23 +18,12 @@ import java.util.List;
 import java.util.UUID;
 
 public final class DefinedClaim implements Claimable, MongoDocument<DefinedClaim> {
-    @Getter
-    public Factions plugin;
-
-    @Getter
-    public UUID uniqueId;
-
-    @Getter
-    public UUID ownerId;
-
-    @Getter @Setter
-    public double x1, y1, z1;
-
-    @Getter @Setter
-    public double x2, y2, z2;
-
-    @Getter @Setter
-    public String worldName;
+    @Getter public Factions plugin;
+    @Getter public UUID uniqueId;
+    @Getter public UUID ownerId;
+    @Getter @Setter public double x1, y1, z1;
+    @Getter @Setter public double x2, y2, z2;
+    @Getter @Setter public String worldName;
 
     public DefinedClaim(Factions plugin) {
         this.plugin = plugin;

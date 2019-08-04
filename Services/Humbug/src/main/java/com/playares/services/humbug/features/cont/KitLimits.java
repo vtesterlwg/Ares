@@ -19,13 +19,10 @@ import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -37,25 +34,18 @@ import java.util.Map;
 import java.util.Set;
 
 public final class KitLimits implements HumbugModule, Listener {
-    @Getter
-    public final HumbugService humbug;
+    @Getter public final HumbugService humbug;
+    @Getter public final Set<PotionLimit> potionLimits;
+    @Getter public final Set<EnchantLimit> enchantLimits;
 
-    @Getter
-    public final Set<PotionLimit> potionLimits;
-
-    @Getter
-    public final Set<EnchantLimit> enchantLimits;
-
-    @Getter // hehe holy FUCK
-    public final ImmutableMap<PotionEffectType, Integer> extendedValues = ImmutableMap.<PotionEffectType, Integer>builder()
+    @Getter public final ImmutableMap<PotionEffectType, Integer> extendedValues = ImmutableMap.<PotionEffectType, Integer>builder()
             .put(PotionEffectType.INVISIBILITY, (480 * 20)).put(PotionEffectType.NIGHT_VISION, (480 * 20)).put(PotionEffectType.JUMP, (480 * 20))
             .put(PotionEffectType.FIRE_RESISTANCE, (480 * 20)).put(PotionEffectType.SPEED, (480 * 20)).put(PotionEffectType.SLOW, (480 * 20))
             .put(PotionEffectType.WATER_BREATHING, (480 * 20)).put(PotionEffectType.POISON, (90 * 20)).put(PotionEffectType.REGENERATION, (90 * 20))
-            .put(PotionEffectType.INCREASE_DAMAGE, (480 * 20)).put(PotionEffectType.WEAKNESS, (240 * 20)).put(PotionEffectType.SLOW_FALLING, (240 * 20))
+            .put(PotionEffectType.INCREASE_DAMAGE, (480 * 20)).put(PotionEffectType.WEAKNESS, (240 * 20))
             .build();
 
-    @Getter @Setter
-    public boolean enabled;
+    @Getter @Setter public boolean enabled;
 
     public KitLimits(HumbugService humbug) {
         this.humbug = humbug;
@@ -117,7 +107,6 @@ public final class KitLimits implements HumbugModule, Listener {
         PlayerDamagePlayerEvent.getHandlerList().unregister(this);
         PlayerItemConsumeEvent.getHandlerList().unregister(this);
         PrepareItemEnchantEvent.getHandlerList().unregister(this);
-        EntityPotionEffectEvent.getHandlerList().unregister(this);
         PotionSplashEvent.getHandlerList().unregister(this);
     }
 
@@ -159,7 +148,7 @@ public final class KitLimits implements HumbugModule, Listener {
             item.removeEnchantment(removed);
 
             player.sendMessage(ChatColor.DARK_RED + "Removed Enchantment" + ChatColor.RED + ": " +
-                    ChatColor.WHITE + StringUtils.capitaliseAllWords(removed.getKey().getKey().toLowerCase().replace("_", " ")));
+                    ChatColor.WHITE + StringUtils.capitaliseAllWords(removed.getName().toLowerCase().replace("_", " ")));
         });
 
         toLower.keySet().forEach(lowered -> {
@@ -167,7 +156,7 @@ public final class KitLimits implements HumbugModule, Listener {
             item.addUnsafeEnchantment(lowered, level);
 
             player.sendMessage(ChatColor.BLUE + "Updated Enchantment" + ChatColor.AQUA + ": " +
-                    ChatColor.WHITE + StringUtils.capitaliseAllWords(lowered.getKey().getKey().toLowerCase().replace("_", " ")));
+                    ChatColor.WHITE + StringUtils.capitaliseAllWords(lowered.getName().toLowerCase().replace("_", " ")));
         });
     }
 
@@ -245,55 +234,6 @@ public final class KitLimits implements HumbugModule, Listener {
     }
 
     @EventHandler
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        final Player player = event.getPlayer();
-        final ItemStack item = event.getItem();
-
-        if (event.getAction().equals(Action.PHYSICAL)) {
-            return;
-        }
-
-        if (item == null || !item.getType().equals(Material.TRIDENT)) {
-            return;
-        }
-
-        updateEnchantments(player, item);
-    }
-
-    @EventHandler
-    public void onPotionLimit(EntityPotionEffectEvent event) {
-        if (!isEnabled()) {
-            return;
-        }
-
-        if (!event.getAction().equals(EntityPotionEffectEvent.Action.ADDED)) {
-            return;
-        }
-
-        final PotionEffect effect = event.getNewEffect();
-
-        if (effect == null) {
-            return;
-        }
-
-        final PotionLimit limit = getPotionLimit(effect.getType());
-
-        if (limit == null) {
-            return;
-        }
-
-        if (limit.isDisabled()) {
-            event.setCancelled(true);
-            return;
-        }
-
-        if (!limit.isAmplifiable() && effect.getAmplifier() > 0) {
-            event.setCancelled(true);
-            return;
-        }
-    }
-
-    @EventHandler
     public void onPotionSplash(PotionSplashEvent event) {
         if (!isEnabled()) {
             return;
@@ -361,34 +301,21 @@ public final class KitLimits implements HumbugModule, Listener {
 
         if (!limit.isExtendable() && meta.getBasePotionData().isExtended()) {
             event.setCancelled(true);
-            return;
         }
     }
 
     @AllArgsConstructor
     public final class EnchantLimit {
-        @Getter
-        public final Enchantment type;
-
-        @Getter
-        public final boolean disabled;
-
-        @Getter
-        public final int maxLevel;
+        @Getter public final Enchantment type;
+        @Getter public final boolean disabled;
+        @Getter public final int maxLevel;
     }
 
     @AllArgsConstructor
     public final class PotionLimit {
-        @Getter
-        public final PotionEffectType type;
-
-        @Getter
-        public final boolean disabled;
-
-        @Getter
-        public final boolean extendable;
-
-        @Getter
-        public final boolean amplifiable;
+        @Getter public final PotionEffectType type;
+        @Getter public final boolean disabled;
+        @Getter public final boolean extendable;
+        @Getter public final boolean amplifiable;
     }
 }

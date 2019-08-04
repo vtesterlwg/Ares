@@ -29,10 +29,11 @@ public final class ClaimMapHandler {
 
     public void renderMap(Player viewer, SimplePromise promise) {
         final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(viewer.getUniqueId());
-        final ImmutableList<Material> pillarMaterials = ImmutableList.of(Material.BOOKSHELF, Material.SOUL_SAND, Material.PUMPKIN,
-                Material.YELLOW_WOOL, Material.LIME_WOOL, Material.SPONGE, Material.EMERALD_BLOCK, Material.DIAMOND_BLOCK, Material.REDSTONE_BLOCK,
-                Material.DARK_OAK_PLANKS, Material.SANDSTONE, Material.LAPIS_BLOCK, Material.IRON_BLOCK, Material.PRISMARINE_BRICKS, Material.PURPUR_BLOCK,
-                Material.NETHERRACK, Material.RED_NETHER_BRICKS, Material.MELON, Material.END_STONE, Material.QUARTZ_PILLAR);
+        final ImmutableList<Material> pillarMaterials = ImmutableList.of(
+                Material.BOOKSHELF, Material.SOUL_SAND, Material.PUMPKIN, Material.SPONGE, Material.EMERALD_BLOCK,
+                Material.DIAMOND_BLOCK, Material.REDSTONE_BLOCK, Material.SANDSTONE, Material.LAPIS_BLOCK,
+                Material.IRON_BLOCK, Material.PRISMARINE, Material.PURPUR_BLOCK, Material.NETHERRACK,
+                Material.RED_NETHER_BRICK, Material.MELON, Material.ENDER_STONE, Material.QUARTZ_BLOCK);
 
         if (profile == null) {
             promise.failure("Failed to obtain your profile");
@@ -99,7 +100,7 @@ public final class ClaimMapHandler {
                         }
                     });
 
-                    viewer.sendMessage(ChatColor.GOLD + faction.getName() + ChatColor.YELLOW + " - " + ChatColor.WHITE + StringUtils.capitaliseAllWords(pillarMat.getKey().getKey().toLowerCase().replace("_", " ")));
+                    viewer.sendMessage(ChatColor.GOLD + faction.getName() + ChatColor.YELLOW + " - " + ChatColor.WHITE + StringUtils.capitaliseAllWords(pillarMat.name().toLowerCase().replace("_", " ")));
 
                     pos++;
                 }

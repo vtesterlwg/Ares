@@ -11,6 +11,8 @@ public interface Shield {
 
     Material getMaterial();
 
+    short getData();
+
     BLocatable getLocation();
 
     boolean isDrawn();
@@ -22,7 +24,7 @@ public interface Shield {
             return;
         }
 
-        Players.sendBlockChange(getViewer(), getLocation().getBukkit().getLocation(), getMaterial());
+        Players.sendBlockChange(getViewer(), getLocation().getBukkit().getLocation(), getMaterial(), (byte)getData());
         setDrawn(true);
     }
 
@@ -32,7 +34,7 @@ public interface Shield {
         }
 
         final Block block = getLocation().getBukkit();
-        Players.sendBlockChange(getViewer(), block.getLocation(), block.getType());
+        Players.sendBlockChange(getViewer(), block.getLocation(), block.getType(), block.getData());
 
         setDrawn(false);
     }

@@ -7,7 +7,7 @@
     <groupId>com.playares</groupId>
     <artifactId>Ares</artifactId>
     <packaging>pom</packaging>
-    <version>1.13.2</version>
+    <version>1.12.2</version>
 
     <modules>
         <module>Commons</module>

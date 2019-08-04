@@ -21,8 +21,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import java.util.List;
 
 public final class CustomEventService implements AresService, Listener {
-    @Getter
-    public final AresPlugin owner;
+    @Getter public final AresPlugin owner;
 
     public CustomEventService(AresPlugin owner) {
         this.owner = owner;

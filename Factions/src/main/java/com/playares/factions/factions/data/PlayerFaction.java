@@ -10,7 +10,6 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.timer.BossTimer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
-import com.playares.factions.addons.stats.holder.FactionStatisticHolder;
 import com.playares.factions.timers.FactionTimer;
 import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
 import lombok.AllArgsConstructor;
@@ -62,8 +61,6 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
     @Getter public Set<FactionTimer> timers;
     /** Contains the scoreboard object for this faction, applied to all members **/
     @Getter public Scoreboard scoreboard;
-    /** Statistics holder for this faction **/
-    @Getter public FactionStatisticHolder stats;
     /** Next tick (in milliseconds) that this Faction should be ticked **/
     @Getter @Setter public long nextTick;
 
@@ -82,7 +79,6 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.memberHistory = Sets.newConcurrentHashSet();
         this.timers = Sets.newConcurrentHashSet();
         this.scoreboard = null;
-        this.stats = new FactionStatisticHolder();
         this.nextTick = (Time.now() + (plugin.getFactionConfig().getFactionTickInterval() * 1000L));
 
         configureScoreboard();
@@ -103,7 +99,6 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.memberHistory = Sets.newConcurrentHashSet();
         this.timers = Sets.newConcurrentHashSet();
         this.scoreboard = null;
-        this.stats = new FactionStatisticHolder();
         this.nextTick = (Time.now() + (plugin.getFactionConfig().getFactionTickInterval() * 1000L));
 
         configureScoreboard();
@@ -471,7 +466,6 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
 
         this.pendingInvites = Sets.newConcurrentHashSet((List<UUID>)document.get("pendingInvites"));
         this.memberHistory = Sets.newConcurrentHashSet((List<UUID>)document.get("memberHistory"));
-        this.stats.fromDocument(document.get("stats", Document.class));
 
         return this;
     }
@@ -495,8 +489,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
                 .append("members", convertedMembers)
                 .append("pendingInvites", pendingInvites)
                 .append("memberHistory", memberHistory)
-                .append("timers", convertedTimers)
-                .append("stats", stats.toDocument());
+                .append("timers", convertedTimers);
     }
 
     @AllArgsConstructor
@@ -552,7 +545,6 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
          */
         public FactionRank getLower() {
             switch (this) {
-                case MEMBER: return null;
                 case OFFICER: return MEMBER;
                 case CO_LEADER: return OFFICER;
                 case LEADER: return CO_LEADER;

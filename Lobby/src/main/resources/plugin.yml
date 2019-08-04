@@ -1,5 +1,4 @@
 name: Lobby
 main: Lobby
-version: 1.13
+version: 1.12.2
 depend: [ProtocolLib]
-api-version: 1.13

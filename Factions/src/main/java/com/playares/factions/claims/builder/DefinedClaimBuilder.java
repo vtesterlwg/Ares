@@ -17,20 +17,11 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public final class DefinedClaimBuilder {
-    @Getter
-    public Factions plugin;
-
-    @Getter
-    public final Faction owner;
-
-    @Getter
-    public final Player claimer;
-
-    @Getter
-    public BLocatable cornerA;
-
-    @Getter
-    public BLocatable cornerB;
+    @Getter public Factions plugin;
+    @Getter public final Faction owner;
+    @Getter public final Player claimer;
+    @Getter public BLocatable cornerA;
+    @Getter public BLocatable cornerB;
 
     public DefinedClaimBuilder(Factions plugin, Faction faction, Player claimer) {
         this.plugin = plugin;

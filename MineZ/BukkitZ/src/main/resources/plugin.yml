@@ -1,5 +1,4 @@
 name: MineZ
 main: com.playares.minez.bukkitz.MineZ
-version: 1.13
+version: 1.12.2
 depends: [ProtocolLib]
-api-version: 1.13

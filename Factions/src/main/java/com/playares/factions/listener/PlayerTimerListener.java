@@ -140,7 +140,7 @@ public final class PlayerTimerListener implements Listener {
             return;
         }
 
-        if (item == null || !(item.getType().equals(Material.GOLDEN_APPLE) || item.getType().equals(Material.ENCHANTED_GOLDEN_APPLE))) {
+        if (item == null || !(item.getType().equals(Material.GOLDEN_APPLE))) {
             return;
         }
 
@@ -150,7 +150,7 @@ public final class PlayerTimerListener implements Listener {
             return;
         }
 
-        if (item.getType().equals(Material.GOLDEN_APPLE)) {
+        if (item.getDurability() == (short)0) {
             CrappleTimer timer = (CrappleTimer)profile.getTimer(PlayerTimer.PlayerTimerType.CRAPPLE);
 
             if (timer != null) {
@@ -166,7 +166,7 @@ public final class PlayerTimerListener implements Listener {
             return;
         }
 
-        if (item.getType().equals(Material.ENCHANTED_GOLDEN_APPLE)) {
+        if (item.getDurability() == (short)1) {
             GappleTimer timer = (GappleTimer)profile.getTimer(PlayerTimer.PlayerTimerType.GAPPLE);
 
             if (timer != null) {
@@ -191,7 +191,7 @@ public final class PlayerTimerListener implements Listener {
             return;
         }
 
-        if (item == null || !(item.getType().equals(Material.TOTEM_OF_UNDYING) || item.getType().equals(Material.ENCHANTED_GOLDEN_APPLE))) {
+        if (item == null || !(item.getType().equals(Material.TOTEM) || (item.getType().equals(Material.GOLDEN_APPLE) && item.getDurability() == (short)1))) {
             return;
         }
 
@@ -201,7 +201,7 @@ public final class PlayerTimerListener implements Listener {
             return;
         }
 
-        if (item.getType().equals(Material.TOTEM_OF_UNDYING) && profile.getTimer(PlayerTimer.PlayerTimerType.TOTEM) != null) {
+        if (item.getType().equals(Material.TOTEM) && profile.getTimer(PlayerTimer.PlayerTimerType.TOTEM) != null) {
             player.sendMessage(ChatColor.RED + "Totems are locked for " +
                     ChatColor.RED + "" + ChatColor.BOLD + Time.convertToDecimal(profile.getTimer(PlayerTimer.PlayerTimerType.TOTEM).getRemaining()) + ChatColor.RED + "s");
 
@@ -209,7 +209,7 @@ public final class PlayerTimerListener implements Listener {
             return;
         }
 
-        if (item.getType().equals(Material.ENCHANTED_GOLDEN_APPLE) && profile.getTimer(PlayerTimer.PlayerTimerType.GAPPLE) != null) {
+        if (item.getType().equals(Material.GOLDEN_APPLE) && item.getDurability() == (short)1 && profile.getTimer(PlayerTimer.PlayerTimerType.GAPPLE) != null) {
             player.sendMessage(ChatColor.RED + "Gapples are locked for " +
                     ChatColor.RED + "" + ChatColor.BOLD + Time.convertToDecimal(profile.getTimer(PlayerTimer.PlayerTimerType.GAPPLE).getRemaining()) + ChatColor.RED + "s");
 

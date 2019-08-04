@@ -9,7 +9,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Endermite;
+import org.bukkit.entity.Evoker;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -17,7 +20,6 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -26,7 +28,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 import java.util.Random;
@@ -38,7 +39,6 @@ public final class MemeItems implements HumbugModule, Listener {
     @Getter @Setter public boolean enderchestDisabled;
     @Getter @Setter public boolean fishingPlayersDisabled;
     @Getter @Setter public boolean dolphinsGraceDisabled;
-    @Getter @Setter public boolean naturalPhantomsDisabled;
     @Getter @Setter public boolean disableFireworkElytra;
     @Getter @Setter public boolean lowerTotemDropChances;
     @Getter @Setter public double totemDropChance;
@@ -57,7 +57,6 @@ public final class MemeItems implements HumbugModule, Listener {
         this.enderchestDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-ender-chest");
         this.fishingPlayersDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-fishing-players");
         this.dolphinsGraceDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-dolphins-grace");
-        this.naturalPhantomsDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-natural-phantom-spawning");
         this.disableFireworkElytra = humbug.getHumbugConfig().getBoolean("meme-items.disable-firework-elytra");
         this.lowerTotemDropChances = humbug.getHumbugConfig().getBoolean("meme-items.lower-totem-drop-chances.enabled");
         this.totemDropChance = humbug.getHumbugConfig().getDouble("meme-items.lower-totem-drop-chances.chances");
@@ -79,7 +78,6 @@ public final class MemeItems implements HumbugModule, Listener {
     @Override
     public void stop() {
         BlockPlaceEvent.getHandlerList().unregister(this);
-        EntityPotionEffectEvent.getHandlerList().unregister(this);
         PlayerFishEvent.getHandlerList().unregister(this);
         PlayerTeleportEvent.getHandlerList().unregister(this);
         PlayerInteractEvent.getHandlerList().unregister(this);
@@ -141,44 +139,6 @@ public final class MemeItems implements HumbugModule, Listener {
     }
 
     @EventHandler
-    public void onEntityEffect(EntityPotionEffectEvent event) {
-        final Entity entity = event.getEntity();
-
-        if (!isEnabled() || !isDolphinsGraceDisabled()) {
-            return;
-        }
-
-        if (entity instanceof Player && entity.hasPermission("humbug.bypass")) {
-            return;
-        }
-
-        if (event.getAction().equals(EntityPotionEffectEvent.Action.ADDED) &&
-                event.getCause().equals(EntityPotionEffectEvent.Cause.DOLPHIN) &&
-                event.getNewEffect().getType().equals(PotionEffectType.DOLPHINS_GRACE)) {
-
-            event.setCancelled(true);
-
-        }
-    }
-
-    @EventHandler
-    public void onCreatureSpawn(CreatureSpawnEvent event) {
-        if (!isEnabled() || !isNaturalPhantomsDisabled()) {
-            return;
-        }
-
-        if (!event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.NATURAL) && !event.getSpawnReason().equals(CreatureSpawnEvent.SpawnReason.DEFAULT)) {
-            return;
-        }
-
-        if (!event.getEntityType().equals(EntityType.PHANTOM)) {
-            return;
-        }
-
-        event.setCancelled(true);
-    }
-
-    @EventHandler
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (!isEnabled() || !isDisableFireworkElytra()) {
             return;
@@ -188,7 +148,7 @@ public final class MemeItems implements HumbugModule, Listener {
         final ItemStack hand = event.getItem();
         final Action action = event.getAction();
 
-        if (hand == null || !hand.getType().equals(Material.FIREWORK_ROCKET)) {
+        if (hand == null || !hand.getType().equals(Material.FIREWORK)) {
             return;
         }
 
@@ -227,7 +187,7 @@ public final class MemeItems implements HumbugModule, Listener {
         if (entity.getKiller() != null) {
             final Player killer = entity.getKiller();
 
-            if (killer.getItemInHand() != null && killer.getItemInHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
+            if (killer.getInventory().getItemInMainHand() != null && killer.getInventory().getItemInMainHand().containsEnchantment(Enchantment.LOOT_BONUS_MOBS)) {
                 chance += (killer.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.LOOT_BONUS_MOBS) * 0.1);
             }
         }
@@ -236,7 +196,7 @@ public final class MemeItems implements HumbugModule, Listener {
             final List<ItemStack> toRemove = Lists.newArrayList();
 
             for (ItemStack drop : drops) {
-                if (drop.getType().equals(Material.TOTEM_OF_UNDYING)) {
+                if (drop.getType().equals(Material.TOTEM)) {
                     toRemove.add(drop);
                 }
             }
@@ -254,7 +214,7 @@ public final class MemeItems implements HumbugModule, Listener {
         final Player player = event.getPlayer();
         final ItemStack item = event.getOffHandItem();
 
-        if (item == null || (!item.getType().equals(Material.BOW) && !item.getType().equals(Material.TRIDENT))) {
+        if (item == null || !item.getType().equals(Material.BOW)) {
             return;
         }
 
@@ -285,7 +245,7 @@ public final class MemeItems implements HumbugModule, Listener {
         for (Integer i : event.getNewItems().keySet()) {
             final ItemStack item = event.getNewItems().get(i);
 
-            if (i == 45 && (item.getType().equals(Material.BOW) || item.getType().equals(Material.TRIDENT) || item.getType().equals(Material.SHIELD))) {
+            if (i == 45 && (item.getType().equals(Material.BOW) || item.getType().equals(Material.SHIELD))) {
                 event.setCancelled(true);
                 player.sendMessage(ChatColor.RED + "This item can not be moved to your off-hand");
                 return;
@@ -308,7 +268,6 @@ public final class MemeItems implements HumbugModule, Listener {
 
         if (cursor == null ||
                 (!cursor.getType().equals(Material.BOW) &&
-                !cursor.getType().equals(Material.TRIDENT) &&
                 !cursor.getType().equals(Material.SHIELD))) {
 
             return;

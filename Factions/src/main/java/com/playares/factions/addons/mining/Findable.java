@@ -10,38 +10,17 @@ import org.bukkit.block.Block;
 
 @AllArgsConstructor
 public final class Findable {
-    @Getter
-    public final Material type;
-
-    @Getter
-    public final Material foundType;
-
-    @Getter
-    public final double rate;
-
-    @Getter
-    public final World.Environment environment;
-
-    @Getter
-    public final int minHeight;
-
-    @Getter
-    public final int maxHeight;
-
-    @Getter
-    public final int minVeinSize;
-
-    @Getter
-    public final int maxVeinSize;
-
-    @Getter
-    public final boolean broadcast;
-
-    @Getter
-    public final boolean message;
-
-    @Getter
-    public final ChatColor color;
+    @Getter public final Material type;
+    @Getter public final Material foundType;
+    @Getter public final double rate;
+    @Getter public final World.Environment environment;
+    @Getter public final int minHeight;
+    @Getter public final int maxHeight;
+    @Getter public final int minVeinSize;
+    @Getter public final int maxVeinSize;
+    @Getter public final boolean broadcast;
+    @Getter public final boolean message;
+    @Getter public final ChatColor color;
 
     public String getName() {
         return StringUtils.capitaliseAllWords(type.name().toLowerCase().replace("_", " "));

@@ -1,18 +1,16 @@
 package com.playares.services.customentity;
 
-import com.mojang.datafixers.types.Type;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.service.AresService;
 import lombok.Getter;
-import net.minecraft.server.v1_13_R2.*;
-
-import java.util.Map;
-import java.util.function.Function;
+import net.minecraft.server.v1_12_R1.Entity;
+import net.minecraft.server.v1_12_R1.EntityTypes;
+import net.minecraft.server.v1_12_R1.MinecraftKey;
 
 public final class CustomEntityService implements AresService {
-    @Getter
-    public AresPlugin owner;
+    @Getter public EntityTypes customEntityTypes;
+    @Getter public AresPlugin owner;
 
     public CustomEntityService(AresPlugin owner) {
         this.owner = owner;
@@ -26,11 +24,12 @@ public final class CustomEntityService implements AresService {
         return "Custom Entities";
     }
 
-    @SuppressWarnings("unchecked")
-    public void register(String name, String extendedFrom, Class<? extends Entity> clazz, Function<? super World, ? extends Entity> function) {
-        Map<Object, Type<?>> dataTypes = (Map<Object, Type<?>>) DataConverterRegistry.a().getSchema(15190).findChoiceType(DataConverterTypes.n).types();
-        dataTypes.put("minecraft:" + name, dataTypes.get("minecraft:" + extendedFrom));
-        EntityTypes.a(name, EntityTypes.a.a(clazz, function));
-        Logger.print("Registered custom entity: " + name + ", extends from " + extendedFrom);
+    public void register(int entityId, String entityName, Class<? extends Entity> clazz) {
+        final MinecraftKey key = new MinecraftKey(entityName);
+
+        EntityTypes.b.a(entityId, key, clazz);
+        EntityTypes.d.add(key);
+
+        Logger.print("Registered custom entity: " + entityName);
     }
 }

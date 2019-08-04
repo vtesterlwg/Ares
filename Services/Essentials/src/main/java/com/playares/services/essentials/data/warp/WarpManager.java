@@ -9,14 +9,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import java.util.Set;
 
 public final class WarpManager {
-    @Getter
-    public final AresPlugin plugin;
-
-    @Getter
-    public final Set<Warp> warps;
-
-    @Getter
-    public final YamlConfiguration warpsConfig;
+    @Getter public final AresPlugin plugin;
+    @Getter public final Set<Warp> warps;
+    @Getter public final YamlConfiguration warpsConfig;
 
     public WarpManager(AresPlugin plugin) {
         this.plugin = plugin;

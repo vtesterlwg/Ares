@@ -7,14 +7,9 @@ import org.bukkit.inventory.ItemStack;
 
 @AllArgsConstructor
 public final class Kit {
-    @Getter
-    public final String name;
-
-    @Getter
-    public final ItemStack[] contents;
-
-    @Getter
-    public final ItemStack[] armor;
+    @Getter public final String name;
+    @Getter public final ItemStack[] contents;
+    @Getter public final ItemStack[] armor;
 
     public void apply(Player player) {
         player.getInventory().clear();
