@@ -24,10 +24,10 @@ public final class ChatListener implements Listener {
         }
 
         if (faction.getMember(receiver.getUniqueId()) != null) {
-            return ChatColor.DARK_GREEN + "[" + faction.getName() + "]" + displayName + ChatColor.RESET + ": " + message;
+            return ChatColor.DARK_GREEN + "[" + faction.getName() + "]" + ChatColor.RESET + displayName + ChatColor.RESET + ": " + message;
         }
 
-        return ChatColor.GOLD + "[" + ChatColor.YELLOW + faction.getName() + ChatColor.GOLD + "]" + displayName + ChatColor.RESET + ": " + message;
+        return ChatColor.GOLD + "[" + ChatColor.YELLOW + faction.getName() + ChatColor.GOLD + "]" + ChatColor.RESET + displayName + ChatColor.RESET + ": " + message;
     }
 
     private String getFactionFormat(String displayName, String message) {
