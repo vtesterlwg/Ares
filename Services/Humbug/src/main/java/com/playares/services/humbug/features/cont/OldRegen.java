@@ -6,6 +6,7 @@ import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -62,22 +63,31 @@ public final class OldRegen implements HumbugModule, Listener {
 
         final Player player = (Player)entity;
         final UUID uniqueId = player.getUniqueId();
+        final double maxHealth = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 
-        if (recentHeals.contains(uniqueId)) {
-            return;
-        }
-
-        if (player.getHealth() >= player.getMaxHealth()) {
-            return;
+        if (player.getHealth() < maxHealth && !recentHeals.contains(uniqueId)) {
+            player.setHealth(clamp(player.getHealth() + 1, 0.0, maxHealth));
+            recentHeals.add(uniqueId);
+            new Scheduler(getHumbug().getOwner()).sync(() -> recentHeals.remove(uniqueId)).delay(3 * 20L).run();
         }
 
         final float exhaustion = player.getExhaustion();
-        new Scheduler(getHumbug().getOwner()).sync(() -> player.setExhaustion(exhaustion + 3)).delay(1L).run();
 
-        final double health = player.getHealth();
-        final double newHealth = health + 0.5;
-        player.setHealth((newHealth > player.getMaxHealth()) ? player.getMaxHealth() : newHealth);
-        recentHeals.add(player.getUniqueId());
-        new Scheduler(getHumbug().getOwner()).sync(() -> recentHeals.remove(uniqueId)).delay(60L).run();
+        new Scheduler(getHumbug().getOwner()).sync(() -> player.setExhaustion(exhaustion + 3)).delay(1L).run();
+    }
+
+    private double clamp(double value, double min, double max){
+        final double realMin = Math.min(min, max);
+        final double realMax = Math.max(min, max);
+
+        if(value < realMin){
+            value = realMin;
+        }
+
+        if(value > realMax){
+            value = realMax;
+        }
+
+        return value;
     }
 }
