@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 public final class Items {
     public static Enchantment getEnchantmentByName(String name) {
         for (Enchantment enchantment : Enchantment.values()) {
-            if (name.startsWith(enchantment.getName())) {
+            if (name.equalsIgnoreCase(enchantment.getName().toLowerCase().replace("_", ""))) {
                 return enchantment;
             }
         }
