@@ -44,7 +44,7 @@ public final class PunishmentManager {
             }
         }
 
-        response.add(ChatColor.RED + "Appeal at https://www.riotmc.com/appeal");
+        response.add(ChatColor.RED + "Appeal at https://www.hcfrevival.net/appeal");
         return Joiner.on(ChatColor.RESET + "\n").join(response);
     }
 
@@ -61,7 +61,7 @@ public final class PunishmentManager {
             response.add(ChatColor.RED + "This punishment will expire in " + Time.convertToRemaining(punishment.getExpireDate() - Time.now()));
         }
 
-        response.add(ChatColor.RED + "Appeal at https://www.riotmc.com/appeal");
+        response.add(ChatColor.RED + "Appeal at https://www.hcfrevival.net/appeal");
         return Joiner.on(ChatColor.RESET + "\n").join(response);
     }
 

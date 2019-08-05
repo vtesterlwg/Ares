@@ -442,7 +442,7 @@ public final class DeathbanService implements AresService {
                     ChatColor.YELLOW + Time.convertToRemaining(deathban.getTimeUntilUndeathban()) + "\n" +
                     ChatColor.RESET + " " + "\n" +
                     ChatColor.YELLOW + "Bypass this deathban by using a life" + "\n" +
-                    ChatColor.YELLOW + "Lives can be purchased at " + ChatColor.GOLD + "shop.riotmc.com";
+                    ChatColor.YELLOW + "Lives can be purchased at " + ChatColor.GOLD + "www.hcfrevival.net/store";
         } else {
             return ChatColor.RED + "You are deathbanned!" + "\n" +
                     ChatColor.GOLD + "You will be able to login at" + "\n" +

@@ -109,7 +109,7 @@ public final class PlayerManager {
 
         this.tabUpdater = new Scheduler(plugin).async(() -> {
             // TODO: Add koth info and other display information
-            Bukkit.getOnlinePlayers().forEach(player -> Players.sendTablist(plugin.getProtocol(), player, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Ares", ChatColor.RED + "riotmc.com"));
+            Bukkit.getOnlinePlayers().forEach(player -> Players.sendTablist(plugin.getProtocol(), player, ChatColor.AQUA + "" + ChatColor.BOLD + "Welcome to HCFRevival", ChatColor.GREEN + "play.hcfrevival.net"));
         }).repeat(0L, 60 * 20L).run();
     }
 
