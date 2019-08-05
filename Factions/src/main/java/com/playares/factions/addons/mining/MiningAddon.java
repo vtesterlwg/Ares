@@ -142,13 +142,13 @@ public final class MiningAddon implements Addon, Listener {
             return;
         }
 
-        double pull = random.nextDouble();
         final double luckIncrease = (player.hasPotionEffect(PotionEffectType.LUCK) ? 0.005 * (player.getPotionEffect(PotionEffectType.LUCK).getAmplifier() + 1) : 0.0);
         final boolean isZuergner = (player.hasPotionEffect(PotionEffectType.FAST_DIGGING) &&
                 player.getPotionEffect(PotionEffectType.FAST_DIGGING).getAmplifier() > 0 &&
                 hand != null && hand.getEnchantmentLevel(Enchantment.DIG_SPEED) >= 5);
 
         for (Findable possible : possibilities) {
+            final double pull = random.nextDouble();
             double rate = possible.getRate();
 
             rate += luckIncrease;
@@ -232,11 +232,11 @@ public final class MiningAddon implements Addon, Listener {
         });
 
         if (findable.isBroadcast()) {
-            Bukkit.broadcastMessage("[AM] " + findable.getColor() + player.getName() + " found " + event.getBlocks().size() + " " + findable.getName());
+            Bukkit.broadcastMessage("[RM] " + findable.getColor() + player.getName() + " found " + event.getBlocks().size() + " " + findable.getName());
         }
 
         if (findable.isMessage()) {
-            player.sendMessage("[AM] " + findable.getColor() + "You found " + event.getBlocks().size() + " " + findable.getName());
+            player.sendMessage("[RM] " + findable.getColor() + "You found " + event.getBlocks().size() + " " + findable.getName());
         }
 
         return true;

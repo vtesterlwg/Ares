@@ -35,7 +35,7 @@ public final class Findable {
             return false;
         }
 
-        if (block.getY() < minHeight || block.getY() > maxHeight) {
+        if (block.getY() <= minHeight || block.getY() >= maxHeight) {
             return false;
         }
 
