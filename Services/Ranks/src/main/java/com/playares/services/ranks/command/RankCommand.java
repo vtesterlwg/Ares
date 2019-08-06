@@ -2,189 +2,103 @@ package com.playares.services.ranks.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
-import com.google.common.base.Joiner;
-import com.google.common.collect.Lists;
-import com.playares.commons.base.promise.SimplePromise;
 import com.playares.services.ranks.RankService;
-import com.playares.services.ranks.data.AresRank;
+import com.playares.services.ranks.data.Rank;
+import com.playares.services.ranks.data.RankDataHandler;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-
-import javax.annotation.Nonnull;
-import java.util.List;
 
 @CommandAlias("rank")
 public final class RankCommand extends BaseCommand {
-    @Getter
-    public RankService rankService;
+    @Getter public RankService service;
+    @Getter public RankDataHandler dataHandler;
 
     public RankCommand(RankService service) {
-        this.rankService = service;
-    }
-
-    @Subcommand("setdisplay|sd")
-    @CommandPermission("rank.configure")
-    @CommandCompletion("@ranks")
-    @Description("Set the display name of a Rank")
-    @Syntax("<rank> <display>")
-    public void onSetDisplay(CommandSender sender, String rankName, String displayName) {
-        rankService.getRankHandler().setDisplay(rankName, displayName, new SimplePromise() {
-            @Override
-            public void success() {
-                sender.sendMessage(ChatColor.GREEN + "Updated display name");
-            }
-
-            @Override
-            public void failure(@Nonnull String reason) {
-                sender.sendMessage(ChatColor.RED + reason);
-            }
-        });
-    }
-
-    @Subcommand("setprefix|spre")
-    @CommandPermission("rank.configure")
-    @CommandCompletion("@ranks")
-    @Description("Set the prefix of a Rank")
-    @Syntax("<rank> <prefix>")
-    public void onSetPrefix(CommandSender sender, String rankName, String rankPrefix) {
-        rankService.getRankHandler().setPrefix(rankName, rankPrefix, new SimplePromise() {
-            @Override
-            public void success() {
-                sender.sendMessage(ChatColor.GREEN + "Updated prefix");
-            }
-
-            @Override
-            public void failure(@Nonnull String reason) {
-                sender.sendMessage(ChatColor.RED + reason);
-            }
-        });
-    }
-
-    @Subcommand("setperm|sperm")
-    @CommandPermission("rank.configure")
-    @CommandCompletion("@ranks")
-    @Description("Set the permission for a Rank")
-    @Syntax("<rank> <permission>")
-    public void onSetPermission(CommandSender sender, String rankName, String permission) {
-        rankService.getRankHandler().setPermission(rankName, permission, new SimplePromise() {
-            @Override
-            public void success() {
-                sender.sendMessage(ChatColor.GREEN + "Updated permission");
-            }
-
-            @Override
-            public void failure(@Nonnull String reason) {
-                sender.sendMessage(ChatColor.RED + reason);
-            }
-        });
-    }
-
-    @Subcommand("setweight|sw")
-    @CommandPermission("rank.configure")
-    @CommandCompletion("@ranks")
-    @Description("Set the display name of a Rank")
-    @Syntax("<rank> <display>")
-    public void onSetWeight(CommandSender sender, String rankName, int weight) {
-        rankService.getRankHandler().setWeight(rankName, weight, new SimplePromise() {
-            @Override
-            public void success() {
-                sender.sendMessage(ChatColor.GREEN + "Updated weight");
-            }
-
-            @Override
-            public void failure(@Nonnull String reason) {
-                sender.sendMessage(ChatColor.RED + reason);
-            }
-        });
-    }
-
-    @Subcommand("setstaff|ss")
-    @CommandPermission("rank.configure")
-    @CommandCompletion("@ranks")
-    @Description("Set the rank to be staff only")
-    @Syntax("<rank> <true/false>")
-    public void onSetStaff(CommandSender sender, String rankName, boolean staff) {
-        rankService.getRankHandler().setStaff(rankName, staff, new SimplePromise() {
-            @Override
-            public void success() {
-                sender.sendMessage(ChatColor.GREEN + "Rank status updated");
-            }
-
-            @Override
-            public void failure(@Nonnull String reason) {
-                sender.sendMessage(ChatColor.RED + reason);
-            }
-        });
-    }
-
-    @Subcommand("seteveryone|se")
-    @CommandPermission("rank.configure")
-    @CommandCompletion("@ranks")
-    @Description("Set the rank to be a default")
-    @Syntax("<rank> <true/false>")
-    public void onSetEveryone(CommandSender sender, String rankName, boolean everyone) {
-        rankService.getRankHandler().setEveryone(rankName, everyone, new SimplePromise() {
-            @Override
-            public void success() {
-                sender.sendMessage(ChatColor.GREEN + "Rank status updated");
-            }
-
-            @Override
-            public void failure(@Nonnull String reason) {
-                sender.sendMessage(ChatColor.RED + reason);
-            }
-        });
-    }
-
-    @Subcommand("list")
-    @Description("List all ranks")
-    public void onListCommand(Player player) {
-        final List<String> names = Lists.newArrayList();
-        rankService.getSortedRanks().forEach(rank -> names.add(rank.getDisplayName()));
-        player.sendMessage(ChatColor.GOLD + "Ranks" + ChatColor.YELLOW + ": " + ChatColor.RESET + Joiner.on(ChatColor.WHITE + ", ").join(names));
+        this.service = service;
+        this.dataHandler = new RankDataHandler(service);
     }
 
     @Subcommand("create")
-    @CommandPermission("rank.create")
+    @CommandPermission("rank.configure")
     @Description("Create a new rank")
-    public void onCreateRank(Player player, String name) {
-        rankService.getRankHandler().createRank(name, new SimplePromise() {
-            @Override
-            public void success() {
-                player.sendMessage(ChatColor.GREEN + "Rank created, requires additional setup");
-            }
-
-            @Override
-            public void failure(@Nonnull String reason) {
-                player.sendMessage(ChatColor.RED + reason);
-            }
-        });
+    @Syntax("<name>")
+    public void onCreate(CommandSender sender, String rankName) {
+        dataHandler.create(sender, rankName);
     }
 
     @Subcommand("delete")
-    @CommandPermission("rank.delete")
-    @CommandCompletion("@ranks")
+    @CommandPermission("rank.configure")
     @Description("Delete a rank")
-    public void onDeleteRank(Player player, String name) {
-        final AresRank rank = rankService.getRank(name);
+    @Syntax("<name>")
+    public void onDelete(CommandSender sender, String rankName) {
+        dataHandler.delete(sender, rankName);
+    }
+
+    @Subcommand("give|apply")
+    @CommandPermission("rank.give")
+    @Description("Give a rank to a player")
+    @Syntax("<player> <rank>")
+    public void onGive(CommandSender sender, String playerName, String rankName) {
+        dataHandler.applyRank(sender, playerName, rankName);
+    }
+
+    @Subcommand("revoke|remove")
+    @CommandPermission("rank.revoke")
+    @Description("Revoke a rank from a player")
+    @Syntax("<player> <rank>")
+    public void onRevoke(CommandSender sender, String playerName, String rankName) {
+        dataHandler.removeRank(sender, playerName, rankName);
+    }
+
+    @Subcommand("set")
+    @CommandPermission("rank.configure")
+    @CommandCompletion("@ranks")
+    @Description("Update the value for a rank")
+    @Syntax("<rank> <key> <value>")
+    public void onSet(CommandSender sender, String rankName, String key, String value) {
+        final Rank rank = service.getRankByName(rankName);
 
         if (rank == null) {
-            player.sendMessage(ChatColor.RED + "Rank not found");
+            sender.sendMessage(ChatColor.RED + "Rank not found");
             return;
         }
 
-        rankService.getRankHandler().deleteRank(rank, new SimplePromise() {
-            @Override
-            public void success() {
-                player.sendMessage(ChatColor.GREEN + "Rank has been deleted");
-            }
+        if (key.equalsIgnoreCase("name")) {
+            dataHandler.setName(sender, rank, value);
+            return;
+        }
 
-            @Override
-            public void failure(String reason) {
-                player.sendMessage(ChatColor.RED + reason);
-            }
-        });
+        if (key.equalsIgnoreCase("displayname")) {
+            dataHandler.setDisplayName(sender, rank, value);
+            return;
+        }
+
+        if (key.equalsIgnoreCase("prefix")) {
+            dataHandler.setPrefix(sender, rank, value);
+            return;
+        }
+
+        if (key.equalsIgnoreCase("permission")) {
+            dataHandler.setPermission(sender, rank, value);
+            return;
+        }
+
+        if  (key.equalsIgnoreCase("weight")) {
+            dataHandler.setWeight(sender, rank, value);
+            return;
+        }
+
+        if (key.equalsIgnoreCase("staff")) {
+            dataHandler.setStaff(sender, rank, value);
+            return;
+        }
+
+        if (key.equalsIgnoreCase("default")) {
+            dataHandler.setDefault(sender, rank, value);
+            return;
+        }
+
+        sender.sendMessage(ChatColor.RED + "Invalid key, allowed: <name/displayname/prefix/permission/weight/staff/default>");
     }
 }

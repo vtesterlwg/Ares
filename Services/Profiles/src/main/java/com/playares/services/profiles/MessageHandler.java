@@ -86,8 +86,8 @@ public final class MessageHandler implements Listener {
         }
 
         if (rankService != null) {
-            sender.sendMessage(ChatColor.GRAY + "(To: " + rankService.getDisplayName(receiver) + ChatColor.GRAY + "): " + ChatColor.WHITE + message);
-            receiver.sendMessage(ChatColor.GRAY + "(From: " + rankService.getDisplayName(sender) + ChatColor.GRAY + "): " + ChatColor.WHITE + message);
+            sender.sendMessage(ChatColor.GRAY + "(To: " + rankService.formatName(receiver) + ChatColor.GRAY + "): " + ChatColor.WHITE + message);
+            receiver.sendMessage(ChatColor.GRAY + "(From: " + rankService.formatName(sender) + ChatColor.GRAY + "): " + ChatColor.WHITE + message);
             recentMessages.put(receiver.getUniqueId(), sender.getUniqueId());
             Logger.print("[PM] " + sender.getName() + " -> " + receiver.getName() + ": " + message);
             promise.success();

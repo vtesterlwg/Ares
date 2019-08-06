@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.bson.Document;
 import org.bukkit.ChatColor;
 
-public final class AresRank implements MongoDocument<AresRank> {
+public final class Rank implements MongoDocument<Rank> {
     @Getter @Setter public String name;
     @Getter @Setter public String displayName;
     @Getter @Setter public String prefix;
@@ -15,36 +15,36 @@ public final class AresRank implements MongoDocument<AresRank> {
     @Getter @Setter public boolean staff;
     @Getter @Setter public boolean everyone;
 
-    public AresRank() {
+    public Rank() {
         this.name = null;
         this.displayName = null;
         this.prefix = null;
         this.permission = null;
-        this.weight = 0;
         this.staff = false;
         this.everyone = false;
     }
 
-    public AresRank(String name) {
+    public Rank(String name) {
         this.name = name;
-        this.displayName = null;
-        this.prefix = null;
+        this.displayName = name;
+        this.prefix = name;
         this.permission = null;
         this.weight = 0;
         this.staff = false;
         this.everyone = false;
     }
 
-    public boolean isSetup() {
-        return this.name != null && this.displayName != null && (this.staff || this.everyone);
+    public boolean isReady() {
+        return this.name != null && this.displayName != null && (this.permission != null || this.staff || this.everyone);
     }
 
     @Override
     public String toString() {
-        return displayName;
+        return name;
     }
 
-    public AresRank fromDocument(Document document) {
+    @Override
+    public Rank fromDocument(Document document) {
         this.name = document.getString("name");
         this.displayName = ChatColor.translateAlternateColorCodes('&', document.getString("display_name"));
         this.prefix = ChatColor.translateAlternateColorCodes('&', document.getString("prefix"));
@@ -56,6 +56,7 @@ public final class AresRank implements MongoDocument<AresRank> {
         return this;
     }
 
+    @Override
     public Document toDocument() {
         return new Document()
                 .append("name", name)

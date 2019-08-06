@@ -9,7 +9,7 @@ import com.google.common.collect.Maps;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.services.essentials.EssentialsService;
 import com.playares.services.ranks.RankService;
-import com.playares.services.ranks.data.AresRank;
+import com.playares.services.ranks.data.Rank;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -52,10 +52,10 @@ public final class ListCommand extends BaseCommand {
             return;
         }
 
-        final List<AresRank> ranks = rankService.getSortedRanks();
+        final List<Rank> ranks = rankService.getRanksByWeight();
         final List<String> rankNames = Lists.newArrayList();
         final List<String> response = Lists.newArrayList();
-        final Map<AresRank, List<String>> players = Maps.newHashMap();
+        final Map<Rank, List<String>> players = Maps.newHashMap();
 
         ranks.forEach(rank -> {
             rankNames.add(rank.getDisplayName());
@@ -63,7 +63,7 @@ public final class ListCommand extends BaseCommand {
         });
 
         for (Player player : Bukkit.getOnlinePlayers()) {
-            final AresRank rank = rankService.getHighestRank(player);
+            final Rank rank = rankService.getHighestRank(player);
 
             if (!players.containsKey(rank)) {
                 continue;
@@ -76,7 +76,7 @@ public final class ListCommand extends BaseCommand {
             players.get(rank).add(player.getName());
         }
 
-        for (AresRank rank : ranks) {
+        for (Rank rank : ranks) {
             final List<String> names = players.get(rank);
             response.add(Joiner.on(ChatColor.RESET + ", ").join(names));
         }

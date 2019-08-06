@@ -11,8 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
 public final class ChatListener implements Listener {
-    @Getter
-    public final Factions plugin;
+    @Getter public final Factions plugin;
 
     public ChatListener(Factions plugin) {
         this.plugin = plugin;
