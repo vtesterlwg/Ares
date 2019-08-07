@@ -5,8 +5,10 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.services.ranks.RankService;
 import lombok.Getter;
+import me.lucko.luckperms.api.Group;
 import me.lucko.luckperms.api.Node;
 import me.lucko.luckperms.api.User;
+import me.lucko.luckperms.api.manager.GroupManager;
 import me.lucko.luckperms.api.manager.UserManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
@@ -22,6 +24,35 @@ public final class RankDataHandler {
     }
 
     public void setName(CommandSender sender, Rank rank, String name) {
+        if (getService().getLuckPerms() == null) {
+            sender.sendMessage(ChatColor.RED + "LuckPermsApi not found");
+            Logger.error("Attempted to apply a rank but LuckPermsApi was not found");
+            return;
+        }
+
+        final GroupManager groupManager = getService().getLuckPerms().getGroupManager();
+        final Group group = groupManager.getGroup(rank.getName());
+
+        if (group == null) {
+            sender.sendMessage(ChatColor.RED + "Failed to find group matching rank '" + rank.getName() + "'");
+            return;
+        }
+
+        new Scheduler(service.getOwner()).async(() -> {
+            Group newGroup;
+
+            newGroup = groupManager.createAndLoadGroup(name).join();
+            groupManager.deleteGroup(group).join();
+
+            for (Node node : group.getAllNodes()) {
+                newGroup.setPermission(node);
+            }
+
+            Logger.print("Transferred " + group.getAllNodes().size() + " nodes to " + newGroup.getName());
+
+            groupManager.saveGroup(newGroup);
+        }).run();
+
         rank.setName(name);
 
         save(rank, new SimplePromise() {
@@ -157,22 +188,40 @@ public final class RankDataHandler {
     }
 
     public void create(CommandSender sender, String name) {
+        if (service.getLuckPerms() == null) {
+            Logger.error("Attempted to create a rank but LuckPermsApi was not found");
+            return;
+        }
+
         if (getService().getRankByName(name) != null) {
             sender.sendMessage(ChatColor.RED + "Rank name is already in use");
             return;
         }
 
+        final GroupManager groupManager = getService().getLuckPerms().getGroupManager();
         final Rank rank = new Rank(name);
+        final Group group = groupManager.getGroup(rank.getName());
+
         getService().getRanks().add(rank);
 
         new Scheduler(service.getOwner()).async(() -> {
-            RankDAO.create(service.getOwner().getMongo(), rank);
+            if (group == null) {
+                Logger.print("Creating new LuckPerms group for new rank '" + rank.getName() + "'");
+                groupManager.createAndLoadGroup(rank.getName());
+            }
 
+            RankDAO.create(service.getOwner().getMongo(), rank);
             new Scheduler(service.getOwner()).sync(() -> sender.sendMessage(ChatColor.GREEN + "Rank " + rank.getName() + " has been created")).run();
         }).run();
     }
 
     public void delete(CommandSender sender, String name) {
+        if (service.getLuckPerms() == null) {
+            Logger.error("Attempted to create a rank but LuckPermsApi was not found");
+            return;
+        }
+
+        final GroupManager groupManager = getService().getLuckPerms().getGroupManager();
         final Rank rank = service.getRankByName(name);
 
         if (rank == null) {
@@ -180,10 +229,21 @@ public final class RankDataHandler {
             return;
         }
 
-        new Scheduler(service.getOwner()).async(() -> {
-            RankDAO.delete(service.getOwner().getMongo(), rank);
+        final Group group = groupManager.getGroup(rank.getName());
 
+        service.getRanks().remove(rank);
+
+        new Scheduler(service.getOwner()).async(() -> {
+            if (group == null) {
+                Logger.print("LuckPerms group did not exist for " + name);
+            } else {
+                groupManager.deleteGroup(group).join();
+                Logger.warn("Deleted LuckPerms group '" + group.getName() + "'");
+            }
+
+            RankDAO.delete(service.getOwner().getMongo(), rank);
             new Scheduler(service.getOwner()).sync(() -> sender.sendMessage(ChatColor.GREEN + "Rank " + rank.getName() + " has been deleted")).run();
+            Logger.warn("Rank '" + rank.getName() + "' has been deleted");
         }).run();
     }
 
@@ -201,6 +261,12 @@ public final class RankDataHandler {
         }
 
         final UserManager userManager = service.getLuckPerms().getUserManager();
+        final Group group = service.getLuckPerms().getGroupManager().getGroup(rank.getName());
+
+        if (group == null) {
+            sender.sendMessage(ChatColor.RED + "LuckPerms group not found");
+            return;
+        }
 
         new Scheduler(getService().getOwner()).async(() -> {
             final UUID uniqueId = userManager.lookupUuid(username).join();
@@ -213,7 +279,7 @@ public final class RankDataHandler {
                     return;
                 }
 
-                user.setPermission(getService().getLuckPerms().getNodeFactory().newBuilder(rank.getPermission()).build());
+                user.setPermission(getService().getLuckPerms().getNodeFactory().makeGroupNode(group).build());
                 userManager.saveUser(user);
 
                 sender.sendMessage(rank.getDisplayName() + ChatColor.GREEN + " has been applied to " + username);
@@ -236,10 +302,12 @@ public final class RankDataHandler {
         }
 
         final UserManager userManager = service.getLuckPerms().getUserManager();
+        final GroupManager groupManager = service.getLuckPerms().getGroupManager();
 
         new Scheduler(getService().getOwner()).async(() -> {
             final UUID uniqueId = userManager.lookupUuid(username).join();
             final User user = (uniqueId != null) ? userManager.loadUser(uniqueId).join() : null;
+            final Group group = groupManager.getGroup(rank.getName());
 
             new Scheduler(getService().getOwner()).sync(() -> {
                 if (user == null) {
@@ -248,20 +316,21 @@ public final class RankDataHandler {
                     return;
                 }
 
-                for (Node node : user.getPermissions()) {
-                    if (node.getPermission().equalsIgnoreCase(rank.getPermission())) {
-                        if (user.unsetPermission(node).wasSuccess()) {
-                            Logger.print("Successfully removed permission for " + username);
-                        } else {
-                            Logger.print("Failed to remove permission for " + username);
-                        }
+                if (group == null) {
+                    sender.sendMessage("Group not found");
+                    Logger.error("Failed to remove rank from " + user + ", group was not found");
+                    return;
+                }
 
+                for (Node node : user.getPermissions()) {
+                    if (node.getPermission().equalsIgnoreCase("group." + group.getName())) {
+                        user.unsetPermission(node);
+                        Logger.print("Successfully removed group permission for " + username);
                         break;
                     }
                 }
 
                 userManager.saveUser(user);
-
                 sender.sendMessage(rank.getDisplayName() + ChatColor.GREEN + " has been removed from " + username);
                 Logger.print("Removed rank '" + rank.getName() + "' from " + username);
             }).run();
