@@ -35,7 +35,7 @@ public final class ListCommand extends BaseCommand {
         final boolean canSeeVanished = sender.hasPermission("essentials.vanish");
 
         // Fallback if the service is not found or no ranks to display
-        if (rankService == null || rankService.getRanks().isEmpty() || rankService.getDefaultRanks().isEmpty()) {
+        if (rankService == null || (rankService.getRanks().isEmpty() && rankService.getDefaultRanks().isEmpty())) {
             final List<String> usernames = Lists.newArrayList();
 
             for (Player player : Bukkit.getOnlinePlayers()) {
@@ -52,10 +52,11 @@ public final class ListCommand extends BaseCommand {
             return;
         }
 
-        final List<Rank> ranks = rankService.getRanksByWeight();
+        final List<Rank> ranks = rankService.getRanksByAlphabetical();
         final List<String> rankNames = Lists.newArrayList();
         final List<String> response = Lists.newArrayList();
         final Map<Rank, List<String>> players = Maps.newHashMap();
+        int onlineCount = 0;
 
         ranks.forEach(rank -> {
             rankNames.add(rank.getDisplayName());
@@ -73,7 +74,13 @@ public final class ListCommand extends BaseCommand {
                 continue;
             }
 
-            players.get(rank).add(player.getName());
+            onlineCount += 1;
+
+            if (rank == null || rank.getPrefix() == null) {
+                players.get(rank).add(ChatColor.RESET + player.getName());
+            } else {
+                players.get(rank).add(rank.getPrefix() + player.getName());
+            }
         }
 
         for (Rank rank : ranks) {
@@ -81,7 +88,7 @@ public final class ListCommand extends BaseCommand {
             response.add(Joiner.on(ChatColor.RESET + ", ").join(names));
         }
 
-        sender.sendMessage(ChatColor.WHITE + "" + Bukkit.getOnlinePlayers().size() + ChatColor.YELLOW + " players are on this server");
+        sender.sendMessage(ChatColor.YELLOW + "There are " + ChatColor.WHITE + onlineCount + ChatColor.YELLOW + " players online");
         sender.sendMessage(Joiner.on(ChatColor.RESET + ", ").join(rankNames));
         sender.sendMessage(Joiner.on(ChatColor.RESET + ", ").join(response));
     }
