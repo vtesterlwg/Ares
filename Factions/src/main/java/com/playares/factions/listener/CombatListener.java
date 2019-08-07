@@ -314,6 +314,8 @@ public final class CombatListener implements Listener {
 
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
+        event.setDeathMessage(null);
+
         if (event.getEntity() == null || event.getEntity().getLastDamageCause() == null) {
             return;
         }
@@ -333,8 +335,6 @@ public final class CombatListener implements Listener {
 
         player.getWorld().strikeLightningEffect(player.getLocation());
         Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_THUNDER));
-
-        event.setDeathMessage(null);
 
         // Fixes 'fell 0 blocks' caused by dying from pearl damage
         if (reason.equals(EntityDamageEvent.DamageCause.FALL)) {
