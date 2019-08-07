@@ -5,6 +5,7 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.services.ranks.RankService;
 import lombok.Getter;
+import me.lucko.luckperms.api.Node;
 import me.lucko.luckperms.api.User;
 import me.lucko.luckperms.api.manager.UserManager;
 import org.bukkit.ChatColor;
@@ -195,7 +196,7 @@ public final class RankDataHandler {
         }
 
         if (service.getLuckPerms() == null) {
-            Logger.error("Attempted to remove a rank but LuckPermsApi was not found");
+            Logger.error("Attempted to apply a rank but LuckPermsApi was not found");
             return;
         }
 
@@ -234,20 +235,36 @@ public final class RankDataHandler {
             return;
         }
 
-        final User permUser = service.getLuckPerms().getUser(username);
-
-        if (permUser == null) {
-            Logger.error("Failed to obtain LuckPerms user for player " + username);
-            return;
-        }
+        final UserManager userManager = service.getLuckPerms().getUserManager();
 
         new Scheduler(getService().getOwner()).async(() -> {
-            permUser.unsetPermission(service.getLuckPerms().getNodeFactory().newBuilder(rank.getPermission()).build());
+            final UUID uniqueId = userManager.lookupUuid(username).join();
+            final User user = (uniqueId != null) ? userManager.loadUser(uniqueId).join() : null;
 
             new Scheduler(getService().getOwner()).sync(() -> {
+                if (user == null) {
+                    sender.sendMessage("Player not found");
+                    Logger.error("Failed to remove rank from " + username + ", user was not found");
+                    return;
+                }
+
+                for (Node node : user.getPermissions()) {
+                    if (node.getPermission().equalsIgnoreCase(rank.getPermission())) {
+                        if (user.unsetPermission(node).wasSuccess()) {
+                            Logger.print("Successfully removed permission for " + username);
+                        } else {
+                            Logger.print("Failed to remove permission for " + username);
+                        }
+
+                        break;
+                    }
+                }
+
+                userManager.saveUser(user);
+
                 sender.sendMessage(rank.getDisplayName() + ChatColor.GREEN + " has been removed from " + username);
                 Logger.print("Removed rank '" + rank.getName() + "' from " + username);
-            });
+            }).run();
         }).run();
     }
 

@@ -2,12 +2,16 @@ package com.playares.services.ranks.command;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
 import com.playares.services.ranks.RankService;
 import com.playares.services.ranks.data.Rank;
 import com.playares.services.ranks.data.RankDataHandler;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+
+import java.util.List;
 
 @CommandAlias("rank")
 public final class RankCommand extends BaseCommand {
@@ -49,6 +53,17 @@ public final class RankCommand extends BaseCommand {
     @Syntax("<player> <rank>")
     public void onRevoke(CommandSender sender, String playerName, String rankName) {
         dataHandler.removeRank(sender, playerName, rankName);
+    }
+
+    @Subcommand("list")
+    @Description("List all configured ranks")
+    public void onList(CommandSender sender) {
+        final List<Rank> ranks = getService().getRanksByAlphabetical();
+        final List<String> result = Lists.newArrayList();
+
+        ranks.forEach(rank -> result.add(rank.getDisplayName()));
+
+        sender.sendMessage(ChatColor.YELLOW + "Ranks (" + ChatColor.WHITE + ranks.size() + ChatColor.YELLOW + "): " + ChatColor.RESET + Joiner.on(ChatColor.YELLOW + ", ").join(result));
     }
 
     @Subcommand("set")
