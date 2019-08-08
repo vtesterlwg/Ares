@@ -87,6 +87,10 @@ public final class MobStacking implements HumbugModule, Listener {
                         continue;
                     }
 
+                    if (entity.getHealth() <= 0.0 || entity.isDead()) {
+                        continue;
+                    }
+
                     if (entity.isLeashed()) {
                         continue;
                     }
@@ -258,6 +262,8 @@ public final class MobStacking implements HumbugModule, Listener {
 
             entityA.setAge(entityB.getAge());
         }
+
+        stackSkip.add(entity.getUniqueId());
     }
 
     @EventHandler

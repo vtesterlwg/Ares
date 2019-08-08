@@ -101,6 +101,7 @@ mob-stacking:
         - 'CHICKEN'
         - 'PIG'
         - 'RABBIT'
+        - 'SHEEP'
 
 # Enabling Kit Limits prevents players from obtaining certain Potions/Enchantments
 kit-limits:
