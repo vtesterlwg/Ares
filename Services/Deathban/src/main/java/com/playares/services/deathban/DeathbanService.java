@@ -409,20 +409,19 @@ public final class DeathbanService implements AresService {
         });
     }
 
-    public void deathban(UUID uniqueId, int seconds, boolean sotw, boolean permanent) {
+    public void deathban(UUID uniqueId, int seconds, boolean permanent) {
         if (!getConfiguration().isDeathbanEnforced()) {
             return;
         }
 
-        // TODO: Finish
+        final Deathban deathban = new Deathban(uniqueId, Time.now(), (Time.now() + (seconds * 1000)), permanent);
+        final Player player = Bukkit.getPlayer(uniqueId);
 
-        new Scheduler(owner).async(() -> {
-            final Deathban existing = DeathbanDAO.getDeathban(owner.getMongo(), uniqueId);
+        if (player != null) {
+            player.kickPlayer(getDeathbanKickMessage(deathban));
+        }
 
-            if (existing != null) {
-                DeathbanDAO.deleteDeathban(owner.getMongo(), existing);
-            }
-        }).run();
+        new Scheduler(owner).async(() -> DeathbanDAO.saveDeathban(getOwner().getMongo(), deathban)).run();
     }
 
     public String getDeathbanKickMessage(Deathban deathban) {

@@ -17,6 +17,7 @@ import com.playares.factions.factions.data.ServerFaction;
 import com.playares.factions.players.data.FactionPlayer;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
+import com.playares.services.deathban.DeathbanService;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -280,6 +281,7 @@ public final class CombatListener implements Listener {
         }
 
         final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(logger.getOwner());
+        final DeathbanService deathbanService = (DeathbanService)getPlugin().getService(DeathbanService.class);
 
         if (event.getKiller() != null) {
             final Player killer = event.getKiller();
@@ -300,6 +302,10 @@ public final class CombatListener implements Listener {
 
         logger.getBukkitEntity().getWorld().strikeLightningEffect(logger.getBukkitEntity().getLocation());
         Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_THUNDER));
+
+        if (deathbanService != null && deathbanService.getConfiguration().isDeathbanEnforced()) {
+            deathbanService.deathban(logger.getOwner(), 30, false); // TODO: Make dynamic
+        }
     }
 
     @EventHandler
@@ -325,6 +331,11 @@ public final class CombatListener implements Listener {
         final Player killer = player.getKiller();
         final EntityDamageEvent.DamageCause reason = player.getLastDamageCause().getCause();
         final String rip = ChatColor.RED + "RIP: " + ChatColor.RESET;
+        final DeathbanService deathbanService = (DeathbanService)getPlugin().getService(DeathbanService.class);
+
+        if (deathbanService != null) {
+            deathbanService.deathban(player.getUniqueId(), 30, false);
+        }
 
         if (faction != null) {
             final MemberDeathEvent memberDeathEvent = new MemberDeathEvent(player.getUniqueId(), player.getName(), faction, new PLocatable(player), 1.0, plugin.getFactionConfig().getTimerFreeze());

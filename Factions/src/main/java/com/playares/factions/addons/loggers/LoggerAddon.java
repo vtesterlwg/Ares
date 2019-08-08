@@ -21,6 +21,8 @@ import com.playares.factions.timers.cont.player.CombatTagTimer;
 import com.playares.factions.util.FactionUtils;
 import com.playares.services.customentity.CustomEntityService;
 import com.playares.services.deathban.DeathbanService;
+import com.playares.services.deathban.dao.DeathbanDAO;
+import com.playares.services.deathban.data.Deathban;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_12_R1.EntityLiving;
@@ -35,6 +37,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
@@ -240,6 +243,7 @@ public final class LoggerAddon implements Addon, Listener {
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player player = event.getPlayer();
         final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+        final DeathbanService deathbanService = (DeathbanService)getPlugin().getService(DeathbanService.class);
 
         if (!isEnabled()) {
             return;
@@ -260,6 +264,39 @@ public final class LoggerAddon implements Addon, Listener {
             if (faction != null && faction.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
                 return;
             }
+        }
+
+        if (deathbanService != null) {
+            new Scheduler(getPlugin()).async(() -> {
+                final Deathban deathban = DeathbanDAO.getDeathban(getPlugin().getMongo(), profile.getUniqueId());
+
+                new Scheduler(getPlugin()).sync(() -> {
+                    if (deathban != null) {
+                        return;
+                    }
+
+                    if (profile.hasTimer(PlayerTimer.PlayerTimerType.COMBAT)) {
+                        spawnLogger(player);
+                        return;
+                    }
+
+                    if (player.getFallDistance() >= 4.0) {
+                        spawnLogger(player);
+                        return;
+                    }
+
+                    if (player.getNoDamageTicks() > 0) {
+                        spawnLogger(player);
+                        return;
+                    }
+
+                    if (!FactionUtils.getNearbyEnemies(plugin, player, enemyCheckRadius).isEmpty()) {
+                        spawnLogger(player);
+                    }
+                }).run();
+            }).run();
+
+            return;
         }
 
         if (profile.hasTimer(PlayerTimer.PlayerTimerType.COMBAT)) {
@@ -306,6 +343,25 @@ public final class LoggerAddon implements Addon, Listener {
         }
 
         logger.dropItems(entity.getLocation());
+    }
+
+    @EventHandler
+    public void onRightClickLogger(PlayerInteractAtEntityEvent event) {
+        final Player player = event.getPlayer();
+        final Entity entity = event.getRightClicked();
+
+        if (!(entity instanceof LivingEntity)) {
+            return;
+        }
+
+        final LivingEntity livingEntity = (LivingEntity)entity;
+        final EntityLiving asNms = ((CraftLivingEntity)livingEntity).getHandle();
+
+        if (!(asNms instanceof CombatLogger)) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
     @EventHandler
