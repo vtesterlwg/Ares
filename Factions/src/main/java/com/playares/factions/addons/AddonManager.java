@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.autosave.AutosaveAddon;
+import com.playares.factions.addons.economy.EconomyAddon;
 import com.playares.factions.addons.events.EventsAddon;
 import com.playares.factions.addons.loggers.LoggerAddon;
 import com.playares.factions.addons.mining.MiningAddon;
@@ -22,6 +23,7 @@ public final class AddonManager {
         this.plugin = plugin;
         this.addons = Maps.newHashMap();
 
+        registerAddon(new EconomyAddon(plugin));
         registerAddon(new ServerStateAddon(plugin));
         registerAddon(new EventsAddon(plugin));
         registerAddon(new MiningAddon(plugin));
