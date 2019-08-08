@@ -10,6 +10,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -64,7 +66,9 @@ public final class AntiGrief implements HumbugModule, Listener {
 
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
-        if (isEnabled() && isEntityGriefDisabled()) {
+        final Entity entity = event.getEntity();
+
+        if (isEnabled() && isEntityGriefDisabled() && (entity instanceof LivingEntity)) {
             event.setCancelled(true);
         }
     }
