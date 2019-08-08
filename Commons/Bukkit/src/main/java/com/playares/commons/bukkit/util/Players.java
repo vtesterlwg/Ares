@@ -53,7 +53,6 @@ public final class Players {
     }
 
     public static void sendSignChange(Player player, Location location, String[] lines) {
-        Preconditions.checkArgument(lines.length > 4, "Signs can only hold 4 lines");
         player.sendSignChange(location, lines);
     }
 
