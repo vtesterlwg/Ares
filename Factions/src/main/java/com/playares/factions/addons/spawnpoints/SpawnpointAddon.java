@@ -12,14 +12,9 @@ import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public final class SpawnpointAddon implements Addon {
-    @Getter
-    public final Factions plugin;
-
-    @Getter
-    public SpawnpointManager manager;
-
-    @Getter
-    public SpawnpointListener listener;
+    @Getter public final Factions plugin;
+    @Getter public SpawnpointManager manager;
+    @Getter public SpawnpointListener listener;
 
     public SpawnpointAddon(Factions plugin) {
         this.plugin = plugin;
