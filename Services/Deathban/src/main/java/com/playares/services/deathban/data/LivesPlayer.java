@@ -18,6 +18,12 @@ public final class LivesPlayer implements MongoDocument<LivesPlayer> {
         this.soulboundLives = 0;
     }
 
+    public LivesPlayer(UUID uniqueId) {
+        this.uniqueId = uniqueId;
+        this.standardLives = 0;
+        this.soulboundLives = 0;
+    }
+
     @Override
     public LivesPlayer fromDocument(Document document) {
         this.uniqueId = (UUID)document.get("id");

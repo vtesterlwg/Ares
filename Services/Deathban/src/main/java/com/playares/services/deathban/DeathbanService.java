@@ -131,16 +131,11 @@ public final class DeathbanService implements AresService {
                 return;
             }
 
-            final LivesPlayer receiver = LivesDAO.getLivesPlayer(owner.getMongo(), Filters.eq("id"));
+            LivesPlayer receiverResult = LivesDAO.getLivesPlayer(owner.getMongo(), Filters.eq("id", receiverProfile.getUniqueId()));
+            final LivesPlayer receiver = (receiverResult != null) ? receiverResult : new LivesPlayer(receiverProfile.getUniqueId());
             final LivesPlayer sender = (commandSender instanceof Player) ? LivesDAO.getLivesPlayer(owner.getMongo(), Filters.eq("id", ((Player)commandSender).getUniqueId())) : null;
 
             new Scheduler(owner).sync(() -> {
-                // Receiver has connected to the network, but has never logged in to a server with Deathbans enabled
-                if (receiver == null) {
-                    promise.failure("Player not found");
-                    return;
-                }
-
                 // The sender is a player and does not have bypass, so we should subtract lives
                 if (sender != null && !bypass) {
                     // Sender doesn't have enough lives
@@ -217,15 +212,10 @@ public final class DeathbanService implements AresService {
                 return;
             }
 
-            final LivesPlayer receiver = LivesDAO.getLivesPlayer(owner.getMongo(), Filters.eq("id"));
+            LivesPlayer receiverResult = LivesDAO.getLivesPlayer(owner.getMongo(), Filters.eq("id", receiverProfile.getUniqueId()));
+            final LivesPlayer receiver = (receiverResult != null) ? receiverResult : new LivesPlayer(receiverProfile.getUniqueId());
 
             new Scheduler(owner).sync(() -> {
-                // Receiver has connected to the network, but has never logged in to a server with Deathbans enabled
-                if (receiver == null) {
-                    promise.failure("Player not found");
-                    return;
-                }
-
                 // Updating the lives for the receiver
                 if (soulbound) {
                     receiver.setSoulboundLives(amount);

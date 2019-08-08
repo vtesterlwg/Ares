@@ -5,11 +5,9 @@ import com.playares.services.deathban.dao.DeathbanDAO;
 import com.playares.services.deathban.data.Deathban;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.UUID;
 
@@ -29,10 +27,5 @@ public final class DeathbanListener implements Listener {
         if (deathban != null) {
             event.disallow(AsyncPlayerPreLoginEvent.Result.KICK_BANNED, service.getDeathbanKickMessage(deathban));
         }
-    }
-
-    @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        final Player player = event.getPlayer();
     }
 }

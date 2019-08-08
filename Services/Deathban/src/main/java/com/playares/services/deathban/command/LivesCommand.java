@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 
+@CommandAlias("lives|lifes|live|life")
 public final class LivesCommand extends BaseCommand {
     @Getter public final DeathbanService service;
 
@@ -56,7 +57,7 @@ public final class LivesCommand extends BaseCommand {
         });
     }
 
-    @CommandAlias("lives|lifes|live|life")
+    @Subcommand("give")
     @Syntax("<player> <amount>")
     @Description("Give a player lives")
     public void onGive(CommandSender sender, String username, int amount, @Optional String soulbound) {
@@ -73,7 +74,7 @@ public final class LivesCommand extends BaseCommand {
         });
     }
 
-    @CommandAlias("lives|lifes|live|life")
+    @Subcommand("set")
     @CommandPermission("deathbans.lives.set")
     @Syntax("<player> <amount> [-s soulbound]")
     @Description("Set a players lives")
