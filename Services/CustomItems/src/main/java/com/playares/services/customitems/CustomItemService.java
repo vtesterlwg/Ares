@@ -76,6 +76,10 @@ public final class CustomItemService implements AresService, Listener {
         return Optional.ofNullable(registry.get(clazz));
     }
 
+    public Optional<CustomItem> getItem(String name) {
+        return registry.values().stream().filter(item -> ChatColor.stripColor(item.getName()).equalsIgnoreCase(name)).findFirst();
+    }
+
     @EventHandler
     public void onPlayerDropItem(PlayerDropItemEvent event) {
         final Player player = event.getPlayer();
