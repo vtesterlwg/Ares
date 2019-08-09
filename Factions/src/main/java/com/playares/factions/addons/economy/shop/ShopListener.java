@@ -175,6 +175,7 @@ public final class ShopListener implements Listener {
                         if (hand.getAmount() <= amount) {
                             final double dollarValuePerItem = price / amount;
                             final double value = dollarValuePerItem * hand.getAmount();
+                            final int totalSold = hand.getAmount();
 
                             // AMOUNT IS LESS THAN THE PORTION, TAKE IT ALL
                             player.getInventory().setItemInMainHand(null);
@@ -183,7 +184,7 @@ public final class ShopListener implements Listener {
                             getAddon().getHandler().addToBalance(player.getUniqueId(), value, new SimplePromise() {
                                 @Override
                                 public void success() {
-                                    getAddon().getShopHandler().flashSale(player, sign, amount, value, ChatColor.stripColor(item.getName()));
+                                    getAddon().getShopHandler().flashSale(player, sign, totalSold, value, ChatColor.stripColor(item.getName()));
                                 }
 
                                 @Override
@@ -225,13 +226,14 @@ public final class ShopListener implements Listener {
                         if (hand.getAmount() <= amount) {
                             final double dollarValuePerItem = price / amount;
                             final double value = dollarValuePerItem * hand.getAmount();
+                            final int totalSold = hand.getAmount();
 
                             player.getInventory().setItemInMainHand(null);
 
                             getAddon().getHandler().addToBalance(player.getUniqueId(), value, new SimplePromise() {
                                 @Override
                                 public void success() {
-                                    getAddon().getShopHandler().flashSale(player, sign, amount, value, StringUtils.capitaliseAllWords(byMaterialName.getType().name().toLowerCase().replace("_", " ")));
+                                    getAddon().getShopHandler().flashSale(player, sign, totalSold, value, StringUtils.capitaliseAllWords(byMaterialName.getType().name().toLowerCase().replace("_", " ")));
                                 }
 
                                 @Override
@@ -269,13 +271,14 @@ public final class ShopListener implements Listener {
                         if (hand.getAmount() <= amount) {
                             final double dollarValuePerItem = price / amount;
                             final double value = dollarValuePerItem * hand.getAmount();
+                            final int totalSold = hand.getAmount();
 
                             player.getInventory().setItemInMainHand(null);
 
                             getAddon().getHandler().addToBalance(player.getUniqueId(), value, new SimplePromise() {
                                 @Override
                                 public void success() {
-                                    getAddon().getShopHandler().flashSale(player, sign, amount, value, StringUtils.capitaliseAllWords(byItemId.getType().name().toLowerCase().replace("_", " ")));
+                                    getAddon().getShopHandler().flashSale(player, sign, totalSold, value, StringUtils.capitaliseAllWords(byItemId.getType().name().toLowerCase().replace("_", " ")));
                                 }
 
                                 @Override
