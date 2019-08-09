@@ -64,6 +64,7 @@ timers:
     crapple: 10
     home: 10
     stuck: 180
+    logout: 30
   faction:
     freeze: 3600
     rally: 10

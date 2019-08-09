@@ -40,6 +40,7 @@ public final class PlayerTimerListener implements Listener {
 
         final HomeTimer homeTimer = (HomeTimer)profile.getTimer(PlayerTimer.PlayerTimerType.HOME);
         final StuckTimer stuckTimer = (StuckTimer)profile.getTimer(PlayerTimer.PlayerTimerType.STUCK);
+        final LogoutTimer logoutTimer = (LogoutTimer)profile.getTimer(PlayerTimer.PlayerTimerType.LOGOUT);
 
         if (homeTimer != null) {
             profile.getTimers().remove(homeTimer);
@@ -49,6 +50,11 @@ public final class PlayerTimerListener implements Listener {
         if (stuckTimer != null) {
             profile.getTimers().remove(stuckTimer);
             player.sendMessage(ChatColor.RED + "Stuck warp cancelled");
+        }
+
+        if (logoutTimer != null) {
+            profile.getTimers().remove(logoutTimer);
+            player.sendMessage(ChatColor.RED + "Logout cancelled");
         }
     }
 
@@ -67,6 +73,7 @@ public final class PlayerTimerListener implements Listener {
 
         final HomeTimer homeTimer = (HomeTimer)profile.getTimer(PlayerTimer.PlayerTimerType.HOME);
         final StuckTimer stuckTimer = (StuckTimer)profile.getTimer(PlayerTimer.PlayerTimerType.STUCK);
+        final LogoutTimer logoutTimer = (LogoutTimer)profile.getTimer(PlayerTimer.PlayerTimerType.LOGOUT);
 
         if (homeTimer != null) {
             profile.getTimers().remove(homeTimer);
@@ -76,6 +83,11 @@ public final class PlayerTimerListener implements Listener {
         if (stuckTimer != null) {
             profile.getTimers().remove(stuckTimer);
             player.sendMessage(ChatColor.RED + "Stuck warp cancelled");
+        }
+
+        if (logoutTimer != null) {
+            profile.getTimers().remove(logoutTimer);
+            player.sendMessage(ChatColor.RED + "Logout cancelled");
         }
     }
 

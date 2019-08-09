@@ -1,6 +1,7 @@
 package com.playares.factions.addons.loggers;
 
 import com.google.common.collect.Maps;
+import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
 import com.playares.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
@@ -9,6 +10,7 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.Addon;
+import com.playares.factions.addons.loggers.command.LogoutCommand;
 import com.playares.factions.addons.loggers.data.CombatLogger;
 import com.playares.factions.addons.loggers.event.CombatLogEvent;
 import com.playares.factions.addons.loggers.event.LoggerDeathEvent;
@@ -18,6 +20,7 @@ import com.playares.factions.factions.data.ServerFaction;
 import com.playares.factions.players.data.FactionPlayer;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.CombatTagTimer;
+import com.playares.factions.timers.cont.player.LogoutTimer;
 import com.playares.factions.util.FactionUtils;
 import com.playares.services.customentity.CustomEntityService;
 import com.playares.services.deathban.DeathbanService;
@@ -56,6 +59,8 @@ public final class LoggerAddon implements Addon, Listener {
     @Getter @Setter public int loggerDuration;
     /* Radius to check for enemy players when performing a logger check */
     @Getter @Setter public int enemyCheckRadius;
+    /* Time (in seconds) the logout timer delays before safely removing the player from the server */
+    @Getter @Setter public int logoutTimerDuration;
     /* Map containing currently active combat-loggers */
     @Getter public final Map<UUID, CombatLogger> loggers;
 
@@ -75,6 +80,7 @@ public final class LoggerAddon implements Addon, Listener {
         this.enabled = config.getBoolean("loggers.enabled");
         this.loggerDuration = config.getInt("loggers.logger-duration");
         this.enemyCheckRadius = config.getInt("loggers.enemy-radius");
+        this.logoutTimerDuration = config.getInt("timers.player.logout");
     }
 
     @Override
@@ -88,6 +94,30 @@ public final class LoggerAddon implements Addon, Listener {
         }
 
         plugin.registerListener(this);
+        plugin.registerCommand(new LogoutCommand(this));
+    }
+
+    public void attemptSafeLogout(Player player, SimplePromise promise) {
+        final FactionPlayer factionPlayer = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (factionPlayer == null) {
+            promise.failure("Failed to obtain faction profile");
+            return;
+        }
+
+        if (factionPlayer.hasTimer(PlayerTimer.PlayerTimerType.LOGOUT)) {
+            promise.failure("Logout timer has already started");
+            return;
+        }
+
+        if (factionPlayer.hasTimer(PlayerTimer.PlayerTimerType.COMBAT)) {
+            promise.failure("You can not start a safe logout while combat-tagged");
+            return;
+        }
+
+        final LogoutTimer timer = new LogoutTimer(plugin, player.getUniqueId(), logoutTimerDuration, factionPlayer);
+        factionPlayer.getTimers().add(timer);
+        promise.success();
     }
 
     @Override
