@@ -1,4 +1,5 @@
 name: Factions
 main: com.playares.factions.Factions
 version: 1.12.2
+author: johnsama
 depends: [ProtocolLib]
