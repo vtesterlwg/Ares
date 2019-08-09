@@ -37,6 +37,8 @@ public final class FactionManager {
     @Getter public final FactionStaffHandler staffHandler;
     /** Handles all faction chat tasks **/
     @Getter public final FactionChatHandler chatHandler;
+    /** Handles all faction economy tasks **/
+    @Getter public final FactionEconomyHandler economyHandler;
     /** Performs faction ticking **/
     @Getter public final BukkitTask factionTicker;
     /** Contains a cache of every loaded faction **/
@@ -52,6 +54,7 @@ public final class FactionManager {
         this.manageHandler = new FactionManageHandler(this);
         this.staffHandler = new FactionStaffHandler(this);
         this.chatHandler = new FactionChatHandler(this);
+        this.economyHandler = new FactionEconomyHandler(this);
 
         this.factionRepository = Sets.newConcurrentHashSet();
 

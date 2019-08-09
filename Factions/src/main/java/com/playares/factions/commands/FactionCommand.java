@@ -14,8 +14,7 @@ import javax.annotation.Nonnull;
 
 @CommandAlias("factions|faction|f|teams|team|t")
 public final class FactionCommand extends BaseCommand {
-    @Getter
-    public final Factions plugin;
+    @Getter public final Factions plugin;
 
     public FactionCommand(Factions plugin) {
         this.plugin = plugin;
@@ -120,29 +119,77 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("deposit|d")
     @Description("Deposit money in to your faction balance")
     @Syntax("<amount/all>")
-    public void onDeposit(Player player, double amount) {
+    public void onDeposit(Player player, String value) {
+        if (value.equalsIgnoreCase("all")) {
+            plugin.getFactionManager().getEconomyHandler().depositAll(player, new SimplePromise() {
+                @Override
+                public void success() {}
 
-    }
+                @Override
+                public void failure(@Nonnull String reason) {
+                    player.sendMessage(ChatColor.RED + reason);
+                }
+            });
 
-    @Subcommand("deposit|d")
-    @Description("Deposit money in to your faction balance")
-    @Syntax("<amount/all>")
-    public void onDeposit(Player player, @Flags("all") String all) {
+            return;
+        }
 
+        final double amount;
+
+        try {
+            amount = Double.parseDouble(value);
+        } catch (NumberFormatException ex) {
+            player.sendMessage(ChatColor.RED + "Value must be a number");
+            return;
+        }
+
+        plugin.getFactionManager().getEconomyHandler().deposit(player, amount, new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("withdraw|w")
     @Description("Withdraw money from your faction balance")
     @Syntax("<amount/all>")
-    public void onWithdrawl(Player player, double amount) {
+    public void onWithdrawl(Player player, String value) {
+        if (value.equalsIgnoreCase("all")) {
+            plugin.getFactionManager().getEconomyHandler().withdrawAll(player, new SimplePromise() {
+                @Override
+                public void success() {}
 
-    }
+                @Override
+                public void failure(@Nonnull String reason) {
+                    player.sendMessage(ChatColor.RED + reason);
+                }
+            });
 
-    @Subcommand("withdraw|w")
-    @Description("Withdraw money from your faction balance")
-    @Syntax("<amount/all>")
-    public void onWithdraw(Player player, @Flags("all") String all) {
+            return;
+        }
 
+        final double amount;
+
+        try {
+            amount = Double.parseDouble(value);
+        } catch (NumberFormatException ex) {
+            player.sendMessage(ChatColor.RED + "Value must be a number");
+            return;
+        }
+
+        plugin.getFactionManager().getEconomyHandler().withdraw(player, amount, new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("show|who")
