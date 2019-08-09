@@ -257,6 +257,10 @@ public final class LoggerAddon implements Addon, Listener {
             return;
         }
 
+        if (player.getHealth() <= 0.0 || player.isDead()) {
+            return;
+        }
+
         if (profile.getCurrentClaim() != null) {
             final DefinedClaim claim = profile.getCurrentClaim();
             final ServerFaction faction = plugin.getFactionManager().getServerFactionById(claim.getOwnerId());
