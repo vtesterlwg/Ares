@@ -23,6 +23,14 @@ public final class CombatLogger extends EntityVillager {
     @Getter @Setter public List<ItemStack> items;
 
     /**
+     * Build an empty combat logger to prevent an init error
+     * @param world Bukkit World
+     */
+    public CombatLogger(World world) {
+        super(world);
+    }
+
+    /**
      * Build a combat logger for a specified player
      * @param world Bukkit World
      * @param player Bukkit Player
@@ -67,7 +75,13 @@ public final class CombatLogger extends EntityVillager {
     }
 
     @Override
-    public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {}
+    public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
+        if (enummovetype.equals(EnumMoveType.SELF) || enummovetype.equals(EnumMoveType.PLAYER)) {
+            d0 = 0;
+            d1 = 0;
+            d2 = 0;
+        }
+    }
 
     @Override
     public void a(Entity entity, float f, double d0, double d1) {}
