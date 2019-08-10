@@ -186,7 +186,7 @@ public final class CrowbarAddon implements Addon, Listener {
 
             final ItemStack item = new ItemBuilder()
                     .setMaterial(Material.MOB_SPAWNER)
-                    .setName(ChatColor.RESET + StringUtils.capitaliseAllWords(spawner.getSpawnedType().name().toLowerCase().replace("_", " ")) + " Spawner")
+                    .setName(StringUtils.capitaliseAllWords(spawner.getSpawnedType().name().toLowerCase().replace("_", " ")) + " Spawner")
                     .build();
 
             block.breakNaturally();
