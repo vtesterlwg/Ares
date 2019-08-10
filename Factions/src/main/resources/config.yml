@@ -33,6 +33,8 @@ factions:
       - 'owner'
       - 'palace'
       - 'citadel'
+      - 'developer'
+      - 'dev'
 
 # Claiming configuration, here's what it all means:
 # Min-size: Minimum size each side of a claim needs to be. E.g (10 = 10x10)
