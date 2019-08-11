@@ -276,6 +276,7 @@ public final class KitLimits implements HumbugModule, Listener {
             return;
         }
 
+        final Player player = event.getPlayer();
         final ItemStack item = event.getItem();
 
         if (item == null || !item.getType().equals(Material.POTION)) {
@@ -290,16 +291,19 @@ public final class KitLimits implements HumbugModule, Listener {
         }
 
         if (limit.isDisabled()) {
+            player.sendMessage(ChatColor.RED + "This potion has been disabled");
             event.setCancelled(true);
             return;
         }
 
         if (!limit.isAmplifiable() && meta.getBasePotionData().isUpgraded()) {
+            player.sendMessage(ChatColor.RED + "This potion has been disabled");
             event.setCancelled(true);
             return;
         }
 
         if (!limit.isExtendable() && meta.getBasePotionData().isExtended()) {
+            player.sendMessage(ChatColor.RED + "This potion has been disabled");
             event.setCancelled(true);
         }
     }
