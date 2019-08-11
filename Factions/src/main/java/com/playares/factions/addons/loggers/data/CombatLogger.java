@@ -28,6 +28,9 @@ public final class CombatLogger extends EntityVillager {
      */
     public CombatLogger(World world) {
         super(world);
+        this.owner = null;
+        this.ownerUsername = null;
+        this.items = Lists.newArrayList();
     }
 
     /**
@@ -76,15 +79,15 @@ public final class CombatLogger extends EntityVillager {
 
     @Override
     public void move(EnumMoveType enummovetype, double d0, double d1, double d2) {
-        if (enummovetype.equals(EnumMoveType.SELF) || enummovetype.equals(EnumMoveType.PLAYER)) {
-            d0 = 0;
-            d1 = 0;
-            d2 = 0;
+        super.move(enummovetype, 0.0, d1, 0.0);
+
+        if (this.motY > 0.0) {
+            this.motY = 0.0;
         }
     }
 
-    @Override
-    public void a(Entity entity, float f, double d0, double d1) {}
+    /* @Override
+    public void a(Entity entity, float f, double d0, double d1) {} */
 
     public void reapply(Player player) {
         final CraftLivingEntity living = (CraftLivingEntity)getBukkitEntity();
