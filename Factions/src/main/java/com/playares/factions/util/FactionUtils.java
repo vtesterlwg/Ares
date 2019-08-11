@@ -3,9 +3,12 @@ package com.playares.factions.util;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.playares.commons.bukkit.location.PLocatable;
+import com.playares.commons.bukkit.util.Players;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.factions.data.PlayerFaction;
+import com.playares.factions.players.data.FactionPlayer;
+import com.playares.factions.timers.cont.player.ProtectionTimer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -66,5 +69,18 @@ public final class FactionUtils {
         }
 
         return ImmutableList.copyOf(result);
+    }
+
+    public static void resetPlayer(Factions plugin, Player player) {
+        final FactionPlayer factionPlayer = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (factionPlayer != null) {
+            factionPlayer.getTimers().clear();
+            factionPlayer.getTimers().add(new ProtectionTimer(plugin, player.getUniqueId(), plugin.getFactionConfig().getTimerProtection()));
+        }
+
+        Players.resetHealth(player);
+        player.getInventory().clear();
+        player.getInventory().setArmorContents(null);
     }
 }

@@ -2,6 +2,7 @@ package com.playares.factions.listener;
 
 import com.playares.factions.Factions;
 import com.playares.factions.factions.data.PlayerFaction;
+import com.playares.factions.util.FactionUtils;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -9,6 +10,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
 public final class PlayerListener implements Listener {
     @Getter public Factions plugin;
@@ -43,5 +45,11 @@ public final class PlayerListener implements Listener {
             faction.unregister(player);
             faction.sendMessage(ChatColor.YELLOW + "Member " + ChatColor.RED + "Offline" + ChatColor.YELLOW + ": " + ChatColor.RESET + player.getName());
         }
+    }
+
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event) {
+        final Player player = event.getPlayer();
+        FactionUtils.resetPlayer(plugin, player);
     }
 }
