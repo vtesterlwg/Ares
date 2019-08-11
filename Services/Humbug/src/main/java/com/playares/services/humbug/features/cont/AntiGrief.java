@@ -113,13 +113,14 @@ public final class AntiGrief implements HumbugModule, Listener {
             return;
         }
 
-        final Location to = event.getTo();
+        final Player player = event.getPlayer();
 
-        if (!to.getWorld().getEnvironment().equals(World.Environment.NETHER)) {
+        if (!event.getTo().getWorld().getEnvironment().equals(World.Environment.NETHER)) {
             return;
         }
 
         new Scheduler(getHumbug().getOwner()).sync(() -> {
+            final Location to = player.getLocation();
             final int minX = to.getBlockX() - 5;
             final int maxX = to.getBlockX() + 5;
             final int y = to.getBlockY() - 1;
