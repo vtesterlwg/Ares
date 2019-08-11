@@ -40,7 +40,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.potion.PotionEffect;
@@ -380,9 +380,12 @@ public final class LoggerAddon implements Addon, Listener {
     }
 
     @EventHandler
-    public void onRightClickLogger(PlayerInteractAtEntityEvent event) {
-        final Player player = event.getPlayer();
+    public void onEntityInteract(PlayerInteractEntityEvent event) {
         final Entity entity = event.getRightClicked();
+
+        if (event.isCancelled()) {
+            return;
+        }
 
         if (!(entity instanceof LivingEntity)) {
             return;
