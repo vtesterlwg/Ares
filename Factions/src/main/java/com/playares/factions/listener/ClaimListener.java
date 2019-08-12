@@ -7,6 +7,7 @@ import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.util.Items;
 import com.playares.factions.Factions;
 import com.playares.factions.claims.data.DefinedClaim;
+import com.playares.factions.claims.world.WorldLocation;
 import com.playares.factions.event.PlayerChangeClaimEvent;
 import com.playares.factions.factions.data.Faction;
 import com.playares.factions.factions.data.PlayerFaction;
@@ -352,7 +353,6 @@ public final class ClaimListener implements Listener {
         }
     }
 
-
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
@@ -366,7 +366,7 @@ public final class ClaimListener implements Listener {
 
         if (inside != null) {
             final Faction owner = plugin.getFactionManager().getFactionById(inside.getOwnerId());
-            final PlayerChangeClaimEvent changeClaimEvent = new PlayerChangeClaimEvent(player, null, inside);
+            final PlayerChangeClaimEvent changeClaimEvent = new PlayerChangeClaimEvent(player, null, player.getLocation(), null, inside);
             Bukkit.getPluginManager().callEvent(changeClaimEvent);
 
             if (changeClaimEvent.isCancelled()) {
@@ -407,11 +407,22 @@ public final class ClaimListener implements Listener {
                 event.getTo().getYaw(),
                 event.getTo().getPitch()));
 
+        final WorldLocation expectedWorldLocation = getPlugin().getClaimManager().getWorldLocationManager().getWorldLocation(
+                new PLocatable(event.getFrom().getWorld().getName(), event.getFrom().getX(), event.getFrom().getY(), event.getFrom().getZ(), event.getFrom().getYaw(), event.getFrom().getPitch()));
+
+        final WorldLocation predictedWorldLocation = getPlugin().getClaimManager().getWorldLocationManager().getWorldLocation(
+                new PLocatable(event.getTo().getWorld().getName(), event.getTo().getX(), event.getTo().getY(), event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
+
+        if (expectedClaim == null && predictedClaim == null && !expectedWorldLocation.equals(predictedWorldLocation)) {
+            player.sendMessage(ChatColor.GOLD + "Now Leaving: " + ChatColor.RESET + expectedWorldLocation.getDisplayName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
+            player.sendMessage(ChatColor.GOLD + "Now Entering: " + ChatColor.RESET + predictedWorldLocation.getDisplayName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
+        }
+
         if (expectedClaim == predictedClaim) {
             return;
         }
 
-        final PlayerChangeClaimEvent changeClaimEvent = new PlayerChangeClaimEvent(player, expectedClaim, predictedClaim);
+        final PlayerChangeClaimEvent changeClaimEvent = new PlayerChangeClaimEvent(player, event.getFrom(), event.getTo(), expectedClaim, predictedClaim);
         Bukkit.getPluginManager().callEvent(changeClaimEvent);
 
         if (changeClaimEvent.isCancelled()) {
@@ -446,11 +457,22 @@ public final class ClaimListener implements Listener {
                 event.getTo().getPitch()
         ));
 
+        final WorldLocation expectedWorldLocation = getPlugin().getClaimManager().getWorldLocationManager().getWorldLocation(
+                new PLocatable(event.getFrom().getWorld().getName(), event.getFrom().getX(), event.getFrom().getY(), event.getFrom().getZ(), event.getFrom().getYaw(), event.getFrom().getPitch()));
+
+        final WorldLocation predictedWorldLocation = getPlugin().getClaimManager().getWorldLocationManager().getWorldLocation(
+                new PLocatable(event.getTo().getWorld().getName(), event.getTo().getX(), event.getTo().getY(), event.getTo().getZ(), event.getTo().getYaw(), event.getTo().getPitch()));
+
+        if (expectedClaim == null && predictedClaim == null && !expectedWorldLocation.equals(predictedWorldLocation)) {
+            player.sendMessage(ChatColor.GOLD + "Now Leaving: " + ChatColor.RESET + expectedWorldLocation.getDisplayName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
+            player.sendMessage(ChatColor.GOLD + "Now Entering: " + ChatColor.RESET + predictedWorldLocation.getDisplayName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
+        }
+
         if (expectedClaim == predictedClaim) {
             return;
         }
 
-        final PlayerChangeClaimEvent changeClaimEvent = new PlayerChangeClaimEvent(player, expectedClaim, predictedClaim);
+        final PlayerChangeClaimEvent changeClaimEvent = new PlayerChangeClaimEvent(player, event.getFrom(), event.getTo(), expectedClaim, predictedClaim);
         Bukkit.getPluginManager().callEvent(changeClaimEvent);
 
         if (changeClaimEvent.isCancelled()) {
@@ -465,7 +487,7 @@ public final class ClaimListener implements Listener {
     public void onPlayerChangeClaim(PlayerChangeClaimEvent event) {
         final Player player = event.getPlayer();
         final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
-        final DefinedClaim to = event.getTo();
+        final DefinedClaim to = event.getClaimTo();
 
         if (to != null) {
             final Faction toFaction = plugin.getFactionManager().getFactionById(to.getOwnerId());
@@ -499,8 +521,25 @@ public final class ClaimListener implements Listener {
     @EventHandler (priority = EventPriority.MONITOR)
     public void onPlayerClaimChangeNotification(PlayerChangeClaimEvent event) {
         final Player player = event.getPlayer();
-        final DefinedClaim from = event.getFrom();
-        final DefinedClaim to = event.getTo();
+        final DefinedClaim from = event.getClaimFrom();
+        final DefinedClaim to = event.getClaimTo();
+
+        final WorldLocation fromWorldLocation = (event.getLocationFrom() != null) ? getPlugin().getClaimManager().getWorldLocationManager().getWorldLocation(new PLocatable(
+                        event.getLocationFrom().getWorld().getName(),
+                        event.getLocationFrom().getX(),
+                        event.getLocationFrom().getY(),
+                        event.getLocationFrom().getZ(),
+                        event.getLocationFrom().getYaw(),
+                        event.getLocationFrom().getPitch()))
+                : null;
+
+        final WorldLocation toWorldLocation = getPlugin().getClaimManager().getWorldLocationManager().getWorldLocation(new PLocatable(
+                event.getLocationTo().getWorld().getName(),
+                event.getLocationTo().getX(),
+                event.getLocationTo().getY(),
+                event.getLocationTo().getZ(),
+                event.getLocationTo().getYaw(),
+                event.getLocationTo().getPitch()));
 
         if (event.isCancelled()) {
             return;
@@ -523,6 +562,8 @@ public final class ClaimListener implements Listener {
                     player.sendMessage(ChatColor.GOLD + "Now Leaving: " + color + pf.getName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
                 }
             }
+        } else if (fromWorldLocation != null) {
+            player.sendMessage(ChatColor.GOLD + "Now Leaving: " + ChatColor.RESET + fromWorldLocation.getDisplayName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
         }
 
         if (to != null) {
@@ -538,6 +579,8 @@ public final class ClaimListener implements Listener {
                     player.sendMessage(ChatColor.GOLD + "Now Entering: " + color + pf.getName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
                 }
             }
+        } else {
+            player.sendMessage(ChatColor.GOLD + "Now Entering: " + ChatColor.RESET + toWorldLocation.getDisplayName() + ChatColor.GOLD + " (" + ChatColor.RED + "Deathban" + ChatColor.GOLD + ")");
         }
     }
 
@@ -549,7 +592,7 @@ public final class ClaimListener implements Listener {
 
         final Player player = event.getPlayer();
         final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
-        final DefinedClaim to = event.getTo();
+        final DefinedClaim to = event.getClaimTo();
         boolean toSafezone = false;
 
         if (profile == null) {

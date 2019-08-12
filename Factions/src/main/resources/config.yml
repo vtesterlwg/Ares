@@ -53,6 +53,13 @@ claims:
     player: 16.0
     server: 250.0
 
+# World location configuration
+# The values here dictate the radius on warzones
+world-locations:
+  overworld-warzone: 1000.0
+  nether-warzone: 500.0
+  end: 500.0
+
 # Timer configuration
 timers:
   player:

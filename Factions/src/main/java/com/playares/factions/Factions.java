@@ -29,12 +29,16 @@ import lombok.Getter;
 public final class Factions extends AresPlugin {
     /** Core factions configuration **/
     @Getter protected FactionConfig factionConfig;
+
     /** Stores all data/handling for Factions **/
     @Getter protected FactionManager factionManager;
+
     /** Stores all data/handling for Claims **/
     @Getter protected ClaimManager claimManager;
+
     /** Stores all data/handling for Players **/
     @Getter protected PlayerManager playerManager;
+
     /** Stores all data/handling for Faction Addons **/
     @Getter protected AddonManager addonManager;
 
@@ -91,6 +95,7 @@ public final class Factions extends AresPlugin {
         // Data Loading
         factionManager.loadFactions();
         claimManager.loadClaims();
+        claimManager.getWorldLocationManager().load();
 
         addonManager.startAddons();
         registerItems();

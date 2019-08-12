@@ -13,6 +13,7 @@ import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.claims.handler.ClaimCreationHandler;
 import com.playares.factions.claims.handler.ClaimDeleteHandler;
 import com.playares.factions.claims.handler.ClaimMapHandler;
+import com.playares.factions.claims.world.WorldLocationManager;
 import com.playares.factions.factions.data.Faction;
 import com.playares.factions.factions.data.ServerFaction;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public final class ClaimManager {
     @Getter public ClaimCreationHandler creationHandler;
     @Getter public ClaimDeleteHandler deleteHandler;
     @Getter public ClaimMapHandler mapHandler;
+    @Getter public WorldLocationManager worldLocationManager;
     @Getter public Set<DefinedClaim> claimRepository;
     @Getter public Set<DefinedClaimBuilder> claimBuilders;
 
@@ -36,6 +38,7 @@ public final class ClaimManager {
         this.creationHandler = new ClaimCreationHandler(this);
         this.deleteHandler = new ClaimDeleteHandler(this);
         this.mapHandler = new ClaimMapHandler(this);
+        this.worldLocationManager = new WorldLocationManager(plugin);
         this.claimRepository = Sets.newConcurrentHashSet();
         this.claimBuilders = Sets.newConcurrentHashSet();
     }

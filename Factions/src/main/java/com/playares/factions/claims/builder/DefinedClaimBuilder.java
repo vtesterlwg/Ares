@@ -6,6 +6,7 @@ import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.claims.pillars.ClaimPillar;
+import com.playares.factions.claims.world.WorldLocation;
 import com.playares.factions.factions.data.Faction;
 import com.playares.factions.factions.data.PlayerFaction;
 import com.playares.factions.factions.data.ServerFaction;
@@ -132,6 +133,15 @@ public final class DefinedClaimBuilder {
             final DefinedClaim claim = new DefinedClaim(plugin, owner, cornerA, cornerB);
             final List<DefinedClaim> existingClaims = plugin.getClaimManager().getClaimsByOwner(owner);
             boolean isTouchingExisting = existingClaims.isEmpty() || owner instanceof ServerFaction;
+
+            for (BLocatable perimeter : claim.getPerimeter(64)) {
+                final WorldLocation location = plugin.getClaimManager().getWorldLocationManager().getWorldLocation(perimeter);
+
+                if (!location.equals(WorldLocation.OVERWORLD_WILDERNESS)) {
+                    new Scheduler(plugin).sync(() -> promise.failure("Claims can not be in the WarZone")).run();
+                    return;
+                }
+            }
 
             if (claim.getLxW()[0] < plugin.getFactionConfig().getClaimMinSize() || claim.getLxW()[1] < plugin.getFactionConfig().getClaimMinSize()) {
                 new Scheduler(plugin).sync(() -> promise.failure("Claim must be at least " + plugin.getFactionConfig().getClaimMinSize() + "x" + plugin.getFactionConfig().getClaimMinSize())).run();
