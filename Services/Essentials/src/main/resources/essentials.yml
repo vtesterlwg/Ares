@@ -1,9 +1,3 @@
 broadcasts:
-    global-prefix: '&6<&dAres&6>&e '
-    player-prefix-format: '&6<&d{player}&6>&e '
-
-tab-display:
-    header:
-        - "Header"
-    footer:
-        - "Footer"
+    global-prefix: '&6[&4Ares&6]&e'
+    player-prefix-format: '&6<&4{player}&6>&e '

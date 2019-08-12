@@ -32,6 +32,8 @@ public final class PlayerListener implements Listener {
             faction.registerFriendly(player);
             faction.sendMessage(ChatColor.YELLOW + "Member " + ChatColor.GREEN + "Online" + ChatColor.YELLOW + ": " + ChatColor.RESET + player.getName());
         }
+
+        plugin.getPlayerManager().sendTabDisplay(player);
     }
 
     @EventHandler

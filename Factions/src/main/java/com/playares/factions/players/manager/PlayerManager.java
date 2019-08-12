@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.client.model.Filters;
 import com.playares.commons.base.util.Time;
+import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.timer.Timer;
 import com.playares.commons.bukkit.util.Players;
@@ -13,6 +14,7 @@ import com.playares.factions.Factions;
 import com.playares.factions.addons.events.EventsAddon;
 import com.playares.factions.addons.events.data.type.AresEvent;
 import com.playares.factions.addons.events.data.type.koth.KOTHEvent;
+import com.playares.factions.factions.data.PlayerFaction;
 import com.playares.factions.players.dao.PlayerDAO;
 import com.playares.factions.players.data.FactionPlayer;
 import com.playares.factions.players.handlers.PlayerTimerHandler;
@@ -22,6 +24,7 @@ import com.playares.services.automatedrestarts.AutomatedRestartService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
@@ -107,10 +110,7 @@ public final class PlayerManager {
 
         }).run()))).repeat(0L, 5L).run();
 
-        this.tabUpdater = new Scheduler(plugin).async(() -> {
-            // TODO: Add koth info and other display information
-            Bukkit.getOnlinePlayers().forEach(player -> Players.sendTablist(plugin.getProtocol(), player, ChatColor.AQUA + "" + ChatColor.BOLD + "Welcome to HCFRevival", ChatColor.GREEN + "play.hcfrevival.net"));
-        }).repeat(0L, 60 * 20L).run();
+        this.tabUpdater = new Scheduler(plugin).sync(() -> Bukkit.getOnlinePlayers().forEach(this::sendTabDisplay)).repeat(0L, 20L).run();
     }
 
     /**
@@ -124,6 +124,39 @@ public final class PlayerManager {
         if (this.timerUpdater != null) {
             this.timerUpdater.cancel();
         }
+    }
+
+    /**
+     * Sends the tab header and footer to the player
+     * @param player Player
+     */
+    public void sendTabDisplay(Player player) {
+        final FactionPlayer factionPlayer = getPlayer(player.getUniqueId());
+        final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(player.getUniqueId());
+        final String location = (factionPlayer.getCurrentClaim() != null) ? getPlugin().getFactionManager().getFactionById(factionPlayer.getCurrentClaim().getOwnerId()).getName() :
+                getPlugin().getClaimManager().getWorldLocationManager().getWorldLocation(new PLocatable(player)).getDisplayName();
+
+        final List<String> header = Lists.newArrayList();
+        final List<String> footer = Lists.newArrayList();
+
+        header.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + "HCFRevival");
+
+        if (faction != null) {
+            footer.add(ChatColor.GOLD + faction.getName());
+            footer.add(ChatColor.YELLOW + "Online: " + ChatColor.GRAY + faction.getOnlineMembers().size() + "/" + faction.getMembers().size());
+            footer.add(ChatColor.YELLOW + "DTR: " + ChatColor.GRAY + String.format("%.2f", faction.getDeathsTilRaidable()));
+            footer.add(ChatColor.YELLOW + "Balance: " + ChatColor.GRAY + "$" + String.format("%.2f", faction.getBalance()));
+            footer.add(ChatColor.RESET + " ");
+        }
+
+        footer.add(ChatColor.YELLOW + "Your location: " + location);
+        footer.add(ChatColor.GRAY + " [" + player.getLocation().getBlockX() + ", " + player.getLocation().getBlockY() + ", " + player.getLocation().getBlockZ() + "]");
+
+        footer.add(ChatColor.RESET + " ");
+        footer.add(ChatColor.GRAY + "For map-specific info type " + ChatColor.LIGHT_PURPLE + "/map");
+        footer.add(ChatColor.AQUA + "play.hcfrevival.net");
+
+        new Scheduler(plugin).async(() -> Players.sendTablist(getPlugin().getProtocol(), player, Joiner.on("\n").join(header), Joiner.on("\n").join(footer))).run();
     }
 
     /**
