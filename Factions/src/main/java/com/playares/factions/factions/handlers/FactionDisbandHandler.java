@@ -174,7 +174,7 @@ public final class FactionDisbandHandler {
             return;
         }
 
-        if (faction.getMember(player.getUniqueId()).getRank().equals(PlayerFaction.FactionRank.LEADER)) {
+        if (faction.getMember(player.getUniqueId()).getRank().equals(PlayerFaction.FactionRank.LEADER) && faction.getMembersByRank(PlayerFaction.FactionRank.LEADER).size() < 2) {
             promise.failure("You must promote someone else to leader before leaving");
             return;
         }
