@@ -1,5 +1,6 @@
 package com.playares.factions.listener;
 
+import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
 import com.playares.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
 import com.playares.commons.bukkit.event.PlayerSplashPlayerEvent;
@@ -25,9 +26,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
-import org.bukkit.entity.AreaEffectCloud;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -41,6 +40,34 @@ public final class CombatListener implements Listener {
 
     public CombatListener(Factions plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler
+    public void onProjectileCollide(ProjectileCollideEvent event) {
+        final Projectile projectile = event.getEntity();
+        final Entity entity = event.getCollidedWith();
+
+        if (!(projectile instanceof EnderPearl)) {
+            return;
+        }
+
+        if (!(projectile.getShooter() instanceof Player)) {
+            return;
+        }
+
+        if (!(entity instanceof Player)) {
+            return;
+        }
+
+        final Player shooter = (Player)projectile.getShooter();
+        final Player hit = (Player)entity;
+        final PlayerFaction shooterFaction = getPlugin().getFactionManager().getFactionByPlayer(shooter.getUniqueId());
+
+        if (shooterFaction == null || shooterFaction.getMember(hit.getUniqueId()) == null) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
     @EventHandler (priority = EventPriority.LOW)
