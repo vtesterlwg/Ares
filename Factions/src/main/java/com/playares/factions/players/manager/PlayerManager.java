@@ -65,10 +65,23 @@ public final class PlayerManager {
 
                     if (event instanceof KOTHEvent) {
                         final KOTHEvent koth = (KOTHEvent)event;
-                        eventElement.append(Time.convertToHHMMSS(koth.getSession().getTimer().getRemaining()));
-                    }
 
-                    hudElements.add(eventElement.toString());
+                        if (koth.getSession().isContested()) {
+                            eventElement.append("Contested");
+                            hudElements.add(eventElement.toString());
+                            continue;
+                        }
+
+                        final long remainingMs = koth.getSession().getTimer().getRemaining();
+
+                        if (remainingMs <= (10 * 1000L)) {
+                            eventElement.append(Time.convertToDecimal(remainingMs));
+                        } else {
+                            eventElement.append(Time.convertToHHMMSS(remainingMs));
+                        }
+
+                        hudElements.add(eventElement.toString());
+                    }
                 }
             }
 
@@ -133,7 +146,7 @@ public final class PlayerManager {
     public void sendTabDisplay(Player player) {
         final FactionPlayer factionPlayer = getPlayer(player.getUniqueId());
         final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(player.getUniqueId());
-        final String location = (factionPlayer.getCurrentClaim() != null) ? getPlugin().getFactionManager().getFactionById(factionPlayer.getCurrentClaim().getOwnerId()).getName() :
+        final String location = (factionPlayer != null && factionPlayer.getCurrentClaim() != null) ? getPlugin().getFactionManager().getFactionById(factionPlayer.getCurrentClaim().getOwnerId()).getName() :
                 getPlugin().getClaimManager().getWorldLocationManager().getWorldLocation(new PLocatable(player)).getDisplayName();
 
         final List<String> header = Lists.newArrayList();
