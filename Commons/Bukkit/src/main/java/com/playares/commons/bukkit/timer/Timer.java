@@ -5,14 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 public abstract class Timer {
-    @Setter
-    public long expire;
-
-    @Getter @Setter
-    public long frozenTime;
-
-    @Getter
-    public boolean frozen;
+    @Setter public long expire;
+    @Getter @Setter public long frozenTime;
+    @Getter public boolean frozen;
 
     public Timer(int seconds) {
         this.expire = Time.now() + (seconds * 1000);
