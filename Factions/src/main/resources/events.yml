@@ -1,0 +1,109 @@
+standard-loot-table:
+  BEACON:
+    amount: 1
+    chance: '1:800'
+  CROWBAR:
+    amount: 1
+    chance: '1:800'
+  END_PORTAL_FRAME:
+    amount: 3
+    chance: '1:800'
+  GOLDEN_APPLE:
+    amount: 3
+    data: 1
+    chance: '1:400'
+  EMERALD_BLOCK:
+    amount: 32
+    chance: '1:350'
+  DIAMOND_BLOCK:
+    amount: 32
+    chance: '1:350'
+  GOLD_BLOCK:
+    amount: 64
+    chance: '1:350'
+  ELYTRA:
+    amount: 1
+    chance: '1:350'
+  DIAMOND_HELMET:
+    amount: 1
+    name: '&1Event Helmet'
+    enchantments:
+      - 'PROTECTION_ENVIRONMENTAL:4'
+      - 'DURABILITY:3'
+      - 'MENDING:1'
+    chance: '1:250'
+  DIAMOND_CHESTPLATE:
+    amount: 1
+    name: '&1Event Chestplate'
+    enchantments:
+      - 'PROTECTION_ENVIRONMENTAL:4'
+      - 'DURABILITY:3'
+      - 'MENDING:1'
+    chance: '1:250'
+  DIAMOND_LEGGINGS:
+    amount: 1
+    name: '&1Event Leggings'
+    enchantments:
+      - 'PROTECTION_ENVIRONMENTAL:4'
+      - 'DURABILITY:3'
+      - 'MENDING:1'
+    chance: '1:250'
+  DIAMOND_BOOTS:
+    amount: 1
+    name: '&1Event Boots'
+    enchantments:
+      - 'PROTECTION_ENVIRONMENTAL:4'
+      - 'DURABILITY:3'
+      - 'MENDING:1'
+      - 'PROTECTION_FALL:4'
+      - 'DEPTH_STRIDER:3'
+    chance: '1:300'
+  DIAMOND_PICKAXE:
+    amount: 1
+    name: '&1Event Pickaxe'
+    enchantments:
+      - 'LOOT_BONUS_BLOCKS:4'
+      - 'DURABILITY:3'
+      - 'DIG_SPEED:5'
+    chance: '1:300'
+  DIAMOND_SWORD:
+    amount: 1
+    name: '&1Event Sword'
+    enchantments:
+      - 'DAMAGE_ALL:5'
+      - 'LOOT_BONUS_MOBS:4'
+      - 'DURABILITY:3'
+    chance: '1:300'
+  PURPLE_SHULKER_BOX:
+    amount: 1
+    chance: '1:400'
+  TOTEM:
+    amont: 3
+    chance: '1:350'
+  DRAGONS_BREATH:
+    amount: 64
+    chance: '1:250'
+  322:0:
+    amount: 64
+    chance: '1:250'
+  SLIME_BLOCK:
+    amount: 64
+    chance: '1:200'
+  ENDER_PEARL:
+    amount: 16
+    chance: '1:200'
+  SULPHUR:
+    amount: 64
+    chance: '1:150'
+  MAGMA_CREAM:
+    amount: 64
+    chance: '1:150'
+  BLAZE_ROD:
+    amount: 64
+    chance: '1:125'
+  GLOWSTONE_BLOCK:
+    amount: 64
+    chance: '1:125'
+  GHAST_TEAR:
+    amount: 64
+    chance: '1:100'

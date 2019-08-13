@@ -11,6 +11,7 @@ import com.playares.factions.addons.events.EventsAddon;
 import com.playares.factions.addons.events.data.type.AresEvent;
 import com.playares.factions.addons.events.data.type.koth.KOTHEvent;
 import com.playares.factions.factions.data.Faction;
+import com.playares.factions.factions.data.PlayerFaction;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -71,7 +72,23 @@ public final class EventsMenu extends Menu {
                     lore.add(ChatColor.GOLD + "Remaining Time" + ChatColor.YELLOW + ": " + Time.convertToHHMMSS(koth.getSession().getTimer().getRemaining()));
 
                     if (koth.getSession().getTicketsNeededToWin() > 1) {
-                        // TODO: Ticket Leaderboard
+                        final List<PlayerFaction> leaderboard = koth.getSession().getSortedLeaderboard();
+                        int position = 1;
+
+                        lore.add(ChatColor.RESET + " ");
+                        lore.add(ChatColor.GOLD + "Leaderboard");
+
+                        if (!leaderboard.isEmpty()) {
+                            for (PlayerFaction faction : leaderboard) {
+                                final int tickets = koth.getSession().getTickets(faction);
+
+                                lore.add(ChatColor.GOLD + "" + position + ". " + ChatColor.YELLOW + faction.getName() + ChatColor.BLUE + " (" + tickets + ")");
+
+                                position += 1;
+                            }
+                        } else {
+                            lore.add(ChatColor.YELLOW + "No factions have a ticket yet");
+                        }
                     }
                 } else {
                     lore.add(ChatColor.GRAY + "This event will activate:");

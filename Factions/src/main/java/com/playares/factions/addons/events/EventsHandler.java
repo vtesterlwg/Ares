@@ -79,13 +79,45 @@ public final class EventsHandler {
                 return;
             }
 
+            if (!manager.getTicker().isStarted()) {
+                manager.getTicker().start();
+            }
+
             koth.start(ticketsNeededToWin, timerDuration);
             promise.success();
+            return;
         }
+
+        promise.failure("Event not found");
     }
 
-    public void stop(Player player, String name, SimplePromise promise) {
+    public void stop(String name, SimplePromise promise) {
+        final AresEvent event = manager.getEventByName(name);
 
+        if (event == null) {
+            promise.failure("Event not found");
+            return;
+        }
+
+        if (event instanceof KOTHEvent) {
+            final KOTHEvent koth = (KOTHEvent)event;
+
+            if (koth.getSession() == null || !koth.getSession().isActive()) {
+                promise.failure("This event is not active");
+                return;
+            }
+
+            koth.stop();
+
+            if (getManager().getActiveEvents().isEmpty() && getManager().getTicker().isStarted()) {
+                getManager().getTicker().stop();
+            }
+
+            promise.success();
+            return;
+        }
+
+        promise.failure("Event not found");
     }
 
     public void set(Player player, String name, String type, int value, SimplePromise promise) {

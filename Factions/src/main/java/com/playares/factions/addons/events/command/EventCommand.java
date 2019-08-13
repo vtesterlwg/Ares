@@ -1,9 +1,7 @@
 package com.playares.factions.addons.events.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.Subcommand;
-import co.aikar.commands.annotation.Values;
+import co.aikar.commands.annotation.*;
 import com.playares.commons.base.promise.FailablePromise;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.factions.addons.events.EventsAddon;
@@ -23,6 +21,7 @@ public final class EventCommand extends BaseCommand {
     }
 
     @Subcommand("list")
+    @Description("View a list of all events")
     public void onList(Player player) {
         addon.getManager().getHandler().list(player, new FailablePromise<EventsMenu>() {
             @Override
@@ -38,6 +37,8 @@ public final class EventCommand extends BaseCommand {
     }
 
     @Subcommand("create")
+    @Description("Create a new event")
+    @CommandPermission("factions.events.admin")
     public void onCreate(Player player, @Values("koth|palace") String type) {
         addon.getManager().getHandler().create(player, type, new SimplePromise() {
             @Override
@@ -51,6 +52,8 @@ public final class EventCommand extends BaseCommand {
     }
 
     @Subcommand("delete")
+    @Description("Delete an event")
+    @CommandPermission("factions.events.admin")
     public void onDelete(Player player, String name) {
         addon.getManager().getHandler().delete(player, name, new SimplePromise() {
             @Override
@@ -66,6 +69,8 @@ public final class EventCommand extends BaseCommand {
     }
 
     @Subcommand("rename")
+    @Description("Rename an event")
+    @CommandPermission("factions.events.admin")
     public void onRename(Player player, String currentName, String newName) {
         addon.getManager().getHandler().rename(player, currentName, newName, new SimplePromise() {
             @Override
@@ -81,6 +86,8 @@ public final class EventCommand extends BaseCommand {
     }
 
     @Subcommand("start")
+    @Description("Start an event")
+    @CommandPermission("factions.events.admin")
     public void onStart(Player player, String name, int ticketsNeededToWin, int timerDuration) {
         addon.getManager().getHandler().start(name, ticketsNeededToWin, timerDuration, new SimplePromise() {
             @Override
@@ -96,8 +103,10 @@ public final class EventCommand extends BaseCommand {
     }
 
     @Subcommand("stop")
+    @Description("Stop an event")
+    @CommandPermission("factions.events.admin")
     public void onStop(Player player, String name) {
-        addon.getManager().getHandler().stop(player, name, new SimplePromise() {
+        addon.getManager().getHandler().stop(name, new SimplePromise() {
             @Override
             public void success() {
                 player.sendMessage(ChatColor.GREEN + "Event stopped");
@@ -111,6 +120,8 @@ public final class EventCommand extends BaseCommand {
     }
 
     @Subcommand("set")
+    @Description("Update an events session value")
+    @CommandPermission("factions.events.admin")
     public void onSet(Player player, String name, @Values("timer|wincondition|wc") String type, int value) {
         addon.getManager().getHandler().set(player, name, type, value, new SimplePromise() {
             @Override

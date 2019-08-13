@@ -18,5 +18,6 @@ public final class KOTHCountdownTimer extends Timer {
     public void onFinish() {
         final KOTHTickEvent tickEvent = new KOTHTickEvent(event);
         Bukkit.getPluginManager().callEvent(tickEvent);
+        event.getSession().tick(event.getSession().getCapturingFaction());
     }
 }

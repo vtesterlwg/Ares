@@ -68,6 +68,7 @@ factions.setspawn - Set a spawnpoint
 factions.timer.edit - Access /timer command
 factions.events.builder - Access event builder functions
 factions.serverstates.set - Set the server state
+factions.events.admin - Access event functions
 
 autoreboot.schedule - Schedule reboot
 autoreboot.start - Start reboot process

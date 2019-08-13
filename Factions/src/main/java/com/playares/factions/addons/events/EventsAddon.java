@@ -6,6 +6,8 @@ import com.playares.factions.addons.Addon;
 import com.playares.factions.addons.events.builder.EventBuilderManager;
 import com.playares.factions.addons.events.builder.EventBuilderWand;
 import com.playares.factions.addons.events.command.EventCommand;
+import com.playares.factions.addons.events.listener.EventListener;
+import com.playares.factions.addons.events.loot.LootManager;
 import com.playares.services.customitems.CustomItemService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -18,6 +20,7 @@ public final class EventsAddon implements Addon {
 
     @Getter public EventsManager manager;
     @Getter public EventBuilderManager builderManager;
+    @Getter public LootManager lootManager;
 
     public EventsAddon(Factions plugin) {
         this.plugin = plugin;
@@ -34,8 +37,10 @@ public final class EventsAddon implements Addon {
 
         this.manager = new EventsManager(this);
         this.builderManager = new EventBuilderManager(this);
+        this.lootManager = new LootManager(this);
 
         plugin.registerCommand(new EventCommand(this));
+        plugin.registerListener(new EventListener(this));
 
         if (customItemService != null) {
             customItemService.registerNewItem(new EventBuilderWand());
@@ -46,11 +51,9 @@ public final class EventsAddon implements Addon {
 
     @Override
     public void start() {
-
+        lootManager.load();
     }
 
     @Override
-    public void stop() {
-
-    }
+    public void stop() {}
 }
