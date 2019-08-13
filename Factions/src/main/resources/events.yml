@@ -107,3 +107,207 @@ standard-loot-table:
   GHAST_TEAR:
     amount: 64
     chance: '1:100'
+
+palace-loot-table:
+  TIER3:
+    COOKED_BEEF:
+      amount: 8
+      chance: '1:100'
+    GOLD_ORE:
+      amount: 4
+      chance: '1:125'
+    REDSTONE_ORE:
+      amount: 5
+      chance: '1:100'
+    LAPIS_ORE:
+      amount: 5
+      chance: '1:100'
+    IRON_ORE:
+      amount: 6
+      chance: '1:125'
+    TNT:
+      amount: 1
+      chance: '1:150'
+    GLOWSTONE:
+      amount: 2
+      chance: '1:150'
+    EMERALD_ORE:
+      amount: 1
+      chance: '1:300'
+    DIAMOND_ORE:
+      amount: 1
+      chance: '1:300'
+    PACKED_ICE:
+      amount: 6
+      chance: '1:100'
+    SLIME_BLOCK:
+      amount: 3
+      chance: '1:200'
+    SULPHUR:
+      amount: 2
+      chance: '1:250'
+    GLOWSTONE_DUST:
+      amount: 2
+      chance: '1:250'
+    FERMENTED_SPIDER_EYE:
+      amount: 1
+      chance: '1:250'
+    BLAZE_ROD:
+      amount: 1
+      chance: '1:250'
+    SPECKLED_MELON:
+      amount: 2
+      chance: '1:300'
+    EXP_BOTTLE:
+      amount: 10
+      chance: '1:500'
+    CAKE:
+      amount: 1
+      chance: '1:300'
+    DRAGONS_BREATH:
+      amount: 1
+      chance: '1:200'
+  TIER2:
+    ENDER_PEARL:
+      amount: 3
+      chance: '1:300'
+    GOLDEN_APPLE:
+      amount: 3
+      chance: '1:300'
+    DRAGONS_BREATH:
+      amount: 3
+      chance: '1:100'
+    GOLD_ORE:
+      amount: 6
+      chance: '1:200'
+    LAPIS_ORE:
+      amount: 8
+      chance: '1:175'
+    IRON_ORE:
+      amount: 6
+      chance: '1:175'
+    REDSTONE_ORE:
+      amount: 8
+      chance: '1:175'
+    GLOWSTONE:
+      amount: 4
+      chance: '1:250'
+    DIAMOND_ORE:
+      amount: 3
+      chance: '1:500'
+    EMERALD_ORE:
+      amount: 3
+      chance: '1:500'
+    SULPHUR:
+      amount: 6
+      chance: '1:300'
+    GLOWSTONE_DUST:
+      amount: 6
+      chance: '1:200'
+    EXP_BOTTLE:
+      amount: 16
+      chance: '1:400'
+    QUARTZ_ORE:
+      amount: 16
+      chance: '1:100'
+  TIER1:
+    DIAMOND_BLOCK:
+      amount: 3
+      chance: '1:300'
+    GOLD_BLOCK:
+      amount: 3
+      chance: '1:250'
+    EMERALD_BLOCK:
+      amount: 3
+      chance: '1:300'
+    REDSTONE_BLOCK:
+      amount: 6
+      chance: '1:150'
+    LAPIS_BLOCK:
+      amount: 6
+      chance: '1:150'
+    IRON_BLOCK:
+      amount: 6
+      chance: '1:150'
+    GOLDEN_APPLE:
+      amount: 8
+      chance: '1:200'
+    ELYTRA:
+      amount: 1
+      chance: '1:500'
+    322:1:
+      amount: 1
+      data: 1
+      chance: '1:500'
+    BLACK_SHULKER_BOX:
+      amount: 1
+      chance: '1:350'
+    NETHER_STAR:
+      amount: 1
+      chance: '1:500'
+    ENDER_PEARL:
+      amount: 1
+      chance: '1:250'
+    EXP_BOTTLE:
+      amount: 32
+      chance: '1:400'
+    END_PORTAL_FRAME:
+      amount: 1
+      chance: '1:750'
+    CROWBAR:
+      amount: 1
+      chance: '1:750'
+    QUARTZ_ORE:
+      amount: 64
+      chance: '1:200'
+    DIAMOND_HELMET:
+      amount: 1
+      name: '&4Palace Helmet'
+      enchantments:
+        - 'PROTECTION_ENVIRONMENTAL:4'
+        - 'DURABILITY:3'
+        - 'MENDING:1'
+      chance: '1:500'
+    DIAMOND_CHESTPLATE:
+      amount: 1
+      name: '&4Palace Chestplate'
+      enchantments:
+        - 'PROTECTION_ENVIRONMENTAL:4'
+        - 'DURABILITY:3'
+        - 'MENDING:1'
+      chance: '1:600'
+    DIAMOND_LEGGINGS:
+      amount: 1
+      name: '&4Palace Leggings'
+      enchantments:
+        - 'PROTECTION_ENVIRONMENTAL:4'
+        - 'DURABILITY:3'
+        - 'MENDING:1'
+      chance: '1:550'
+    DIAMOND_BOOTS:
+      amount: 1
+      name: '&4Palace Boots'
+      enchantments:
+        - 'PROTECTION_ENVIRONMENTAL:4'
+        - 'DURABILITY:3'
+        - 'PROTECTION_FALL:4'
+        - 'DEPTH_STRIDER:3'
+        - 'MENDING:1'
+      chance: '1:500'
+    DIAMOND_SWORD:
+      amount: 1
+      name: '&4Palace Sword'
+      enchantments:
+        - 'DAMAGE_ALL:5'
+        - 'FIRE_ASPECT:2'
+        - 'DURABILITY:3'
+        - 'LOOT_BONUS_MOBS:4'
+      chance: '1:750'
+    DIAMOND_PICKAXE:
+      amount: 1
+      name: '&4Palace Pickaxe'
+      enchantments:
+        - 'LOOT_BONUS_BLOCKS:4'
+        - 'DURABILITY:3'
+        - 'DIG_SPEED:5'
+      chance: '1:750'

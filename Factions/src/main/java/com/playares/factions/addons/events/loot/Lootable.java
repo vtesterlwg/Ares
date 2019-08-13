@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.Random;
 
 @AllArgsConstructor
-public final class Lootable {
+public class Lootable {
     @Getter public final EventsAddon addon;
     @Getter public final String materialName;
     @Getter public final String displayName;
