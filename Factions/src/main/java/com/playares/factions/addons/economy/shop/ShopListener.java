@@ -4,6 +4,7 @@ import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.item.custom.CustomItem;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.addons.economy.EconomyAddon;
+import com.playares.factions.util.ItemUtils;
 import com.playares.services.customitems.CustomItemService;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
@@ -38,7 +39,7 @@ public final class ShopListener implements Listener {
         }
 
         if (l1.equalsIgnoreCase("buysign")) {
-            if (!addon.getShopHandler().isValidItem(l2)) {
+            if (addon.getShopHandler().isInvalidItem(l2)) {
                 player.sendMessage(ChatColor.RED + "Item not found");
                 addon.getShopHandler().setInvalidSign(event);
                 return;
@@ -67,7 +68,7 @@ public final class ShopListener implements Listener {
         }
 
         if (l1.equalsIgnoreCase("sellsign")) {
-            if (!addon.getShopHandler().isValidItem(l2)) {
+            if (addon.getShopHandler().isInvalidItem(l2)) {
                 player.sendMessage(ChatColor.RED + "Item not found");
                 addon.getShopHandler().setInvalidSign(event);
                 return;
@@ -111,9 +112,9 @@ public final class ShopListener implements Listener {
         final String l1 = sign.getLine(0), l2 = sign.getLine(1), l3 = sign.getLine(2), l4 = sign.getLine(3);
 
         if (l1.equals(ChatColor.DARK_GREEN + "[Buy]")) {
-            final CustomItem byCustomItem = getAddon().getShopHandler().getByCustomItem(l2);
-            final ItemStack byMaterialName = getAddon().getShopHandler().getByName(l2.toUpperCase());
-            final ItemStack byItemId = getAddon().getShopHandler().getById(l2);
+            final CustomItem byCustomItem = ItemUtils.getCustomItem(addon.getPlugin(), l2);
+            final ItemStack byMaterialName = ItemUtils.getItemByName(l2);
+            final ItemStack byItemId = ItemUtils.getItemById(l2);
             final int amount = Integer.parseInt(l3);
             final double price = Double.parseDouble(l4.replace("$", ""));
 
@@ -157,9 +158,9 @@ public final class ShopListener implements Listener {
 
         if (l1.equals(ChatColor.RED + "[Sell]")) {
             final CustomItemService customItemService = (CustomItemService)addon.getPlugin().getService(CustomItemService.class);
-            final CustomItem byCustomItem = getAddon().getShopHandler().getByCustomItem(l2);
-            final ItemStack byMaterialName = getAddon().getShopHandler().getByName(l2.toUpperCase());
-            final ItemStack byItemId = getAddon().getShopHandler().getById(l2);
+            final CustomItem byCustomItem = ItemUtils.getCustomItem(addon.getPlugin(), l2);
+            final ItemStack byMaterialName = ItemUtils.getItemByName(l2);
+            final ItemStack byItemId = ItemUtils.getItemById(l2);
             final int amount = Integer.parseInt(l3);
             final double price = Double.parseDouble(l4.replace("$", ""));
 
