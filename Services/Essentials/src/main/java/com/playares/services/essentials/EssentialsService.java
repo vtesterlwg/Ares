@@ -11,12 +11,12 @@ import com.playares.services.essentials.data.kit.KitManager;
 import com.playares.services.essentials.data.warp.Warp;
 import com.playares.services.essentials.data.warp.WarpHandler;
 import com.playares.services.essentials.data.warp.WarpManager;
+import com.playares.services.essentials.remap.RemappedEnchantment;
 import com.playares.services.essentials.vanish.VanishHandler;
 import com.playares.services.essentials.vanish.VanishManager;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
@@ -61,8 +61,8 @@ public final class EssentialsService implements AresService {
         getOwner().getCommandManager().getCommandCompletions().registerAsyncCompletion("enchantments", c -> {
            final List<String> enchants = Lists.newArrayList();
 
-           for (Enchantment enchant : Enchantment.values()) {
-               enchants.add(enchant.getName().toLowerCase());
+           for (RemappedEnchantment enchant : RemappedEnchantment.values()) {
+               enchants.add(enchant.name().toLowerCase().replace("_", ""));
            }
 
            return ImmutableList.copyOf(enchants);
