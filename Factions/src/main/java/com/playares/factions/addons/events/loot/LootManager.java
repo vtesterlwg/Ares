@@ -39,27 +39,28 @@ public final class LootManager {
         final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
 
         for (String materialName : config.getConfigurationSection("standard-loot-table").getKeys(false)) {
+            final String path = "standard-loot-table." + materialName + ".";
             String name = null;
             short data = 0;
             int amount = 1;
-            Map<Enchantment, Integer> enchantments = Maps.newHashMap();
+            final Map<Enchantment, Integer> enchantments = Maps.newHashMap();
             int required = 1;
             int total = 100;
 
-            if (config.get("standard-loot-table." + materialName + ".name") != null) {
-                name = ChatColor.translateAlternateColorCodes('&', config.getString("standard-loot-table." + materialName + ".name"));
+            if (config.get(path + "name") != null) {
+                name = ChatColor.translateAlternateColorCodes('&', config.getString(path + "name"));
             }
 
-            if (config.get("standard-loot-table." + materialName + ".data") != null) {
-                data = (short)config.getInt("standard-loot-table." + materialName + ".data");
+            if (config.get(path + "data") != null) {
+                data = (short)config.getInt(path + "data");
             }
 
-            if (config.get("standard-loot-table." + materialName + ".amount") != null) {
-                amount = config.getInt("standard-loot-table." + materialName + ".amount");
+            if (config.get(path + "amount") != null) {
+                amount = config.getInt(path + "amount");
             }
 
-            if (config.get("standard-loot-table." + materialName + ".enchantments") != null) {
-                final List<String> values = config.getStringList("standard-loot-table." + materialName + ".enchantments");
+            if (config.get(path + "enchantments") != null) {
+                final List<String> values = config.getStringList(path + "enchantments");
 
                 for (String value : values) {
                     final String enchantmentName = value.split(":")[0];
@@ -83,9 +84,9 @@ public final class LootManager {
                 }
             }
 
-            if (config.get("standard-loot-table." + materialName + ".chance") != null) {
-                final String requiredName = config.getString("standard-loot-table." + materialName + ".chance").split(":")[0];
-                final String totalName = config.getString("standard-loot-table." + materialName + ".chance").split(":")[1];
+            if (config.get(path + "chance") != null) {
+                final String requiredName = config.getString(path + "chance").split(":")[0];
+                final String totalName = config.getString(path + "chance").split(":")[1];
 
                 try {
                     required = Integer.parseInt(requiredName);
@@ -104,27 +105,28 @@ public final class LootManager {
 
         for (PalaceLootTier tier : PalaceLootTier.values()) {
             for (String materialName : config.getConfigurationSection("palace-loot-table." + tier.name()).getKeys(false)) {
+                final String path = "palace.loot-table." + tier.name() + "." + materialName + ".";
                 String name = null;
                 short data = 0;
                 int amount = 1;
-                Map<Enchantment, Integer> enchantments = Maps.newHashMap();
+                final Map<Enchantment, Integer> enchantments = Maps.newHashMap();
                 int required = 1;
                 int total = 100;
 
-                if (config.get("palace-loot-table." + tier.name() + "." + materialName + ".name") != null) {
-                    name = ChatColor.translateAlternateColorCodes('&', config.getString("palace-loot-table." + tier.name() + "." + materialName + ".name"));
+                if (config.get(path + "name") != null) {
+                    name = ChatColor.translateAlternateColorCodes('&', config.getString(path + "name"));
                 }
 
-                if (config.get("palace-loot-table." + tier.name() + "." + materialName + ".data") != null) {
-                    data = (short)config.getInt("palace-loot-table." + tier.name() + "." + materialName + ".data");
+                if (config.get(path + "data") != null) {
+                    data = (short)config.getInt(path + "data");
                 }
 
-                if (config.get("palace-loot-table." + tier.name() + "." + materialName + ".amount") != null) {
-                    amount = config.getInt("palace-loot-table." + tier.name() + "." + materialName + ".amount");
+                if (config.get(path + "amount") != null) {
+                    amount = config.getInt(path + "amount");
                 }
 
-                if (config.get("palace-loot-table." + tier.name() + "." + materialName + ".enchantments") != null) {
-                    final List<String> values = config.getStringList("palace-loot-table." + tier.name() + "." + materialName + ".enchantments");
+                if (config.get(path + "enchantments") != null) {
+                    final List<String> values = config.getStringList(path + "enchantments");
 
                     for (String value : values) {
                         final String enchantmentName = value.split(":")[0];
@@ -148,9 +150,9 @@ public final class LootManager {
                     }
                 }
 
-                if (config.get("palace-loot-table." + tier.name() + "." + materialName + ".chance") != null) {
-                    final String requiredName = config.getString("palace-loot-table." + tier.name() + "." + materialName + ".chance").split(":")[0];
-                    final String totalName = config.getString("palace-loot-table." + tier.name() + "." + materialName + ".chance").split(":")[1];
+                if (config.get(path + "chance") != null) {
+                    final String requiredName = config.getString(path + "chance").split(":")[0];
+                    final String totalName = config.getString(path + "chance").split(":")[1];
 
                     try {
                         required = Integer.parseInt(requiredName);
