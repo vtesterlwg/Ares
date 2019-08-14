@@ -22,6 +22,7 @@ import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.ProtectionTimer;
 import com.playares.services.automatedrestarts.AutomatedRestartService;
 import lombok.Getter;
+import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -158,7 +159,16 @@ public final class PlayerManager {
             footer.add(ChatColor.GOLD + faction.getName());
             footer.add(ChatColor.YELLOW + "Online: " + ChatColor.GRAY + faction.getOnlineMembers().size() + "/" + faction.getMembers().size());
             footer.add(ChatColor.YELLOW + "DTR: " + ChatColor.GRAY + String.format("%.2f", faction.getDeathsTilRaidable()));
-            footer.add(ChatColor.YELLOW + "Balance: " + ChatColor.GRAY + "$" + String.format("%.2f", faction.getBalance()));
+
+            if (faction.getRally() != null) {
+                footer.add(ChatColor.YELLOW + "Rally: " + ChatColor.GRAY +
+                        "[" + faction.getRally().getBukkit().getBlockX() + ", " +
+                        faction.getRally().getBukkit().getBlockY() + ", " +
+                        faction.getRally().getBukkit().getBlockZ() + ", " +
+                        StringUtils.capitaliseAllWords(faction.getRally().getBukkit().getWorld().getEnvironment().name())
+                        + ChatColor.GRAY + "]");
+            }
+
             footer.add(ChatColor.RESET + " ");
         }
 
