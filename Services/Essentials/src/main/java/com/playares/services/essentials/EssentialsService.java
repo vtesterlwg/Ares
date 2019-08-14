@@ -3,6 +3,7 @@ package com.playares.services.essentials;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.bukkit.remap.RemappedEffect;
 import com.playares.commons.bukkit.remap.RemappedEnchantment;
 import com.playares.commons.bukkit.service.AresService;
 import com.playares.services.essentials.command.*;
@@ -17,7 +18,6 @@ import com.playares.services.essentials.vanish.VanishManager;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.List;
 
@@ -47,12 +47,8 @@ public final class EssentialsService implements AresService {
         getOwner().getCommandManager().getCommandCompletions().registerAsyncCompletion("potions", c -> {
             final List<String> potions = Lists.newArrayList();
 
-            for (PotionEffectType type : PotionEffectType.values()) {
-                if (type == null) {
-                    continue;
-                }
-
-                potions.add(type.getName().toLowerCase());
+            for (RemappedEffect effect : RemappedEffect.values()) {
+                potions.add(effect.name().toLowerCase().replace("_", ""));
             }
 
             return ImmutableList.copyOf(potions);
