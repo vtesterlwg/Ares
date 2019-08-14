@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Endermite;
@@ -38,13 +39,13 @@ public final class MemeItems implements HumbugModule, Listener {
     @Getter @Setter public boolean chorusFruitTeleportDisabled;
     @Getter @Setter public boolean enderchestDisabled;
     @Getter @Setter public boolean fishingPlayersDisabled;
-    @Getter @Setter public boolean dolphinsGraceDisabled;
     @Getter @Setter public boolean disableFireworkElytra;
     @Getter @Setter public boolean lowerTotemDropChances;
     @Getter @Setter public double totemDropChance;
     @Getter @Setter public boolean unbalancedOffhandDisabled;
     @Getter @Setter public boolean craftingEndCrystalDisabled;
     @Getter @Setter public boolean endermiteSpawningDisabled;
+    @Getter @Setter public boolean bedBombsDisabled;
 
     public MemeItems(HumbugService humbug) {
         this.humbug = humbug;
@@ -56,13 +57,13 @@ public final class MemeItems implements HumbugModule, Listener {
         this.chorusFruitTeleportDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-chorus-fruit-teleportation");
         this.enderchestDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-ender-chest");
         this.fishingPlayersDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-fishing-players");
-        this.dolphinsGraceDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-dolphins-grace");
         this.disableFireworkElytra = humbug.getHumbugConfig().getBoolean("meme-items.disable-firework-elytra");
         this.lowerTotemDropChances = humbug.getHumbugConfig().getBoolean("meme-items.lower-totem-drop-chances.enabled");
         this.totemDropChance = humbug.getHumbugConfig().getDouble("meme-items.lower-totem-drop-chances.chances");
         this.unbalancedOffhandDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-unbalanced-offhand");
         this.craftingEndCrystalDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-end-crystal-crafting");
         this.endermiteSpawningDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-endermite-spawning");
+        this.bedBombsDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-bed-bombs");
     }
 
     @Override
@@ -327,6 +328,35 @@ public final class MemeItems implements HumbugModule, Listener {
             return;
         }
 
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onBedInteract(PlayerInteractEvent event) {
+        if (!isEnabled() || !isBedBombsDisabled()) {
+            return;
+        }
+
+        if (!event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+
+        if (event.getClickedBlock() == null || !(event.getClickedBlock().getType().equals(Material.BED) || event.getClickedBlock().getType().equals(Material.BED_BLOCK))) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final Block block = event.getClickedBlock();
+
+        if (block.getWorld().getEnvironment().equals(World.Environment.NORMAL)) {
+            return;
+        }
+
+        if (player.hasPermission("humbug.bypass")) {
+            return;
+        }
+
+        player.sendMessage(ChatColor.RED + "Bed bombs have been disabled");
         event.setCancelled(true);
     }
 }

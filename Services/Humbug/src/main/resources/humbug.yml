@@ -42,12 +42,11 @@ meme-items:
     disable-chorus-fruit-teleportation: true
     disable-ender-chest: true
     disable-fishing-players: true
-    disable-dolphins-grace: true
-    disable-natural-phantom-spawning: true
     disable-firework-elytra: true
     disable-unbalanced-offhand: true
     disable-end-crystal-crafting: true
     disable-endermite-spawning: true
+    disable-bed-bombs: true
     lower-totem-drop-chances:
         enabled: true
         chances: 0.04
