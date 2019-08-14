@@ -1,4 +1,4 @@
-package com.playares.services.essentials.remap;
+package com.playares.commons.bukkit.remap;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
