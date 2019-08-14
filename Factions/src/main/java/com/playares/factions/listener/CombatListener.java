@@ -395,7 +395,7 @@ public final class CombatListener implements Listener {
                     killer.getInventory().getItemInMainHand() != null &&
                     killer.getInventory().getItemInMainHand().getType().isItem() &&
                     !killer.getInventory().getItemInMainHand().getType().equals(Material.AIR)) ?
-                    ChatColor.RED + " using a " + ChatColor.YELLOW + StringUtils.capitaliseAllWords(killer.getInventory().getItemInMainHand().getType().name().replace("_", " "))
+                    ChatColor.RED + " using a " + ChatColor.YELLOW + StringUtils.capitaliseAllWords(killer.getInventory().getItemInMainHand().getType().name().replace("_", " ").toLowerCase())
                     : "";
 
             switch (reason) {
