@@ -56,5 +56,9 @@ public final class EventsAddon implements Addon {
     }
 
     @Override
-    public void stop() {}
+    public void stop() {
+        if (manager.getTicker() != null && manager.getTicker().isStarted()) {
+            manager.getTicker().stop();
+        }
+    }
 }
