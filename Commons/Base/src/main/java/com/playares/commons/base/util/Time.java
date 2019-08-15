@@ -1,5 +1,7 @@
 package com.playares.commons.base.util;
 
+import com.google.common.base.Preconditions;
+
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.text.SimpleDateFormat;
@@ -245,6 +247,10 @@ public final class Time {
      * @return Returns the time until a specific day, hour and minute combination can be matched again
      */
     public static long getTimeUntil(int day, int hour, int minute) {
+        Preconditions.checkArgument(day < 7, "Day must be less than 7");
+        Preconditions.checkArgument(hour < 24, "Hour must be less than 24");
+        Preconditions.checkArgument(minute < 60, "Minute must be less than 60");
+
         final Calendar calendar = Calendar.getInstance();
         final int currentDay = calendar.get(Calendar.DAY_OF_WEEK);
         final int currentHour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -255,25 +261,34 @@ public final class Time {
         int minCycles = 0;
         long ms = 0L;
 
-        for (int i = currentDay; i != day; i++) {
-            if (i >= 7) {
-                i = 0;
+        int d = currentDay;
+        while (d != day) {
+            d++;
+
+            if (d >= 7) {
+                d = 0;
             }
 
             dayCycles++;
         }
 
-        for (int i = currentHour; i != hour; i++) {
-            if (i >= 24) {
-                i = 0;
+        int hr = currentHour;
+        while (hr != hour) {
+            hr++;
+
+            if (hr >= 24) {
+                hr = 0;
             }
 
             hourCycles++;
         }
 
-        for (int i = currentMin; i != minute; i++) {
-            if (i >= 60) {
-                i = 0;
+        int min = currentMin;
+        while (min != minute) {
+            min++;
+
+            if (min >= 60) {
+                min = 0;
             }
 
             minCycles++;
