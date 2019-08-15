@@ -4,11 +4,17 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.location.BLocatable;
+import com.playares.commons.bukkit.logger.Logger;
+import com.playares.factions.addons.events.data.schedule.EventSchedule;
 import com.playares.factions.addons.events.data.type.AresEvent;
+import com.playares.factions.addons.events.data.type.EventType;
 import com.playares.factions.addons.events.data.type.koth.KOTHEvent;
+import com.playares.factions.addons.events.data.type.koth.PalaceEvent;
 import com.playares.factions.addons.events.engine.EventTicker;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.Comparator;
 import java.util.List;
@@ -17,10 +23,20 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class EventsManager {
+    /** Events Addon **/
     @Getter public final EventsAddon addon;
+
+    /** Handles all events functions **/
     @Getter public final EventsHandler handler;
+
+    /** Event repository containing all of the loaded events **/
     @Getter public final Set<AresEvent> eventRepository;
+
+    /** Event Ticker contains the timer ticking data and logic behind event ticking **/
     @Getter @Setter public EventTicker ticker;
+
+    /** Event Scheduler which handles starting events automatically **/
+    @Getter public EventScheduler scheduler;
 
     public EventsManager(EventsAddon addon) {
         this.addon = addon;
@@ -178,20 +194,37 @@ public final class EventsManager {
         return eventRepository.stream().filter(event -> event.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
+    /**
+     * Returns an AresEvent matching the event ServerFaction UUID
+     * @param ownerId ServerFaction UUID
+     * @return AresEvent
+     */
     public AresEvent getEventByOwnerId(UUID ownerId) {
-        return eventRepository.stream().filter(event -> event.getOwnerId().equals(ownerId)).findFirst().orElse(null);
+        return eventRepository.stream().filter(event -> event.getOwnerId() != null && event.getOwnerId().equals(ownerId)).findFirst().orElse(null);
     }
 
+    /**
+     * Returns an Immutable List containing all events that should now start
+     * @return ImmutableList containing AresEvents
+     */
     public ImmutableList<AresEvent> getEventsThatShouldStart() {
         return ImmutableList.copyOf(eventRepository.stream().filter(AresEvent::shouldStart).collect(Collectors.toList()));
     }
 
+    /**
+     * Returns an Immutable List containing all Ares Events sorted by alphabetical order
+     * @return ImmutableList containing AresEvents
+     */
     public ImmutableList<AresEvent> getEventsAlphabetical() {
         final List<AresEvent> events = Lists.newArrayList(eventRepository);
         events.sort(Comparator.comparing(AresEvent::getName));
         return ImmutableList.copyOf(events);
     }
 
+    /**
+     * Returns an Immutable List containing all active AresEvents
+     * @return ImmutableList containing AresEvents
+     */
     public ImmutableList<AresEvent> getActiveEvents() {
         final List<AresEvent> events = Lists.newArrayList();
 
@@ -210,6 +243,11 @@ public final class EventsManager {
         return ImmutableList.copyOf(events);
     }
 
+    /**
+     * Returns an AresEvent with a loot chest location matching the provided block location
+     * @param location Block Location
+     * @return AresEvent
+     */
     public AresEvent getEventByLootChest(BLocatable location) {
         for (AresEvent event : eventRepository) {
             if (

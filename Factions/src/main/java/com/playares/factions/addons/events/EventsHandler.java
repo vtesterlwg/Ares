@@ -17,6 +17,11 @@ public final class EventsHandler {
         this.manager = manager;
     }
 
+    /**
+     * Opens the Events Menu
+     * @param player Player
+     * @param promise Promise
+     */
     public void list(Player player, FailablePromise<EventsMenu> promise) {
         if (manager.getEventRepository().isEmpty()) {
             promise.failure("There are no events created");
@@ -27,6 +32,12 @@ public final class EventsHandler {
         promise.success(menu);
     }
 
+    /**
+     * Starts the creation of a new event
+     * @param player Player
+     * @param type Event Type
+     * @param promise Promise
+     */
     public void create(Player player, String type, SimplePromise promise) {
         if (manager.getAddon().getBuilderManager().getBuilder(player) != null) {
             promise.failure("You are already building an event");
@@ -63,6 +74,13 @@ public final class EventsHandler {
 
     }
 
+    /**
+     * Starts an event
+     * @param name Event Name
+     * @param ticketsNeededToWin Tickets needed to win event
+     * @param timerDuration Ticket timer duration
+     * @param promise Promise
+     */
     public void start(String name, int ticketsNeededToWin, int timerDuration, SimplePromise promise) {
         final AresEvent event = manager.getEventByName(name);
 
@@ -91,6 +109,11 @@ public final class EventsHandler {
         promise.failure("Event not found");
     }
 
+    /**
+     * Stops an event
+     * @param name Event Name
+     * @param promise Promise
+     */
     public void stop(String name, SimplePromise promise) {
         final AresEvent event = manager.getEventByName(name);
 
