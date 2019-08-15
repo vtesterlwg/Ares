@@ -76,6 +76,7 @@ public final class EventBuilderHandler {
                     builder.build(new FailablePromise<KOTHEvent>() {
                         @Override
                         public void success(@Nonnull KOTHEvent kothEvent) {
+                            manager.getBuilders().remove(builder);
                             manager.getAddon().getManager().getEventRepository().add(kothEvent);
                             player.sendMessage(ChatColor.GREEN + kothEvent.getName() + " is now ready to be scheduled in the events.yml file");
                         }
