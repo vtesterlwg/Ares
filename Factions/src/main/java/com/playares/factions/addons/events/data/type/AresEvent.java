@@ -29,7 +29,7 @@ public interface AresEvent {
 
     @SuppressWarnings("MagicConstant")
     default boolean shouldStart() {
-        Preconditions.checkArgument(getSchedule().isEmpty(), "Schedule is empty");
+        Preconditions.checkArgument(!getSchedule().isEmpty(), "Schedule is empty");
 
         final Calendar calendar = Calendar.getInstance();
 
