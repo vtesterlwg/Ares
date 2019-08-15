@@ -51,6 +51,7 @@ public final class EventsAddon implements Addon {
 
     @Override
     public void start() {
+        manager.load();
         lootManager.load();
     }
 
