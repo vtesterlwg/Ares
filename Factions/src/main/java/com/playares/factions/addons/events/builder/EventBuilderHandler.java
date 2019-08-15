@@ -78,6 +78,8 @@ public final class EventBuilderHandler {
                         public void success(@Nonnull KOTHEvent kothEvent) {
                             manager.getBuilders().remove(builder);
                             manager.getAddon().getManager().getEventRepository().add(kothEvent);
+                            manager.getAddon().getManager().save(kothEvent);
+
                             player.sendMessage(ChatColor.GREEN + kothEvent.getName() + " is now ready to be scheduled in the events.yml file");
                         }
 
