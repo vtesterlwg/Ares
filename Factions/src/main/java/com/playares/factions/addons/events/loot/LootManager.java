@@ -1,15 +1,19 @@
 package com.playares.factions.addons.events.loot;
 
+import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.addons.events.EventsAddon;
 import com.playares.factions.addons.events.data.type.AresEvent;
+import com.playares.factions.addons.events.data.type.koth.KOTHEvent;
 import com.playares.factions.addons.events.data.type.koth.PalaceEvent;
 import com.playares.factions.addons.events.loot.palace.PalaceLootTier;
 import com.playares.factions.addons.events.loot.palace.PalaceLootable;
 import lombok.Getter;
+import org.apache.commons.lang.StringUtils;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -224,6 +228,24 @@ public final class LootManager {
         final List<ItemStack> loot = getAddon().getLootManager().getStandardLoot((event instanceof PalaceEvent) ? 10 : 5);
         final Set<Integer> slots = Sets.newHashSet();
         int pos = 0;
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (event instanceof KOTHEvent) {
+                final KOTHEvent koth = (KOTHEvent)event;
+                final List<String> lootNames = Lists.newArrayList();
+
+                for (ItemStack item : loot) {
+                    if (item == null) {
+                        continue;
+                    }
+
+                    lootNames.add(ChatColor.YELLOW + "" + item.getAmount() + "x " +
+                            ((item.hasItemMeta() && item.getItemMeta().getDisplayName() != null) ? item.getItemMeta().getDisplayName() : StringUtils.capitaliseAllWords(item.getType().name().toLowerCase().replace("_", " "))));
+                }
+
+                player.sendMessage(EventsAddon.PREFIX + ChatColor.BLUE + koth.getSession().getCapturingFaction().getName() + ChatColor.GOLD + " received " + Joiner.on(ChatColor.GOLD + ", ").join(lootNames) + ChatColor.GOLD + " from " + ChatColor.RESET + event.getDisplayName());
+            }
+        });
 
         while (slots.size() < loot.size()) {
             slots.add(Math.abs(new Random().nextInt(26)));
