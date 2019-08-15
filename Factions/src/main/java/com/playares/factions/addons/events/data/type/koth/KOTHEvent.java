@@ -30,8 +30,20 @@ public class KOTHEvent implements AresEvent {
     @Getter public final BLocatable captureChestLocation;
     @Getter @Setter public KOTHSession session;
     @Getter @Setter public CaptureRegion captureRegion;
+    @Getter @Setter public int defaultTicketsNeededToWin;
+    @Getter @Setter public int defaultTimerDuration;
 
-    public KOTHEvent(EventsAddon addon, UUID ownerId, String name, String displayName, Collection<EventSchedule> schedule, BLocatable captureChestLocation, BLocatable captureCornerA, BLocatable captureCornerB) {
+    public KOTHEvent(EventsAddon addon,
+                     UUID ownerId,
+                     String name,
+                     String displayName,
+                     Collection<EventSchedule> schedule,
+                     BLocatable captureChestLocation,
+                     BLocatable captureCornerA,
+                     BLocatable captureCornerB,
+                     int defaultTicketsNeededToWin,
+                     int defaultTimerDuration) {
+
         this.addon = addon;
         this.ownerId = ownerId;
         this.name = name;
@@ -40,6 +52,13 @@ public class KOTHEvent implements AresEvent {
         this.captureChestLocation = captureChestLocation;
         this.session = null;
         this.captureRegion = new CaptureRegion(captureCornerA, captureCornerB);
+        this.defaultTicketsNeededToWin = defaultTicketsNeededToWin;
+        this.defaultTimerDuration = defaultTimerDuration;
+
+    }
+
+    public void start() {
+        start(defaultTicketsNeededToWin, defaultTimerDuration);
     }
 
     public void start(int ticketsNeededToWin, int timerDuration) {

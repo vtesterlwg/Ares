@@ -43,7 +43,7 @@ public final class PalaceEventBuilder extends KOTHEventBuilder {
             return;
         }
 
-        final PalaceEvent event = new PalaceEvent(addon, owningFactionId, name, displayName, Lists.newArrayList(), lootChest, cornerA, cornerB);
+        final PalaceEvent event = new PalaceEvent(addon, owningFactionId, name, displayName, Lists.newArrayList(), lootChest, cornerA, cornerB, 30, 60); // TODO: Make customizable
         promise.success(event);
     }
 }

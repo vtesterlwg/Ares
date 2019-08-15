@@ -133,7 +133,7 @@ public class KOTHEventBuilder implements EventBuilder {
             return;
         }
 
-        final KOTHEvent event = new KOTHEvent(addon, owningFactionId, name, displayName, Lists.newArrayList(), lootChest, cornerA, cornerB);
+        final KOTHEvent event = new KOTHEvent(addon, owningFactionId, name, displayName, Lists.newArrayList(), lootChest, cornerA, cornerB, 15, 60); // TODO: Make customizable
         promise.success(event);
     }
 

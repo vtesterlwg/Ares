@@ -9,8 +9,19 @@ import java.util.Collection;
 import java.util.UUID;
 
 public final class PalaceEvent extends KOTHEvent {
-    public PalaceEvent(EventsAddon addon, UUID ownerId, String name, String displayName, Collection<EventSchedule> schedule, BLocatable captureChestLocation, BLocatable captureCornerA, BLocatable captureCornerB) {
-        super(addon, ownerId, name, displayName, schedule, captureChestLocation, captureCornerA, captureCornerB);
+    public PalaceEvent(EventsAddon addon,
+                       UUID ownerId,
+                       String name,
+                       String displayName,
+                       Collection<EventSchedule> schedule,
+                       BLocatable captureChestLocation,
+                       BLocatable captureCornerA,
+                       BLocatable captureCornerB,
+                       int defaultTicketsNeededToWin,
+                       int defaultTimerDuration) {
+
+        super(addon, ownerId, name, displayName, schedule, captureChestLocation, captureCornerA, captureCornerB, defaultTicketsNeededToWin, defaultTimerDuration);
+
     }
 
     @Override
