@@ -43,7 +43,9 @@ public interface AresEvent {
     }
 
     default long getTimeToNextSchedule() {
-        Preconditions.checkArgument(getSchedule().isEmpty(), "Schedule is empty");
+        if (getSchedule().isEmpty()) {
+            return -1;
+        }
 
         final List<Long> times = Lists.newArrayList();
 
