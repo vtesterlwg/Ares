@@ -12,8 +12,6 @@ public final class EventScheduler {
 
     public EventScheduler(EventsManager manager) {
         this.manager = manager;
-
-
     }
 
     public void start() {
