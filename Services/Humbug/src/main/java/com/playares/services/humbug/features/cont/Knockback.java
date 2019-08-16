@@ -126,7 +126,7 @@ public final class Knockback implements HumbugModule, Listener {
             return;
         }
 
-        final double sprintMultiplier = (damager.isSprinting() && isRecentSprinter(damager)) ? 0.8D : 0.5D;
+        final double sprintMultiplier = (damager.isSprinting() && isRecentSprinter(damager)) ? 0.9D : 0.5D;
         final double enchantMultiplier = (damager.getInventory().getItemInMainHand() == null) ? 0 : damager.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.KNOCKBACK);
         final double airMultiplier = damaged.isOnGround() ? 1 : 0.5;
 
