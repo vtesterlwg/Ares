@@ -60,5 +60,10 @@ public final class EventsAddon implements Addon {
         if (manager.getTicker() != null && manager.getTicker().isStarted()) {
             manager.getTicker().stop();
         }
+
+        if (lootManager.getPalaceLootTimer() != null && !lootManager.getPalaceLootTimer().isCancelled()) {
+            lootManager.getPalaceLootTimer().cancel();
+            lootManager.palaceLootTimer = null;
+        }
     }
 }

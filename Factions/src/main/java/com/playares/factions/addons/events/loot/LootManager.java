@@ -5,13 +5,16 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.logger.Logger;
+import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.addons.events.EventsAddon;
 import com.playares.factions.addons.events.data.type.AresEvent;
 import com.playares.factions.addons.events.data.type.koth.KOTHEvent;
 import com.playares.factions.addons.events.data.type.koth.PalaceEvent;
+import com.playares.factions.addons.events.loot.palace.PalaceLootChest;
 import com.playares.factions.addons.events.loot.palace.PalaceLootTier;
 import com.playares.factions.addons.events.loot.palace.PalaceLootable;
 import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,6 +24,7 @@ import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.List;
 import java.util.Map;
@@ -30,16 +34,100 @@ import java.util.stream.Collectors;
 
 public final class LootManager {
     @Getter public final EventsAddon addon;
+    @Getter @Setter public BukkitTask palaceLootTimer;
     private final Set<Lootable> standardLoot;
     private final Set<PalaceLootable> palaceLoot;
+    private final Set<PalaceLootChest> palaceChests;
 
     public LootManager(EventsAddon addon) {
         this.addon = addon;
         this.standardLoot = Sets.newHashSet();
         this.palaceLoot = Sets.newHashSet();
+        this.palaceChests = Sets.newHashSet();
     }
 
     public void load() {
+        loadStandardLoot();
+        loadPalaceLoot();
+        loadPalaceChests();
+
+        this.palaceLootTimer = new Scheduler(getAddon().getPlugin()).async(() ->
+                new Scheduler(getAddon().getPlugin()).sync(() ->
+                        palaceChests.forEach(PalaceLootChest::stock)).run()).repeat(3600 * 20, 3600 * 20).run();
+    }
+
+    public void fillCaptureChest(AresEvent event) {
+        final Block lootChest = event.getCaptureChestLocation().getBukkit();
+
+        if (lootChest == null) {
+            Logger.error("Loot chest block was null for event " + event.getName());
+            return;
+        }
+
+        if (!lootChest.getType().equals(Material.CHEST)) {
+            Logger.error("Loot chest block was not found as a chest for event " + event.getName());
+            return;
+        }
+
+        final Chest chest = (Chest)lootChest.getState();
+        final List<ItemStack> loot = getAddon().getLootManager().getStandardLoot((event instanceof PalaceEvent) ? 10 : 5);
+        final Set<Integer> slots = Sets.newHashSet();
+        int pos = 0;
+
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            if (event instanceof KOTHEvent) {
+                final KOTHEvent koth = (KOTHEvent)event;
+                final List<String> lootNames = Lists.newArrayList();
+
+                for (ItemStack item : loot) {
+                    if (item == null) {
+                        continue;
+                    }
+
+                    lootNames.add(ChatColor.YELLOW + "" + item.getAmount() + "x " +
+                            ((item.hasItemMeta() && item.getItemMeta().getDisplayName() != null) ? item.getItemMeta().getDisplayName() : StringUtils.capitaliseAllWords(item.getType().name().toLowerCase().replace("_", " "))));
+                }
+
+                player.sendMessage(EventsAddon.PREFIX + ChatColor.BLUE + koth.getSession().getCapturingFaction().getName() + ChatColor.GOLD + " received " + Joiner.on(ChatColor.GOLD + ", ").join(lootNames) + ChatColor.GOLD + " from " + ChatColor.RESET + event.getDisplayName());
+            }
+        });
+
+        while (slots.size() < loot.size()) {
+            slots.add(Math.abs(new Random().nextInt(26)));
+        }
+
+        for (int slot : slots) {
+            final ItemStack item = loot.get(pos);
+            chest.getBlockInventory().setItem(slot, item);
+            pos += 1;
+        }
+    }
+
+    public void fillPalaceChest(PalaceLootChest chest) {
+        final Block block = chest.getBukkit();
+
+        if (block == null || !block.getType().equals(Material.CHEST)) {
+            Logger.warn("Palace chest at " + chest.toString() + " is not a chest and has been skipped");
+            return;
+        }
+
+        final Chest chestBlock = (Chest)block.getState();
+        final List<ItemStack> loot = getPalaceLoot(chest.getTier(), 3);
+        final Set<Integer> slots = Sets.newHashSet();
+        int pos = 0;
+
+        while (slots.size() < loot.size()) {
+            slots.add(Math.abs(new Random().nextInt(26)));
+        }
+
+        for (int slot : slots) {
+            final ItemStack item = loot.get(pos);
+            chestBlock.getBlockInventory().setItem(slot, item);
+            pos += 1;
+        }
+    }
+
+    private void loadStandardLoot() {
         final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
 
         for (String materialName : config.getConfigurationSection("standard-loot-table").getKeys(false)) {
@@ -106,6 +194,10 @@ public final class LootManager {
         }
 
         Logger.print("Loaded " + standardLoot.size() + " lootable items in to the " + LootType.STANDARD.name() + " loot table");
+    }
+
+    private void loadPalaceLoot() {
+        final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
 
         for (PalaceLootTier tier : PalaceLootTier.values()) {
             for (String materialName : config.getConfigurationSection("palace-loot-table." + tier.name()).getKeys(false)) {
@@ -175,7 +267,48 @@ public final class LootManager {
         }
     }
 
-    public List<ItemStack> getStandardLoot(int amount) {
+    private void loadPalaceChests() {
+        final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
+
+        for (String palaceEventName : config.getConfigurationSection("palace-chests").getKeys(false)) {
+            for (PalaceLootTier tier : PalaceLootTier.values()) {
+                final String path = "palace-chests." + palaceEventName + ".";
+
+                if (config.get(path + tier.name()) == null) {
+                    continue;
+                }
+
+                for (String coordValues : config.getStringList(palaceEventName + tier.name())) {
+                    final String[] split = coordValues.split(":");
+                    final double x, y, z;
+                    final String worldName;
+
+                    if (split.length != 4) {
+                        Logger.error("Coordinates invalid within '" + coordValues + "' for Palace Loot Chest");
+                        continue;
+                    }
+
+                    try {
+                        x = Double.parseDouble(split[0]);
+                        y = Double.parseDouble(split[1]);
+                        z = Double.parseDouble(split[2]);
+                    } catch (NumberFormatException ex) {
+                        Logger.error("Coordinates invalid within '" + coordValues + "' for Palace Loot Chest");
+                        continue;
+                    }
+
+                    worldName = split[3];
+
+                    final PalaceLootChest chest = new PalaceLootChest(addon, palaceEventName, worldName, x, y, z, tier);
+                    palaceChests.add(chest);
+                }
+            }
+        }
+
+        Logger.print("Loaded " + palaceChests.size() + " Palace Loot Chests");
+    }
+
+    private List<ItemStack> getStandardLoot(int amount) {
         final List<ItemStack> loot = Lists.newArrayList();
         int currentAttempt = 0;
         final int maxAttempts = 1000;
@@ -193,7 +326,7 @@ public final class LootManager {
         return loot;
     }
 
-    public List<ItemStack> getPalaceLoot(PalaceLootTier tier, int amount) {
+    private List<ItemStack> getPalaceLoot(PalaceLootTier tier, int amount) {
         final List<ItemStack> loot = Lists.newArrayList();
         int currentAttempt = 0;
         final int maxAttempts = 1000;
@@ -209,52 +342,5 @@ public final class LootManager {
         }
 
         return loot;
-    }
-
-    public void fillCaptureChest(AresEvent event) {
-        final Block lootChest = event.getCaptureChestLocation().getBukkit();
-
-        if (lootChest == null) {
-            Logger.error("Loot chest block was null for event " + event.getName());
-            return;
-        }
-
-        if (!lootChest.getType().equals(Material.CHEST)) {
-            Logger.error("Loot chest block was not found as a chest for event " + event.getName());
-            return;
-        }
-
-        final Chest chest = (Chest)lootChest.getState();
-        final List<ItemStack> loot = getAddon().getLootManager().getStandardLoot((event instanceof PalaceEvent) ? 10 : 5);
-        final Set<Integer> slots = Sets.newHashSet();
-        int pos = 0;
-
-        Bukkit.getOnlinePlayers().forEach(player -> {
-            if (event instanceof KOTHEvent) {
-                final KOTHEvent koth = (KOTHEvent)event;
-                final List<String> lootNames = Lists.newArrayList();
-
-                for (ItemStack item : loot) {
-                    if (item == null) {
-                        continue;
-                    }
-
-                    lootNames.add(ChatColor.YELLOW + "" + item.getAmount() + "x " +
-                            ((item.hasItemMeta() && item.getItemMeta().getDisplayName() != null) ? item.getItemMeta().getDisplayName() : StringUtils.capitaliseAllWords(item.getType().name().toLowerCase().replace("_", " "))));
-                }
-
-                player.sendMessage(EventsAddon.PREFIX + ChatColor.BLUE + koth.getSession().getCapturingFaction().getName() + ChatColor.GOLD + " received " + Joiner.on(ChatColor.GOLD + ", ").join(lootNames) + ChatColor.GOLD + " from " + ChatColor.RESET + event.getDisplayName());
-            }
-        });
-
-        while (slots.size() < loot.size()) {
-            slots.add(Math.abs(new Random().nextInt(26)));
-        }
-
-        for (int slot : slots) {
-            final ItemStack item = loot.get(pos);
-            chest.getBlockInventory().setItem(slot, item);
-            pos += 1;
-        }
     }
 }
