@@ -1,23 +1,28 @@
 package com.playares.factions.addons.events;
 
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Lists;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.Addon;
 import com.playares.factions.addons.events.builder.EventBuilderManager;
 import com.playares.factions.addons.events.builder.EventBuilderWand;
 import com.playares.factions.addons.events.command.EventCommand;
+import com.playares.factions.addons.events.command.PalaceCommand;
+import com.playares.factions.addons.events.data.type.AresEvent;
 import com.playares.factions.addons.events.listener.EventListener;
 import com.playares.factions.addons.events.loot.LootManager;
 import com.playares.services.customitems.CustomItemService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 
+import java.util.List;
+
 public final class EventsAddon implements Addon {
     public static final String PREFIX = ChatColor.GOLD + "[" + ChatColor.YELLOW + "Events" + ChatColor.GOLD + "] " + ChatColor.RESET;
 
     @Getter public final Factions plugin;
     @Getter public boolean enabled;
-
     @Getter public EventsManager manager;
     @Getter public EventBuilderManager builderManager;
     @Getter public LootManager lootManager;
@@ -40,6 +45,7 @@ public final class EventsAddon implements Addon {
         this.lootManager = new LootManager(this);
 
         plugin.registerCommand(new EventCommand(this));
+        plugin.registerCommand(new PalaceCommand(this));
         plugin.registerListener(new EventListener(this));
 
         if (customItemService != null) {
@@ -53,6 +59,16 @@ public final class EventsAddon implements Addon {
     public void start() {
         manager.load();
         lootManager.load();
+
+        getPlugin().getCommandManager().getCommandCompletions().registerAsyncCompletion("events", c -> {
+            final List<String> events = Lists.newArrayList();
+
+            for (AresEvent event : manager.getEventRepository()) {
+                events.add(event.getName());
+            }
+
+            return ImmutableList.copyOf(events);
+        });
     }
 
     @Override

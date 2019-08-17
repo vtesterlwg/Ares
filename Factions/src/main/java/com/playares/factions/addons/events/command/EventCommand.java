@@ -6,6 +6,7 @@ import com.playares.commons.base.promise.FailablePromise;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.factions.addons.events.EventsAddon;
 import com.playares.factions.addons.events.menu.EventsMenu;
+import com.playares.factions.addons.events.menu.LootMenu;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -127,6 +128,22 @@ public final class EventCommand extends BaseCommand {
             @Override
             public void success() {
                 player.sendMessage(ChatColor.GREEN + "Event value updated");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("loot")
+    @Description("View the standard event loot")
+    public void onLoot(Player player) {
+        addon.getManager().getHandler().showStandardLoot(player, new FailablePromise<LootMenu>() {
+            @Override
+            public void success(@Nonnull LootMenu lootMenu) {
+                lootMenu.open();
             }
 
             @Override

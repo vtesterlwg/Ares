@@ -31,7 +31,6 @@ public final class EventsMenu extends Menu {
     public EventsMenu(EventsAddon addon, @Nonnull AresPlugin plugin, @Nonnull Player player, @Nonnull String title, int rows) {
         super(plugin, player, title, rows);
         this.addon = addon;
-
     }
 
     private void update() {

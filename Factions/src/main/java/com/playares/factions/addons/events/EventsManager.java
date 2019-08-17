@@ -2,6 +2,7 @@ package com.playares.factions.addons.events;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.location.BLocatable;
 import com.playares.commons.bukkit.logger.Logger;
@@ -11,15 +12,13 @@ import com.playares.factions.addons.events.data.type.EventType;
 import com.playares.factions.addons.events.data.type.koth.KOTHEvent;
 import com.playares.factions.addons.events.data.type.koth.PalaceEvent;
 import com.playares.factions.addons.events.engine.EventTicker;
+import com.playares.factions.addons.events.loot.palace.PalaceLootTier;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public final class EventsManager {
@@ -38,7 +37,7 @@ public final class EventsManager {
     /** Event Scheduler which handles starting events automatically **/
     @Getter public EventScheduler scheduler;
 
-    public EventsManager(EventsAddon addon) {
+    EventsManager(EventsAddon addon) {
         this.addon = addon;
         this.handler = new EventsHandler(this);
         this.eventRepository = Sets.newConcurrentHashSet();
@@ -51,7 +50,7 @@ public final class EventsManager {
     /**
      * Loads all events from events.yml in to the Event Repository
      */
-    public void load() {
+    void load() {
         final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
 
         for (String name : config.getConfigurationSection("events").getKeys(false)) {
@@ -124,11 +123,19 @@ public final class EventsManager {
                 if (type.equals(EventType.KOTH_STANDARD)) {
                     final KOTHEvent koth = new KOTHEvent(addon, ownerId, name, displayName, schedule, captureChest, cornerA, cornerB, ticketsNeeded, timerDuration);
                     eventRepository.add(koth);
-                    continue;
-                }
+                } else {
+                    final Map<PalaceLootTier, Long> unlockTimes = Maps.newHashMap();
 
-                final PalaceEvent palace = new PalaceEvent(addon, ownerId, name, displayName, schedule, captureChest, cornerA, cornerB, ticketsNeeded, timerDuration);
-                eventRepository.add(palace);
+                    for (PalaceLootTier tier : PalaceLootTier.values()) {
+                        long unlockTime = config.getLong(path + "loot-unlock-times." + tier.name());
+                        unlockTimes.put(tier, unlockTime);
+                    }
+
+                    final PalaceEvent palace = new PalaceEvent(addon, ownerId, name, displayName, schedule, captureChest, cornerA, cornerB, ticketsNeeded, timerDuration);
+                    palace.getLootTierUnlockTimes().putAll(unlockTimes);
+
+                    eventRepository.add(palace);
+                }
             }
         }
 
@@ -158,8 +165,16 @@ public final class EventsManager {
 
         config.set(path + ".schedule", scheduleList);
 
+        // Here we're setting event specific values
         if (event instanceof PalaceEvent) {
+            final PalaceEvent palace = (PalaceEvent)event;
+
             config.set(path + ".type", EventType.KOTH_PALACE.name());
+
+            // We save the loot-tier unlock times to 0L by default
+            for (PalaceLootTier tier : palace.getLootTierUnlockTimes().keySet()) {
+                config.set(path + ".loot-unlock-times." + tier.name(), palace.getLootTierUnlockTimes().getOrDefault(tier, 0L));
+            }
         } else if (event instanceof KOTHEvent) {
             config.set(path + ".type", EventType.KOTH_STANDARD.name());
         }
@@ -262,5 +277,19 @@ public final class EventsManager {
         }
 
         return null;
+    }
+
+    /**
+     * Returns an Immutable List containing all Palace Events
+     * @return Immutable List containing Palace Events
+     */
+    public ImmutableList<PalaceEvent> getPalaceEvents() {
+        final List<PalaceEvent> events = Lists.newArrayList();
+
+        eventRepository.stream().filter(event -> event instanceof PalaceEvent).forEach(palaceEvent -> {
+            events.add((PalaceEvent)palaceEvent);
+        });
+
+        return ImmutableList.copyOf(events);
     }
 }

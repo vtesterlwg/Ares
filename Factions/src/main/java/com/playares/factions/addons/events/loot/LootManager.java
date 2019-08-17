@@ -1,6 +1,7 @@
 package com.playares.factions.addons.events.loot;
 
 import com.google.common.base.Joiner;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -35,15 +36,13 @@ import java.util.stream.Collectors;
 public final class LootManager {
     @Getter public final EventsAddon addon;
     @Getter @Setter public BukkitTask palaceLootTimer;
-    private final Set<Lootable> standardLoot;
-    private final Set<PalaceLootable> palaceLoot;
-    private final Set<PalaceLootChest> palaceChests;
+    @Getter public final Set<Lootable> standardLootables;
+    @Getter public final Set<PalaceLootable> palaceLootables;
 
     public LootManager(EventsAddon addon) {
         this.addon = addon;
-        this.standardLoot = Sets.newHashSet();
-        this.palaceLoot = Sets.newHashSet();
-        this.palaceChests = Sets.newHashSet();
+        this.standardLootables = Sets.newHashSet();
+        this.palaceLootables = Sets.newHashSet();
     }
 
     public void load() {
@@ -51,9 +50,7 @@ public final class LootManager {
         loadPalaceLoot();
         loadPalaceChests();
 
-        this.palaceLootTimer = new Scheduler(getAddon().getPlugin()).async(() ->
-                new Scheduler(getAddon().getPlugin()).sync(() ->
-                        palaceChests.forEach(PalaceLootChest::stock)).run()).repeat(3600 * 20, 3600 * 20).run();
+        palaceLootTimer = new Scheduler(getAddon().getPlugin()).async(() -> addon.getManager().getPalaceEvents().forEach(PalaceEvent::stock)).repeat(3600 * 20, 3600 * 20).run();
     }
 
     public void fillCaptureChest(AresEvent event) {
@@ -190,10 +187,10 @@ public final class LootManager {
             }
 
             final Lootable loot = new Lootable(getAddon(), materialName, name, data, amount, enchantments, required, total);
-            standardLoot.add(loot);
+            standardLootables.add(loot);
         }
 
-        Logger.print("Loaded " + standardLoot.size() + " lootable items in to the " + LootType.STANDARD.name() + " loot table");
+        Logger.print("Loaded " + standardLootables.size() + " lootable items in to the " + LootType.STANDARD.name() + " loot table");
     }
 
     private void loadPalaceLoot() {
@@ -201,7 +198,7 @@ public final class LootManager {
 
         for (PalaceLootTier tier : PalaceLootTier.values()) {
             for (String materialName : config.getConfigurationSection("palace-loot-table." + tier.name()).getKeys(false)) {
-                final String path = "palace.loot-table." + tier.name() + "." + materialName + ".";
+                final String path = "palace-loot-table." + tier.name() + "." + materialName + ".";
                 String name = null;
                 short data = 0;
                 int amount = 1;
@@ -260,17 +257,31 @@ public final class LootManager {
                 }
 
                 final PalaceLootable loot = new PalaceLootable(getAddon(), tier, materialName, name, data, amount, enchantments, required, total);
-                palaceLoot.add(loot);
+                palaceLootables.add(loot);
             }
 
-            Logger.print("Loaded " + palaceLoot.stream().filter(palaceLoot -> palaceLoot.getTier().equals(tier)).count() + " lootable items in to the " + LootType.PALACE.name() + " " + tier.name() + " loot table");
+            Logger.print("Loaded " + palaceLootables.stream().filter(palaceLoot -> palaceLoot.getTier().equals(tier)).count() + " lootable items in to the " + LootType.PALACE.name() + " " + tier.name() + " loot table");
         }
     }
 
     private void loadPalaceChests() {
         final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
 
+        if (config.get("palace-chests") == null) {
+            Logger.warn("No palace chests were found in events.yml... Skipping loading Palace Chests");
+            return;
+        }
+
         for (String palaceEventName : config.getConfigurationSection("palace-chests").getKeys(false)) {
+            final AresEvent event = getAddon().getManager().getEventByName(palaceEventName);
+
+            if (!(event instanceof PalaceEvent)) {
+                Logger.error("Failed to find Palace Event by name '" + palaceEventName + "', skipping...");
+                continue;
+            }
+
+            final PalaceEvent palace = (PalaceEvent)event;
+
             for (PalaceLootTier tier : PalaceLootTier.values()) {
                 final String path = "palace-chests." + palaceEventName + ".";
 
@@ -299,13 +310,29 @@ public final class LootManager {
 
                     worldName = split[3];
 
-                    final PalaceLootChest chest = new PalaceLootChest(addon, palaceEventName, worldName, x, y, z, tier);
-                    palaceChests.add(chest);
+                    final PalaceLootChest chest = new PalaceLootChest(addon, worldName, x, y, z, tier);
+                    palace.getLootChests().add(chest);
+                }
+            }
+
+            Logger.print("Loaded " + palace.getLootChests().size() + " Palace chests for " + palace.getName());
+        }
+    }
+
+    public PalaceLootChest getPalaceLootChestByBlock(Block block) {
+        for (PalaceEvent event : getAddon().getManager().getPalaceEvents()) {
+            for (PalaceLootChest chest : event.getLootChests()) {
+                if (chest.getX() == block.getX() && chest.getY() == block.getY() && chest.getZ() == block.getZ() && chest.getWorldName().equalsIgnoreCase(block.getWorld().getName())) {
+                    return chest;
                 }
             }
         }
 
-        Logger.print("Loaded " + palaceChests.size() + " Palace Loot Chests");
+        return null;
+    }
+
+    public ImmutableList<PalaceLootable> getPalaceLootByTier(PalaceLootTier tier) {
+        return ImmutableList.copyOf(palaceLootables.stream().filter(lootable -> lootable.getTier().equals(tier)).collect(Collectors.toList()));
     }
 
     private List<ItemStack> getStandardLoot(int amount) {
@@ -314,7 +341,7 @@ public final class LootManager {
         final int maxAttempts = 1000;
 
         while (loot.size() < amount && currentAttempt < maxAttempts) {
-            for (Lootable item : standardLoot) {
+            for (Lootable item : standardLootables) {
                 if (item.pull()) {
                     loot.add(item.getItem());
                 }
@@ -332,7 +359,7 @@ public final class LootManager {
         final int maxAttempts = 1000;
 
         while (loot.size() < amount && currentAttempt < maxAttempts) {
-            for (PalaceLootable item : palaceLoot.stream().filter(palaceLoot -> palaceLoot.getTier().equals(tier)).collect(Collectors.toList())) {
+            for (PalaceLootable item : palaceLootables.stream().filter(palaceLoot -> palaceLoot.getTier().equals(tier)).collect(Collectors.toList())) {
                 if (item.pull()) {
                     loot.add(item.getItem());
                 }
