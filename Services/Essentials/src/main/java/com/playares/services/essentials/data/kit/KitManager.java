@@ -3,11 +3,11 @@ package com.playares.services.essentials.data.kit;
 import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
-import com.playares.commons.bukkit.util.ItemSerializer;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.Set;
 
 public final class KitManager {
@@ -15,6 +15,7 @@ public final class KitManager {
     @Getter public final Set<Kit> kits;
     @Getter public final YamlConfiguration kitsConfig;
 
+    @SuppressWarnings("unchecked")
     public KitManager(AresPlugin plugin) {
         this.plugin = plugin;
         this.kits = Sets.newConcurrentHashSet();
@@ -26,12 +27,20 @@ public final class KitManager {
         }
 
         for (String kitNames : kitsConfig.getConfigurationSection("kits").getKeys(false)) {
-            final ItemStack[] contents = ItemSerializer.decodeItemStacks(kitsConfig.getString("kits." + kitNames + ".contents"));
-            final ItemStack[] armor = ItemSerializer.decodeItemStacks(kitsConfig.getString("kits." + kitNames + ".armor"));
+            final List<ItemStack> contentItems = (List<ItemStack>)kitsConfig.getList("kits." + kitNames + ".contents");
+            final List<ItemStack> armorItems = (List<ItemStack>)kitsConfig.getList("kits." + kitNames + ".armor");
+            ItemStack[] contents = new ItemStack[contentItems.size()];
+            ItemStack[] armor = new ItemStack[armorItems.size()];
+
+            contents = contentItems.toArray(contents);
+            armor = armorItems.toArray(armor);
 
             final Kit kit = new Kit(kitNames, contents, armor);
-            this.kits.add(kit);
+
+            kits.add(kit);
         }
+
+        Logger.print("Loaded " + kits.size() + " kits");
     }
 
     public Kit getKit(String name) {
@@ -51,8 +60,8 @@ public final class KitManager {
         }
 
         for (Kit kit : kits) {
-            kitsConfig.set("kits." + kit.getName() + ".contents", ItemSerializer.encodeItemStacks(kit.getContents()));
-            kitsConfig.set("kits." + kit.getName() + ".armor", ItemSerializer.encodeItemStacks(kit.getArmor()));
+            kitsConfig.set("kits." + kit.getName() + ".contents", kit.getContents());
+            kitsConfig.set("kits." + kit.getName() + ".armor", kit.getArmor());
         }
 
         plugin.saveConfig("kits", kitsConfig);

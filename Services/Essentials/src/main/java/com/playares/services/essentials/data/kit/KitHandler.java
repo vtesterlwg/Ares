@@ -21,7 +21,7 @@ public final class KitHandler {
             return;
         }
 
-        final Kit kit = new Kit(name, player.getInventory().getContents(), player.getInventory().getArmorContents());
+        final Kit kit = new Kit(name, player.getInventory().getStorageContents(), player.getInventory().getArmorContents());
 
         essentials.getKitManager().getKits().add(kit);
         essentials.getKitManager().saveKits();

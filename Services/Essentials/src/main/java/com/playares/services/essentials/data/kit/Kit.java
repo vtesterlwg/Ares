@@ -13,25 +13,7 @@ public final class Kit {
 
     public void apply(Player player) {
         player.getInventory().clear();
-
-        for (int i = 0; i < contents.length; i++) {
-            final ItemStack item = contents[i];
-
-            if (item == null) {
-                continue;
-            }
-
-            player.getInventory().setItem(i, item);
-        }
-
-        for (int i = 0; i < armor.length; i++) {
-            final ItemStack item = armor[i];
-
-            if (item == null) {
-                continue;
-            }
-
-            player.getInventory().setItem(i, item);
-        }
+        player.getInventory().setStorageContents(contents);
+        player.getInventory().setArmorContents(armor);
     }
 }
