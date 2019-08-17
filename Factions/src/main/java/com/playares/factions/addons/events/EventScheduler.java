@@ -10,16 +10,16 @@ public final class EventScheduler {
     @Getter public final EventsManager manager;
     @Getter @Setter public BukkitTask scheduler;
 
-    public EventScheduler(EventsManager manager) {
+    EventScheduler(EventsManager manager) {
         this.manager = manager;
     }
 
     public void start() {
-        if (this.scheduler != null && !this.scheduler.isCancelled()) {
+        if (scheduler != null && !scheduler.isCancelled()) {
             return;
         }
 
-        this.scheduler = new Scheduler(manager.getAddon().getPlugin()).async(() -> {
+        scheduler = new Scheduler(manager.getAddon().getPlugin()).async(() -> {
             manager.getEventsThatShouldStart().stream().filter(event -> !manager.getActiveEvents().contains(event)).forEach(toStart -> {
                 if (toStart instanceof KOTHEvent) {
                     final KOTHEvent koth = (KOTHEvent)toStart;
@@ -35,11 +35,11 @@ public final class EventScheduler {
     }
 
     public void stop() {
-        if (this.scheduler == null || this.scheduler.isCancelled()) {
+        if (scheduler == null || scheduler.isCancelled()) {
             return;
         }
 
-        this.scheduler.cancel();
-        this.scheduler = null;
+        scheduler.cancel();
+        scheduler = null;
     }
 }
