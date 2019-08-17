@@ -161,7 +161,7 @@ public class Menu implements Listener {
 
         event.setCancelled(true);
 
-        if (item == null) {
+        if (item == null || item.getResult() == null) {
             return;
         }
 
