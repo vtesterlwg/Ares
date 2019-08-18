@@ -23,8 +23,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
 public final class PlayerTimerListener implements Listener {
-    @Getter
-    public final Factions plugin;
+    @Getter public final Factions plugin;
 
     public PlayerTimerListener(Factions plugin) {
         this.plugin = plugin;
