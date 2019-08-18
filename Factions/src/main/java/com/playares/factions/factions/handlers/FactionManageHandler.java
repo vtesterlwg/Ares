@@ -193,7 +193,7 @@ public final class FactionManageHandler {
                 Bukkit.getPlayer(aresProfile.getUniqueId()).sendMessage(ChatColor.GREEN + "You have been promoted!");
             }
 
-            faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " promoted " + ChatColor.DARK_GREEN + aresProfile.getUsername() + ChatColor.GOLD + " to " + ChatColor.BLUE + StringUtils.capitalise(newRank.name().toLowerCase()));
+            faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " promoted " + ChatColor.DARK_GREEN + aresProfile.getUsername() + ChatColor.GOLD + " to " + ChatColor.BLUE + StringUtils.capitalise(newRank.name().toLowerCase().replace("_", " ")));
             Logger.print(player.getName() + " promoted " + aresProfile.getUsername() + " to " + newRank.name());
             promise.success();
         });
@@ -259,7 +259,7 @@ public final class FactionManageHandler {
                 Bukkit.getPlayer(aresProfile.getUniqueId()).sendMessage(ChatColor.RED + "You have been demoted!");
             }
 
-            faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " demoted " + ChatColor.DARK_GREEN + aresProfile.getUsername() + ChatColor.GOLD + " to " + ChatColor.BLUE + StringUtils.capitalise(newRank.name().toLowerCase()));
+            faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " demoted " + ChatColor.DARK_GREEN + aresProfile.getUsername() + ChatColor.GOLD + " to " + ChatColor.BLUE + StringUtils.capitalise(newRank.name().toLowerCase().replace("_", " ")));
             Logger.print(player.getName() + " demoted " + aresProfile.getUsername() + " to " + newRank.name());
             promise.success();
         });
