@@ -31,6 +31,7 @@ import lombok.Setter;
 import net.minecraft.server.v1_12_R1.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
@@ -289,6 +290,14 @@ public final class LoggerAddon implements Addon, Listener {
         }
 
         if (profile.isSafelogging()) {
+            return;
+        }
+
+        if (player.hasPermission("factions.mod") || player.hasPermission("factions.admin")) {
+            return;
+        }
+
+        if (!player.getGameMode().equals(GameMode.SURVIVAL)) {
             return;
         }
 
