@@ -167,6 +167,10 @@ public final class KitLimits implements HumbugModule, Listener {
         }
 
         for (EnchantmentOffer offer : event.getOffers()) {
+            if (offer == null || offer.getEnchantment() == null) {
+                continue;
+            }
+
             final EnchantLimit limit = getEnchantLimit(offer.getEnchantment());
 
             if (limit == null) {
