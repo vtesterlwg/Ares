@@ -22,6 +22,11 @@ public interface CustomItem {
     String getName();
 
     /**
+     * @return Item Durability
+     */
+    default short getDurability() { return 0; }
+
+    /**
      * @return Item Lore
      */
     List<String> getLore();
@@ -76,6 +81,6 @@ public interface CustomItem {
             getLore().add(ChatColor.RED + "Soulbound");
         }
 
-        return new ItemBuilder().setMaterial(getMaterial()).setName(getName()).addLore(getLore()).addEnchant(getEnchantments()).build();
+        return new ItemBuilder().setMaterial(getMaterial()).setName(getName()).setData(getDurability()).addLore(getLore()).addEnchant(getEnchantments()).build();
     }
 }

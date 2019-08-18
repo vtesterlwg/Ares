@@ -31,8 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 
 public final class CustomItemService implements AresService, Listener {
-    @Getter
-    public final AresPlugin owner;
+    @Getter public final AresPlugin owner;
 
     @Getter
     public final Map<Class<? extends CustomItem>, CustomItem> registry;
