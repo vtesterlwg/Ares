@@ -65,6 +65,16 @@ public final class MessageHandler implements Listener {
         final AresProfile senderProfile = profileService.getProfile(sender.getUniqueId());
         final AresProfile receiverProfile = profileService.getProfile(receiverName);
 
+        if (senderProfile == null) {
+            promise.failure("Failed to obtain your profile");
+            return;
+        }
+
+        if (receiverProfile == null) {
+            promise.failure("Failed to obtain player's profile");
+            return;
+        }
+
         if (senderProfile.getSettings().isHidingPrivateMessages()) {
             promise.failure("You have private messages disabled. You can turn them back on in your Global Settings.");
             return;

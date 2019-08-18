@@ -12,8 +12,7 @@ import org.bukkit.entity.Player;
 
 @AllArgsConstructor
 public final class MessageCommand extends BaseCommand {
-    @Getter
-    public final ProfileService profileService;
+    @Getter public final ProfileService profileService;
 
     @CommandAlias("message|msg|tell|t|pm")
     @Description("Send a player a message")
