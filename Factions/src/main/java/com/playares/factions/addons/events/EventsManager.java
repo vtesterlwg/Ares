@@ -53,6 +53,11 @@ public final class EventsManager {
     void load() {
         final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
 
+        if (config == null) {
+            Logger.error("Failed to obtain config for events.yml");
+            return;
+        }
+
         for (String name : config.getConfigurationSection("events").getKeys(false)) {
             final String path = "events." + name + ".";
             final UUID ownerId = (config.get(path + "owner-id") != null) ? UUID.fromString(config.getString(path + "owner-id")) : null;
