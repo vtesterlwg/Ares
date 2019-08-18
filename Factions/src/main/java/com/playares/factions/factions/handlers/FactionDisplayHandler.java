@@ -79,6 +79,13 @@ public final class FactionDisplayHandler {
             return;
         }
 
+        final long timeSinceLastUpdate = (Time.now() - faction.getLastRallyUpdate());
+
+        if ((timeSinceLastUpdate / 1000) < 10) {
+            promise.failure("Please wait a moment before setting your faction rally again");
+            return;
+        }
+
         faction.updateRally(player);
 
         promise.success();

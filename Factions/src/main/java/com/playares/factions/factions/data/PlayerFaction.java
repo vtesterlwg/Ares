@@ -62,6 +62,8 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
     @Getter public Scoreboard scoreboard;
     /** Next tick (in milliseconds) that this Faction should be ticked **/
     @Getter @Setter public long nextTick;
+    /** Prevents rally from being spammed */
+    @Getter @Setter public long lastRallyUpdate;
 
     public PlayerFaction(Factions plugin) {
         this.plugin = plugin;
@@ -341,6 +343,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
      */
     public void updateRally(Player player) {
         this.rally = new PLocatable(player);
+        this.lastRallyUpdate = Time.now();
 
         final String text = ChatColor.GOLD + "Rally at " +
                 ChatColor.LIGHT_PURPLE + "X: " + player.getLocation().getBlockX() + ChatColor.YELLOW + ", " +
