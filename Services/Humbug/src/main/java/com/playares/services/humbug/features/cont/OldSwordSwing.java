@@ -25,6 +25,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -102,8 +103,17 @@ public final class OldSwordSwing implements HumbugModule, Listener {
                     final LivingEntity damaged = (LivingEntity)entity;
                     final double distance = damager.getLocation().distanceSquared(damaged.getLocation());
 
-                    if (damaged.isDead() || damaged.getNoDamageTicks() > 0 || distance > (maxReach * maxReach)) {
+                    if (damaged.isDead()|| distance > (maxReach * maxReach)) {
                         return;
+                    }
+
+                    if (
+                            damaged.getLastDamageCause() != null &&
+                            damaged.getLastDamageCause().getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) &&
+                            damaged.getNoDamageTicks() > 0) {
+
+                        return;
+
                     }
 
                     double init = ((CraftPlayer)damager).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
@@ -157,6 +167,21 @@ public final class OldSwordSwing implements HumbugModule, Listener {
         final Player player = event.getPlayer();
         player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(1024.0);
         player.saveData();
+    }
+
+    @EventHandler
+    public void onEntityDamageEvent(EntityDamageEvent event) {
+        if (!isEnabled()) {
+            return;
+        }
+
+        if (!(event.getEntity() instanceof LivingEntity)) {
+            return;
+        }
+
+        final LivingEntity entity = (LivingEntity)event.getEntity();
+
+        entity.setNoDamageTicks(hitDelayTicks);
     }
 
     @AllArgsConstructor
