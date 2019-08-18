@@ -38,6 +38,7 @@
                                     <include>com.playares:AutomatedRestarts</include>
                                     <include>com.playares:CustomEntity</include>
                                     <include>com.playares:Deathban</include>
+                                    <include>com.playares:ChatRestrictions</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -178,6 +179,14 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Deathban</artifactId>
+            <version>1.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Chat Restriction Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>ChatRestrictions</artifactId>
             <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>

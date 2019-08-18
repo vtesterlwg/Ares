@@ -80,3 +80,6 @@ deathbans.bypass - Bypass deathbans, life limits, etc
 deathbans.lives.set - Set a players lives
 
 economy.shop.admin - Ability to create a shop
+
+chatrestrict.bypass.cooldown
+chatrestrict.bypass.links

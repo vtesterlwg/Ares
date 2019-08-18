@@ -25,5 +25,6 @@
         <module>AutomatedRestarts</module>
         <module>CustomEntity</module>
         <module>Deathban</module>
+        <module>ChatRestrictions</module>
     </modules>
 </project>

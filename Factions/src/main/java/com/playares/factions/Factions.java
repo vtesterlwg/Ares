@@ -15,6 +15,7 @@ import com.playares.factions.items.ClaimingStick;
 import com.playares.factions.listener.*;
 import com.playares.factions.players.manager.PlayerManager;
 import com.playares.services.automatedrestarts.AutomatedRestartService;
+import com.playares.services.chatrestrictions.ChatRestrictionService;
 import com.playares.services.customentity.CustomEntityService;
 import com.playares.services.customevents.CustomEventService;
 import com.playares.services.customitems.CustomItemService;
@@ -84,6 +85,7 @@ public final class Factions extends AresPlugin {
         registerService(new RankService(this));
         registerService(new DeathbanService(this));
         registerService(new AutomatedRestartService(this, 42300));
+        registerService(new ChatRestrictionService(this));
         startServices();
 
         // Data Managers

@@ -39,6 +39,10 @@ public final class ChatListener implements Listener {
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onChat(ProcessedChatEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
         final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(event.getPlayer().getUniqueId());
         final boolean admin = event.getPlayer().hasPermission("factions.admin");
 
