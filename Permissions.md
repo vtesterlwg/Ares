@@ -69,6 +69,8 @@ factions.timer.edit - Access /timer command
 factions.events.builder - Access event builder functions
 factions.serverstates.set - Set the server state
 factions.events.admin - Access event functions
+factions.events.palace.restock - Access the restock palace command
+factions.events.palace.chests - Access the create/delete commands for Palace chests
 
 autoreboot.schedule - Schedule reboot
 autoreboot.start - Start reboot process
