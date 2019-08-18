@@ -6,10 +6,12 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
+import com.google.common.collect.Queues;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.commons.bukkit.util.Worlds;
 import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
@@ -17,6 +19,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,15 +28,22 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitTask;
+
+import java.util.Queue;
 
 public final class OldSwordSwing implements HumbugModule, Listener {
     @Getter public final HumbugService humbug;
     @Getter @Setter public boolean enabled;
     @Getter @Setter public int hitDelayTicks;
     @Getter @Setter public double maxReach;
+    @Getter public BukkitTask queueProcessor;
+    @Getter private final Queue<QueuedAttack> attackQueue;
 
     public OldSwordSwing(HumbugService humbug) {
         this.humbug = humbug;
+        this.attackQueue = Queues.newConcurrentLinkedQueue();
     }
 
     @Override
@@ -50,9 +60,24 @@ public final class OldSwordSwing implements HumbugModule, Listener {
 
     @Override
     public void start() {
-        this.humbug.getOwner().registerListener(this);
+        queueProcessor = new Scheduler(getHumbug().getOwner()).sync(() -> {
+            while (attackQueue.size() > 0) {
+                final QueuedAttack attack = attackQueue.remove();
 
-        this.humbug.getOwner().getProtocol().addPacketListener(new PacketAdapter(this.humbug.getOwner(), ListenerPriority.LOWEST, PacketType.Play.Client.USE_ENTITY) {
+                attack.getAttacked().damage(attack.getDamage(), attack.getAttacker());
+                attack.getAttacked().setNoDamageTicks(hitDelayTicks);
+
+                final ItemStack attackerItem = attack.getAttacker().getInventory().getItemInMainHand();
+
+                if (attackerItem != null && attackerItem.hasItemMeta() && attackerItem.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
+                    attack.getAttacked().setFireTicks(attackerItem.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
+                }
+            }
+        }).repeat(0L, 1L).run();
+
+        humbug.getOwner().registerListener(this);
+
+        humbug.getOwner().getProtocol().addPacketListener(new PacketAdapter(humbug.getOwner(), ListenerPriority.LOWEST, PacketType.Play.Client.USE_ENTITY) {
             @Override
             public void onPacketReceiving(PacketEvent event) {
                 if (!isEnabled()) {
@@ -74,25 +99,25 @@ public final class OldSwordSwing implements HumbugModule, Listener {
                 if (entity instanceof LivingEntity) {
                     event.setCancelled(true);
 
-                    new Scheduler(humbug.getOwner()).sync(() -> {
-                        final LivingEntity damaged = (LivingEntity)entity;
-                        final double distance = damager.getLocation().distanceSquared(damaged.getLocation());
+                    final LivingEntity damaged = (LivingEntity)entity;
+                    final double distance = damager.getLocation().distanceSquared(damaged.getLocation());
 
-                        if (damaged.isDead() || damaged.getNoDamageTicks() > 0 || (distance > (maxReach * maxReach))) {
-                            return;
-                        }
+                    if (damaged.isDead() || damaged.getNoDamageTicks() > 0 || distance > (maxReach * maxReach)) {
+                        return;
+                    }
 
-                        double init = ((CraftPlayer)damager).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
+                    double init = ((CraftPlayer)damager).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
+                    boolean critical = false;
 
-                        if (!damager.isOnGround() && damager.getVelocity().getY() < 0) {
-                            init *= 1.25;
-                            Worlds.spawnParticle(damaged.getLocation().add(0, 1.0, 0), Particle.CRIT, 10, -10);
-                            Worlds.playSound(damaged.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT);
-                        }
+                    if (!damager.isOnGround() && damager.getVelocity().getY() < 0) {
+                        init *= 1.25;
+                        critical = true;
 
-                        damaged.damage(init, damager);
-                        damaged.setNoDamageTicks(hitDelayTicks);
-                    }).run();
+                        Worlds.spawnParticle(damaged.getLocation().add(0, 1.0, 0), Particle.CRIT, 10, -10);
+                        Worlds.playSound(damaged.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT);
+                    }
+
+                    attackQueue.add(new QueuedAttack(damager, damaged, init, critical));
                 }
             }
         });
@@ -132,5 +157,13 @@ public final class OldSwordSwing implements HumbugModule, Listener {
         final Player player = event.getPlayer();
         player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).setBaseValue(1024.0);
         player.saveData();
+    }
+
+    @AllArgsConstructor
+    public final class QueuedAttack {
+        @Getter public final Player attacker;
+        @Getter public final LivingEntity attacked;
+        @Getter public final double damage;
+        @Getter public final boolean critical;
     }
 }
