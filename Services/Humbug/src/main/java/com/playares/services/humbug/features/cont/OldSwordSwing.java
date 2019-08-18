@@ -14,6 +14,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
@@ -29,6 +30,7 @@ public final class OldSwordSwing implements HumbugModule, Listener {
     @Getter public final HumbugService humbug;
     @Getter @Setter public boolean enabled;
     @Getter @Setter public int hitDelayTicks;
+    @Getter @Setter public double maxReach;
 
     public OldSwordSwing(HumbugService humbug) {
         this.humbug = humbug;
@@ -38,6 +40,7 @@ public final class OldSwordSwing implements HumbugModule, Listener {
     public void loadValues() {
         this.enabled = humbug.getHumbugConfig().getBoolean("old-sword-swing.enabled");
         this.hitDelayTicks = humbug.getHumbugConfig().getInt("old-sword-swing.hit-delay-ticks");
+        this.maxReach = humbug.getHumbugConfig().getDouble("old-sword-swing.max-reach");
     }
 
     @Override
@@ -73,8 +76,9 @@ public final class OldSwordSwing implements HumbugModule, Listener {
 
                     new Scheduler(humbug.getOwner()).sync(() -> {
                         final LivingEntity damaged = (LivingEntity)entity;
+                        final double distance = damager.getLocation().distanceSquared(damaged.getLocation());
 
-                        if (damaged.isDead() || damaged.getNoDamageTicks() > 0) {
+                        if (damaged.isDead() || damaged.getNoDamageTicks() > 0 || (distance > (maxReach * maxReach))) {
                             return;
                         }
 
@@ -82,7 +86,8 @@ public final class OldSwordSwing implements HumbugModule, Listener {
 
                         if (!damager.isOnGround() && damager.getVelocity().getY() < 0) {
                             init *= 1.25;
-                            Worlds.spawnParticle(damaged.getLocation().add(0, 1.0, 0), Particle.CRIT, 8);
+                            Worlds.spawnParticle(damaged.getLocation().add(0, 1.0, 0), Particle.CRIT, 10, -10);
+                            Worlds.playSound(damaged.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT);
                         }
 
                         damaged.damage(init, damager);

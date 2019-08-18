@@ -26,6 +26,7 @@ old-item-velocity:
 old-sword-swing:
     enabled: true
     hit-delay-ticks: 10
+    max-reach: 4.0
 
 # Enabling Old Regen reverts health regeneration to pre-1.9 values
 old-regen:
