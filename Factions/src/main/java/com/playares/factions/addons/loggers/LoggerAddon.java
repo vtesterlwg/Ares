@@ -238,6 +238,11 @@ public final class LoggerAddon implements Addon, Listener {
             return;
         }
 
+        // Fix for custom potions
+        if (cloud.getBasePotionData() == null || cloud.getBasePotionData().getType() == null || cloud.getBasePotionData().getType().getEffectType() == null) {
+            return;
+        }
+
         if (
                 !cloud.getBasePotionData().getType().getEffectType().equals(PotionEffectType.HARM) &&
                 !cloud.getBasePotionData().getType().getEffectType().equals(PotionEffectType.WEAKNESS) &&
