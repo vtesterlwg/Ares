@@ -101,6 +101,7 @@ public final class FactionDisplayHandler {
         final List<PlayerFaction> factions = Lists.newArrayList(manager.getPlayerFactions());
 
         factions.sort(Comparator.comparingInt(f -> f.getOnlineMembers().size()));
+        Collections.reverse(factions);
 
         int finishPos = page * 10;
         int startPos = finishPos - 9;
