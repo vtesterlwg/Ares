@@ -70,7 +70,7 @@ public final class OldSwordSwing implements HumbugModule, Listener {
                 final ItemStack attackerItem = attack.getAttacker().getInventory().getItemInMainHand();
 
                 if (attackerItem != null && attackerItem.hasItemMeta() && attackerItem.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
-                    attack.getAttacked().setFireTicks(attackerItem.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
+                    attack.getAttacked().setFireTicks(80 * attackerItem.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
                 }
             }
         }).repeat(0L, 1L).run();
