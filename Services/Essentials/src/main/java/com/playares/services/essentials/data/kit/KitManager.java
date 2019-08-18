@@ -21,6 +21,8 @@ public final class KitManager {
         this.kits = Sets.newConcurrentHashSet();
         this.kitsConfig = plugin.getConfig("kits");
 
+        getPlugin().registerListener(new KitSignListener(this));
+
         if (kitsConfig.getConfigurationSection("kits") == null) {
             Logger.warn("No kits found...");
             return;
