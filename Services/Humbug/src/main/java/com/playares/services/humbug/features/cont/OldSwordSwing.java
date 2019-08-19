@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.google.common.collect.Queues;
+import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.commons.bukkit.util.Worlds;
 import com.playares.services.humbug.HumbugService;
@@ -24,6 +25,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
@@ -67,12 +69,6 @@ public final class OldSwordSwing implements HumbugModule, Listener {
 
                 attack.getAttacked().damage(attack.getDamage(), attack.getAttacker());
                 attack.getAttacked().setNoDamageTicks(hitDelayTicks);
-
-                final ItemStack attackerItem = attack.getAttacker().getInventory().getItemInMainHand();
-
-                if (attackerItem != null && attackerItem.hasItemMeta() && attackerItem.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
-                    attack.getAttacked().setFireTicks(80 * attackerItem.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
-                }
             }
         }).repeat(0L, 1L).run();
 
@@ -182,6 +178,29 @@ public final class OldSwordSwing implements HumbugModule, Listener {
         final LivingEntity entity = (LivingEntity)event.getEntity();
 
         entity.setNoDamageTicks(hitDelayTicks);
+    }
+
+    @EventHandler (priority = EventPriority.HIGH)
+    public void onPlayerDamagePlayer(PlayerDamagePlayerEvent event) {
+        if (!isEnabled()) {
+            return;
+        }
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (!event.getType().equals(PlayerDamagePlayerEvent.DamageType.PHYSICAL)) {
+            return;
+        }
+
+        final Player attacker = event.getDamager();
+        final Player attacked = event.getDamaged();
+        final ItemStack attackerItem = attacker.getInventory().getItemInMainHand();
+
+        if (attackerItem != null && attackerItem.hasItemMeta() && attackerItem.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
+            attacked.setFireTicks(80 * attackerItem.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
+        }
     }
 
     @AllArgsConstructor
