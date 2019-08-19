@@ -1,6 +1,5 @@
 package com.playares.factions.addons.events.data.type;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.location.BLocatable;
@@ -29,7 +28,9 @@ public interface AresEvent {
 
     @SuppressWarnings("MagicConstant")
     default boolean shouldStart() {
-        Preconditions.checkArgument(!getSchedule().isEmpty(), "Schedule is empty");
+        if (getSchedule().isEmpty()) {
+            return false;
+        }
 
         final Calendar calendar = Calendar.getInstance();
 
