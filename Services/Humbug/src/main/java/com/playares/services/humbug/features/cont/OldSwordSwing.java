@@ -15,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
+import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
@@ -113,6 +114,8 @@ public final class OldSwordSwing implements HumbugModule, Listener {
                     if (!damager.isOnGround() && damager.getVelocity().getY() < 0) {
                         init *= 1.25;
                         critical = true;
+
+                        damaged.getLocation().getWorld().spawnParticle(Particle.CRIT, damaged.getLocation().add(0, 1.0, 0), 8, 0.1, 0.1, 0.1, 0.5);
                     }
 
                     attackQueue.add(new QueuedAttack(damager, damaged, init, critical));
