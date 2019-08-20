@@ -7,17 +7,14 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.google.common.collect.Queues;
-import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
+import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.util.Scheduler;
-import com.playares.commons.bukkit.util.Worlds;
 import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
@@ -25,9 +22,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -35,6 +31,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Queue;
+import java.util.Set;
+import java.util.UUID;
 
 public final class OldSwordSwing implements HumbugModule, Listener {
     @Getter public final HumbugService humbug;
@@ -42,11 +40,13 @@ public final class OldSwordSwing implements HumbugModule, Listener {
     @Getter @Setter public int hitDelayTicks;
     @Getter @Setter public double maxReach;
     @Getter public BukkitTask queueProcessor;
+    @Getter public final Set<UUID> attackCooldowns;
     @Getter private final Queue<QueuedAttack> attackQueue;
 
     public OldSwordSwing(HumbugService humbug) {
         this.humbug = humbug;
         this.attackQueue = Queues.newConcurrentLinkedQueue();
+        this.attackCooldowns = Sets.newConcurrentHashSet();
     }
 
     @Override
@@ -66,7 +66,6 @@ public final class OldSwordSwing implements HumbugModule, Listener {
         queueProcessor = new Scheduler(getHumbug().getOwner()).sync(() -> {
             while (attackQueue.size() > 0) {
                 final QueuedAttack attack = attackQueue.remove();
-
                 attack.getAttacked().damage(attack.getDamage(), attack.getAttacker());
                 attack.getAttacked().setNoDamageTicks(hitDelayTicks);
             }
@@ -97,19 +96,15 @@ public final class OldSwordSwing implements HumbugModule, Listener {
                     event.setCancelled(true);
 
                     final LivingEntity damaged = (LivingEntity)entity;
+                    final UUID uniqueId = damaged.getUniqueId();
                     final double distance = damager.getLocation().distanceSquared(damaged.getLocation());
 
                     if (damaged.isDead()|| distance > (maxReach * maxReach)) {
                         return;
                     }
 
-                    if (
-                            damaged.getLastDamageCause() != null &&
-                            damaged.getLastDamageCause().getCause().equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) &&
-                            damaged.getNoDamageTicks() > 0) {
-
+                    if (attackCooldowns.contains(uniqueId)) {
                         return;
-
                     }
 
                     double init = ((CraftPlayer)damager).getHandle().getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).getValue();
@@ -118,12 +113,12 @@ public final class OldSwordSwing implements HumbugModule, Listener {
                     if (!damager.isOnGround() && damager.getVelocity().getY() < 0) {
                         init *= 1.25;
                         critical = true;
-
-                        Worlds.spawnParticle(damaged.getLocation().add(0, 1.0, 0), Particle.CRIT, 10, -10);
-                        Worlds.playSound(damaged.getLocation(), Sound.ENTITY_PLAYER_ATTACK_CRIT);
                     }
 
                     attackQueue.add(new QueuedAttack(damager, damaged, init, critical));
+                    attackCooldowns.add(uniqueId);
+
+                    new Scheduler(getHumbug().getOwner()).async(() -> attackCooldowns.remove(uniqueId)).delay(hitDelayTicks).run();
                 }
             }
         });
@@ -131,6 +126,9 @@ public final class OldSwordSwing implements HumbugModule, Listener {
 
     @Override
     public void stop() {
+        attackQueue.clear();
+        attackCooldowns.clear();
+
         PlayerJoinEvent.getHandlerList().unregister(this);
         PlayerQuitEvent.getHandlerList().unregister(this);
         PlayerChangedWorldEvent.getHandlerList().unregister(this);
@@ -166,22 +164,7 @@ public final class OldSwordSwing implements HumbugModule, Listener {
     }
 
     @EventHandler
-    public void onEntityDamageEvent(EntityDamageEvent event) {
-        if (!isEnabled()) {
-            return;
-        }
-
-        if (!(event.getEntity() instanceof LivingEntity)) {
-            return;
-        }
-
-        final LivingEntity entity = (LivingEntity)event.getEntity();
-
-        entity.setNoDamageTicks(hitDelayTicks);
-    }
-
-    @EventHandler (priority = EventPriority.HIGH)
-    public void onPlayerDamagePlayer(PlayerDamagePlayerEvent event) {
+    public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (!isEnabled()) {
             return;
         }
@@ -190,16 +173,19 @@ public final class OldSwordSwing implements HumbugModule, Listener {
             return;
         }
 
-        if (!event.getType().equals(PlayerDamagePlayerEvent.DamageType.PHYSICAL)) {
+        final Entity damager = event.getDamager();
+        final Entity entity = event.getEntity();
+
+        if (!(damager instanceof Player)) {
             return;
         }
 
-        final Player attacker = event.getDamager();
-        final Player attacked = event.getDamaged();
-        final ItemStack attackerItem = attacker.getInventory().getItemInMainHand();
+        final Player player = (Player)damager;
+        final ItemStack hand = player.getInventory().getItemInMainHand();
 
-        if (attackerItem != null && attackerItem.hasItemMeta() && attackerItem.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
-            attacked.setFireTicks(80 * attackerItem.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
+        if (hand != null && hand.hasItemMeta() && hand.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
+            entity.setFireTicks(80 * hand.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
+            entity.setLastDamageCause(event);
         }
     }
 
