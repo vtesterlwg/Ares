@@ -5,6 +5,7 @@ import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
 import com.playares.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
 import com.playares.commons.bukkit.event.PlayerSplashPlayerEvent;
 import com.playares.commons.bukkit.location.PLocatable;
+import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.loggers.data.CombatLogger;
@@ -83,14 +84,14 @@ public final class CombatListener implements Listener {
         final FactionPlayer attackedProfile = plugin.getPlayerManager().getPlayer(attacked.getUniqueId());
 
         if (attackerProfile == null) {
-            attacker.sendMessage(ChatColor.RED + "Failed to obtain your profile");
-            event.setCancelled(true);
-            return;
+            Logger.error("Attacker profile could not be found for " + attacker.getName());
         }
 
         if (attackedProfile == null) {
-            attacker.sendMessage(ChatColor.RED + "Failed to obtain this players profile");
-            event.setCancelled(true);
+            Logger.error("Attacked profile could not be found for " + attacked.getName());
+        }
+
+        if (attackerProfile == null || attackedProfile == null) {
             return;
         }
 
