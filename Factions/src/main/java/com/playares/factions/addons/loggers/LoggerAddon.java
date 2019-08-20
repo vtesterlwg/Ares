@@ -31,6 +31,7 @@ import lombok.Setter;
 import net.minecraft.server.v1_12_R1.EntityLiving;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.GameMode;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
@@ -44,6 +45,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.projectiles.ProjectileSource;
@@ -462,6 +464,26 @@ public final class LoggerAddon implements Addon, Listener {
                 }
             }
         }
+    }
+
+    @EventHandler (priority = EventPriority.HIGH)
+    public void onChunkUnload(ChunkUnloadEvent event) {
+        if (!isEnabled()) {
+            return;
+        }
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        final Chunk chunk = event.getChunk();
+
+        if (getLoggers().isEmpty()) {
+            return;
+        }
+
+        getLoggers().values().stream().filter(logger ->
+                logger.getBukkitEntity().getChunk().getChunkKey() == chunk.getChunkKey()).findAny().ifPresent(found -> event.setCancelled(true));
     }
 
     private void spawnLogger(Player player) {
