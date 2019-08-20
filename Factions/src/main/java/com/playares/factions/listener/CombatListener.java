@@ -22,6 +22,7 @@ import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
 import com.playares.services.deathban.DeathbanService;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -31,6 +32,7 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
@@ -387,6 +389,41 @@ public final class CombatListener implements Listener {
                 }
 
                 return;
+            }
+        }
+
+        // This adds death messages to entities through melee and projectile attacks
+        if (killer == null && (reason.equals(EntityDamageEvent.DamageCause.ENTITY_ATTACK) || reason.equals(EntityDamageEvent.DamageCause.PROJECTILE))) {
+            final EntityDamageEvent originalDamageEvent = player.getLastDamageCause();
+
+            if (originalDamageEvent instanceof EntityDamageByEntityEvent) {
+                final EntityDamageByEntityEvent pveEvent = (EntityDamageByEntityEvent)originalDamageEvent;
+                final Entity damager = pveEvent.getDamager();
+
+                if (damager != null) {
+                    if (damager instanceof LivingEntity) {
+                        final LivingEntity entityKiller = (LivingEntity)damager;
+
+                        Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " slain by a " + ChatColor.GOLD + WordUtils.capitalize(entityKiller.getType().name().toLowerCase().replace("_", " ")));
+
+                        return;
+                    }
+
+                    else if (damager instanceof Projectile) {
+                        final Projectile projectile = (Projectile)damager;
+
+                        if (projectile.getShooter() instanceof LivingEntity) {
+                            final LivingEntity entityKiller = (LivingEntity)projectile.getShooter();
+                            final String distance = String.format("%.2f", player.getLocation().distance(entityKiller.getLocation()));
+
+                            Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " was shot and killed by a " +
+                                    ChatColor.GOLD + WordUtils.capitalize(entityKiller.getType().name().toLowerCase().replace("_", " ")) +
+                                    ChatColor.RED + " from a distance of " + ChatColor.BLUE + distance + " blocks");
+
+                            return;
+                        }
+                    }
+                }
             }
         }
 
