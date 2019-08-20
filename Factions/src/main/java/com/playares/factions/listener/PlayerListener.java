@@ -28,7 +28,6 @@ public final class PlayerListener implements Listener {
 
         if (faction != null) {
             player.setScoreboard(faction.getScoreboard());
-
             faction.registerFriendly(player);
             faction.sendMessage(ChatColor.YELLOW + "Member " + ChatColor.GREEN + "Online" + ChatColor.YELLOW + ": " + ChatColor.RESET + player.getName());
         }
