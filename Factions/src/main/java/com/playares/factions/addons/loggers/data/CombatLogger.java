@@ -86,9 +86,6 @@ public final class CombatLogger extends EntityVillager {
         }
     }
 
-    /* @Override
-    public void a(Entity entity, float f, double d0, double d1) {} */
-
     public void reapply(Player player) {
         final CraftLivingEntity living = (CraftLivingEntity)getBukkitEntity();
 

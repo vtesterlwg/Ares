@@ -78,7 +78,6 @@ public final class FactionUtils {
         if (factionPlayer != null) {
             factionPlayer.getTimers().forEach(Timer::onFinish);
             factionPlayer.getTimers().clear();
-
             factionPlayer.getTimers().add(new ProtectionTimer(plugin, player.getUniqueId(), plugin.getFactionConfig().getTimerProtection()));
         }
 
