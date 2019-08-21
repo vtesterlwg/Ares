@@ -26,5 +26,6 @@
         <module>CustomEntity</module>
         <module>Deathban</module>
         <module>ChatRestrictions</module>
+        <module>PlayerClasses</module>
     </modules>
 </project>
