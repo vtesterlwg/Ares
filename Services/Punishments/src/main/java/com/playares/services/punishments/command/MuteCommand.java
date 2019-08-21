@@ -13,8 +13,7 @@ import javax.annotation.Nonnull;
 
 @AllArgsConstructor
 public final class MuteCommand extends BaseCommand {
-    @Getter
-    public final PunishmentService service;
+    @Getter public final PunishmentService service;
 
     @CommandAlias("mute")
     @CommandPermission("punishments.mute")

@@ -13,8 +13,7 @@ import javax.annotation.Nonnull;
 
 @AllArgsConstructor
 public final class BanCommand extends BaseCommand {
-    @Getter
-    public final PunishmentService service;
+    @Getter public final PunishmentService service;
 
     @CommandAlias("ban")
     @CommandPermission("punishments.ban")

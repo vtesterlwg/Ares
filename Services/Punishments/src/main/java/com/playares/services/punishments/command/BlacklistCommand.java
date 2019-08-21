@@ -13,8 +13,7 @@ import javax.annotation.Nonnull;
 
 @AllArgsConstructor
 public final class BlacklistCommand extends BaseCommand {
-    @Getter
-    public final PunishmentService service;
+    @Getter public final PunishmentService service;
 
     @CommandAlias("blacklist")
     @CommandPermission("punishments.blacklist")

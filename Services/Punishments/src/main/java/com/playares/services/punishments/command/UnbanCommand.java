@@ -16,8 +16,7 @@ import javax.annotation.Nonnull;
 
 @AllArgsConstructor
 public final class UnbanCommand extends BaseCommand {
-    @Getter
-    public final PunishmentService service;
+    @Getter public final PunishmentService service;
 
     @CommandAlias("unban|pardon")
     @CommandPermission("punishments.unban")
