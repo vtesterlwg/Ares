@@ -10,15 +10,16 @@ import com.playares.services.essentials.EssentialsService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Particle;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public final class VanishHandler implements Listener {
-    @Getter
-    public final EssentialsService essentials;
+    @Getter public final EssentialsService essentials;
 
     public VanishHandler(EssentialsService essentials) {
         this.essentials = essentials;
@@ -40,7 +41,6 @@ public final class VanishHandler implements Listener {
                             event.setCancelled(true);
                         }
                     }
-
                 }
         );
     }
@@ -75,6 +75,21 @@ public final class VanishHandler implements Listener {
         }
 
         Logger.print(player.getName() + " unvanished");
+    }
+
+    @EventHandler
+    public void onEntityTarget(EntityTargetLivingEntityEvent event) {
+        final LivingEntity target = event.getTarget();
+
+        if (!(target instanceof Player)) {
+            return;
+        }
+
+        final Player player = (Player)target;
+
+        if (getEssentials().getVanishManager().isVanished(player)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler
