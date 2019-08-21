@@ -7,6 +7,7 @@ import com.playares.commons.bukkit.event.PlayerSplashPlayerEvent;
 import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Players;
+import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.loggers.data.CombatLogger;
 import com.playares.factions.addons.loggers.event.LoggerDeathEvent;
@@ -16,6 +17,7 @@ import com.playares.factions.event.MemberDeathEvent;
 import com.playares.factions.factions.data.Faction;
 import com.playares.factions.factions.data.PlayerFaction;
 import com.playares.factions.factions.data.ServerFaction;
+import com.playares.factions.players.dao.PlayerDAO;
 import com.playares.factions.players.data.FactionPlayer;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
@@ -336,6 +338,12 @@ public final class CombatListener implements Listener {
         if (deathbanService != null && deathbanService.getConfiguration().isDeathbanEnforced()) {
             deathbanService.deathban(logger.getOwner(), 30, false); // TODO: Make dynamic
         }
+
+        new Scheduler(getPlugin()).async(() -> {
+            final FactionPlayer factionPlayer = getPlugin().getPlayerManager().loadPlayer(logger.getOwner(), logger.getOwnerUsername());
+            factionPlayer.setResetOnJoin(true);
+            PlayerDAO.savePlayer(getPlugin().getMongo(), factionPlayer);
+        }).run();
     }
 
     @EventHandler

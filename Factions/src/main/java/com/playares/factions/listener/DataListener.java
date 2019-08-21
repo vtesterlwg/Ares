@@ -4,6 +4,7 @@ import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.players.dao.PlayerDAO;
 import com.playares.factions.players.data.FactionPlayer;
+import com.playares.factions.util.FactionUtils;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -11,6 +12,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public final class DataListener implements Listener {
@@ -29,6 +31,17 @@ public final class DataListener implements Listener {
 
         final FactionPlayer profile = plugin.getPlayerManager().loadPlayer(event.getUniqueId(), event.getName());
         plugin.getPlayerManager().getPlayerRepository().add(profile);
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        final Player player = event.getPlayer();
+        final FactionPlayer factionPlayer = plugin.getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (factionPlayer != null && factionPlayer.isResetOnJoin()) {
+            FactionUtils.resetPlayer(getPlugin(), player);
+            factionPlayer.setResetOnJoin(false);
+        }
     }
 
     @EventHandler (priority = EventPriority.LOWEST)

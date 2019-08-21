@@ -40,6 +40,8 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     @Getter @Setter public double balance;
     /** If true the player should not spawn a Combat Logger **/
     @Getter @Setter public boolean safelogging;
+    /** If true the player should be reset upon connecting **/
+    @Getter @Setter public boolean resetOnJoin;
     /** Faction **/
     @Getter @Setter public PlayerFaction faction;
     /** Current claim inside of **/
@@ -57,6 +59,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = null;
         this.balance = 0.0;
         this.safelogging = false;
+        this.resetOnJoin = false;
         this.faction = null;
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
@@ -70,6 +73,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = player.getName();
         this.balance = 0.0; // TODO: Get from economyconfig
         this.safelogging = false;
+        this.resetOnJoin = false;
         this.faction = null;
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
@@ -83,6 +87,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.username = username;
         this.balance = 0.0;
         this.safelogging = false;
+        this.resetOnJoin = false;
         this.faction = null;
         this.currentClaim = null;
         this.timers = Sets.newConcurrentHashSet();
@@ -223,11 +228,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
      * @return True if ClaimPillars found
      */
     public boolean hasClaimPillars() {
-        return !pillars
-                .stream()
-                .filter(pillar -> pillar instanceof ClaimPillar)
-                .collect(Collectors.toList())
-                .isEmpty();
+        return pillars.stream().anyMatch(pillar -> pillar instanceof ClaimPillar);
     }
 
     /**
@@ -235,11 +236,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
      * @return True if MapPillars found
      */
     public boolean hasMapPillars() {
-        return !pillars
-                .stream()
-                .filter(pillar -> pillar instanceof MapPillar)
-                .collect(Collectors.toList())
-                .isEmpty();
+        return pillars.stream().anyMatch(pillar -> pillar instanceof MapPillar);
     }
 
     /**
@@ -247,11 +244,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
      * @return True if CombatShields found
      */
     public boolean hasCombatShields() {
-        return !shields
-                .stream()
-                .filter(shield -> shield instanceof CombatShield)
-                .collect(Collectors.toList())
-                .isEmpty();
+        return shields.stream().anyMatch(shield -> shield instanceof CombatShield);
     }
 
     /**
@@ -259,11 +252,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
      * @return True if ProtectionShields found
      */
     public boolean hasProtectionShields() {
-        return !shields
-                .stream()
-                .filter(shield -> shield instanceof ProtectionShield)
-                .collect(Collectors.toList())
-                .isEmpty();
+        return shields.stream().anyMatch(shield -> shield instanceof ProtectionShield);
     }
 
     /**
@@ -363,6 +352,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.uniqueId = (UUID)document.get("id");
         this.username = document.getString("username");
         this.balance = document.getDouble("balance");
+        this.resetOnJoin = document.getBoolean("reset");
         this.faction = null;
 
         // Load timers
@@ -413,6 +403,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
                 .append("id", uniqueId)
                 .append("username", username)
                 .append("balance", balance)
+                .append("reset", resetOnJoin)
                 .append("timers", convertedTimers);
     }
 }
