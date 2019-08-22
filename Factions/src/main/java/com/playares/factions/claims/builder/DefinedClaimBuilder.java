@@ -137,7 +137,7 @@ public final class DefinedClaimBuilder {
             for (BLocatable perimeter : claim.getPerimeter(64)) {
                 final WorldLocation location = plugin.getClaimManager().getWorldLocationManager().getWorldLocation(perimeter);
 
-                if (!location.equals(WorldLocation.OVERWORLD_WILDERNESS)) {
+                if (!location.equals(WorldLocation.OVERWORLD_WILDERNESS) && !(owner instanceof ServerFaction)) {
                     new Scheduler(plugin).sync(() -> promise.failure("Claims can not be in the WarZone")).run();
                     return;
                 }
