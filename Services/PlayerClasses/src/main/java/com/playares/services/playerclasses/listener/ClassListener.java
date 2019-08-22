@@ -2,23 +2,28 @@ package com.playares.services.playerclasses.listener;
 
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.google.common.collect.Sets;
+import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.services.playerclasses.PlayerClassService;
 import com.playares.services.playerclasses.data.Class;
+import com.playares.services.playerclasses.data.ClassConsumable;
 import com.playares.services.playerclasses.data.cont.ArcherClass;
+import com.playares.services.playerclasses.event.ConsumeClassItemEvent;
 import com.playares.services.playerclasses.event.PlayerClassDeactivateEvent;
 import com.playares.services.playerclasses.event.PlayerClassReadyEvent;
 import com.playares.services.playerclasses.event.PlayerClassUnreadyEvent;
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.apache.commons.lang.WordUtils;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Set;
 import java.util.UUID;
@@ -136,5 +141,58 @@ public final class ClassListener implements Listener {
         player.sendMessage(ChatColor.YELLOW + "[" + ChatColor.BLUE + "Archer" + ChatColor.YELLOW + " w/ " + ChatColor.BLUE + "Range" + ChatColor.YELLOW +
                 "(" + ChatColor.RED + String.format("%.2f", distance) + ChatColor.YELLOW + ")]: Damage Increase (" + ChatColor.RED + String.format("%.2f", damage) + ChatColor.YELLOW + " => " +
                 ChatColor.BLUE + String.format("%.2f", finalDamage) + ChatColor.YELLOW + ")");
+    }
+
+    @EventHandler
+    public void onConsume(PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
+        final ItemStack hand = player.getInventory().getItem(event.getHand());
+        final Action action = event.getAction();
+
+        if (!action.equals(Action.RIGHT_CLICK_BLOCK) && !action.equals(Action.RIGHT_CLICK_AIR)) {
+            return;
+        }
+
+        // Prevents ASSERTION ERROR: TRAP
+        if (!player.getGameMode().equals(GameMode.SURVIVAL)) {
+            return;
+        }
+
+        final Class playerClass = service.getClassManager().getCurrentClass(player);
+
+        if (hand == null || hand.getType().equals(Material.AIR)) {
+            return;
+        }
+
+        if (playerClass == null || playerClass.getConsumables().isEmpty()) {
+            return;
+        }
+
+        final ClassConsumable consumable = playerClass.getConsumableByMaterial(hand.getType());
+
+        if (consumable == null) {
+            return;
+        }
+
+        if (consumable.hasCooldown(player)) {
+            player.sendMessage(ChatColor.RED + WordUtils.capitalize(consumable.getEffectType().getName().toLowerCase().replace("_", " ")) + " are locked for " +
+                    ChatColor.RED + "" + ChatColor.BOLD + Time.convertToDecimal(consumable.getPlayerCooldown(player) - Time.now()) + ChatColor.RED + "s");
+
+            return;
+        }
+
+        final ConsumeClassItemEvent consumeClassItemEvent = new ConsumeClassItemEvent(player, consumable);
+        Bukkit.getPluginManager().callEvent(consumeClassItemEvent);
+
+        if (consumeClassItemEvent.isCancelled()) {
+            return;
+        }
+
+        consumable.consume(player, event.getHand());
+
+        // Prevents the physical item from being used
+        if (consumable.getMaterial().equals(Material.EYE_OF_ENDER)) {
+            event.setCancelled(true);
+        }
     }
 }

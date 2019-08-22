@@ -26,6 +26,7 @@ import com.playares.services.customentity.CustomEntityService;
 import com.playares.services.deathban.DeathbanService;
 import com.playares.services.deathban.dao.DeathbanDAO;
 import com.playares.services.deathban.data.Deathban;
+import com.playares.services.playerclasses.event.ConsumeClassItemEvent;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_12_R1.EntityLiving;
@@ -484,6 +485,33 @@ public final class LoggerAddon implements Addon, Listener {
 
         getLoggers().values().stream().filter(logger ->
                 logger.getBukkitEntity().getChunk().getChunkKey() == chunk.getChunkKey()).findAny().ifPresent(found -> event.setCancelled(true));
+    }
+
+    @EventHandler (priority = EventPriority.HIGH)
+    public void onClassConsume(ConsumeClassItemEvent event) {
+        if (!isEnabled()) {
+            return;
+        }
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final FactionPlayer profile = getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            Logger.error("Failed to obtain profile for " + player.getName() + " while applying combat tag for class use");
+            return;
+        }
+
+        if (profile.hasTimer(PlayerTimer.PlayerTimerType.COMBAT)) {
+            final CombatTagTimer existing = (CombatTagTimer)profile.getTimer(PlayerTimer.PlayerTimerType.COMBAT);
+            existing.setExpire((plugin.getFactionConfig().getTimerCombatTagAttacker() * 1000L) + Time.now());
+        } else {
+            profile.addTimer(new CombatTagTimer(plugin, player.getUniqueId(), plugin.getFactionConfig().getTimerCombatTagAttacker()));
+            player.sendMessage(ChatColor.RED + "Combat Tag: " + ChatColor.BLUE + Time.convertToHHMMSS(plugin.getFactionConfig().getTimerCombatTagAttacker() * 1000L));
+        }
     }
 
     private void spawnLogger(Player player) {

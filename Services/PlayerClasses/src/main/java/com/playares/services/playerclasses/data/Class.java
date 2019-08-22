@@ -65,6 +65,10 @@ public abstract class Class {
         }
     }
 
+    public ClassConsumable getConsumableByMaterial(Material material) {
+        return consumables.stream().filter(consumable -> consumable.getMaterial().equals(material)).findFirst().orElse(null);
+    }
+
     public boolean hasArmorRequirements(Player player) {
         // HELMET
         if (getRequiredHelmet() != null) {

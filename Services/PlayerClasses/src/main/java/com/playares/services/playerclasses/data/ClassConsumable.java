@@ -12,6 +12,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -56,14 +58,26 @@ public final class ClassConsumable {
         return playerCooldowns.getOrDefault(player.getUniqueId(), 0L);
     }
 
-    public void consume(Player player) {
+    public void consume(Player player, EquipmentSlot slot) {
         final UUID playerUUID = player.getUniqueId();
+        final ItemStack item = player.getInventory().getItem(slot);
         final ConsumeClassItemEvent consumeEvent = new ConsumeClassItemEvent(player, this);
 
         Bukkit.getPluginManager().callEvent(consumeEvent);
 
         if (consumeEvent.isCancelled()) {
             return;
+        }
+
+        if (item.getAmount() > 1) {
+            item.setAmount(item.getAmount() - 1);
+            player.getInventory().setItem(slot, item);
+        } else {
+            if (slot.equals(EquipmentSlot.HAND)) {
+                player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+            } else {
+                player.getInventory().setItemInOffHand(new ItemStack(Material.AIR));
+            }
         }
 
         final PotionEffect existing = (player.hasPotionEffect(effectType) ? player.getPotionEffect(effectType) : null);
@@ -81,7 +95,14 @@ public final class ClassConsumable {
         }
 
         playerCooldowns.put(player.getUniqueId(), (Time.now() + (cooldown * 1000L)));
-        new Scheduler(getService().getOwner()).sync(() -> playerCooldowns.remove(playerUUID)).delay(getCooldown() * 20).run();
+
+        new Scheduler(getService().getOwner()).sync(() -> {
+            playerCooldowns.remove(playerUUID);
+
+            if (Bukkit.getPlayer(playerUUID) != null) {
+                Bukkit.getPlayer(playerUUID).sendMessage(ChatColor.GREEN + WordUtils.capitalize(effectType.getName().toLowerCase().replace("_", " ")) + " has been unlocked");
+            }
+        }).delay(getCooldown() * 20).run();
 
         if (applicationType.equals(ConsumableApplicationType.INDIVIDUAL)) {
             return;

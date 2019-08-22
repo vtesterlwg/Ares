@@ -6,6 +6,9 @@ import com.playares.commons.bukkit.location.BLocatable;
 import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.util.Items;
 import com.playares.factions.Factions;
+import com.playares.factions.addons.events.EventsAddon;
+import com.playares.factions.addons.events.data.type.AresEvent;
+import com.playares.factions.addons.events.data.type.koth.PalaceEvent;
 import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.claims.world.WorldLocation;
 import com.playares.factions.event.PlayerChangeClaimEvent;
@@ -17,6 +20,7 @@ import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.EnderpearlTimer;
 import com.playares.factions.timers.cont.player.ProtectionTimer;
 import com.playares.factions.util.FactionUtils;
+import com.playares.services.playerclasses.event.ConsumeClassItemEvent;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -34,6 +38,7 @@ import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
+import java.util.UUID;
 
 public final class ClaimListener implements Listener {
     @Getter public final Factions plugin;
@@ -89,6 +94,65 @@ public final class ClaimListener implements Listener {
     @EventHandler
     public void onBucketEmpty(PlayerBucketEmptyEvent event) {
         handlePlayerBlockMods(event.getPlayer(), event.getBlockClicked(), event);
+    }
+
+    @EventHandler (priority = EventPriority.NORMAL)
+    public void onConsume(ConsumeClassItemEvent event) {
+        final Player player = event.getPlayer();
+        final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new PLocatable(player));
+
+        if (inside == null) {
+            return;
+        }
+
+        final Faction faction = plugin.getFactionManager().getFactionById(inside.getOwnerId());
+
+        if (!(faction instanceof ServerFaction)) {
+            return;
+        }
+
+        final ServerFaction serverFaction = (ServerFaction)faction;
+
+        if (serverFaction.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+            player.sendMessage(ChatColor.RED + "You can not consume class items while in a Safezone");
+            event.setCancelled(true);
+            return;
+        }
+
+        final List<UUID> toRemove = Lists.newArrayList();
+
+        for (UUID affectedUuid : event.getAffectedPlayers().keySet()) {
+            final Player affected = Bukkit.getPlayer(affectedUuid);
+
+            if (affected == null) {
+                toRemove.add(affectedUuid);
+                continue;
+            }
+
+            final DefinedClaim affectedInside = plugin.getClaimManager().getClaimAt(new PLocatable(affected));
+
+            if (affectedInside == null) {
+                continue;
+            }
+
+            final Faction affectedInsideFaction = plugin.getFactionManager().getFactionById(inside.getOwnerId());
+
+            if (affectedInsideFaction == null) {
+                continue;
+            }
+
+            if (affectedInsideFaction instanceof ServerFaction) {
+                final ServerFaction affectedInsideServerFaction = (ServerFaction)affectedInsideFaction;
+
+                if (affectedInsideServerFaction.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+                    toRemove.add(affectedUuid);
+                }
+            }
+        }
+
+        for (UUID removed : toRemove) {
+            event.getAffectedPlayers().remove(removed);
+        }
     }
 
     @EventHandler
