@@ -1,0 +1,122 @@
+classes:
+  miner:
+    warmup: 5
+    passive:
+      SPEED: 1
+      FIRE_RESISTANCE: 1
+      FAST_DIGGING: 2
+      NIGHT_VISION: 1
+  rogue:
+    warmup: 30
+    passive:
+      SPEED: 4
+      JUMP: 2
+    consumables:
+      SPEED:
+        material: 'SUGAR'
+        duration: 5
+        amplifier: 5
+        cooldown: 180
+        application: 'INDIVIDUAL'
+      JUMP:
+        material: 'RABBIT_FOOT'
+        duration: 5
+        amplifier: 5
+        cooldown: 60
+        application: 'INDIVIDUAL'
+      INVISIBILITY:
+        material: 'EYE_OF_ENDER'
+        duration: 60
+        amplifier: 1
+        cooldown: 300
+        application: 'INDIVIDUAL'
+      LEVITATION:
+        material: 'FEATHER'
+        duration: 5
+        amplifier: 3
+        cooldown: 300
+        application: 'INDIVIDUAL'
+  archer:
+    damage-values:
+      max-damage: 10.0
+      increment: 0.15
+    max-damage: 10.0
+    warmup: 30
+    passive:
+      SPEED: 3
+    consumables:
+      SPEED:
+        material: 'SUGAR'
+        duration: 5
+        amplifier: 4
+        cooldown: 60
+        application: 'INDIVIDUAL'
+      JUMP:
+        material: 'RABBIT_FOOT'
+        duration: 5
+        amplifier: 3
+        cooldown: 45
+        application: 'INDIVIDUAL'
+      LEVITATION:
+        material: 'FEATHER'
+        duration: 5
+        amplifier: 3
+        cooldown: 300
+        application: 'INDIVIDUAL'
+  bard:
+    range: 16.0
+    warmup: 30
+    passive:
+      SPEED: 3
+      DAMAGE_RESISTANCE: 4
+      WEAKNESS: 2
+      FIRE_RESISTANCE: 1
+    consumables:
+      SPEED:
+        material: 'SUGAR'
+        duration: 5
+        amplifier: 3
+        cooldown: 60
+        application: 'FRIENDLY_ONLY'
+      JUMP:
+        material: 'RABBIT_FOOT'
+        duration: 5
+        amplifier: 3
+        cooldown: 45
+        application: 'FRIENDLY_ONLY'
+      LEVITATION:
+        material: 'FEATHER'
+        duration: 5
+        amplifier: 3
+        cooldown: 600
+        application: 'FRIENDLY_ONLY'
+      INCREASE_DAMAGE:
+        material: 'BLAZE_POWDER'
+        duration: 3
+        amplifier: 2
+        cooldown: 180
+        application: 'FRIENDLY_ONLY'
+      WEAKNESS:
+        material: 'FERMENTED_SPIDER_EYE'
+        duration: 10
+        amplifier: 2
+        cooldown: 300
+        application: 'ENEMY_ONLY'
+      POISON:
+        material: 'SPIDER_EYE'
+        duration: 5
+        amplifier: 1
+        cooldown: 300
+        application: 'ENEMY_ONLY'
+      INVISIBILITY:
+        material: 'EYE_OF_ENDER'
+        duration: 60
+        cooldown: 300
+        amplifier: 1
+        application: 'FRIENDLY_ONLY'
+      REGENERATION:
+        material: 'GHAST_TEAR'
+        duration: 5
+        amplifier: 4
+        cooldown: 120
+        application: 'FRIENDLY_ONLY'

@@ -103,7 +103,7 @@ public final class CombatLogger extends EntityVillager {
         player.setFireTicks(living.getFireTicks());
         player.setRemainingAir(living.getRemainingAir());
 
-        living.getActivePotionEffects().forEach(player::addPotionEffect);
+        living.getActivePotionEffects().stream().filter(effect -> effect.getDuration() < 25000).forEach(player::addPotionEffect);
         living.remove();
     }
 

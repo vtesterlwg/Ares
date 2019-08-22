@@ -38,7 +38,8 @@ public abstract class PlayerTimer extends Timer {
         TOTEM(ChatColor.GOLD + "" + ChatColor.BOLD + "Totem", false, false),
         LOGOUT(ChatColor.AQUA + "" + ChatColor.BOLD + "Logout", true, true),
         COMBAT(ChatColor.RED + "" + ChatColor.BOLD + "Combat Tag", true, true),
-        PROTECTION(ChatColor.GREEN + "" + ChatColor.BOLD + "Protection", true, false);
+        PROTECTION(ChatColor.GREEN + "" + ChatColor.BOLD + "Protection", true, false),
+        CLASS(ChatColor.BLUE + "" + ChatColor.BOLD + "Class", true, true);
 
         /** The display name for this timer, usually used in HUD rendering **/
         @Getter public final String displayName;

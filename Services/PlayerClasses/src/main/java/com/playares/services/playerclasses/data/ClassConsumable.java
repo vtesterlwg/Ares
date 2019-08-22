@@ -43,7 +43,7 @@ public final class ClassConsumable {
         this.cooldown = cooldown;
         this.applicationType = applicationType;
         this.effectType = effectType;
-        this.effectAmplifier = effectAmplifier;
+        this.effectAmplifier = (effectAmplifier - 1);
         this.playerCooldowns = Maps.newConcurrentMap();
 
     }

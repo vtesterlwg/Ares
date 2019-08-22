@@ -2,10 +2,14 @@ package com.playares.factions.listener;
 
 import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.event.PlayerBigMoveEvent;
+import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.Factions;
 import com.playares.factions.players.data.FactionPlayer;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.*;
+import com.playares.services.playerclasses.data.Class;
+import com.playares.services.playerclasses.event.PlayerClassReadyEvent;
+import com.playares.services.playerclasses.event.PlayerClassUnreadyEvent;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -230,6 +234,45 @@ public final class PlayerTimerListener implements Listener {
                     ChatColor.RED + "" + ChatColor.BOLD + Time.convertToDecimal(profile.getTimer(PlayerTimer.PlayerTimerType.GAPPLE).getRemaining()) + ChatColor.RED + "s");
 
             event.setCancelled(true);
+        }
+    }
+
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void onClassReady(PlayerClassReadyEvent event) {
+        final Player player = event.getPlayer();
+        final Class playerClass = event.getPlayerClass();
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        final FactionPlayer profile = getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            player.sendMessage(ChatColor.RED + "Failed to obtain your profile");
+            event.setCancelled(true);
+            return;
+        }
+
+        profile.addTimer(new ClassTimer(player.getUniqueId(), playerClass, playerClass.getWarmup()));
+        player.sendMessage(ChatColor.BLUE + playerClass.getName() + ChatColor.GOLD + " will be ready in " + ChatColor.YELLOW + playerClass.getWarmup() + " seconds");
+    }
+
+    @EventHandler
+    public void onClassUnready(PlayerClassUnreadyEvent event) {
+        final Player player = event.getPlayer();
+        final FactionPlayer profile = getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            Logger.error("Failed to obtain profile for " + player.getName() + " while trying to remove their class!");
+            return;
+        }
+
+        final ClassTimer classTimer = (ClassTimer)profile.getTimer(PlayerTimer.PlayerTimerType.CLASS);
+
+        if (classTimer != null) {
+            profile.getTimers().remove(classTimer);
+            player.sendMessage(ChatColor.RED + "Class warm-up cancelled");
         }
     }
 }

@@ -22,6 +22,7 @@ import com.playares.services.customitems.CustomItemService;
 import com.playares.services.deathban.DeathbanService;
 import com.playares.services.essentials.EssentialsService;
 import com.playares.services.humbug.HumbugService;
+import com.playares.services.playerclasses.PlayerClassService;
 import com.playares.services.profiles.ProfileService;
 import com.playares.services.punishments.PunishmentService;
 import com.playares.services.ranks.RankService;
@@ -86,6 +87,7 @@ public final class Factions extends AresPlugin {
         registerService(new DeathbanService(this));
         registerService(new AutomatedRestartService(this, 42300));
         registerService(new ChatRestrictionService(this));
+        registerService(new PlayerClassService(this));
         startServices();
 
         // Data Managers
