@@ -413,7 +413,17 @@ public final class ClaimListener implements Listener {
                 event.setCancelled(true);
             }
 
-            // TODO: Cancel enderpearl landing in active Palace event claims
+            final EventsAddon eventsAddon = (EventsAddon)getPlugin().getAddonManager().getAddon(EventsAddon.class);
+            final AresEvent insideEvent = eventsAddon.getManager().getEventByOwnerId(sf.getUniqueId());
+
+            if (insideEvent == null) {
+                return;
+            }
+
+            if (insideEvent instanceof PalaceEvent) {
+                player.sendMessage(ChatColor.RED + "Enderpearls are disabled within Palace claims");
+                event.setCancelled(true);
+            }
         }
     }
 
