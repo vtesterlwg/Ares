@@ -8,6 +8,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.google.common.collect.Queues;
 import com.google.common.collect.Sets;
+import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
@@ -168,6 +169,25 @@ public final class OldSwordSwing implements HumbugModule, Listener {
     }
 
     @EventHandler (priority = EventPriority.MONITOR)
+    public void onPlayerDamagePlayer(PlayerDamagePlayerEvent event) {
+        if (!isEnabled()) {
+            return;
+        }
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        final Player damager = event.getDamager();
+        final Player damaged = event.getDamaged();
+        final ItemStack hand = damager.getInventory().getItemInMainHand();
+
+        if (hand != null && hand.hasItemMeta() && hand.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
+            damaged.setFireTicks(80 * hand.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
+        }
+    }
+
+    @EventHandler (priority = EventPriority.MONITOR)
     public void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (!isEnabled()) {
             return;
@@ -180,7 +200,7 @@ public final class OldSwordSwing implements HumbugModule, Listener {
         final Entity damager = event.getDamager();
         final Entity entity = event.getEntity();
 
-        if (!(damager instanceof Player)) {
+        if (!(damager instanceof Player) || entity instanceof Player) {
             return;
         }
 
