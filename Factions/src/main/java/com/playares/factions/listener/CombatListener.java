@@ -21,7 +21,13 @@ import com.playares.factions.players.dao.PlayerDAO;
 import com.playares.factions.players.data.FactionPlayer;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
+import com.playares.factions.util.FactionUtils;
 import com.playares.services.deathban.DeathbanService;
+import com.playares.services.playerclasses.PlayerClassService;
+import com.playares.services.playerclasses.data.Class;
+import com.playares.services.playerclasses.data.ClassConsumable;
+import com.playares.services.playerclasses.data.cont.BardClass;
+import com.playares.services.playerclasses.event.ConsumeClassItemEvent;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
@@ -40,11 +46,57 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.List;
+
 public final class CombatListener implements Listener {
     @Getter public final Factions plugin;
 
     public CombatListener(Factions plugin) {
         this.plugin = plugin;
+    }
+
+    @EventHandler (priority = EventPriority.LOW)
+    public void onClassConsume(ConsumeClassItemEvent event) {
+        final PlayerClassService classService = (PlayerClassService)getPlugin().getService(PlayerClassService.class);
+
+        if (classService == null) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final Class playerClass = classService.getClassManager().getCurrentClass(player);
+
+        // TODO: Eventually fix this but it's expected only bard will give effects for now
+        if (!(playerClass instanceof BardClass)) {
+            return;
+        }
+
+        final BardClass bard = (BardClass)playerClass;
+
+        if (event.getConsumable().getApplicationType().equals(ClassConsumable.ConsumableApplicationType.INDIVIDUAL)) {
+            return;
+        }
+
+        if (event.getConsumable().getApplicationType().equals(ClassConsumable.ConsumableApplicationType.ALL)) {
+            final List<Player> friendlies = FactionUtils.getNearbyFriendlies(plugin, player, bard.getRange());
+            final List<Player> enemies = FactionUtils.getNearbyEnemies(plugin, player, bard.getRange());
+
+            friendlies.forEach(friendly -> event.getAffectedPlayers().put(friendly.getUniqueId(), true));
+            enemies.forEach(enemy -> event.getAffectedPlayers().put(enemy.getUniqueId(), false));
+
+            return;
+        }
+
+        if (event.getConsumable().getApplicationType().equals(ClassConsumable.ConsumableApplicationType.FRIENDLY_ONLY)) {
+            final List<Player> friendlies = FactionUtils.getNearbyFriendlies(plugin, player, bard.getRange());
+            friendlies.forEach(friendly -> event.getAffectedPlayers().put(friendly.getUniqueId(), true));
+            return;
+        }
+
+        if (event.getConsumable().getApplicationType().equals(ClassConsumable.ConsumableApplicationType.ENEMY_ONLY)) {
+            final List<Player> enemies = FactionUtils.getNearbyEnemies(plugin, player, bard.getRange());
+            enemies.forEach(enemy -> event.getAffectedPlayers().put(enemy.getUniqueId(), true));
+        }
     }
 
     @EventHandler

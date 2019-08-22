@@ -38,6 +38,36 @@ public final class FactionUtils {
     }
 
     /**
+     * Returns a list containing all players that are considered friendlies within the supplied distance
+     * @param plugin Plugin
+     * @param player Player
+     * @param distance Distance (radius)
+     * @return ImmutableList containing all players considered friendlies
+     */
+    public static ImmutableList<Player> getNearbyFriendlies(Factions plugin, Player player, double distance) {
+        final List<Player> result = Lists.newArrayList();
+        final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(player.getUniqueId());
+
+        if (faction == null || faction.getMembers().size() <= 1) {
+            return ImmutableList.copyOf(result);
+        }
+
+        for (Entity entity : player.getNearbyEntities(distance, distance, distance)) {
+            if (!(entity instanceof Player)) {
+                continue;
+            }
+
+            final Player otherPlayer = (Player)entity;
+
+            if (faction.getMember(otherPlayer.getUniqueId()) != null) {
+                result.add(otherPlayer);
+            }
+        }
+
+        return ImmutableList.copyOf(result);
+    }
+
+    /**
      * Returns a list containing all players that are considering enemies within the supplied distance
      * @param plugin Plugin
      * @param player Player
