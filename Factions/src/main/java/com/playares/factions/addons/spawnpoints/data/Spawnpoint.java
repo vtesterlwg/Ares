@@ -6,8 +6,7 @@ import lombok.Getter;
 import javax.annotation.Nonnull;
 
 public final class Spawnpoint extends PLocatable {
-    @Getter
-    public final SpawnpointType type;
+    @Getter public final SpawnpointType type;
 
     @SuppressWarnings("ConstantConditions") // hehe OOPSIE
     public Spawnpoint(@Nonnull SpawnpointType type, @Nonnull PLocatable locatable) {
@@ -21,6 +20,16 @@ public final class Spawnpoint extends PLocatable {
     }
 
     public enum SpawnpointType {
-        OVERWORLD, END_ENTRANCE, END_CITY_ENTRANCE
+        OVERWORLD, END_ENTRANCE, END_CITY_ENTRANCE;
+
+        public static SpawnpointType getType(String name) {
+            for (SpawnpointType value : values()) {
+                if (value.name().replace("_", "").equalsIgnoreCase(name)) {
+                    return value;
+                }
+            }
+
+            return null;
+        }
     }
 }

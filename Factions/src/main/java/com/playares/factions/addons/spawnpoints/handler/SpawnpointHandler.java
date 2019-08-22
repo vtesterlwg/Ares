@@ -39,12 +39,10 @@ public final class SpawnpointHandler {
             return;
         }
 
-        final Spawnpoint.SpawnpointType type;
+        final Spawnpoint.SpawnpointType type = Spawnpoint.SpawnpointType.getType(name);
 
-        try {
-            type = Spawnpoint.SpawnpointType.valueOf(name);
-        } catch (IllegalArgumentException e) {
-            promise.failure("Invalid spawn type");
+        if (type == null) {
+            promise.failure("Spawnpoint type not found");
             return;
         }
 
@@ -60,11 +58,9 @@ public final class SpawnpointHandler {
     }
 
     public void setSpawn(Player player, String name, SimplePromise promise) {
-        final Spawnpoint.SpawnpointType type;
+        final Spawnpoint.SpawnpointType type = Spawnpoint.SpawnpointType.getType(name);
 
-        try {
-            type = Spawnpoint.SpawnpointType.valueOf(name.toUpperCase().replace("-", "_"));
-        } catch (IllegalArgumentException e) {
+        if (type == null) {
             promise.failure("Invalid spawnpoint type");
             return;
         }
