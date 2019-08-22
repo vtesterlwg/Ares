@@ -96,24 +96,13 @@ public final class ClaimListener implements Listener {
         handlePlayerBlockMods(event.getPlayer(), event.getBlockClicked(), event);
     }
 
-    @EventHandler (priority = EventPriority.NORMAL)
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onConsume(ConsumeClassItemEvent event) {
         final Player player = event.getPlayer();
         final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new PLocatable(player));
+        final Faction faction = (inside != null) ? plugin.getFactionManager().getFactionById(inside.getOwnerId()) : null;
 
-        if (inside == null) {
-            return;
-        }
-
-        final Faction faction = plugin.getFactionManager().getFactionById(inside.getOwnerId());
-
-        if (!(faction instanceof ServerFaction)) {
-            return;
-        }
-
-        final ServerFaction serverFaction = (ServerFaction)faction;
-
-        if (serverFaction.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+        if (faction instanceof ServerFaction && ((ServerFaction) faction).getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
             player.sendMessage(ChatColor.RED + "You can not consume class items while in a Safezone");
             event.setCancelled(true);
             return;
@@ -135,7 +124,7 @@ public final class ClaimListener implements Listener {
                 continue;
             }
 
-            final Faction affectedInsideFaction = plugin.getFactionManager().getFactionById(inside.getOwnerId());
+            final Faction affectedInsideFaction = plugin.getFactionManager().getFactionById(affectedInside.getOwnerId());
 
             if (affectedInsideFaction == null) {
                 continue;
