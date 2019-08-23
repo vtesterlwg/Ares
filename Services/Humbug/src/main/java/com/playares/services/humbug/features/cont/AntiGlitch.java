@@ -9,6 +9,7 @@ import lombok.Setter;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +18,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.potion.PotionEffectType;
 
 public final class AntiGlitch implements HumbugModule, Listener {
     @Getter public final HumbugService humbug;
@@ -54,7 +56,7 @@ public final class AntiGlitch implements HumbugModule, Listener {
 
     @EventHandler (priority = EventPriority.HIGHEST)
     public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (!isEnabled() || !isDisableElytraClipping() || event.isCancelled()) {
+        if (!isEnabled() || !isDisablePearlClipping() || event.isCancelled()) {
             return;
         }
 
@@ -62,13 +64,15 @@ public final class AntiGlitch implements HumbugModule, Listener {
             return;
         }
 
-        final Location fixed = new Location(event.getTo().getWorld(),
-                event.getTo().getBlockX() + 0.5, event.getTo().getBlockY(),
-                event.getTo().getBlockZ() + 0.5,
-                event.getTo().getYaw(),
-                event.getTo().getPitch());
+        final Player player = event.getPlayer();
+        final double x = event.getTo().getBlockX() + 0.5;
+        final double z = event.getTo().getBlockZ() + 0.5;
+        final float yaw = event.getTo().getYaw();
+        final float pitch = event.getTo().getPitch();
+        final double y = (player.hasPotionEffect(PotionEffectType.LEVITATION) && event.getTo().getY() >= event.getFrom().getY()) ? event.getTo().getBlockY() - 1.0 : event.getTo().getBlockY();
+        final World world = event.getTo().getWorld();
 
-        event.setTo(fixed);
+        event.setTo(new Location(world, x, y, z, yaw, pitch));
     }
 
     @EventHandler
