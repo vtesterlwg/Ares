@@ -15,6 +15,12 @@ public final class ServerStateCommand extends BaseCommand {
         this.addon = addon;
     }
 
+    /*
+    /serverstate current - view current state
+    /serverstate set <name> - set the server state to provided
+    /serverstate list - list all server states
+     */
+
     @Subcommand("current")
     @Description("View the current state of the server")
     public void onCurrent(CommandSender sender) {
@@ -24,7 +30,7 @@ public final class ServerStateCommand extends BaseCommand {
     @Subcommand("set")
     @Description("Set the state of the server")
     @CommandPermission("factions.serverstates.set")
-    public void onSet(CommandSender sender, @Values("sotw|normal|eotw") String state) {
+    public void onSet(CommandSender sender, @Values("sotw|normal|eotwphase1|eotwphase2") String state) {
 
     }
 }
