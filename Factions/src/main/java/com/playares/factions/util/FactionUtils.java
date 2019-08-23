@@ -59,6 +59,10 @@ public final class FactionUtils {
 
             final Player otherPlayer = (Player)entity;
 
+            if (otherPlayer.getUniqueId().equals(player.getUniqueId())) {
+                continue;
+            }
+
             if (faction.getMember(otherPlayer.getUniqueId()) != null) {
                 result.add(otherPlayer);
             }
