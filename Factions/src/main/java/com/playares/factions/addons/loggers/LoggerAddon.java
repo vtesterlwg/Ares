@@ -34,6 +34,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftLivingEntity;
@@ -41,9 +42,11 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
@@ -135,6 +138,8 @@ public final class LoggerAddon implements Addon, Listener {
         PlayerJoinEvent.getHandlerList().unregister(this);
         PlayerDamageLoggerEvent.getHandlerList().unregister(this);
         CombatLogEvent.getHandlerList().unregister(this);
+        ConsumeClassItemEvent.getHandlerList().unregister(this);
+        PlayerInteractEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler (priority = EventPriority.MONITOR)
@@ -512,6 +517,34 @@ public final class LoggerAddon implements Addon, Listener {
             profile.addTimer(new CombatTagTimer(plugin, player.getUniqueId(), plugin.getFactionConfig().getTimerCombatTagAttacker()));
             player.sendMessage(ChatColor.RED + "Combat Tag: " + ChatColor.BLUE + Time.convertToHHMMSS(plugin.getFactionConfig().getTimerCombatTagAttacker() * 1000L));
         }
+    }
+
+    @EventHandler (priority = EventPriority.NORMAL)
+    public void onShulkerBoxUse(PlayerInteractEvent event) {
+        final Player player = event.getPlayer();
+        final Block block = event.getClickedBlock();
+        final Action action = event.getAction();
+
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (!action.equals(Action.RIGHT_CLICK_BLOCK)) {
+            return;
+        }
+
+        if (block == null || !block.getType().name().contains("SHULKER_BOX")) {
+            return;
+        }
+
+        final FactionPlayer profile = getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null || !profile.hasTimer(PlayerTimer.PlayerTimerType.COMBAT)) {
+            return;
+        }
+
+        player.sendMessage(ChatColor.RED + "This item can not be used while your are combat-tagged");
+        event.setCancelled(true);
     }
 
     private void spawnLogger(Player player) {
