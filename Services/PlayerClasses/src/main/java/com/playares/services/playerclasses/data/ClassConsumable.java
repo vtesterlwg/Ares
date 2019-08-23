@@ -80,18 +80,20 @@ public final class ClassConsumable {
             }
         }
 
-        final PotionEffect existing = (player.hasPotionEffect(effectType) ? player.getPotionEffect(effectType) : null);
+        if (!applicationType.equals(ConsumableApplicationType.ENEMY_ONLY)) {
+            final PotionEffect existing = (player.hasPotionEffect(effectType) ? player.getPotionEffect(effectType) : null);
 
-        if (player.hasPotionEffect(effectType)) {
-            player.removePotionEffect(effectType);
-        }
+            if (player.hasPotionEffect(effectType)) {
+                player.removePotionEffect(effectType);
+            }
 
-        player.addPotionEffect(new PotionEffect(effectType, (duration * 20), effectAmplifier));
-        player.sendMessage(ChatColor.LIGHT_PURPLE + "You now have " + ChatColor.AQUA + WordUtils.capitalize(effectType.getName().toLowerCase().replace("_", " ")) + " " +
-                (effectAmplifier + 1) + ChatColor.LIGHT_PURPLE + " for " + ChatColor.AQUA + duration + " seconds");
+            player.addPotionEffect(new PotionEffect(effectType, (duration * 20), effectAmplifier));
+            player.sendMessage(ChatColor.LIGHT_PURPLE + "You now have " + ChatColor.AQUA + WordUtils.capitalize(effectType.getName().toLowerCase().replace("_", " ")) + " " +
+                    (effectAmplifier + 1) + ChatColor.LIGHT_PURPLE + " for " + ChatColor.AQUA + duration + " seconds");
 
-        if (existing != null) {
-            new Scheduler(getService().getOwner()).sync(() -> player.addPotionEffect(existing)).delay(duration * 20).run();
+            if (existing != null) {
+                new Scheduler(getService().getOwner()).sync(() -> player.addPotionEffect(existing)).delay(duration * 20).run();
+            }
         }
 
         playerCooldowns.put(player.getUniqueId(), (Time.now() + (cooldown * 1000L)));
@@ -153,6 +155,8 @@ public final class ClassConsumable {
                 }
             }
         });
+
+        player.sendMessage(ChatColor.LIGHT_PURPLE + "Your effect was applied to " + ChatColor.AQUA + affected.size() + ChatColor.LIGHT_PURPLE + " players");
     }
 
     public enum ConsumableApplicationType {
