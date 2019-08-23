@@ -65,6 +65,13 @@ public final class CombatListener implements Listener {
 
         final Player player = event.getPlayer();
         final Class playerClass = classService.getClassManager().getCurrentClass(player);
+        final FactionPlayer profile = getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile.hasTimer(PlayerTimer.PlayerTimerType.PROTECTION)) {
+            player.sendMessage(ChatColor.RED + "You can not use consumable effects while you have PvP Protection");
+            event.setCancelled(true);
+            return;
+        }
 
         // TODO: Eventually fix this but it's expected only bard will give effects for now
         if (!(playerClass instanceof BardClass)) {
