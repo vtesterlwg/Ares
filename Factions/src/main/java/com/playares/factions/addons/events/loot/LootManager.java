@@ -24,6 +24,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -70,6 +71,8 @@ public final class LootManager {
         final List<ItemStack> loot = getAddon().getLootManager().getStandardLoot((event instanceof PalaceEvent) ? 10 : 5);
         final Set<Integer> slots = Sets.newHashSet();
         int pos = 0;
+
+        chest.getBlockInventory().getViewers().forEach(viewer -> viewer.closeInventory(InventoryCloseEvent.Reason.PLUGIN));
 
         Bukkit.getOnlinePlayers().forEach(player -> {
             if (event instanceof KOTHEvent) {
