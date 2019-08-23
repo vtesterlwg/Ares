@@ -174,6 +174,11 @@ public final class ClassListener implements Listener {
             return;
         }
 
+        // Prevents the physical item from being used
+        if (consumable.getMaterial().equals(Material.EYE_OF_ENDER)) {
+            event.setCancelled(true);
+        }
+
         if (consumable.hasCooldown(player)) {
             player.sendMessage(ChatColor.RED + WordUtils.capitalize(consumable.getEffectType().getName().toLowerCase().replace("_", " ")) + " are locked for " +
                     ChatColor.RED + "" + ChatColor.BOLD + Time.convertToDecimal(consumable.getPlayerCooldown(player) - Time.now()) + ChatColor.RED + "s");
@@ -189,10 +194,5 @@ public final class ClassListener implements Listener {
         }
 
         consumable.consume(player, event.getHand());
-
-        // Prevents the physical item from being used
-        if (consumable.getMaterial().equals(Material.EYE_OF_ENDER)) {
-            event.setCancelled(true);
-        }
     }
 }
