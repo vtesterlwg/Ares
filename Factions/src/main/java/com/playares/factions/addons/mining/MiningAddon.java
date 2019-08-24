@@ -16,13 +16,11 @@ import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.Comparator;
 import java.util.List;
@@ -82,7 +80,9 @@ public final class MiningAddon implements Addon, Listener {
                 continue;
             }
 
-            final double rate = config.getDouble("mining.findables." + matName + ".rate");
+            final String pullName = config.getString("mining.findables." + matName + ".rate");
+            final int required = Integer.parseInt(pullName.split(":")[0]);
+            final int total = Integer.parseInt(pullName.split(":")[1]);
             final int minHeight = config.getInt("mining.findables." + matName + ".height.min");
             final int maxHeight = config.getInt("mining.findables." + matName + ".height.max");
             final int minVeinSize = config.getInt("mining.findables." + matName + ".vein-size.min");
@@ -99,7 +99,8 @@ public final class MiningAddon implements Addon, Listener {
             final Findable findable = new Findable(
                     material,
                     foundIn,
-                    rate,
+                    required,
+                    total,
                     environment,
                     minHeight,
                     maxHeight,
@@ -126,41 +127,24 @@ public final class MiningAddon implements Addon, Listener {
     }
 
     public ImmutableList<Findable> getFindablesAt(Block block) {
-        final List<Findable> result = findables
-                .stream()
-                .filter(findable -> findable.isObtainable(block))
-                .sorted(Comparator.comparingDouble(Findable::getRate))
-                .collect(Collectors.toList());
-
+        final List<Findable> result = findables.stream().filter(findable -> findable.isObtainable(block)).sorted(Comparator.comparingInt(Findable::getTotalPulls)).collect(Collectors.toList());
         return ImmutableList.copyOf(result);
     }
 
-    public void run(Player player, ItemStack hand, Block block) {
+    public void run(Player player, Block block) {
         final List<Findable> possibilities = getFindablesAt(block);
 
         if (possibilities.isEmpty()) {
             return;
         }
 
-        final double luckIncrease = (player.hasPotionEffect(PotionEffectType.LUCK) ? 0.005 * (player.getPotionEffect(PotionEffectType.LUCK).getAmplifier() + 1) : 0.0);
-        final boolean isZuergner = (player.hasPotionEffect(PotionEffectType.FAST_DIGGING) &&
-                player.getPotionEffect(PotionEffectType.FAST_DIGGING).getAmplifier() > 0 &&
-                hand != null && hand.getEnchantmentLevel(Enchantment.DIG_SPEED) >= 5);
-
         for (Findable possible : possibilities) {
-            final double pull = random.nextDouble();
-            double rate = possible.getRate();
-
-            rate += luckIncrease;
-
-            if (isZuergner) {
-                rate += 0.005;
+            if (random.nextInt(possible.getTotalPulls()) > possible.getRequiredPulls()) {
+                continue;
             }
 
-            if (pull <= rate) {
-                if (spawnVein(possible, player, block)) {
-                    break;
-                }
+            if (spawnVein(possible, player, block)) {
+                break;
             }
         }
     }
@@ -256,6 +240,6 @@ public final class MiningAddon implements Addon, Listener {
             return;
         }
 
-        run(player, hand, block);
+        run(player, block);
     }
 }

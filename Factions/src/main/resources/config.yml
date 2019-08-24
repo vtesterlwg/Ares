@@ -131,7 +131,7 @@ mining:
   enabled: true
   findables:
     GLOWSTONE:
-      rate: 0.01
+      rate: '1:1000'
       found-in: 'NETHERRACK'
       height:
         min: 1
@@ -144,7 +144,7 @@ mining:
       message: true
       color: '6'
     DIAMOND_ORE:
-      rate: 0.0125
+      rate: '1:1750'
       found-in: 'STONE'
       height:
         min: 1
@@ -157,7 +157,7 @@ mining:
       message: false
       color: 'b'
     EMERALD_ORE:
-      rate: 0.01
+      rate: '1:1500'
       found-in: 'STONE'
       height:
         min: 1

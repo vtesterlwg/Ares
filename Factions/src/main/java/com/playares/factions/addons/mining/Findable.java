@@ -12,7 +12,8 @@ import org.bukkit.block.Block;
 public final class Findable {
     @Getter public final Material type;
     @Getter public final Material foundType;
-    @Getter public final double rate;
+    @Getter public final int requiredPulls;
+    @Getter public final int totalPulls;
     @Getter public final World.Environment environment;
     @Getter public final int minHeight;
     @Getter public final int maxHeight;
@@ -26,7 +27,7 @@ public final class Findable {
         return StringUtils.capitaliseAllWords(type.name().toLowerCase().replace("_", " "));
     }
 
-    public boolean isObtainable(Block block) {
+    boolean isObtainable(Block block) {
         if (!block.getType().equals(foundType)) {
             return false;
         }
