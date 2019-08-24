@@ -509,6 +509,42 @@ public final class FactionCommand extends BaseCommand {
         });
     }
 
+    @Subcommand("unclaimfor")
+    @Description("Unclaim land for a faction")
+    @Syntax("[all]")
+    @CommandPermission("factions.unclaim.others")
+    public void onUnclaimFor(Player player, String faction) {
+        plugin.getClaimManager().getDeleteHandler().unclaimFor(player, faction, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction land unclaimed");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
+    @Subcommand("unclaimfor")
+    @Description("Unclaim land for a faction")
+    @Syntax("[all]")
+    @CommandPermission("factions.unclaim.others")
+    public void onUnclaimAllFor(Player player, String faction, @Values("all") String all) {
+        plugin.getClaimManager().getDeleteHandler().unclaimAllFor(player, faction, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction land unclaimed");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
     @Subcommand("rename")
     @Description("Rename your faction")
     @Syntax("<name>")

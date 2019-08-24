@@ -61,6 +61,7 @@ factions.sethome.others - Set others homes
 factions.rename.others - Rename others factions
 factions.disband.others - Disband others factions
 factions.freeze.others - Freeze others factions
+factions.unclaim.others - Unclaim land for others
 factions.dtr.others - Set others faction DTR
 factions.flag.others - Set flag for other factions
 factions.spawn - Teleport to a spawnpoint
