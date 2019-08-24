@@ -16,6 +16,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.server.v1_12_R1.GenericAttributes;
+import org.bukkit.GameMode;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
@@ -92,6 +93,10 @@ public final class OldSwordSwing implements HumbugModule, Listener {
                 }
 
                 if (!packet.getEntityUseActions().read(0).equals(EnumWrappers.EntityUseAction.ATTACK)) {
+                    return;
+                }
+
+                if (damager.getGameMode().equals(GameMode.SPECTATOR)) {
                     return;
                 }
 
