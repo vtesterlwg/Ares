@@ -1,6 +1,7 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.base.promise.SimplePromise;
 import org.apache.commons.lang.StringUtils;
@@ -77,5 +78,11 @@ public final class GamemodeCommand extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @HelpCommand
+    @Description("View a list of Gamemode Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

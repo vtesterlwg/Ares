@@ -1,8 +1,10 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
+import co.aikar.commands.annotation.HelpCommand;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -91,5 +93,11 @@ public final class ListCommand extends BaseCommand {
         sender.sendMessage(ChatColor.YELLOW + "There are " + ChatColor.WHITE + onlineCount + ChatColor.YELLOW + " players online");
         sender.sendMessage(Joiner.on(ChatColor.RESET + ", ").join(rankNames));
         sender.sendMessage(Joiner.on(ChatColor.RESET + ", ").join(response));
+    }
+
+    @HelpCommand
+    @Description("View a list of List Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

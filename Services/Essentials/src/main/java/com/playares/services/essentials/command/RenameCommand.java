@@ -1,10 +1,8 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Syntax;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.playares.commons.bukkit.logger.Logger;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -31,5 +29,11 @@ public final class RenameCommand extends BaseCommand {
 
         player.sendMessage(ChatColor.YELLOW + "The item in your hand has been renamed to " + converted);
         Logger.print(player.getName() + " renamed the item in their hand to " + converted);
+    }
+
+    @HelpCommand
+    @Description("View a list of Rename Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

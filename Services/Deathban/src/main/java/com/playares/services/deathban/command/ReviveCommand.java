@@ -1,8 +1,10 @@
 package com.playares.services.deathban.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
+import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Syntax;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.services.deathban.DeathbanService;
@@ -52,5 +54,11 @@ public final class ReviveCommand extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @HelpCommand
+    @Description("View a list of Revive Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

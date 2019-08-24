@@ -1,6 +1,7 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.bukkit.logger.Logger;
 import org.bukkit.ChatColor;
@@ -42,5 +43,11 @@ public final class RepairCommand extends BaseCommand {
         }
 
         Logger.print(player.getName() + " repaired their armor");
+    }
+
+    @HelpCommand
+    @Description("View a list of Repair Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

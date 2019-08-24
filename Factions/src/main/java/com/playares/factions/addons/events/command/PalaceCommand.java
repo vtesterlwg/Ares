@@ -10,7 +10,6 @@ import com.playares.factions.addons.events.menu.LootMenu;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -79,8 +78,8 @@ public final class PalaceCommand extends BaseCommand {
     }
 
     @HelpCommand
-    public void onHelp(CommandSender sender, CommandHelp help) {
-        sender.sendMessage(ChatColor.YELLOW + "Palace Command Help");
+    @Description("View a list of Palace commands")
+    public void onHelp(CommandHelp help) {
         help.showHelp();
     }
 }

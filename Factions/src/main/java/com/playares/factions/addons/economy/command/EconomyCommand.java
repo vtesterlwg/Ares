@@ -1,6 +1,7 @@
 package com.playares.factions.addons.economy.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.factions.addons.economy.EconomyAddon;
@@ -103,5 +104,11 @@ public final class EconomyCommand extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @HelpCommand
+    @Description("View a list of Economy Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

@@ -1,10 +1,8 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandCompletion;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Syntax;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.services.essentials.data.invsee.ViewableInventory;
 import lombok.Getter;
@@ -29,5 +27,11 @@ public final class InvSeeCommand extends BaseCommand {
 
         viewable.open();
         viewable.startUpdater();
+    }
+
+    @HelpCommand
+    @Description("View a list of Invsee Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

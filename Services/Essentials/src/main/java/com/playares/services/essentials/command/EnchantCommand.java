@@ -1,6 +1,7 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.remap.RemappedEnchantment;
@@ -58,5 +59,11 @@ public final class EnchantCommand extends BaseCommand {
 
         player.sendMessage(ChatColor.YELLOW + "Applied " + ChatColor.WHITE + enchantment.getName() + " " + level + ChatColor.YELLOW + " to " + ChatColor.WHITE + count + ChatColor.YELLOW + " pieces of armor");
         Logger.print(player.getName() + " applied " + enchantment.getName() + " " + level + " to their armor");
+    }
+
+    @HelpCommand
+    @Description("View a list of Enchant Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

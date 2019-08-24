@@ -1,6 +1,7 @@
 package com.playares.services.deathban.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.base.promise.FailablePromise;
 import com.playares.commons.base.promise.SimplePromise;
@@ -90,5 +91,11 @@ public final class LivesCommand extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @HelpCommand
+    @Description("View a list of Lives Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

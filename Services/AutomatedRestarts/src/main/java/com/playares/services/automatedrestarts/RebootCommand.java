@@ -1,6 +1,7 @@
 package com.playares.services.automatedrestarts;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.base.promise.SimplePromise;
 import lombok.Getter;
@@ -91,5 +92,11 @@ public final class RebootCommand extends BaseCommand {
                 sender.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @HelpCommand
+    @Description("View a list of Reboot Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

@@ -1,6 +1,7 @@
 package com.playares.factions.addons.events.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.base.promise.FailablePromise;
 import com.playares.commons.base.promise.SimplePromise;
@@ -151,5 +152,11 @@ public final class EventCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @HelpCommand
+    @Description("View a list of Event commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

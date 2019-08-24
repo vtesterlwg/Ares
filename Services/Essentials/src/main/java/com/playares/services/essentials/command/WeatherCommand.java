@@ -1,6 +1,7 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.bukkit.logger.Logger;
 import org.bukkit.ChatColor;
@@ -45,5 +46,11 @@ public final class WeatherCommand extends BaseCommand {
             player.sendMessage(ChatColor.YELLOW + "Weather is now " + ChatColor.WHITE + "thundering");
             Logger.print(player.getName() + " set the weather to thundering");
         }
+    }
+
+    @HelpCommand
+    @Description("View a list of Weather Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

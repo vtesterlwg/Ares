@@ -1,10 +1,8 @@
 package com.playares.factions.addons.spawnpoints.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Syntax;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.spawnpoints.SpawnpointAddon;
@@ -93,5 +91,11 @@ public final class SpawnCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @HelpCommand
+    @Description("View a list of Spawn Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

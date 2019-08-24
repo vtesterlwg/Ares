@@ -1,6 +1,7 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.bukkit.util.Players;
 import org.bukkit.Bukkit;
@@ -52,5 +53,11 @@ public final class HealCommand extends BaseCommand {
 
         player.sendMessage(ChatColor.YELLOW + "You have been healed");
         sender.sendMessage(ChatColor.YELLOW + "You have healed " + ChatColor.WHITE + player.getName());
+    }
+
+    @HelpCommand
+    @Description("View a list of Heal Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

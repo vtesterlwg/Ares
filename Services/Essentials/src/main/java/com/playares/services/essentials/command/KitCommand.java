@@ -1,6 +1,7 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -100,5 +101,11 @@ public final class KitCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @HelpCommand
+    @Description("View a list of Kit Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

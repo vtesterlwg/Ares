@@ -1,10 +1,8 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Syntax;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.playares.services.essentials.EssentialsService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -34,5 +32,11 @@ public final class BroadcastCommand extends BaseCommand {
     @Syntax("<message>")
     public void onBroadcast(Player player, String message) {
         Bukkit.broadcastMessage(playerPrefixFormat.replace("{player}", player.getName()) + message);
+    }
+
+    @HelpCommand
+    @Description("View a list of Broadcast Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

@@ -1,6 +1,7 @@
 package com.playares.factions.addons.states.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.factions.addons.states.ServerStateAddon;
 import lombok.Getter;
@@ -32,5 +33,11 @@ public final class ServerStateCommand extends BaseCommand {
     @CommandPermission("factions.serverstates.set")
     public void onSet(CommandSender sender, @Values("sotw|normal|eotwphase1|eotwphase2") String state) {
 
+    }
+
+    @HelpCommand
+    @Description("View a list of Server State Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

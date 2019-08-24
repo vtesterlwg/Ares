@@ -1,6 +1,7 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.remap.RemappedEffect;
@@ -102,5 +103,11 @@ public final class EffectCommand extends BaseCommand {
         player.sendMessage(ChatColor.YELLOW + "Removed effect " + ChatColor.WHITE + fancyName);
         sender.sendMessage(ChatColor.YELLOW + "Removed effect " + ChatColor.WHITE + fancyName + ChatColor.YELLOW + " from " + ChatColor.WHITE + player.getName());
         Logger.print(sender.getName() + " removed effect " + fancyName + " from " + player.getName());
+    }
+
+    @HelpCommand
+    @Description("View a list of Effect Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

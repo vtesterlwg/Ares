@@ -1,9 +1,11 @@
 package com.playares.services.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandPermission;
 import co.aikar.commands.annotation.Description;
+import co.aikar.commands.annotation.HelpCommand;
 import com.playares.services.essentials.EssentialsService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
@@ -29,5 +31,11 @@ public final class VanishCommand extends BaseCommand {
 
         essentials.getVanishHandler().hidePlayer(player, true);
         player.sendMessage(ChatColor.YELLOW + "You are now " + ChatColor.WHITE + "invisible");
+    }
+
+    @HelpCommand
+    @Description("View a list of Vanish Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }
