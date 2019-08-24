@@ -1,6 +1,7 @@
 package com.playares.factions.commands;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.factions.Factions;
@@ -57,5 +58,11 @@ public final class TimerCommand extends BaseCommand {
     @Description("List all valid Player Timer types")
     public void onList(CommandSender sender) {
         plugin.getPlayerManager().getTimerHandler().list(sender);
+    }
+
+    @HelpCommand
+    @Description("View a list of Timer Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

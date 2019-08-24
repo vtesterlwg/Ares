@@ -1,10 +1,8 @@
 package com.playares.factions.commands;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Syntax;
-import co.aikar.commands.annotation.Values;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.Factions;
 import com.playares.factions.players.data.FactionPlayer;
@@ -22,7 +20,7 @@ public final class PvPCommand extends BaseCommand {
     }
 
     @CommandAlias("pvp")
-    @Description("Access your PvP Protection")
+    @Description("Remove your PvP Protection")
     @Syntax("<enable>")
     public void onPvP(Player player, @Values("enable") String enable) {
         final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
@@ -43,5 +41,11 @@ public final class PvPCommand extends BaseCommand {
         timer.onFinish();
 
         Logger.print(player.getName() + " removed their PvP Protection");
+    }
+
+    @HelpCommand
+    @Description("View a list of PvP Commands")
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

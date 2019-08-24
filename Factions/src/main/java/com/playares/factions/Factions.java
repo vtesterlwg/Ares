@@ -70,7 +70,9 @@ public final class Factions extends AresPlugin {
 
         // Commands
         final PaperCommandManager commandManager = new PaperCommandManager(this);
+        commandManager.enableUnstableAPI("help");
         registerCommandManager(commandManager);
+
         registerCommand(new FactionCommand(this));
         registerCommand(new TimerCommand(this));
         registerCommand(new PvPCommand(this));
