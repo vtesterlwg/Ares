@@ -146,6 +146,11 @@ public final class ClassListener implements Listener {
     @EventHandler
     public void onConsume(PlayerInteractEvent event) {
         final Player player = event.getPlayer();
+
+        if (event.getHand() == null) {
+            return;
+        }
+
         final ItemStack hand = player.getInventory().getItem(event.getHand());
         final Action action = event.getAction();
 
