@@ -24,6 +24,7 @@ public final class KOTHSession {
     @Getter @Setter public int ticketsNeededToWin;
     @Getter @Setter public int timerDuration;
     @Getter public boolean contested;
+    @Getter @Setter public long nextAllowedNotification;
     @Getter @Setter public KOTHCountdownTimer timer;
     @Getter public final Map<PlayerFaction, Integer> leaderboard;
 
@@ -36,6 +37,7 @@ public final class KOTHSession {
         this.ticketsNeededToWin = ticketsNeededToWin;
         this.timerDuration = timerDuration;
         this.contested = false;
+        this.nextAllowedNotification = Time.now();
         this.timer = new KOTHCountdownTimer(event, timerDuration);
         this.timer.freeze();
     }
@@ -55,8 +57,12 @@ public final class KOTHSession {
         this.contested = true;
         this.timer.freeze();
 
-        Bukkit.broadcastMessage(EventsAddon.PREFIX + event.getDisplayName() + ChatColor.GOLD + " is being contested by " +
-                ChatColor.YELLOW + Joiner.on(ChatColor.GOLD + ", " + ChatColor.YELLOW).join(factionNames));
+        if (nextAllowedNotification <= Time.now()) {
+            Bukkit.broadcastMessage(EventsAddon.PREFIX + event.getDisplayName() + ChatColor.GOLD + " is being contested by " +
+                    ChatColor.YELLOW + Joiner.on(ChatColor.GOLD + ", " + ChatColor.YELLOW).join(factionNames));
+
+            this.nextAllowedNotification = Time.now() + (3 * 1000L);
+        }
     }
 
     public void setUncontested(boolean reset) {
@@ -68,7 +74,10 @@ public final class KOTHSession {
         this.timer.unfreeze();
         this.contested = false;
 
-        Bukkit.broadcastMessage(EventsAddon.PREFIX + event.getDisplayName() + ChatColor.GOLD + " is being controlled by " + ChatColor.YELLOW + getCapturingFaction().getName());
+        if (nextAllowedNotification <= Time.now()) {
+            Bukkit.broadcastMessage(EventsAddon.PREFIX + event.getDisplayName() + ChatColor.GOLD + " is being controlled by " + ChatColor.YELLOW + getCapturingFaction().getName());
+            this.nextAllowedNotification = Time.now() + (3 * 1000L);
+        }
     }
 
     public void reset() {
@@ -76,7 +85,11 @@ public final class KOTHSession {
         this.contested = false;
         this.timer.setExpire(Time.now() + (getTimerDuration() * 1000));
         this.timer.freeze();
-        Bukkit.broadcastMessage(EventsAddon.PREFIX + event.getDisplayName() + ChatColor.GOLD + " has been reset");
+
+        if (nextAllowedNotification <= Time.now()) {
+            Bukkit.broadcastMessage(EventsAddon.PREFIX + event.getDisplayName() + ChatColor.GOLD + " has been reset");
+            this.nextAllowedNotification = Time.now() + (3 * 1000L);
+        }
     }
 
     public int getTickets(PlayerFaction faction) {
