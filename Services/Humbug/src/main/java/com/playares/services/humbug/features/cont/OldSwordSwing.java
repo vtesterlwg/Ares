@@ -214,7 +214,6 @@ public final class OldSwordSwing implements HumbugModule, Listener {
 
         if (hand != null && hand.hasItemMeta() && hand.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
             entity.setFireTicks(80 * hand.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
-            entity.setLastDamageCause(event);
         }
     }
 
