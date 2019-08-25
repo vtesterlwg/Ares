@@ -187,6 +187,10 @@ public final class OldSwordSwing implements HumbugModule, Listener {
         final Player damaged = event.getDamaged();
         final ItemStack hand = damager.getInventory().getItemInMainHand();
 
+        if (damaged.getUniqueId().equals(damaged.getUniqueId())) {
+            return;
+        }
+
         if (hand != null && hand.hasItemMeta() && hand.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
             damaged.setFireTicks(80 * hand.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
         }
@@ -211,6 +215,10 @@ public final class OldSwordSwing implements HumbugModule, Listener {
 
         final Player player = (Player)damager;
         final ItemStack hand = player.getInventory().getItemInMainHand();
+
+        if (player.getUniqueId().equals(entity.getUniqueId())) {
+            return;
+        }
 
         if (hand != null && hand.hasItemMeta() && hand.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
             entity.setFireTicks(80 * hand.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
