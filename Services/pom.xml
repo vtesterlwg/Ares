@@ -27,5 +27,6 @@
         <module>Deathban</module>
         <module>ChatRestrictions</module>
         <module>PlayerClasses</module>
+        <module>ServerSyncService</module>
     </modules>
 </project>

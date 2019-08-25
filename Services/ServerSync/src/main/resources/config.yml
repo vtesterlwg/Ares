@@ -1,0 +1,5 @@
+server-data:
+  bungee-name: 'lobby-1'
+  display-name: '&aLobby-1'
+  description: '&7Lobby server'
+  type: 'LOBBY'
