@@ -10,16 +10,14 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Endermite;
-import org.bukkit.entity.Evoker;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.inventory.CraftItemEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -46,6 +44,7 @@ public final class MemeItems implements HumbugModule, Listener {
     @Getter @Setter public boolean craftingEndCrystalDisabled;
     @Getter @Setter public boolean endermiteSpawningDisabled;
     @Getter @Setter public boolean bedBombsDisabled;
+    @Getter @Setter public boolean tntDamageNerfed;
 
     public MemeItems(HumbugService humbug) {
         this.humbug = humbug;
@@ -64,6 +63,7 @@ public final class MemeItems implements HumbugModule, Listener {
         this.craftingEndCrystalDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-end-crystal-crafting");
         this.endermiteSpawningDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-endermite-spawning");
         this.bedBombsDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-bed-bombs");
+        this.tntDamageNerfed = humbug.getHumbugConfig().getBoolean("meme-items.nerf-tnt-damage");
     }
 
     @Override
@@ -84,6 +84,7 @@ public final class MemeItems implements HumbugModule, Listener {
         PlayerInteractEvent.getHandlerList().unregister(this);
         PlayerSwapHandItemsEvent.getHandlerList().unregister(this);
         InventoryDragEvent.getHandlerList().unregister(this);
+        EntityDamageByEntityEvent.getHandlerList().unregister(this);
     }
 
     @EventHandler
@@ -357,6 +358,35 @@ public final class MemeItems implements HumbugModule, Listener {
         }
 
         player.sendMessage(ChatColor.RED + "Bed bombs have been disabled");
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onTNTDamage(EntityDamageByEntityEvent event) {
+        if (!isEnabled() || !isTntDamageNerfed()) {
+            return;
+        }
+
+        if (!(event.getEntity() instanceof LivingEntity) || !(event.getDamager() instanceof TNTPrimed)) {
+            return;
+        }
+
+        event.setDamage(event.getDamage() / 1.5);
+    }
+
+    @EventHandler
+    public void onItemCraft(CraftItemEvent event) {
+        if (!isEnabled() || !isCraftingEndCrystalDisabled()) {
+            return;
+        }
+
+        final ItemStack item = event.getCurrentItem();
+
+        if (item == null || !item.getType().equals(Material.END_CRYSTAL)) {
+            return;
+        }
+
+        event.setCurrentItem(null);
         event.setCancelled(true);
     }
 }

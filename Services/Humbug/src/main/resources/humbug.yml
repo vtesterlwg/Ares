@@ -48,6 +48,7 @@ meme-items:
     disable-end-crystal-crafting: true
     disable-endermite-spawning: true
     disable-bed-bombs: true
+    nerf-tnt-damage: true
     lower-totem-drop-chances:
         enabled: true
         chances: 0.04
