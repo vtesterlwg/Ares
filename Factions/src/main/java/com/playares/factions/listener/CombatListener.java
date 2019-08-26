@@ -29,7 +29,6 @@ import com.playares.services.playerclasses.data.ClassConsumable;
 import com.playares.services.playerclasses.data.cont.BardClass;
 import com.playares.services.playerclasses.event.ConsumeClassItemEvent;
 import lombok.Getter;
-import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -415,6 +414,7 @@ public final class CombatListener implements Listener {
         faction.sendMessage(ChatColor.DARK_RED + "DTR Loss" + ChatColor.RESET + ": " + ChatColor.RESET + "-" + subtracted);
     }
 
+    @SuppressWarnings("StringConcatenationInsideStringBufferAppend")
     @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         event.setDeathMessage(null);
@@ -496,12 +496,17 @@ public final class CombatListener implements Listener {
 
         if (killer != null) {
             final String distance = String.format("%.2f", player.getLocation().distance(killer.getLocation()));
-            final String using = (
-                    killer.getInventory().getItemInMainHand() != null &&
-                    killer.getInventory().getItemInMainHand().getType().isItem() &&
-                    !killer.getInventory().getItemInMainHand().getType().equals(Material.AIR)) ?
-                    ChatColor.RED + " using a " + ChatColor.YELLOW + StringUtils.capitaliseAllWords(killer.getInventory().getItemInMainHand().getType().name().replace("_", " ").toLowerCase())
-                    : "";
+            final StringBuilder usingBuilder = new StringBuilder();
+
+            if (killer.getInventory().getItemInMainHand() != null && killer.getInventory().getItemInMainHand().getType().isItem() && !killer.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
+                usingBuilder.append(ChatColor.RED + " using a " + ChatColor.YELLOW + WordUtils.capitalize(killer.getInventory().getItemInMainHand().getType().name().replace("_", " ").toLowerCase()));
+
+                if (killer.getInventory().getItemInMainHand().hasItemMeta() && killer.getInventory().getItemInMainHand().getItemMeta().getDisplayName() != null) {
+                    usingBuilder.append(ChatColor.GOLD + " [" + ChatColor.YELLOW + killer.getInventory().getItemInMainHand().getItemMeta().getDisplayName() + ChatColor.GOLD + "]");
+                }
+            }
+
+            final String using = usingBuilder.toString();
 
             switch (reason) {
                 case FIRE:
