@@ -13,8 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 public final class MenuHandler {
-    @Getter
-    public final AresPlugin plugin;
+    @Getter public final AresPlugin plugin;
 
     public MenuHandler(AresPlugin plugin) {
         this.plugin = plugin;

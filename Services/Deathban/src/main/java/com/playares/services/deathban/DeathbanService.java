@@ -18,6 +18,7 @@ import com.playares.services.deathban.data.LivesPlayer;
 import com.playares.services.deathban.listener.DeathbanListener;
 import com.playares.services.profiles.ProfileService;
 import com.playares.services.profiles.data.AresProfile;
+import com.playares.services.serversync.ServerSyncService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -414,11 +415,17 @@ public final class DeathbanService implements AresService {
             return;
         }
 
+        final ServerSyncService serverSyncService = (ServerSyncService)getOwner().getService(ServerSyncService.class);
         final Deathban deathban = new Deathban(uniqueId, Time.now(), (Time.now() + (seconds * 1000)), permanent);
         final Player player = Bukkit.getPlayer(uniqueId);
 
         if (player != null) {
-            player.kickPlayer(getDeathbanKickMessage(deathban));
+            if (serverSyncService != null) {
+                player.sendMessage(getDeathbanKickMessage(deathban));
+                serverSyncService.sendToLobby(player);
+            } else {
+                player.kickPlayer(getDeathbanKickMessage(deathban));
+            }
         }
 
         new Scheduler(owner).async(() -> DeathbanDAO.saveDeathban(getOwner().getMongo(), deathban)).run();

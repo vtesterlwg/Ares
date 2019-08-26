@@ -1,6 +1,8 @@
 package com.playares.factions;
 
+import com.playares.services.serversync.data.Server;
 import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.List;
@@ -14,6 +16,20 @@ public final class FactionConfig {
 
     /** MongoDB Database Connect URI **/
     @Getter public String databaseURI;
+
+    /** ServerSync ID **/
+    @Getter public int syncId;
+    /** ServerSync Bungeecord Name **/
+    @Getter public String syncBungeeName;
+    /** ServerSync Display Name **/
+    @Getter public String syncDisplayName;
+    /** ServerSync Description **/
+    @Getter public String syncDescription;
+    /** ServerSync Server Type **/
+    @Getter public Server.Type syncType;
+    /** ServerSync Premium Allocated Slots **/
+    @Getter public int syncPremiumAllocatedSlots;
+
     /** Faction Member Cap **/
     @Getter public int factionMemberCap;
     /** Faction Alliance Cap **/
@@ -75,6 +91,14 @@ public final class FactionConfig {
         final YamlConfiguration config = plugin.getConfig("config");
 
         this.databaseURI = config.getString("database");
+
+        this.syncId = config.getInt("server-data.id");
+        this.syncBungeeName = config.getString("server-data.bungee-name");
+        this.syncDisplayName = ChatColor.translateAlternateColorCodes('&', config.getString("server-data.display-name"));
+        this.syncDescription = ChatColor.translateAlternateColorCodes('&', config.getString("server-data.description"));
+        this.syncType = Server.Type.valueOf(config.getString("server-data.type"));
+        this.syncPremiumAllocatedSlots = config.getInt("server-data.premium-allocated-slots");
+
         this.factionMemberCap = config.getInt("factions.member-cap");
         this.factionAllyCap = config.getInt("factions.ally-cap");
         this.factionHomeCap = config.getDouble("factions.home-height-cap");

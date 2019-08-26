@@ -48,5 +48,13 @@
             <version>1.12.2</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- Ares Server Sync Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>ServerSync</artifactId>
+            <version>1.12.2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

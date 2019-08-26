@@ -2,77 +2,94 @@ package com.playares.lobby;
 
 import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
-import com.playares.commons.base.promise.FailablePromise;
-import com.playares.commons.base.promise.Promise;
-import com.playares.commons.base.promise.SimplePromise;
+import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
+import com.playares.lobby.items.ServerSelectorItem;
+import com.playares.lobby.listener.PlayerListener;
+import com.playares.lobby.queue.QueueManager;
+import com.playares.lobby.selector.SelectorManager;
+import com.playares.services.customevents.CustomEventService;
+import com.playares.services.customitems.CustomItemService;
+import com.playares.services.deathban.DeathbanService;
+import com.playares.services.essentials.EssentialsService;
+import com.playares.services.humbug.HumbugService;
 import com.playares.services.profiles.ProfileService;
+import com.playares.services.punishments.PunishmentService;
+import com.playares.services.ranks.RankService;
+import com.playares.services.serversync.ServerSyncService;
+import com.playares.services.serversync.data.Server;
+import lombok.Getter;
 
 public final class Lobby extends AresPlugin {
+    @Getter public LobbyConfig lobbyConfig;
+    @Getter public SelectorManager selectorManager;
+    @Getter public QueueManager queueManager;
+
     @Override
     public void onEnable() {
-        final PaperCommandManager commandManager = new PaperCommandManager(this);
+        this.lobbyConfig = new LobbyConfig(this);
+        this.selectorManager = new SelectorManager(this);
+        this.queueManager = new QueueManager(this);
 
-        registerCommandManager(commandManager);
+        lobbyConfig.load();
+
+        // Database
+        registerMongo(new MongoDB(lobbyConfig.getDatabaseURI()));
+        getMongo().openConnection();
+
+        // Protocol
         registerProtocol(ProtocolLibrary.getProtocolManager());
 
+        // Commands
+        final PaperCommandManager commandManager = new PaperCommandManager(this);
+        registerCommandManager(commandManager);
+
+        // Services
         registerService(new ProfileService(this));
+        registerService(new PunishmentService(this));
+        registerService(new HumbugService(this));
+        registerService(new EssentialsService(this));
+        registerService(new CustomEventService(this));
+        registerService(new RankService(this));
+        registerService(new CustomItemService(this));
+        registerService(new DeathbanService(this));
+
+        registerService(new ServerSyncService(this, new Server(
+                this,
+                getLobbyConfig().getId(),
+                getLobbyConfig().getBungeeName(),
+                getLobbyConfig().getDisplayName(),
+                getLobbyConfig().getDescription(),
+                getLobbyConfig().getType(),
+                0)));
+
+        startServices();
+
+        // Listeners
+        registerListener(new PlayerListener(this));
+
+        // Bungeecord Messaging Channel
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
+        // Custom Items
+        registerCustomItems();
     }
 
-    public void obtainingAService() {
-        final ProfileService profileService = (ProfileService)getService(ProfileService.class);
+    @Override
+    public void onDisable() {
+        stopServices();
+        getMongo().closeConnection();
     }
 
-    public void usingPromises() {
-        simplePromise(new SimplePromise() {
-            public void success() {
-                Logger.print("yippie!");
-            }
+    private void registerCustomItems() {
+        final CustomItemService customItemService = (CustomItemService)getService(CustomItemService.class);
 
-            public void failure(String reason) {
-                Logger.error(reason);
-            }
-        });
+        if (customItemService == null) {
+            Logger.error("Failed to obtain Custom Item Service while attempting to inject custom items");
+            return;
+        }
 
-        failablePromise(new FailablePromise<String>() {
-            public void success(String s) {
-                Logger.print(s);
-            }
-
-            public void failure(String reason) {
-                Logger.print(reason);
-            }
-        });
-
-        promise(new Promise<Integer>() {
-            public void ready(Integer integer) {
-                Logger.print("" + integer);
-            }
-        });
-    }
-
-    /**
-     * Simple Promises return an empty success body but contain a String for a failure reason
-     * @param promise SimplePromise
-     */
-    private void simplePromise(SimplePromise promise) {
-
-    }
-
-    /**
-     * Failable Promises return a type with a String for a failure reason
-     * @param promise FailablePromise
-     */
-    private void failablePromise(FailablePromise<String> promise) {
-
-    }
-
-    /**
-     * Promises can't fail and return a type
-     * @param promise Promise
-     */
-    private void promise(Promise<Integer> promise) {
-
+        customItemService.registerNewItem(new ServerSelectorItem(this));
     }
 }

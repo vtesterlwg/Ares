@@ -40,6 +40,7 @@
                                     <include>com.playares:Deathban</include>
                                     <include>com.playares:ChatRestrictions</include>
                                     <include>com.playares:PlayerClasses</include>
+                                    <include>com.playares:ServerSync</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -196,6 +197,13 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>PlayerClasses</artifactId>
+            <version>1.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>ServerSync</artifactId>
             <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>

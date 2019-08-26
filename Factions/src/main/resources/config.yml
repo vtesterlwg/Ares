@@ -1,6 +1,13 @@
 # Database connect URI, use 'mongodb://localhost' for default connection
 database: 'mongodb://localhost'
 
+server-data:
+  bungee-name: 'hcfr'
+  display-name: '&6HCFRevival'
+  description: '&7Factions server'
+  type: 'FACTION'
+  premium-allocated-slots: 350
+
 # Autosaves Factions, Players and Claims at a set interval
 autosave:
   enabled: true

@@ -56,5 +56,13 @@
             <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- Ares ServerSync Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>ServerSync</artifactId>
+            <version>1.12.2</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 </project>

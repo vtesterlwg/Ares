@@ -4,8 +4,10 @@ import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.service.AresService;
 import com.playares.commons.bukkit.util.Scheduler;
+import com.playares.services.serversync.ServerSyncService;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitTask;
 import org.spigotmc.RestartCommand;
@@ -39,6 +41,12 @@ public final class AutomatedRestartService implements AresService {
             }
 
             if (isInProgress() && Time.now() >= getRebootTime()) {
+                final ServerSyncService syncService = (ServerSyncService)getOwner().getService(ServerSyncService.class);
+
+                if (syncService != null) {
+                    Bukkit.getOnlinePlayers().forEach(syncService::sendToLobby);
+                }
+
                 RestartCommand.restart();
             }
         }).repeat(20L, 20L).run();

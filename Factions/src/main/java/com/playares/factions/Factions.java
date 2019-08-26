@@ -26,6 +26,8 @@ import com.playares.services.playerclasses.PlayerClassService;
 import com.playares.services.profiles.ProfileService;
 import com.playares.services.punishments.PunishmentService;
 import com.playares.services.ranks.RankService;
+import com.playares.services.serversync.ServerSyncService;
+import com.playares.services.serversync.data.Server;
 import lombok.Getter;
 
 public final class Factions extends AresPlugin {
@@ -68,6 +70,9 @@ public final class Factions extends AresPlugin {
         // Protocol
         registerProtocol(ProtocolLibrary.getProtocolManager());
 
+        // Bungeecord Messaging Channel
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
         // Commands
         final PaperCommandManager commandManager = new PaperCommandManager(this);
         commandManager.enableUnstableAPI("help");
@@ -90,6 +95,16 @@ public final class Factions extends AresPlugin {
         registerService(new AutomatedRestartService(this, 42300));
         registerService(new ChatRestrictionService(this));
         registerService(new PlayerClassService(this));
+
+        registerService(new ServerSyncService(this, new Server(
+                this,
+                factionConfig.getSyncId(),
+                factionConfig.getSyncBungeeName(),
+                factionConfig.getSyncDisplayName(),
+                factionConfig.getSyncDescription(),
+                factionConfig.getSyncType(),
+                factionConfig.getSyncPremiumAllocatedSlots())));
+
         startServices();
 
         // Data Managers

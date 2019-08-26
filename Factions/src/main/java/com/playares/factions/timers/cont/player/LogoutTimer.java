@@ -4,6 +4,7 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.Factions;
 import com.playares.factions.players.data.FactionPlayer;
 import com.playares.factions.timers.PlayerTimer;
+import com.playares.services.serversync.ServerSyncService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -31,8 +32,15 @@ public final class LogoutTimer extends PlayerTimer {
             return;
         }
 
+        final ServerSyncService serverSyncService = (ServerSyncService)getPlugin().getService(ServerSyncService.class);
+
         factionPlayer.setSafelogging(true);
-        player.kickPlayer(ChatColor.GREEN + "You have been safely logged off from the server");
+
+        if (serverSyncService != null) {
+            player.sendMessage(ChatColor.GREEN + "You have been safely logged off from the server");
+            serverSyncService.sendToLobby(player);
+        }
+
         Logger.print(player.getName() + " safe-logged");
     }
 }

@@ -1,4 +1,4 @@
 name: Lobby
-main: Lobby
+main: com.playares.lobby.Lobby
 version: 1.12.2
 depend: [ProtocolLib]

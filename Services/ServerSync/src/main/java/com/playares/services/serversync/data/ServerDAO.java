@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.playares.commons.base.connect.mongodb.MongoDB;
+import com.playares.commons.bukkit.AresPlugin;
 import org.bson.Document;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public final class ServerDAO {
     private static final String DB_NAME = "ares";
     private static final String DB_COLL = "servers";
 
-    public static ImmutableList<Server> getServers(MongoDB database) {
+    public static ImmutableList<Server> getServers(AresPlugin owner, MongoDB database) {
         final List<Server> result = Lists.newArrayList();
         final MongoCollection<Document> collection = database.getCollection(DB_NAME, DB_COLL);
 
@@ -22,7 +23,7 @@ public final class ServerDAO {
         }
 
         for (Document document : collection.find()) {
-            result.add(new Server().fromDocument(document));
+            result.add(new Server(owner).fromDocument(document));
         }
 
         return ImmutableList.copyOf(result);

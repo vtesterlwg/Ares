@@ -34,11 +34,22 @@
                                     <include>com.playares:Essentials</include>
                                     <include>com.playares:Humbug</include>
                                     <include>com.playares:Punishments</include>
+                                    <include>com.playares:ServerSync</include>
+                                    <include>com.playares:CustomItems</include>
+                                    <include>com.playares:Deathban</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>8</source>
+                    <target>8</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
@@ -134,6 +145,28 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Punishments</artifactId>
+            <version>1.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares ServerSync Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>ServerSync</artifactId>
+            <version>1.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>CustomItems</artifactId>
+            <version>1.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Deathban</artifactId>
             <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>
