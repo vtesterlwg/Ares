@@ -88,3 +88,4 @@ chatrestrict.bypass.links
 lobby.queue.bypasswhitelist - Bypass whitelist check in queue, dangerous to give to players who actually might not be on whitelist
 lobby.edit - Bypass block modification preventions
 lobby.premium - Access to premium slots
+lobby.staff - Access lobby staff functions
