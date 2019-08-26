@@ -38,7 +38,7 @@ public final class QueueHandler {
                 continue;
             }
 
-            if (server.isPremiumRequired() && !player.hasPermission("lobby.premium")) {
+            if (server.isPremiumRequired() && (!player.hasPermission("lobby.premium") && !player.hasPermission("lobby.staff"))) {
                 continue;
             }
 
