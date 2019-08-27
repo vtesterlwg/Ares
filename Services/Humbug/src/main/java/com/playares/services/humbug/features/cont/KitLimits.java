@@ -14,6 +14,7 @@ import lombok.Setter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.Player;
@@ -60,9 +61,21 @@ public final class KitLimits implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("kit-limits.enabled");
+        if (!enchantLimits.isEmpty()) {
+            enchantLimits.clear();
+            Logger.warn("Cleared Enchant Limits while reloading " + getHumbug().getName());
+        }
 
-        for (String enchantName : humbug.getHumbugConfig().getConfigurationSection("kit-limits.enchantments").getKeys(false)) {
+        if (!potionLimits.isEmpty()) {
+            potionLimits.clear();
+            Logger.warn("Cleared Potion Limits while reloading " + getHumbug().getName());
+        }
+
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("kit-limits.enabled");
+
+        for (String enchantName : config.getConfigurationSection("kit-limits.enchantments").getKeys(false)) {
             final Enchantment enchantment = Enchantment.getByName(enchantName);
 
             if (enchantment == null) {
@@ -70,14 +83,14 @@ public final class KitLimits implements HumbugModule, Listener {
                 continue;
             }
 
-            final boolean disabled = humbug.getHumbugConfig().getBoolean("kit-limits.enchantments." + enchantName + ".disabled");
-            final int maxLevel = humbug.getHumbugConfig().getInt("kit-limits.enchantments." + enchantName + ".max-level");
+            final boolean disabled = config.getBoolean("kit-limits.enchantments." + enchantName + ".disabled");
+            final int maxLevel = config.getInt("kit-limits.enchantments." + enchantName + ".max-level");
 
             final EnchantLimit limit = new EnchantLimit(enchantment, disabled, maxLevel);
             enchantLimits.add(limit);
         }
 
-        for (String potionName : humbug.getHumbugConfig().getConfigurationSection("kit-limits.potions").getKeys(false)) {
+        for (String potionName : config.getConfigurationSection("kit-limits.potions").getKeys(false)) {
             final PotionEffectType potion = PotionEffectType.getByName(potionName);
 
             if (potion == null) {
@@ -85,9 +98,9 @@ public final class KitLimits implements HumbugModule, Listener {
                 continue;
             }
 
-            final boolean disabled = humbug.getHumbugConfig().getBoolean("kit-limits.potions." + potionName + ".disabled");
-            final boolean amplifiable = humbug.getHumbugConfig().getBoolean("kit-limits.potions." + potionName + ".amplifiable");
-            final boolean extendable = humbug.getHumbugConfig().getBoolean("kit-limits.potions." + potionName + ".extendable");
+            final boolean disabled = config.getBoolean("kit-limits.potions." + potionName + ".disabled");
+            final boolean amplifiable = config.getBoolean("kit-limits.potions." + potionName + ".amplifiable");
+            final boolean extendable = config.getBoolean("kit-limits.potions." + potionName + ".extendable");
 
             final PotionLimit limit = new PotionLimit(potion, disabled, extendable, amplifiable);
             potionLimits.add(limit);

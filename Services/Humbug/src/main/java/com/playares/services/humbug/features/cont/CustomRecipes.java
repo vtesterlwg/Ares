@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 
@@ -24,11 +25,13 @@ public final class CustomRecipes implements HumbugModule {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("custom-recipes.enabled");
-        this.xpBottleEnabled = humbug.getHumbugConfig().getBoolean("custom-recipes.xp-bottle-enabled");
-        this.horseArmorEnabled = humbug.getHumbugConfig().getBoolean("custom-recipes.horse-armor-enabled");
-        this.saddleEnabled = humbug.getHumbugConfig().getBoolean("custom-recipes.saddle-enabled");
-        this.glistMelonEnabled = humbug.getHumbugConfig().getBoolean("custom-recipes.glist-melon-enabled");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("custom-recipes.enabled");
+        this.xpBottleEnabled = config.getBoolean("custom-recipes.xp-bottle-enabled");
+        this.horseArmorEnabled = config.getBoolean("custom-recipes.horse-armor-enabled");
+        this.saddleEnabled = config.getBoolean("custom-recipes.saddle-enabled");
+        this.glistMelonEnabled = config.getBoolean("custom-recipes.glist-melon-enabled");
     }
 
     @Override

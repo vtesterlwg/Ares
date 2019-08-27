@@ -7,6 +7,7 @@ import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -28,7 +29,9 @@ public final class OldRegen implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("old-regen.enabled");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("old-regen.enabled");
     }
 
     @Override

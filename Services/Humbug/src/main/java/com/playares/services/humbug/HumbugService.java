@@ -4,18 +4,15 @@ import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.service.AresService;
-import com.playares.services.humbug.command.HumbugCommand;
 import com.playares.services.humbug.features.HumbugModule;
 import com.playares.services.humbug.features.cont.*;
 import lombok.Getter;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.util.Set;
 
 public final class HumbugService implements AresService {
     @Getter public final AresPlugin owner;
     @Getter protected Set<HumbugModule> modules;
-    @Getter protected YamlConfiguration humbugConfig;
 
     public HumbugService(AresPlugin owner) {
         this.owner = owner;
@@ -23,10 +20,6 @@ public final class HumbugService implements AresService {
     }
 
     public void start() {
-        this.humbugConfig = owner.getConfig("humbug");
-
-        registerCommand(new HumbugCommand(this));
-
         registerHumbugModule(new OldPotions(this));
         registerHumbugModule(new OldItemVelocity(this));
         registerHumbugModule(new AntiGrief(this));
@@ -43,7 +36,7 @@ public final class HumbugService implements AresService {
         registerHumbugModule(new KitLimits(this));
         registerHumbugModule(new Knockback(this));
 
-        this.modules.forEach(module -> {
+        modules.forEach(module -> {
             module.loadValues();
 
             if (module.isEnabled()) {
@@ -57,9 +50,16 @@ public final class HumbugService implements AresService {
         this.modules.forEach(HumbugModule::stop);
     }
 
+    @Override
     public void reload() {
-        this.humbugConfig = owner.getConfig("humbug");
-        this.modules.forEach(HumbugModule::loadValues);
+        modules.forEach(module -> {
+            module.loadValues();
+
+            if (module.isEnabled()) {
+                module.start();
+                Logger.print("Humbug: Started module '" + module.getName() + "'");
+            }
+        });
     }
 
     public String getName() {

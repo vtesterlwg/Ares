@@ -55,6 +55,7 @@ arena.admin - Admin access to Arena
 
 factions.admin - Access all of the factions plugin
 factions.mod - Basic moderation commands for factions
+factions.reload - Access to the reload command
 factions.create.server - Create a server faction
 factions.claim.others - Claim land for others
 factions.sethome.others - Set others homes

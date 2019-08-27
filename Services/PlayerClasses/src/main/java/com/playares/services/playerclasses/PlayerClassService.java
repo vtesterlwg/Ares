@@ -31,4 +31,9 @@ public final class PlayerClassService implements AresService {
         classManager.getClasses().clear();
         classManager = null;
     }
+
+    @Override
+    public void reload() {
+        classManager.load();
+    }
 }

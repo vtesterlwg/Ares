@@ -6,6 +6,7 @@ import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,7 +34,8 @@ public final class OldItemValues implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("old-item-values.enabled");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+        this.enabled = config.getBoolean("old-item-values.enabled");
     }
 
     @Override

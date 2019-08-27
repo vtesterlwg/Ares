@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -32,9 +33,11 @@ public final class AntiGlitch implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("anti-glitch.enabled");
-        this.disablePearlClipping = humbug.getHumbugConfig().getBoolean("anti-glitch.disable-pearl-clipping");
-        this.disableElytraClipping = humbug.getHumbugConfig().getBoolean("anti-glitch.disable-elytra-clipping");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("anti-glitch.enabled");
+        this.disablePearlClipping = config.getBoolean("anti-glitch.disable-pearl-clipping");
+        this.disableElytraClipping = config.getBoolean("anti-glitch.disable-elytra-clipping");
     }
 
     @Override

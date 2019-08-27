@@ -29,6 +29,9 @@ public final class EventsAddon implements Addon {
 
     public EventsAddon(Factions plugin) {
         this.plugin = plugin;
+        this.manager = new EventsManager(this);
+        this.builderManager = new EventBuilderManager(this);
+        this.lootManager = new LootManager(this);
     }
 
     @Override
@@ -38,11 +41,13 @@ public final class EventsAddon implements Addon {
 
     @Override
     public void prepare() {
-        final CustomItemService customItemService = (CustomItemService)plugin.getService(CustomItemService.class);
+        manager.load();
+        lootManager.load();
+    }
 
-        this.manager = new EventsManager(this);
-        this.builderManager = new EventBuilderManager(this);
-        this.lootManager = new LootManager(this);
+    @Override
+    public void start() {
+        final CustomItemService customItemService = (CustomItemService)plugin.getService(CustomItemService.class);
 
         plugin.registerCommand(new EventCommand(this));
         plugin.registerCommand(new PalaceCommand(this));
@@ -53,12 +58,6 @@ public final class EventsAddon implements Addon {
         } else {
             Logger.error("CustomItemService was not found while preparing " + getName() + " Addon. Will be unable to use the Event Builder Wand");
         }
-    }
-
-    @Override
-    public void start() {
-        manager.load();
-        lootManager.load();
 
         getPlugin().getCommandManager().getCommandCompletions().registerAsyncCompletion("events", c -> {
             final List<String> events = Lists.newArrayList();

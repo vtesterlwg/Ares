@@ -50,6 +50,11 @@ public final class CrowbarAddon implements Addon, Listener {
 
     @Override
     public void prepare() {
+        if (!allowedTypes.isEmpty()) {
+            allowedTypes.clear();
+            Logger.warn("Cleared existing allowed types for " + getName());
+        }
+
         final YamlConfiguration config = getPlugin().getConfig("config");
         final List<String> names = config.getStringList("crowbars.allowed-spawner-types");
 

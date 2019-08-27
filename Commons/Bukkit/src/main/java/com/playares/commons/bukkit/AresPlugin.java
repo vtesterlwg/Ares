@@ -18,17 +18,10 @@ import java.io.IOException;
 import java.util.Map;
 
 public abstract class AresPlugin extends JavaPlugin {
-    @Getter
-    public Map<Class<? extends AresService>, AresService> services;
-
-    @Getter
-    public MongoDB mongo;
-
-    @Getter
-    public PaperCommandManager commandManager;
-
-    @Getter
-    public ProtocolManager protocol;
+    @Getter public Map<Class<? extends AresService>, AresService> services;
+    @Getter public MongoDB mongo;
+    @Getter public PaperCommandManager commandManager;
+    @Getter public ProtocolManager protocol;
 
     /**
      * Registers a new Ares Service
@@ -105,6 +98,16 @@ public abstract class AresPlugin extends JavaPlugin {
         services.values().forEach(service -> {
             service.stop();
             Logger.print("Service Stopped: " + service.getName());
+        });
+    }
+
+    /**
+     * Reload all services
+     */
+    public void reloadServices() {
+        services.values().forEach(server -> {
+            server.reload();
+            Logger.print("Service Reloaded: " + server.getName());
         });
     }
 

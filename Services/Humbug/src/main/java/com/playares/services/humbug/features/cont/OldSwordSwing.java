@@ -19,6 +19,7 @@ import net.minecraft.server.v1_12_R1.GenericAttributes;
 import org.bukkit.GameMode;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
@@ -55,9 +56,11 @@ public final class OldSwordSwing implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("old-sword-swing.enabled");
-        this.hitDelayTicks = humbug.getHumbugConfig().getInt("old-sword-swing.hit-delay-ticks");
-        this.maxReach = humbug.getHumbugConfig().getDouble("old-sword-swing.max-reach");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("old-sword-swing.enabled");
+        this.hitDelayTicks = config.getInt("old-sword-swing.hit-delay-ticks");
+        this.maxReach = config.getDouble("old-sword-swing.max-reach");
     }
 
     @Override

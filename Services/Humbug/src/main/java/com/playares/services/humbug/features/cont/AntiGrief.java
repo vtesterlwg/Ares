@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -35,13 +36,15 @@ public final class AntiGrief implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("anti-grief.enabled");
-        this.fireSpreadDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-fire-spread");
-        this.entityGriefDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-entity-grief");
-        this.cobblestoneGeneratorDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-cobble-generators");
-        this.destroyingMobSpawnsDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-mob-spawner-breaking");
-        this.spawnNetherPortalPlatform = humbug.getHumbugConfig().getBoolean("anti-grief.spawn-nether-portal-platform");
-        this.pushableLiquidsDisabled = humbug.getHumbugConfig().getBoolean("anti-grief.disable-pushable-liquid");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("anti-grief.enabled");
+        this.fireSpreadDisabled = config.getBoolean("anti-grief.disable-fire-spread");
+        this.entityGriefDisabled = config.getBoolean("anti-grief.disable-entity-grief");
+        this.cobblestoneGeneratorDisabled = config.getBoolean("anti-grief.disable-cobble-generators");
+        this.destroyingMobSpawnsDisabled = config.getBoolean("anti-grief.disable-mob-spawner-breaking");
+        this.spawnNetherPortalPlatform = config.getBoolean("anti-grief.spawn-nether-portal-platform");
+        this.pushableLiquidsDisabled = config.getBoolean("anti-grief.disable-pushable-liquid");
     }
 
     @Override

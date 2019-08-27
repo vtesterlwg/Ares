@@ -1,3 +1,7 @@
-chat-cooldown: 5
+chat-cooldown:
+  enabled: true
+  duration: 5
 whitelisted-links:
-  - 'discord'
+  enabled: true
+  allowed:
+    - 'discord'

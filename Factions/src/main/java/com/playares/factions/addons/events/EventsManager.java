@@ -50,12 +50,17 @@ public final class EventsManager {
     /**
      * Loads all events from events.yml in to the Event Repository
      */
-    void load() {
+    public void load() {
         final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
 
         if (config == null) {
             Logger.error("Failed to obtain config for events.yml");
             return;
+        }
+
+        if (!eventRepository.isEmpty()) {
+            eventRepository.clear();
+            Logger.warn("Cleared event repository while reloading " + getAddon().getName());
         }
 
         for (String name : config.getConfigurationSection("events").getKeys(false)) {

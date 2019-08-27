@@ -9,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Minecart;
 import org.bukkit.entity.Vehicle;
 import org.bukkit.event.EventHandler;
@@ -25,7 +26,8 @@ public final class Elevators implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("elevators.enabled");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+        this.enabled = config.getBoolean("elevators.enabled");
     }
 
     @Override

@@ -117,12 +117,6 @@ kit-limits:
         ARROW_KNOCKBACK:
             disabled: true
             max-level: 0
-        RIPTIDE:
-            disabled: true
-            max-level: 0
-        CHANNELING:
-            disabled: true
-            max-level: 0
         SWEEPING_EDGE:
             disabled: true
             max-level: 0

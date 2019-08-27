@@ -738,6 +738,22 @@ public final class FactionCommand extends BaseCommand {
         });
     }
 
+    @Subcommand("reload")
+    @Description("Reload plugin configuration")
+    @CommandPermission("factions.reload")
+    public void onReload(CommandSender sender) {
+        sender.sendMessage(ChatColor.YELLOW + "Now reloading Factions configuration");
+        getPlugin().getFactionConfig().loadValues();
+
+        sender.sendMessage(ChatColor.YELLOW + "Factions configuration finished reloading. Now reloading addons...");
+        getPlugin().getAddonManager().reloadAddons();
+
+        sender.sendMessage(ChatColor.YELLOW + "Now reloading all active services...");
+        getPlugin().reloadServices();
+
+        sender.sendMessage(ChatColor.GREEN + "Complete!");
+    }
+
     @HelpCommand
     public void onHelp(CommandSender sender, CommandHelp help) {
         help.showHelp();

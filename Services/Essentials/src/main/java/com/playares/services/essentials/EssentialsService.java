@@ -17,7 +17,6 @@ import com.playares.services.essentials.vanish.VanishHandler;
 import com.playares.services.essentials.vanish.VanishManager;
 import lombok.Getter;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.util.List;
 
@@ -29,20 +28,20 @@ public final class EssentialsService implements AresService {
     @Getter protected WarpHandler warpHandler;
     @Getter protected VanishManager vanishManager;
     @Getter protected VanishHandler vanishHandler;
-    @Getter protected FileConfiguration essentialsConfig;
+    @Getter protected EssentialsConfig essentialsConfig;
 
     public EssentialsService(AresPlugin owner) {
         this.owner = owner;
     }
 
     public void start() {
+        this.essentialsConfig = new EssentialsConfig(this);
         this.kitManager = new KitManager(getOwner());
         this.kitHandler = new KitHandler(this);
         this.warpManager = new WarpManager(getOwner());
         this.warpHandler = new WarpHandler(this);
         this.vanishManager = new VanishManager();
         this.vanishHandler = new VanishHandler(this);
-        this.essentialsConfig = getOwner().getConfig("essentials");
 
         getOwner().getCommandManager().getCommandCompletions().registerAsyncCompletion("potions", c -> {
             final List<String> potions = Lists.newArrayList();
@@ -117,6 +116,12 @@ public final class EssentialsService implements AresService {
         kitManager.getKits().clear();
         warpManager.getWarps().clear();
         vanishManager.getVanished().clear();
+    }
+
+    @Override
+    public void reload() {
+        kitManager.load();
+        warpManager.load();
     }
 
     public String getName() {

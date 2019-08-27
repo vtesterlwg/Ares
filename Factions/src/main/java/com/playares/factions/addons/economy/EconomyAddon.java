@@ -33,7 +33,6 @@ public final class EconomyAddon implements Addon {
     @Override
     public void prepare() {
         final YamlConfiguration config = plugin.getConfig("config");
-
         this.enabled = config.getBoolean("economy.enabled");
         this.startingBalance = config.getDouble("economy.starting-balance");
         this.minPayAmount = config.getDouble("economy.min-pay-amount");

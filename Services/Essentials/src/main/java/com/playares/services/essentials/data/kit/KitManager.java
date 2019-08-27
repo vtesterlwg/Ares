@@ -13,24 +13,31 @@ import java.util.Set;
 public final class KitManager {
     @Getter public final AresPlugin plugin;
     @Getter public final Set<Kit> kits;
-    @Getter public final YamlConfiguration kitsConfig;
 
-    @SuppressWarnings("unchecked")
     public KitManager(AresPlugin plugin) {
         this.plugin = plugin;
         this.kits = Sets.newConcurrentHashSet();
-        this.kitsConfig = plugin.getConfig("kits");
 
         getPlugin().registerListener(new KitSignListener(this));
+    }
 
-        if (kitsConfig.getConfigurationSection("kits") == null) {
+    @SuppressWarnings("unchecked")
+    public void load() {
+        final YamlConfiguration config = getPlugin().getConfig("kits");
+
+        if (!kits.isEmpty()) {
+            kits.clear();
+            Logger.warn("Cleared kits while reloading " + getPlugin().getName());
+        }
+
+        if (config.getConfigurationSection("kits") == null) {
             Logger.warn("No kits found...");
             return;
         }
 
-        for (String kitNames : kitsConfig.getConfigurationSection("kits").getKeys(false)) {
-            final List<ItemStack> contentItems = (List<ItemStack>)kitsConfig.getList("kits." + kitNames + ".contents");
-            final List<ItemStack> armorItems = (List<ItemStack>)kitsConfig.getList("kits." + kitNames + ".armor");
+        for (String kitNames : config.getConfigurationSection("kits").getKeys(false)) {
+            final List<ItemStack> contentItems = (List<ItemStack>)config.getList("kits." + kitNames + ".contents");
+            final List<ItemStack> armorItems = (List<ItemStack>)config.getList("kits." + kitNames + ".armor");
             ItemStack[] contents = new ItemStack[contentItems.size()];
             ItemStack[] armor = new ItemStack[armorItems.size()];
 
@@ -50,22 +57,25 @@ public final class KitManager {
     }
 
     public void deleteKit(Kit kit) {
-        kitsConfig.set("kits." + kit.getName(), null);
-        plugin.saveConfig("kits", kitsConfig);
+        final YamlConfiguration config = getPlugin().getConfig("kits");
+        config.set("kits." + kit.getName(), null);
+        plugin.saveConfig("kits", config);
     }
 
     public void saveKits() {
+        final YamlConfiguration config = getPlugin().getConfig("kits");
+
         if (kits.isEmpty()) {
-            kitsConfig.set("kits", null);
-            plugin.saveConfig("kits", kitsConfig);
+            config.set("kits", null);
+            plugin.saveConfig("kits", config);
             return;
         }
 
         for (Kit kit : kits) {
-            kitsConfig.set("kits." + kit.getName() + ".contents", kit.getContents());
-            kitsConfig.set("kits." + kit.getName() + ".armor", kit.getArmor());
+            config.set("kits." + kit.getName() + ".contents", kit.getContents());
+            config.set("kits." + kit.getName() + ".armor", kit.getArmor());
         }
 
-        plugin.saveConfig("kits", kitsConfig);
+        plugin.saveConfig("kits", config);
     }
 }

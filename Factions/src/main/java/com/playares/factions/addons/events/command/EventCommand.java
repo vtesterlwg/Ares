@@ -10,6 +10,7 @@ import com.playares.factions.addons.events.menu.EventsMenu;
 import com.playares.factions.addons.events.menu.LootMenu;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -152,6 +153,14 @@ public final class EventCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @Subcommand("reload")
+    @Description("Reload events and configuration")
+    @CommandPermission("events.reload")
+    public void onReload(CommandSender sender) {
+        addon.getManager().load();
+        sender.sendMessage(ChatColor.YELLOW + "Events repository and configuration has been reloaded");
     }
 
     @HelpCommand

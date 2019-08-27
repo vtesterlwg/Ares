@@ -18,6 +18,8 @@ public final class SpawnpointAddon implements Addon {
 
     public SpawnpointAddon(Factions plugin) {
         this.plugin = plugin;
+        this.manager = new SpawnpointManager(plugin);
+        this.listener = new SpawnpointListener(this);
     }
 
     @Override
@@ -27,13 +29,11 @@ public final class SpawnpointAddon implements Addon {
 
     @Override
     public void prepare() {
-        this.manager = new SpawnpointManager(plugin);
-        this.listener = new SpawnpointListener(this);
+        manager.loadSpawns();
     }
 
     @Override
     public void start() {
-        this.manager.loadSpawns();
         plugin.registerCommand(new SpawnCommand(plugin));
         plugin.registerListener(listener);
     }
@@ -44,6 +44,6 @@ public final class SpawnpointAddon implements Addon {
         PlayerTeleportEvent.getHandlerList().unregister(listener);
         PlayerJoinEvent.getHandlerList().unregister(listener);
         PlayerRespawnEvent.getHandlerList().unregister(listener);
-        this.manager.saveSpawns();
+        manager.saveSpawns();
     }
 }

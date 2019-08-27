@@ -12,20 +12,17 @@ public final class DeathbanConfig {
     }
 
     @Getter @Setter public boolean deathbanEnforced;
-    @Getter @Setter public int minDeathbanSOTW;
-    @Getter @Setter public int maxDeathbanSOTW;
-    @Getter @Setter public int minDeathbanNormal;
-    @Getter @Setter public int maxDeathbanNormal;
+    @Getter @Setter public int sotwMaxDeathban;
+    @Getter @Setter public int normalMaxDeathban;
+    @Getter @Setter public int minDeathbanDuration;
     @Getter @Setter public int lifeUseDelay;
 
     void loadValues() {
         final YamlConfiguration config = service.getOwner().getConfig("deathbans");
-
-        this.deathbanEnforced = config.getBoolean("settings.enforce-deathbans");
-        this.minDeathbanSOTW = config.getInt("settings.deathban-durations.sotw.min");
-        this.minDeathbanSOTW = config.getInt("settings.deathban-durations.sotw.max");
-        this.minDeathbanSOTW = config.getInt("settings.deathban-durations.normal.min");
-        this.minDeathbanSOTW = config.getInt("settings.deathban-durations.normal.min");
-        this.lifeUseDelay = config.getInt("settings.life-use-delay");
+        this.deathbanEnforced = config.getBoolean("enforce-deathbans");
+        this.normalMaxDeathban = config.getInt("deathban-durations.NORMAL");
+        this.sotwMaxDeathban = config.getInt("deathban-durations.SOTW");
+        this.minDeathbanDuration = config.getInt("minimum-deathban-duration");
+        this.lifeUseDelay = config.getInt("life-use-delay");
     }
 }

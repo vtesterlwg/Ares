@@ -12,6 +12,7 @@ import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.*;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,12 +60,14 @@ public final class MobStacking implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("mob-stacking.enabled");
-        this.tagPrefix = ChatColor.translateAlternateColorCodes('&', humbug.getHumbugConfig().getString("mob-stacking.tag-prefix"));
-        this.stackInterval = humbug.getHumbugConfig().getInt("mob-stacking.stack-interval");
-        this.maxStackSize = humbug.getHumbugConfig().getInt("mob-stacking.max-stack-size");
-        this.breedCooldown = humbug.getHumbugConfig().getInt("mob-stacking.breed-cooldown");
-        this.stackTypes = humbug.getHumbugConfig().getStringList("mob-stacking.stack-types");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("mob-stacking.enabled");
+        this.tagPrefix = ChatColor.translateAlternateColorCodes('&', config.getString("mob-stacking.tag-prefix"));
+        this.stackInterval = config.getInt("mob-stacking.stack-interval");
+        this.maxStackSize = config.getInt("mob-stacking.max-stack-size");
+        this.breedCooldown = config.getInt("mob-stacking.breed-cooldown");
+        this.stackTypes = config.getStringList("mob-stacking.stack-types");
     }
 
     @Override

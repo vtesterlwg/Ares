@@ -11,28 +11,35 @@ import java.util.Set;
 public final class WarpManager {
     @Getter public final AresPlugin plugin;
     @Getter public final Set<Warp> warps;
-    @Getter public final YamlConfiguration warpsConfig;
 
     public WarpManager(AresPlugin plugin) {
         this.plugin = plugin;
         this.warps = Sets.newConcurrentHashSet();
-        this.warpsConfig = plugin.getConfig("warps");
+    }
 
-        if (warpsConfig.getConfigurationSection("warps") == null) {
+    public void load() {
+        final YamlConfiguration config = getPlugin().getConfig("warps");
+
+        if (!warps.isEmpty()) {
+            warps.clear();
+            Logger.warn("Cleared warps while reloading " + getPlugin().getName());
+        }
+
+        if (config.getConfigurationSection("warps") == null) {
             Logger.warn("No warps found...");
             return;
         }
 
-        for (String warpNames : warpsConfig.getConfigurationSection("warps").getKeys(false)) {
-            final double x = warpsConfig.getDouble("warps." + warpNames + ".x");
-            final double y = warpsConfig.getDouble("warps." + warpNames + ".y");
-            final double z = warpsConfig.getDouble("warps." + warpNames + ".z");
-            final float yaw = (float)warpsConfig.getDouble("warps." + warpNames + ".yaw");
-            final float pitch = (float)warpsConfig.getDouble("warps." + warpNames + ".pitch");
-            final String worldName = warpsConfig.getString("warps." + warpNames + ".world");
+        for (String warpNames : config.getConfigurationSection("warps").getKeys(false)) {
+            final double x = config.getDouble("warps." + warpNames + ".x");
+            final double y = config.getDouble("warps." + warpNames + ".y");
+            final double z = config.getDouble("warps." + warpNames + ".z");
+            final float yaw = (float)config.getDouble("warps." + warpNames + ".yaw");
+            final float pitch = (float)config.getDouble("warps." + warpNames + ".pitch");
+            final String worldName = config.getString("warps." + warpNames + ".world");
 
             final Warp warp = new Warp(warpNames, worldName, x, y, z, yaw, pitch);
-            this.warps.add(warp);
+            warps.add(warp);
         }
     }
 
@@ -41,26 +48,29 @@ public final class WarpManager {
     }
 
     public void deleteWarp(Warp warp) {
-        warpsConfig.set("warps." + warp.getName(), null);
-        plugin.saveConfig("warps", warpsConfig);
+        final YamlConfiguration config = getPlugin().getConfig("warps");
+        config.set("warps." + warp.getName(), null);
+        plugin.saveConfig("warps", config);
     }
 
     public void saveWarps() {
+        final YamlConfiguration config = getPlugin().getConfig("warps");
+
         if (warps.isEmpty()) {
-            warpsConfig.set("warps", null);
-            plugin.saveConfig("warps", warpsConfig);
+            config.set("warps", null);
+            plugin.saveConfig("warps", config);
             return;
         }
 
         for (Warp warp : warps) {
-            warpsConfig.set("warps." + warp.getName() + ".x", warp.getX());
-            warpsConfig.set("warps." + warp.getName() + ".y", warp.getY());
-            warpsConfig.set("warps." + warp.getName() + ".z", warp.getZ());
-            warpsConfig.set("warps." + warp.getName() + ".yaw", warp.getYaw());
-            warpsConfig.set("warps." + warp.getName() + ".pitch", warp.getPitch());
-            warpsConfig.set("warps." + warp.getName() + ".world", warp.getWorldName());
+            config.set("warps." + warp.getName() + ".x", warp.getX());
+            config.set("warps." + warp.getName() + ".y", warp.getY());
+            config.set("warps." + warp.getName() + ".z", warp.getZ());
+            config.set("warps." + warp.getName() + ".yaw", warp.getYaw());
+            config.set("warps." + warp.getName() + ".pitch", warp.getPitch());
+            config.set("warps." + warp.getName() + ".world", warp.getWorldName());
         }
 
-        plugin.saveConfig("warps", warpsConfig);
+        plugin.saveConfig("warps", config);
     }
 }

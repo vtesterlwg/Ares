@@ -4,6 +4,7 @@ import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -29,10 +30,12 @@ public final class XPBonuses implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("xp-bonuses.enabled");
-        this.lootingMultiplier = humbug.getHumbugConfig().getDouble("xp-bonuses.multipliers.looting");
-        this.fortuneMutliplier = humbug.getHumbugConfig().getDouble("xp-bonuses.multipliers.fortune");
-        this.bottleMultiplier = humbug.getHumbugConfig().getDouble("xp-bonuses.multipliers.bottle");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("xp-bonuses.enabled");
+        this.lootingMultiplier = config.getDouble("xp-bonuses.multipliers.looting");
+        this.fortuneMutliplier = config.getDouble("xp-bonuses.multipliers.fortune");
+        this.bottleMultiplier = config.getDouble("xp-bonuses.multipliers.bottle");
     }
 
     @Override

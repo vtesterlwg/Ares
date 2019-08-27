@@ -24,6 +24,10 @@ import java.util.UUID;
 public final class ChatRestrictionService implements AresService, Listener {
     /** Owning Plugin **/
     @Getter public final AresPlugin owner;
+    /** If true, chat cooldowns are enforced **/
+    @Getter @Setter public boolean chatCooldownsEnabled;
+    /** If true, whitelisted links are enforced **/
+    @Getter @Setter public boolean whitelistedLinksEnabled;
     /** Stores Player UUIDs that have recently chatted **/
     @Getter public final List<UUID> recentChatters;
     /** Stores a list of all whitelisted links **/
@@ -35,10 +39,10 @@ public final class ChatRestrictionService implements AresService, Listener {
         this.owner = owner;
         this.recentChatters = Lists.newArrayList();
         this.whitelistedLinks = Lists.newArrayList();
-        this.chatCooldown = 10;
+        this.chatCooldown = 5;
     }
 
-    public void start() {
+    private void load() {
         final YamlConfiguration config = getOwner().getConfig("chat-restrictions");
 
         if (config == null) {
@@ -46,16 +50,25 @@ public final class ChatRestrictionService implements AresService, Listener {
             return;
         }
 
-        whitelistedLinks.addAll(config.getStringList("whitelisted-links"));
-        chatCooldown = config.getInt("chat-cooldown");
+        whitelistedLinksEnabled = config.getBoolean("whitelisted-links.enabled");
+        whitelistedLinks.addAll(config.getStringList("whitelisted-links.allowed"));
+        chatCooldownsEnabled = config.getBoolean("chat-cooldown.enabled");
+        chatCooldown = config.getInt("chat-cooldown.duration");
+    }
 
+    public void start() {
+        load();
         registerListener(this);
     }
 
     public void stop() {
         recentChatters.clear();
-
         ProcessedChatEvent.getHandlerList().unregister(this);
+    }
+
+    @Override
+    public void reload() {
+        load();
     }
 
     public String getName() {

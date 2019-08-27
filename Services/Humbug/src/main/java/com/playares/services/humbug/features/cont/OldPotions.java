@@ -5,6 +5,7 @@ import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -29,10 +30,12 @@ public final class OldPotions implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("oldpotions.enabled");
-        this.oldHealthEnabled = humbug.getHumbugConfig().getBoolean("oldpotions.old-health-enabled");
-        this.oldStrengthEnabled = humbug.getHumbugConfig().getBoolean("oldpotions.old-strength-enabled");
-        this.oldRegenEnabled = humbug.getHumbugConfig().getBoolean("oldpotions.old-regen-enabled");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("oldpotions.enabled");
+        this.oldHealthEnabled = config.getBoolean("oldpotions.old-health-enabled");
+        this.oldStrengthEnabled = config.getBoolean("oldpotions.old-strength-enabled");
+        this.oldRegenEnabled = config.getBoolean("oldpotions.old-regen-enabled");
     }
 
     public String getName() {

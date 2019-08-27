@@ -60,6 +60,11 @@ public final class DeathbanService implements AresService {
     }
 
     @Override
+    public void reload() {
+        configuration.loadValues();
+    }
+
+    @Override
     public String getName() {
         return "Deathbans";
     }

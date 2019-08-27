@@ -4,6 +4,7 @@ import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -25,8 +26,9 @@ public final class OldItemVelocity implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("old-item-velocity.enabled");
-        this.pearlVelocity = humbug.getHumbugConfig().getDouble("old-item-velocity.pearl-velocity");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+        this.enabled = config.getBoolean("old-item-velocity.enabled");
+        this.pearlVelocity = config.getDouble("old-item-velocity.pearl-velocity");
     }
 
     @Override

@@ -10,6 +10,7 @@ import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,9 +47,11 @@ public final class Knockback implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("knockback.enabled");
-        this.horizontal = humbug.getHumbugConfig().getDouble("knockback.horizontal-multiplier");
-        this.vertical = humbug.getHumbugConfig().getDouble("knockback.vertical-multiplier");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("knockback.enabled");
+        this.horizontal = config.getDouble("knockback.horizontal-multiplier");
+        this.vertical = config.getDouble("knockback.vertical-multiplier");
     }
 
     @Override

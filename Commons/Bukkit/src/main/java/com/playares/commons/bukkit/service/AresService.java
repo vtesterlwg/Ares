@@ -16,6 +16,11 @@ public interface AresService {
     void stop();
 
     /**
+     * Reload the service
+     */
+    default void reload() {}
+
+    /**
      * @return Returns the name of the Service
      */
     String getName();

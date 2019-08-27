@@ -130,6 +130,11 @@ public final class LootManager {
     private void loadStandardLoot() {
         final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
 
+        if (!standardLootables.isEmpty()) {
+            standardLootables.clear();
+            Logger.warn("Cleared Standard Loot Tables while reloading " + getAddon().getName());
+        }
+
         for (String materialName : config.getConfigurationSection("standard-loot-table").getKeys(false)) {
             final String path = "standard-loot-table." + materialName + ".";
             String name = null;
@@ -198,6 +203,11 @@ public final class LootManager {
 
     private void loadPalaceLoot() {
         final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
+
+        if (!palaceLootables.isEmpty()) {
+            palaceLootables.clear();
+            Logger.warn("Clearing Palace Loot Tables while reloading " + getAddon().getName());
+        }
 
         for (PalaceLootTier tier : PalaceLootTier.values()) {
             for (String materialName : config.getConfigurationSection("palace-loot-table." + tier.name()).getKeys(false)) {
@@ -269,6 +279,11 @@ public final class LootManager {
 
     private void loadPalaceChests() {
         final YamlConfiguration config = getAddon().getPlugin().getConfig("events");
+
+        getAddon().getManager().getPalaceEvents().forEach(palaceEvent -> {
+            palaceEvent.getLootChests().clear();
+            Logger.warn("Cleared loot chests for Palace Event '" + palaceEvent.getName() + "' while reloading " + getAddon().getName());
+        });
 
         if (config.get("palace-chests") == null) {
             Logger.warn("No palace chests were found in events.yml... Skipping loading Palace Chests");

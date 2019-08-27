@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -52,18 +53,20 @@ public final class MemeItems implements HumbugModule, Listener {
 
     @Override
     public void loadValues() {
-        this.enabled = humbug.getHumbugConfig().getBoolean("meme-items.enabled");
-        this.chorusFruitTeleportDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-chorus-fruit-teleportation");
-        this.enderchestDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-ender-chest");
-        this.fishingPlayersDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-fishing-players");
-        this.disableFireworkElytra = humbug.getHumbugConfig().getBoolean("meme-items.disable-firework-elytra");
-        this.lowerTotemDropChances = humbug.getHumbugConfig().getBoolean("meme-items.lower-totem-drop-chances.enabled");
-        this.totemDropChance = humbug.getHumbugConfig().getDouble("meme-items.lower-totem-drop-chances.chances");
-        this.unbalancedOffhandDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-unbalanced-offhand");
-        this.craftingEndCrystalDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-end-crystal-crafting");
-        this.endermiteSpawningDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-endermite-spawning");
-        this.bedBombsDisabled = humbug.getHumbugConfig().getBoolean("meme-items.disable-bed-bombs");
-        this.tntDamageNerfed = humbug.getHumbugConfig().getBoolean("meme-items.nerf-tnt-damage");
+        final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
+
+        this.enabled = config.getBoolean("meme-items.enabled");
+        this.chorusFruitTeleportDisabled = config.getBoolean("meme-items.disable-chorus-fruit-teleportation");
+        this.enderchestDisabled = config.getBoolean("meme-items.disable-ender-chest");
+        this.fishingPlayersDisabled = config.getBoolean("meme-items.disable-fishing-players");
+        this.disableFireworkElytra = config.getBoolean("meme-items.disable-firework-elytra");
+        this.lowerTotemDropChances = config.getBoolean("meme-items.lower-totem-drop-chances.enabled");
+        this.totemDropChance = config.getDouble("meme-items.lower-totem-drop-chances.chances");
+        this.unbalancedOffhandDisabled = config.getBoolean("meme-items.disable-unbalanced-offhand");
+        this.craftingEndCrystalDisabled = config.getBoolean("meme-items.disable-end-crystal-crafting");
+        this.endermiteSpawningDisabled = config.getBoolean("meme-items.disable-endermite-spawning");
+        this.bedBombsDisabled = config.getBoolean("meme-items.disable-bed-bombs");
+        this.tntDamageNerfed = config.getBoolean("meme-items.nerf-tnt-damage");
     }
 
     @Override
