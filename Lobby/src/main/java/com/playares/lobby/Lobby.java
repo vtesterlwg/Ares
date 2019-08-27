@@ -5,10 +5,12 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
+import com.playares.lobby.command.SpawnCommand;
 import com.playares.lobby.items.ServerSelectorItem;
 import com.playares.lobby.listener.PlayerListener;
 import com.playares.lobby.queue.QueueManager;
 import com.playares.lobby.selector.SelectorManager;
+import com.playares.lobby.spawn.SpawnManager;
 import com.playares.services.customevents.CustomEventService;
 import com.playares.services.customitems.CustomItemService;
 import com.playares.services.deathban.DeathbanService;
@@ -25,14 +27,17 @@ public final class Lobby extends AresPlugin {
     @Getter public LobbyConfig lobbyConfig;
     @Getter public SelectorManager selectorManager;
     @Getter public QueueManager queueManager;
+    @Getter public SpawnManager spawnManager;
 
     @Override
     public void onEnable() {
         this.lobbyConfig = new LobbyConfig(this);
         this.selectorManager = new SelectorManager(this);
         this.queueManager = new QueueManager(this);
+        this.spawnManager = new SpawnManager(this);
 
         lobbyConfig.load();
+        spawnManager.load();
 
         // Database
         registerMongo(new MongoDB(lobbyConfig.getDatabaseURI()));
@@ -44,6 +49,8 @@ public final class Lobby extends AresPlugin {
         // Commands
         final PaperCommandManager commandManager = new PaperCommandManager(this);
         registerCommandManager(commandManager);
+
+        registerCommand(new SpawnCommand(this));
 
         // Services
         registerService(new ProfileService(this));

@@ -1,6 +1,7 @@
 package com.playares.lobby.listener;
 
 import com.playares.commons.bukkit.event.PlayerBigMoveEvent;
+import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.lobby.Lobby;
 import com.playares.lobby.items.ServerSelectorItem;
@@ -8,9 +9,7 @@ import com.playares.lobby.util.LobbyUtils;
 import com.playares.services.customitems.CustomItemService;
 import com.playares.services.ranks.RankService;
 import lombok.Getter;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
@@ -69,6 +68,8 @@ public final class PlayerListener implements Listener {
         if (player.hasPermission("lobby.premium") || player.hasPermission("lobby.staff")) {
             LobbyUtils.givePremiumItems(player);
         }
+
+        getPlugin().getSpawnManager().teleport(player);
     }
 
     @EventHandler
@@ -110,7 +111,25 @@ public final class PlayerListener implements Listener {
         player.setVelocity(velocity);
     }
 
-    @EventHandler (priority = EventPriority.LOW)
+    @EventHandler (priority = EventPriority.LOWEST)
+    public void onEntityDamageByEntity(PlayerDamagePlayerEvent event) {
+        final Player damager = event.getDamager();
+        final Player damaged = event.getDamaged();
+
+        event.setCancelled(true);
+
+        if (damaged.hasPermission("lobby.staff")) {
+            return;
+        }
+
+        damager.spawnParticle(Particle.EXPLOSION_NORMAL, damaged.getLocation().add(0, 1.0, 0), 8, 0.1, 0.1, 0.1, 0.5);
+        Players.playSound(damager, Sound.ENTITY_ITEM_PICKUP);
+
+        damager.hidePlayer(getPlugin(), damaged);
+        damager.sendMessage(ChatColor.AQUA + "Pop!");
+    }
+
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             event.setCancelled(true);
