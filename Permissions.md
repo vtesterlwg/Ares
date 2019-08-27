@@ -90,3 +90,4 @@ lobby.queue.bypasswhitelist - Bypass whitelist check in queue, dangerous to give
 lobby.edit - Bypass block modification preventions
 lobby.premium - Access to premium slots
 lobby.staff - Access lobby staff functions
+lobby.reload - Access to the /lobbyreload command
