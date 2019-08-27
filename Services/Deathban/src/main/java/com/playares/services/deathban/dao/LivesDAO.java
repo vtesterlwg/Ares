@@ -18,7 +18,7 @@ public final class LivesDAO {
         final Document existing;
 
         if (collection == null) {
-            return new LivesPlayer();
+            return null;
         }
 
         iter = collection.find(filter);

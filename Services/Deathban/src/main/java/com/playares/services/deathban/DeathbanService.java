@@ -132,32 +132,40 @@ public final class DeathbanService implements AresService {
                 return;
             }
 
-            LivesPlayer receiverResult = LivesDAO.getLivesPlayer(owner.getMongo(), Filters.eq("id", receiverProfile.getUniqueId()));
+            final LivesPlayer receiverResult = LivesDAO.getLivesPlayer(owner.getMongo(), Filters.eq("id", receiverProfile.getUniqueId()));
             final LivesPlayer receiver = (receiverResult != null) ? receiverResult : new LivesPlayer(receiverProfile.getUniqueId());
             final LivesPlayer sender = (commandSender instanceof Player) ? LivesDAO.getLivesPlayer(owner.getMongo(), Filters.eq("id", ((Player)commandSender).getUniqueId())) : null;
 
             new Scheduler(owner).sync(() -> {
+                if (sender == null && !bypass) {
+                    promise.failure("You do not have enough lives");
+                    return;
+                }
+
                 // The sender is a player and does not have bypass, so we should subtract lives
-                if (sender != null && !bypass) {
+                if (sender != null) {
                     // Sender doesn't have enough lives
-                    if (sender.getStandardLives() < amount) {
+                    if (sender.getStandardLives() < amount && !bypass) {
                         promise.failure("You do not have enough lives");
                         return;
                     }
 
                     // Updating the lives for the sender
-                    sender.setStandardLives(sender.getStandardLives() - amount);
+                    if (!bypass) {
+                        sender.setStandardLives(sender.getStandardLives() - amount);
 
-                    new Scheduler(owner).async(() -> {
-                        LivesDAO.saveLivesPlayer(owner.getMongo(), sender);
-
-                        new Scheduler(owner).sync(() -> {
-                            final Player senderPlayer = Bukkit.getPlayer(sender.getUniqueId());
-
-                            if (senderPlayer != null) {
-                                senderPlayer.sendMessage(ChatColor.YELLOW + "" + amount + " lives have been subtracted from your account");
-                            }
+                        new Scheduler(owner).async(() -> {
+                            LivesDAO.saveLivesPlayer(owner.getMongo(), sender);
                         }).run();
+                    }
+
+                    // Sending lives updated notification
+                    new Scheduler(owner).sync(() -> {
+                        final Player senderPlayer = Bukkit.getPlayer(sender.getUniqueId());
+
+                        if (senderPlayer != null) {
+                            senderPlayer.sendMessage(ChatColor.YELLOW + "You gave " + amount + " lives to " + receiverProfile.getUsername());
+                        }
                     }).run();
                 }
 
