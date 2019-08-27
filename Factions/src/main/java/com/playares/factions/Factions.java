@@ -28,6 +28,7 @@ import com.playares.services.punishments.PunishmentService;
 import com.playares.services.ranks.RankService;
 import com.playares.services.serversync.ServerSyncService;
 import com.playares.services.serversync.data.Server;
+import com.playares.services.tips.TipService;
 import lombok.Getter;
 
 public final class Factions extends AresPlugin {
@@ -95,6 +96,7 @@ public final class Factions extends AresPlugin {
         registerService(new AutomatedRestartService(this, 42300));
         registerService(new ChatRestrictionService(this));
         registerService(new PlayerClassService(this));
+        registerService(new TipService(this));
 
         registerService(new ServerSyncService(this, new Server(
                 this,

@@ -1,0 +1,7 @@
+settings:
+  broadcast-interval: 90
+  prefix: '&6TIP: '
+messages:
+  - '&6This is a test message'
+  - '&6This is another test message'
+  - '&6This is the final test message'

@@ -28,5 +28,6 @@
         <module>ChatRestrictions</module>
         <module>PlayerClasses</module>
         <module>ServerSync</module>
+        <module>Tips</module>
     </modules>
 </project>
