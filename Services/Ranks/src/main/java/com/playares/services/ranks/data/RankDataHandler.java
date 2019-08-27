@@ -101,6 +101,35 @@ public final class RankDataHandler {
     }
 
     public void setPermission(CommandSender sender, Rank rank, String permission) {
+        final GroupManager groupManager = getService().getLuckPerms().getGroupManager();
+        final Group group = groupManager.getGroup(rank.getName());
+
+        if (group != null) {
+            Node toRemove = null;
+
+            for (Node node : group.getPermissions()) {
+                if (rank.getPermission() != null) {
+                    if (node.getPermission().equals(rank.getPermission())) {
+                        toRemove = node;
+                        break;
+                    }
+                } else {
+                    if (node.getPermission().equals("rank." +rank.getName())) {
+                        toRemove = node;
+                        break;
+                    }
+                }
+            }
+
+            if (toRemove != null) {
+                group.unsetPermission(toRemove);
+                Logger.warn("Unset old rank permission for " + group.getName());
+            }
+
+            group.setPermission(getService().getLuckPerms().getNodeFactory().newBuilder(permission).build());
+            Logger.print("Updated permission for " + rank.getName() + " to use permission " + permission);
+        }
+
         rank.setPermission(permission);
 
         save(rank, new SimplePromise() {
@@ -208,6 +237,12 @@ public final class RankDataHandler {
             if (group == null) {
                 Logger.print("Creating new LuckPerms group for new rank '" + rank.getName() + "'");
                 groupManager.createAndLoadGroup(rank.getName());
+
+                final Group created = groupManager.getGroup(rank.getName());
+
+                if (created != null) {
+                    created.setPermission(getService().getLuckPerms().getNodeFactory().newBuilder("rank." + rank.getName()).build());
+                }
             }
 
             RankDAO.create(service.getOwner().getMongo(), rank);
