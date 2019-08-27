@@ -54,7 +54,7 @@ public final class ListCommand extends BaseCommand {
             return;
         }
 
-        final List<Rank> ranks = rankService.getRanksByAlphabetical();
+        final List<Rank> ranks = rankService.getRanksByWeight();
         final List<String> rankNames = Lists.newArrayList();
         final List<String> response = Lists.newArrayList();
         final Map<Rank, List<String>> players = Maps.newHashMap();
