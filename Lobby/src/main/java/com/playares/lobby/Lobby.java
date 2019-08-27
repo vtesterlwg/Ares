@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
+import com.playares.lobby.command.ReloadCommand;
 import com.playares.lobby.command.SpawnCommand;
 import com.playares.lobby.items.ServerSelectorItem;
 import com.playares.lobby.listener.PlayerListener;
@@ -55,6 +56,7 @@ public final class Lobby extends AresPlugin {
         registerCommandManager(commandManager);
 
         registerCommand(new SpawnCommand(this));
+        registerCommand(new ReloadCommand(this));
 
         // Services
         registerService(new ProfileService(this));
