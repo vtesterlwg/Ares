@@ -75,7 +75,9 @@ public final class PlayerManager {
 
                         final long remainingMs = koth.getSession().getTimer().getRemaining();
 
-                        if (remainingMs <= (10 * 1000L)) {
+                        if (remainingMs <= 0.0) {
+                            eventElement.append(ChatColor.RED).append("Capturing...");
+                        } else if (remainingMs <= (10 * 1000L)) {
                             eventElement.append(Time.convertToDecimal(remainingMs));
                         } else {
                             eventElement.append(Time.convertToHHMMSS(remainingMs));
