@@ -402,6 +402,15 @@ public final class ClaimListener implements Listener {
                 event.setCancelled(true);
             }
 
+            if (profile.getTimer(PlayerTimer.PlayerTimerType.PROTECTION) != null && sf.getFlag().equals(ServerFaction.FactionFlag.EVENT)) {
+                player.getInventory().addItem(new ItemStack(Material.ENDER_PEARL));
+                player.sendMessage(ChatColor.RED + "Your enderpearl landed in a claim you are not allowed to enter");
+
+                profile.getTimers().remove(timer);
+
+                event.setCancelled(true);
+            }
+
             final EventsAddon eventsAddon = (EventsAddon)getPlugin().getAddonManager().getAddon(EventsAddon.class);
             final AresEvent insideEvent = eventsAddon.getManager().getEventByOwnerId(sf.getUniqueId());
 
