@@ -70,11 +70,14 @@ public final class PlayerListener implements Listener {
         }
 
         getPlugin().getSpawnManager().teleport(player);
+        getPlugin().getNameplateManager().apply(player);
     }
 
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         event.setQuitMessage(null);
+
+        getPlugin().getNameplateManager().remove(event.getPlayer());
     }
 
     @EventHandler
@@ -89,23 +92,23 @@ public final class PlayerListener implements Listener {
         final Vector velocity = player.getLocation().getDirection();
 
         if (floorBlock.getType().equals(Material.WOOD_PLATE)) {
-            velocity.setY(velocity.getY() + 0.5);
-            velocity.multiply(2);
-        }
-
-        if (floorBlock.getType().equals(Material.STONE_PLATE)) {
-            velocity.setY(velocity.getY() + 0.5);
+            velocity.setY(velocity.getY() + 0.3);
             velocity.multiply(2.25);
         }
 
+        if (floorBlock.getType().equals(Material.STONE_PLATE)) {
+            velocity.setY(velocity.getY() + 0.3);
+            velocity.multiply(2.50);
+        }
+
         if (floorBlock.getType().equals(Material.IRON_PLATE)) {
-            velocity.setY(velocity.getY() + 0.5);
-            velocity.multiply(2.5);
+            velocity.setY(velocity.getY() + 0.3);
+            velocity.multiply(2.75);
         }
 
         if (floorBlock.getType().equals(Material.GOLD_PLATE)) {
-            velocity.setY(velocity.getY() + 0.65);
-            velocity.multiply(2.75);
+            velocity.setY(velocity.getY() + 0.3);
+            velocity.multiply(3.00);
         }
 
         player.setVelocity(velocity);

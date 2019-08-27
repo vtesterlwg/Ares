@@ -8,6 +8,7 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.lobby.command.SpawnCommand;
 import com.playares.lobby.items.ServerSelectorItem;
 import com.playares.lobby.listener.PlayerListener;
+import com.playares.lobby.nameplate.NameplateManager;
 import com.playares.lobby.queue.QueueManager;
 import com.playares.lobby.selector.SelectorManager;
 import com.playares.lobby.spawn.SpawnManager;
@@ -22,12 +23,14 @@ import com.playares.services.ranks.RankService;
 import com.playares.services.serversync.ServerSyncService;
 import com.playares.services.serversync.data.Server;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 public final class Lobby extends AresPlugin {
     @Getter public LobbyConfig lobbyConfig;
     @Getter public SelectorManager selectorManager;
     @Getter public QueueManager queueManager;
     @Getter public SpawnManager spawnManager;
+    @Getter public NameplateManager nameplateManager;
 
     @Override
     public void onEnable() {
@@ -35,6 +38,7 @@ public final class Lobby extends AresPlugin {
         this.selectorManager = new SelectorManager(this);
         this.queueManager = new QueueManager(this);
         this.spawnManager = new SpawnManager(this);
+        this.nameplateManager = new NameplateManager(this);
 
         lobbyConfig.load();
         spawnManager.load();
@@ -73,6 +77,8 @@ public final class Lobby extends AresPlugin {
 
         startServices();
 
+        nameplateManager.build();
+
         // Listeners
         registerListener(new PlayerListener(this));
 
@@ -85,6 +91,8 @@ public final class Lobby extends AresPlugin {
 
     @Override
     public void onDisable() {
+        Bukkit.getOnlinePlayers().forEach(player -> nameplateManager.remove(player));
+
         stopServices();
         getMongo().closeConnection();
     }
