@@ -87,6 +87,11 @@ public final class ListCommand extends BaseCommand {
 
         for (Rank rank : ranks) {
             final List<String> names = players.get(rank);
+
+            if (names.isEmpty()) {
+                continue;
+            }
+
             response.add(Joiner.on(ChatColor.RESET + ", ").join(names));
         }
 
