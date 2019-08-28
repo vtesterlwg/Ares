@@ -2,11 +2,12 @@ package com.playares.factions.claims.subclaims.menu;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.playares.commons.bukkit.AresPlugin;
+import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.item.ItemBuilder;
 import com.playares.commons.bukkit.menu.ClickableItem;
 import com.playares.commons.bukkit.menu.Menu;
 import com.playares.commons.bukkit.util.Scheduler;
+import com.playares.factions.Factions;
 import com.playares.factions.claims.subclaims.data.Subclaim;
 import com.playares.factions.factions.data.PlayerFaction;
 import com.playares.services.profiles.ProfileService;
@@ -28,10 +29,12 @@ import java.util.Map;
 import java.util.UUID;
 
 public final class SubclaimMenu extends Menu {
+    @Getter public final Factions factions;
     @Getter public final Subclaim subclaim;
 
-    public SubclaimMenu(@Nonnull AresPlugin plugin, @Nonnull Player player, @Nonnull Subclaim subclaim) {
+    public SubclaimMenu(@Nonnull Factions plugin, @Nonnull Player player, @Nonnull Subclaim subclaim) {
         super(plugin, player, "Subclaim Editor", 6);
+        this.factions = plugin;
         this.subclaim = subclaim;
     }
 
@@ -96,7 +99,18 @@ public final class SubclaimMenu extends Menu {
 
                 addItem(new ClickableItem(deleteIcon, 45, click -> {
                     player.closeInventory();
-                    player.sendMessage(ChatColor.RED + "Subclaim deleted");
+
+                    factions.getSubclaimManager().getDeletionHandler().deleteSubclaim(player, subclaim, new SimplePromise() {
+                        @Override
+                        public void success() {
+                            player.sendMessage(ChatColor.RED + "Subclaim deleted");
+                        }
+
+                        @Override
+                        public void failure(@Nonnull String reason) {
+                            player.sendMessage(ChatColor.RED + reason);
+                        }
+                    });
                 }));
 
                 addItem(new ClickableItem(accessLevelIcon, 53, click -> {

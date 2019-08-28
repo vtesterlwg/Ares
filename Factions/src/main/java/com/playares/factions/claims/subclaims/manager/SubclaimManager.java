@@ -11,6 +11,7 @@ import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.claims.subclaims.dao.SubclaimDAO;
 import com.playares.factions.claims.subclaims.data.Subclaim;
 import com.playares.factions.claims.subclaims.handler.SubclaimCreationHandler;
+import com.playares.factions.claims.subclaims.handler.SubclaimDeletionHandler;
 import com.playares.factions.claims.subclaims.handler.SubclaimEditorHandler;
 import com.playares.factions.factions.data.PlayerFaction;
 import lombok.Getter;
@@ -25,12 +26,14 @@ public final class SubclaimManager {
     @Getter public final Set<Subclaim> subclaimRepository;
     @Getter public final SubclaimCreationHandler creationHandler;
     @Getter public final SubclaimEditorHandler editorHandler;
+    @Getter public final SubclaimDeletionHandler deletionHandler;
 
     public SubclaimManager(Factions plugin) {
         this.plugin = plugin;
         this.subclaimRepository = Sets.newConcurrentHashSet();
         this.creationHandler = new SubclaimCreationHandler(this);
         this.editorHandler = new SubclaimEditorHandler(this);
+        this.deletionHandler = new SubclaimDeletionHandler(this);
     }
 
     public void loadSubclaims() {
