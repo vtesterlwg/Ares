@@ -25,13 +25,13 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 public final class ClaimManager {
-    @Getter public Factions plugin;
-    @Getter public ClaimCreationHandler creationHandler;
-    @Getter public ClaimDeleteHandler deleteHandler;
-    @Getter public ClaimMapHandler mapHandler;
-    @Getter public WorldLocationManager worldLocationManager;
-    @Getter public Set<DefinedClaim> claimRepository;
-    @Getter public Set<DefinedClaimBuilder> claimBuilders;
+    @Getter public final Factions plugin;
+    @Getter public final ClaimCreationHandler creationHandler;
+    @Getter public final ClaimDeleteHandler deleteHandler;
+    @Getter public final ClaimMapHandler mapHandler;
+    @Getter public final WorldLocationManager worldLocationManager;
+    @Getter public final Set<DefinedClaim> claimRepository;
+    @Getter public final Set<DefinedClaimBuilder> claimBuilders;
 
     public ClaimManager(Factions plugin) {
         this.plugin = plugin;

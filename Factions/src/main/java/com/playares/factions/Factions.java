@@ -7,6 +7,7 @@ import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.addons.AddonManager;
 import com.playares.factions.claims.manager.ClaimManager;
+import com.playares.factions.claims.subclaims.manager.SubclaimManager;
 import com.playares.factions.commands.FactionCommand;
 import com.playares.factions.commands.PvPCommand;
 import com.playares.factions.commands.TimerCommand;
@@ -40,6 +41,9 @@ public final class Factions extends AresPlugin {
 
     /** Stores all data/handling for Claims **/
     @Getter protected ClaimManager claimManager;
+
+    /** Stores all data/handling for Subclaims **/
+    @Getter protected SubclaimManager subclaimManager;
 
     /** Stores all data/handling for Players **/
     @Getter protected PlayerManager playerManager;
@@ -113,11 +117,13 @@ public final class Factions extends AresPlugin {
         addonManager = new AddonManager(this);
         factionManager = new FactionManager(this);
         claimManager = new ClaimManager(this);
+        subclaimManager = new SubclaimManager(this);
         playerManager = new PlayerManager(this);
 
         // Data Loading
         factionManager.loadFactions();
         claimManager.loadClaims();
+        subclaimManager.loadSubclaims();
         claimManager.getWorldLocationManager().load();
 
         addonManager.startAddons();
@@ -134,17 +140,20 @@ public final class Factions extends AresPlugin {
         playerManager.savePlayers(true);
         factionManager.saveFactions(true);
         claimManager.saveClaims(true);
+        subclaimManager.saveSubclaims(true);
 
         // Clear Data
         factionManager.getFactionRepository().clear();
         claimManager.getClaimRepository().clear();
         playerManager.getPlayerRepository().clear();
+        subclaimManager.getSubclaimRepository().clear();
 
         addonManager.stopAddons();
 
         // Nullify Classes
         factionManager = null;
         claimManager = null;
+        subclaimManager = null;
         playerManager = null;
         addonManager = null;
 

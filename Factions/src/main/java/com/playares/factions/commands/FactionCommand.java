@@ -387,7 +387,15 @@ public final class FactionCommand extends BaseCommand {
     @Subcommand("subclaim")
     @Description("Subclaim the chest you are looking at")
     public void onSubclaim(Player player) {
+        plugin.getSubclaimManager().getCreationHandler().create(player, new SimplePromise() {
+            @Override
+            public void success() {}
 
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("sethome")
