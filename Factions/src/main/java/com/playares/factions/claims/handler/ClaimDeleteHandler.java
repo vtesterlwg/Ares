@@ -8,6 +8,8 @@ import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.claims.dao.ClaimDAO;
 import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.claims.manager.ClaimManager;
+import com.playares.factions.claims.subclaims.dao.SubclaimDAO;
+import com.playares.factions.claims.subclaims.data.Subclaim;
 import com.playares.factions.factions.data.Faction;
 import com.playares.factions.factions.data.PlayerFaction;
 import lombok.Getter;
@@ -78,6 +80,13 @@ public final class ClaimDeleteHandler {
                 }
             }
 
+            final List<Subclaim> subclaimsInside = getManager().getPlugin().getSubclaimManager().getSubclaimsInside(inside);
+
+            subclaimsInside.forEach(subclaim -> {
+                getManager().getPlugin().getSubclaimManager().getSubclaimRepository().removeAll(subclaimsInside);
+                SubclaimDAO.deleteSubclaims(getManager().getPlugin().getMongo(), subclaimsInside);
+            });
+
             manager.getClaimRepository().remove(inside);
             ClaimDAO.deleteDefinedClaim(manager.getPlugin().getMongo(), inside);
 
@@ -87,6 +96,11 @@ public final class ClaimDeleteHandler {
                 }
 
                 faction.setBalance(faction.getBalance() + (inside.getValue() * manager.getPlugin().getFactionConfig().getRefundedPercent()));
+
+                if (!subclaimsInside.isEmpty()) {
+                    faction.sendMessage(ChatColor.YELLOW + "" + subclaimsInside.size() + ChatColor.GOLD + " subclaims have been removed from unclaiming this land");
+                }
+
                 faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " has unclaimed land. " +
                         ChatColor.GREEN + "$" + String.format("%.2f", (inside.getValue() * manager.getPlugin().getFactionConfig().getRefundedPercent())) + ChatColor.GOLD + " has been returned to your faction balance");
 
@@ -107,6 +121,7 @@ public final class ClaimDeleteHandler {
         }
 
         final List<DefinedClaim> claims = getManager().getClaimsByOwner(faction);
+        final List<Subclaim> subclaims = getManager().getPlugin().getSubclaimManager().getSubclaimsByOwner(faction);
 
         if (faction.getMember(player.getUniqueId()).getRank().equals(PlayerFaction.FactionRank.MEMBER) && !admin) {
             promise.failure("Members are not able to perform this action");
@@ -119,12 +134,15 @@ public final class ClaimDeleteHandler {
         }
 
         manager.getClaimRepository().removeAll(claims);
+        manager.getPlugin().getSubclaimManager().getSubclaimRepository().removeAll(subclaims);
 
         new Scheduler(manager.getPlugin()).async(() -> {
             double refunded = 0.0;
 
+            ClaimDAO.deleteDefinedClaims(manager.getPlugin().getMongo(), claims);
+            SubclaimDAO.deleteSubclaims(manager.getPlugin().getMongo(), subclaims);
+
             for (DefinedClaim claim : claims) {
-                ClaimDAO.deleteDefinedClaim(manager.getPlugin().getMongo(), claim);
                 refunded += claim.getValue();
             }
 
@@ -133,7 +151,6 @@ public final class ClaimDeleteHandler {
             final double refundedFinal = refunded;
 
             new Scheduler(manager.getPlugin()).sync(() -> {
-
                 if (faction.getHome() != null) {
                     faction.unsetHome();
                 }
@@ -188,6 +205,16 @@ public final class ClaimDeleteHandler {
                         return;
                     }
 
+                    if (faction instanceof PlayerFaction) {
+                        final PlayerFaction playerFaction = (PlayerFaction)faction;
+                        final List<Subclaim> subclaims = getManager().getPlugin().getSubclaimManager().getSubclaimsInside(inside);
+
+                        manager.getPlugin().getSubclaimManager().getSubclaimRepository().removeAll(subclaims);
+                        SubclaimDAO.deleteSubclaims(getManager().getPlugin().getMongo(), subclaims);
+
+                        new Scheduler(getManager().getPlugin()).sync(() -> playerFaction.sendMessage(ChatColor.GOLD + "" + subclaims.size() + ChatColor.YELLOW + " subclaims have been removed by unclaiming this land")).run();
+                    }
+
                     manager.getClaimRepository().remove(inside);
                     ClaimDAO.deleteDefinedClaim(manager.getPlugin().getMongo(), inside);
 
@@ -200,6 +227,7 @@ public final class ClaimDeleteHandler {
                             }
 
                             playerFaction.setBalance(playerFaction.getBalance() + (inside.getValue() * manager.getPlugin().getFactionConfig().getRefundedPercent()));
+
                             playerFaction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.GOLD + " has unclaimed land. " +
                                     ChatColor.GREEN + "$" + String.format("%.2f", (inside.getValue() * manager.getPlugin().getFactionConfig().getRefundedPercent())) + ChatColor.GOLD + " has been returned to your faction balance");
                         }
@@ -232,7 +260,13 @@ public final class ClaimDeleteHandler {
         new Scheduler(getManager().getPlugin()).async(() -> {
             if (faction instanceof PlayerFaction) {
                 final PlayerFaction playerFaction = (PlayerFaction)faction;
+                final List<Subclaim> subclaims = getManager().getPlugin().getSubclaimManager().getSubclaimsByOwner(playerFaction);
                 double refunded = 0.0;
+
+                if (!subclaims.isEmpty()) {
+                    getManager().getPlugin().getSubclaimManager().getSubclaimRepository().removeAll(subclaims);
+                    SubclaimDAO.deleteSubclaims(getManager().getPlugin().getMongo(), subclaims);
+                }
 
                 for (DefinedClaim claim : claims) {
                     refunded += claim.getValue();
