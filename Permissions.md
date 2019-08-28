@@ -65,6 +65,7 @@ factions.freeze.others - Freeze others factions
 factions.unclaim.others - Unclaim land for others
 factions.dtr.others - Set others faction DTR
 factions.flag.others - Set flag for other factions
+factions.subclaim.bypass - Bypass subclaim checks
 factions.spawn - Teleport to a spawnpoint
 factions.setspawn - Set a spawnpoint
 factions.timer.edit - Access /timer command
