@@ -14,10 +14,17 @@ import java.util.Objects;
  * Represents a single block location
  */
 public class BLocatable implements Locatable, MongoDocument<BLocatable> {
-    @Nonnull @Getter @Setter public String worldName;
+    @Getter @Setter public String worldName;
     @Getter @Setter double x;
     @Getter @Setter double y;
     @Getter @Setter double z;
+
+    public BLocatable() {
+        this.worldName = null;
+        this.x = 0.0;
+        this.y = 0.0;
+        this.z = 0.0;
+    }
 
     public BLocatable(@Nonnull Block block) {
         this.worldName = block.getWorld().getName();
