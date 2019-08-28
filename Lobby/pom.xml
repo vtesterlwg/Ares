@@ -37,6 +37,7 @@
                                     <include>com.playares:ServerSync</include>
                                     <include>com.playares:CustomItems</include>
                                     <include>com.playares:Deathban</include>
+                                    <include>com.playares:Tips</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -167,6 +168,13 @@
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>Deathban</artifactId>
+            <version>1.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>Tips</artifactId>
             <version>1.12.2</version>
             <scope>compile</scope>
         </dependency>

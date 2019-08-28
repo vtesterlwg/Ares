@@ -23,6 +23,7 @@ import com.playares.services.punishments.PunishmentService;
 import com.playares.services.ranks.RankService;
 import com.playares.services.serversync.ServerSyncService;
 import com.playares.services.serversync.data.Server;
+import com.playares.services.tips.TipService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 
@@ -67,6 +68,7 @@ public final class Lobby extends AresPlugin {
         registerService(new RankService(this));
         registerService(new CustomItemService(this));
         registerService(new DeathbanService(this));
+        registerService(new TipService(this));
 
         registerService(new ServerSyncService(this, new Server(
                 this,
