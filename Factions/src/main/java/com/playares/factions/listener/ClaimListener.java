@@ -201,6 +201,14 @@ public final class ClaimListener implements Listener {
         final Block block = event.getClickedBlock();
         final boolean admin = player.hasPermission("factions.admin");
 
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (admin) {
+            return;
+        }
+
         if (block == null || (block.getType().equals(Material.AIR))) {
             return;
         }
