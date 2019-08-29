@@ -52,14 +52,7 @@ public final class HumbugService implements AresService {
 
     @Override
     public void reload() {
-        modules.forEach(module -> {
-            module.loadValues();
-
-            if (module.isEnabled()) {
-                module.start();
-                Logger.print("Humbug: Started module '" + module.getName() + "'");
-            }
-        });
+        modules.forEach(HumbugModule::loadValues);
     }
 
     public String getName() {
