@@ -19,6 +19,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 
@@ -104,6 +105,7 @@ public final class SubclaimMenu extends Menu {
                         @Override
                         public void success() {
                             player.sendMessage(ChatColor.RED + "Subclaim deleted");
+                            getFactions().getSubclaimManager().getUpdateHandler().performDelete(player, subclaim);
                         }
 
                         @Override
@@ -121,8 +123,10 @@ public final class SubclaimMenu extends Menu {
                     }
 
                     subclaim.setAccessLevel(nextLevel);
+
                     player.sendMessage(ChatColor.YELLOW + "Subclaim Access Level has been changed to " + ChatColor.BLUE + WordUtils.capitalize(nextLevel.name().toLowerCase().replace("_", " ")));
-                    update();
+
+                    factions.getSubclaimManager().getUpdateHandler().performUpdate(subclaim);
                 }));
 
                 int pos = 0;
@@ -159,13 +163,13 @@ public final class SubclaimMenu extends Menu {
 
                             subclaim.getAccessPlayers().remove(aresProfile.getUniqueId());
                             player.sendMessage(ChatColor.DARK_GREEN + aresProfile.getUsername() + ChatColor.YELLOW + " can " + ChatColor.RED + "no longer" + ChatColor.YELLOW + " access this subclaim");
-                            update();
+                            factions.getSubclaimManager().getUpdateHandler().performUpdate(subclaim);
                             return;
                         }
 
                         subclaim.getAccessPlayers().add(aresProfile.getUniqueId());
                         player.sendMessage(ChatColor.DARK_GREEN + aresProfile.getUsername() + ChatColor.YELLOW + " can " + ChatColor.GREEN + "now" + ChatColor.YELLOW + " access this subclaim");
-                        update();
+                        factions.getSubclaimManager().getUpdateHandler().performUpdate(subclaim);
                     }));
 
                     pos++;
@@ -174,5 +178,11 @@ public final class SubclaimMenu extends Menu {
                 player.updateInventory();
             }).run();
         }).run();
+    }
+
+    @Override
+    public void onInventoryClose(InventoryCloseEvent event) {
+        super.onInventoryClose(event);
+        factions.getSubclaimManager().getUpdateHandler().closeMenu(this);
     }
 }

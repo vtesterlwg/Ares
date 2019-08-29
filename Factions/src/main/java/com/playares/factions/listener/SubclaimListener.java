@@ -4,6 +4,7 @@ import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
 import com.playares.factions.claims.subclaims.dao.SubclaimDAO;
 import com.playares.factions.claims.subclaims.data.Subclaim;
+import com.playares.factions.claims.subclaims.menu.SubclaimMenu;
 import com.playares.factions.factions.data.PlayerFaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,6 +19,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.inventory.InventoryMoveItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 @AllArgsConstructor
 public final class SubclaimListener implements Listener {
@@ -43,6 +45,16 @@ public final class SubclaimListener implements Listener {
         if (!subclaim.canAccess(player.getUniqueId()) && faction.isMember(player.getUniqueId())) {
             event.setCancelled(true);
             player.sendMessage(ChatColor.YELLOW + "You do " + ChatColor.RED + "not" + ChatColor.YELLOW + " have access to this subclaim");
+        }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+        final SubclaimMenu activeMenu = getPlugin().getSubclaimManager().getActiveMenu(player);
+
+        if (activeMenu != null) {
+            getPlugin().getSubclaimManager().getUpdateHandler().closeMenu(activeMenu);
         }
     }
 

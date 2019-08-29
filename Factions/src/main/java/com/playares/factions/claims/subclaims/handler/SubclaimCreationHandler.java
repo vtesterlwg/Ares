@@ -6,6 +6,7 @@ import com.playares.commons.bukkit.location.BLocatable;
 import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.claims.subclaims.data.Subclaim;
 import com.playares.factions.claims.subclaims.manager.SubclaimManager;
+import com.playares.factions.claims.subclaims.menu.SubclaimMenu;
 import com.playares.factions.factions.data.PlayerFaction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -78,7 +79,7 @@ public final class SubclaimCreationHandler {
 
             if (subclaimAt != null) {
                 if (subclaimAt.canAccess(player.getUniqueId())) {
-                    getManager().getEditorHandler().openEditor(player, subclaimAt);
+                    getManager().getUpdateHandler().openMenu(new SubclaimMenu(getManager().getPlugin(), player, subclaimAt));
                     promise.success();
                     return;
                 }
@@ -92,7 +93,7 @@ public final class SubclaimCreationHandler {
 
         final Subclaim subclaim = new Subclaim(getManager().getPlugin(), player, faction, convertedBlocks);
         getManager().getSubclaimRepository().add(subclaim);
-        getManager().getEditorHandler().openEditor(player, subclaim);
+        getManager().getUpdateHandler().openMenu(new SubclaimMenu(getManager().getPlugin(), player, subclaim));
         promise.success();
     }
 }
