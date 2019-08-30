@@ -44,7 +44,7 @@ public final class TeleportCommand extends BaseCommand {
 
     @CommandAlias("teleport|tp")
     @CommandPermission("essentials.teleport.others")
-    @CommandCompletion("@players @players")
+    @CommandCompletion("@players")
     @Syntax("<player> <player>")
     @Description("Teleport a player to another")
     public void onTeleportOthers(CommandSender sender, String fromName, String toName) {
