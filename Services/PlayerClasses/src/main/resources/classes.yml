@@ -6,6 +6,13 @@ classes:
       FIRE_RESISTANCE: 1
       FAST_DIGGING: 2
       NIGHT_VISION: 1
+    consumables:
+      FAST_DIGGING:
+        material: 'DIAMOND'
+        duration: 30
+        amplifier: 5
+        cooldown: 60
+        application: 'INDIVIDUAL'
   rogue:
     warmup: 30
     passive:
