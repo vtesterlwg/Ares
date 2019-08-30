@@ -12,6 +12,8 @@ import com.playares.factions.Factions;
 import com.playares.factions.addons.loggers.data.CombatLogger;
 import com.playares.factions.addons.loggers.event.LoggerDeathEvent;
 import com.playares.factions.addons.loggers.event.PlayerDamageLoggerEvent;
+import com.playares.factions.addons.states.ServerStateAddon;
+import com.playares.factions.addons.states.data.ServerState;
 import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.event.MemberDeathEvent;
 import com.playares.factions.factions.data.Faction;
@@ -372,6 +374,7 @@ public final class CombatListener implements Listener {
 
         final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(logger.getOwner());
         final DeathbanService deathbanService = (DeathbanService)getPlugin().getService(DeathbanService.class);
+        final ServerStateAddon serverStateAddon = (ServerStateAddon)getPlugin().getAddonManager().getAddon(ServerStateAddon.class);
 
         if (event.getKiller() != null) {
             final Player killer = event.getKiller();
@@ -393,8 +396,9 @@ public final class CombatListener implements Listener {
         logger.getBukkitEntity().getWorld().strikeLightningEffect(logger.getBukkitEntity().getLocation());
         Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_THUNDER));
 
-        if (deathbanService != null && deathbanService.getConfiguration().isDeathbanEnforced()) {
-            deathbanService.deathban(logger.getOwner(), 30, false); // TODO: Make dynamic
+        if (deathbanService != null && serverStateAddon != null && deathbanService.getConfiguration().isDeathbanEnforced()) {
+            final boolean permanent = (serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_1) || serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_2));
+            deathbanService.deathban(logger.getOwner(), 30, permanent); // TODO: Make dynamic
         }
 
         new Scheduler(getPlugin()).async(() -> {
@@ -429,9 +433,11 @@ public final class CombatListener implements Listener {
         final EntityDamageEvent.DamageCause reason = player.getLastDamageCause().getCause();
         final String rip = ChatColor.RED + "RIP: " + ChatColor.RESET;
         final DeathbanService deathbanService = (DeathbanService)getPlugin().getService(DeathbanService.class);
+        final ServerStateAddon serverStateAddon = (ServerStateAddon)getPlugin().getAddonManager().getAddon(ServerStateAddon.class);
 
-        if (deathbanService != null) {
-            deathbanService.deathban(player.getUniqueId(), 30, false);
+        if (deathbanService != null && serverStateAddon != null) {
+            final boolean permanent = (serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_1) || serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_2));
+            deathbanService.deathban(player.getUniqueId(), 30, permanent);
         }
 
         if (faction != null) {
