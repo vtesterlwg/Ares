@@ -20,6 +20,7 @@ server-state:
   eotw:
     radius: 100
     rate: 14400
+    phase-two-grace-period: 300
 
 # Factions configuration, here's what most of it does:
 # Member-cap: Max members faction can have

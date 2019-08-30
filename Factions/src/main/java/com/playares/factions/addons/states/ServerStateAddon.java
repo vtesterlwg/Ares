@@ -31,6 +31,7 @@ public final class ServerStateAddon implements Addon {
     @Getter @Setter public int shrinkRadius;
     @Getter @Setter public int shrinkRate;
     @Getter @Setter public boolean phase2GracePeriod;
+    @Getter @Setter public int phaseTwoGracePeriodDuration;
 
     public ServerStateAddon(Factions plugin) {
         this.plugin = plugin;
@@ -48,7 +49,8 @@ public final class ServerStateAddon implements Addon {
         final ServerState state = ServerState.getType(config.getString("server-state.current"));
 
         shrinkRadius = config.getInt("server-state.eotw.radius");
-        shrinkRadius = config.getInt("server-state.eotw.rate");
+        shrinkRate = config.getInt("server-state.eotw.rate");
+        phaseTwoGracePeriodDuration = config.getInt("server-state.eotw.phase-two-grace-period");
 
         if (state == null) {
             Logger.error("Invalid server state! Setting to NORMAL");
@@ -94,8 +96,8 @@ public final class ServerStateAddon implements Addon {
                 getPlugin().getClaimManager().getClaimRepository().removeAll(claims);
 
                 new Scheduler(getPlugin()).sync(() -> {
-                    Bukkit.broadcastMessage(EOTW_PREFIX + ChatColor.RED + "All player claims have been removed and claiming has been disabled for the remainder of the map.");
-                    Bukkit.broadcastMessage(EOTW_PREFIX + ChatColor.RED + "Use of the Nether/End has been " + ChatColor.DARK_RED + "" + ChatColor.UNDERLINE + "disabled." + ChatColor.RED + "If you are in the Nether/End you now have 5 minutes to exit before being killed.");
+                    Bukkit.broadcastMessage(EOTW_PREFIX + ChatColor.YELLOW + "All player claims have been removed. Claiming is now disabled for the remainder of the map.");
+                    Bukkit.broadcastMessage(EOTW_PREFIX + ChatColor.DARK_RED + "Use of the Nether & End is now being disabled! If you are in the Nether or End you now have " + Time.convertToRemaining(phaseTwoGracePeriodDuration * 1000L) + " to exit before being automatically killed!");
 
                     final SpawnpointAddon spawnpointAddon = (SpawnpointAddon)getPlugin().getAddonManager().getAddon(SpawnpointAddon.class);
 
@@ -113,8 +115,8 @@ public final class ServerStateAddon implements Addon {
                                 }
                             });
 
-                            Bukkit.broadcastMessage(EOTW_PREFIX + ChatColor.GREEN + "All players in the Nether/End have been slain");
-                        }).delay(300 * 20).run();
+                            Bukkit.broadcastMessage(EOTW_PREFIX + ChatColor.DARK_RED + "All players in the Nether & The End have been slain");
+                        }).delay(phaseTwoGracePeriodDuration * 20).run();
 
                         Bukkit.broadcastMessage(EOTW_PREFIX + ChatColor.DARK_AQUA + "The world border will now begin shrinking for the next " + ChatColor.AQUA + Time.convertToRemaining(shrinkRate * 1000));
                     }
