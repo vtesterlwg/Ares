@@ -4,6 +4,8 @@ import com.playares.commons.base.promise.FailablePromise;
 import com.playares.commons.bukkit.location.BLocatable;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
+import com.playares.factions.addons.states.ServerStateAddon;
+import com.playares.factions.addons.states.data.ServerState;
 import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.claims.pillars.ClaimPillar;
 import com.playares.factions.claims.world.WorldLocation;
@@ -112,6 +114,7 @@ public final class DefinedClaimBuilder {
     }
 
     public void build(FailablePromise<DefinedClaim> promise) {
+        final ServerStateAddon serverStateAddon = (ServerStateAddon)getPlugin().getAddonManager().getAddon(ServerStateAddon.class);
         final boolean admin = claimer.hasPermission("factions.admin");
 
         if (cornerA == null) {
@@ -126,6 +129,11 @@ public final class DefinedClaimBuilder {
 
         if (!cornerA.getWorldName().equals(cornerB.getWorldName())) {
             promise.failure("Worlds do not match for both corners");
+            return;
+        }
+
+        if (serverStateAddon != null && (serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_1) || serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_2)) && !admin) {
+            promise.failure("Claiming is disabled during " + serverStateAddon.getCurrentState().getDisplayName());
             return;
         }
 
