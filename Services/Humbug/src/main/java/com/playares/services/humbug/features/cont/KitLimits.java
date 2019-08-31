@@ -19,12 +19,14 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TippedArrow;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
@@ -349,6 +351,34 @@ public final class KitLimits implements HumbugModule, Listener {
 
         if (!limit.isExtendable() && meta.getBasePotionData().isExtended()) {
             player.sendMessage(ChatColor.RED + "This potion has been disabled");
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onProjectileLaunch(ProjectileLaunchEvent event) {
+        if (!(event.getEntity() instanceof TippedArrow)) {
+            return;
+        }
+
+        final TippedArrow arrow = (TippedArrow)event.getEntity();
+        final PotionLimit limit = getPotionLimit(arrow.getBasePotionData().getType().getEffectType());
+
+        if (limit == null) {
+            return;
+        }
+
+        if (limit.isDisabled()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!limit.isAmplifiable() && arrow.getBasePotionData().isUpgraded()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!limit.isExtendable() && arrow.getBasePotionData().isExtended()) {
             event.setCancelled(true);
         }
     }
