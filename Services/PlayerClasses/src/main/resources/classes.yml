@@ -76,7 +76,6 @@ classes:
     passive:
       SPEED: 3
       DAMAGE_RESISTANCE: 4
-      WEAKNESS: 2
       FIRE_RESISTANCE: 1
     consumables:
       SPEED:
