@@ -64,6 +64,8 @@ public final class FactionConfig {
     @Getter public double playerClaimBuffer;
     /** Default distance (in blocks) that each unique faction claim must be from ServerFaction claims **/
     @Getter public double defaultServerClaimBuffer;
+    /** Default distance (in blocks) that players must be from this factions claims to break blocks **/
+    @Getter public double defaultServerBuildBuffer;
     /** Time (in seconds) that attacking players should be combat-tagged for **/
     @Getter public int timerCombatTagAttacker;
     /** Time (in seconds) that attacked players should be combat-tagged for **/
@@ -115,7 +117,8 @@ public final class FactionConfig {
         this.claimBlockValue = config.getDouble("claims.block-value");
         this.refundedPercent = config.getDouble("claims.refunded-percent");
         this.playerClaimBuffer = config.getDouble("claims.buffers.player");
-        this.defaultServerClaimBuffer = config.getDouble("claims.buffers.server");
+        this.defaultServerClaimBuffer = config.getDouble("claims.buffers.server.claim");
+        this.defaultServerBuildBuffer = config.getDouble("claims.buffers.server.build");
         this.timerCombatTagAttacked = config.getInt("timers.player.combat-tag.attacked");
         this.timerCombatTagAttacker = config.getInt("timers.player.combat-tag.attacker");
         this.timerProtection = config.getInt("timers.player.protection");

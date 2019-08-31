@@ -79,7 +79,7 @@ public final class ClaimManager {
         return ImmutableList.copyOf(claimRepository.stream().filter(claim -> claim.buffer(location, distance)).collect(Collectors.toList()));
     }
 
-    public ImmutableList<DefinedClaim> getClaimsNearby(Locatable location) {
+    public ImmutableList<DefinedClaim> getClaimsNearby(Locatable location, boolean buildBuffer) {
         final List<DefinedClaim> result = Lists.newArrayList();
 
         for (DefinedClaim claim : claimRepository) {
@@ -92,14 +92,18 @@ public final class ClaimManager {
             if (faction instanceof ServerFaction) {
                 final ServerFaction sf = (ServerFaction)faction;
 
-                if (claim.buffer(location, sf.getBuffer())) {
+                if (buildBuffer) {
+                    if (claim.buffer(location, sf.getBuildBuffer())) {
+                        result.add(claim);
+                    }
+                } else if (claim.buffer(location, sf.getClaimBuffer())) {
                     result.add(claim);
                 }
 
                 continue;
             }
 
-            if (claim.buffer(location, plugin.getFactionConfig().getPlayerClaimBuffer())) {
+            if (!buildBuffer && claim.buffer(location, plugin.getFactionConfig().getPlayerClaimBuffer())) {
                 result.add(claim);
             }
         }

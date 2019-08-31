@@ -485,7 +485,6 @@ public final class FactionCommand extends BaseCommand {
 
     @Subcommand("unclaim")
     @Description("Unclaim your land")
-    @Syntax("[all]")
     public void onUnclaim(Player player) {
         plugin.getClaimManager().getDeleteHandler().unclaim(player, new SimplePromise() {
             @Override
@@ -728,15 +727,35 @@ public final class FactionCommand extends BaseCommand {
         });
     }
 
-    @Subcommand("setbuffer|sb")
-    @Description("Update a factions buffer radius")
+    /*
+    /f setbuffer <faction> <claim/build> <buffer>
+     */
+
+    @Subcommand("setbuffer|buffer|sb")
+    @Description("Update a Server Faction's buffer radius")
     @CommandPermission("factions.buffer.others")
-    @Syntax("[faction] [buffer]")
-    public void onSetBuffer(Player player, String faction, double buffer) {
-        plugin.getFactionManager().getManageHandler().setBuffer(player, faction, buffer, new SimplePromise() {
+    @Syntax("<faction> <claim/build> <radius>")
+    public void onSetBuffer(Player player, String faction, @Values("claim|build") String type, double buffer) {
+        if (type.equalsIgnoreCase("claim")) {
+            plugin.getFactionManager().getManageHandler().setClaimBuffer(player, faction, buffer, new SimplePromise() {
+                @Override
+                public void success() {
+                    player.sendMessage(ChatColor.GREEN + "Claim buffer has been updated to " + buffer);
+                }
+
+                @Override
+                public void failure(@Nonnull String reason) {
+                    player.sendMessage(ChatColor.RED + reason);
+                }
+            });
+
+            return;
+        }
+
+        plugin.getFactionManager().getManageHandler().setBuildBuffer(player, faction, buffer, new SimplePromise() {
             @Override
             public void success() {
-                player.sendMessage(ChatColor.GREEN + "Faction buffer has been updated");
+                player.sendMessage(ChatColor.GREEN + "Build buffer has been updated to " + buffer);
             }
 
             @Override

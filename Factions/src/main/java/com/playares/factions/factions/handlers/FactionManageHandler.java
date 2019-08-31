@@ -390,13 +390,13 @@ public final class FactionManageHandler {
     }
 
     /**
-     * Sets the buffer radius for a Server Faction
+     * Sets the claim buffer radius for a Server Faction
      * @param player Player
      * @param factionName Faction Name
      * @param buffer Buffer Radius
      * @param promise Promise
      */
-    public void setBuffer(Player player, String factionName, double buffer, SimplePromise promise) {
+    public void setClaimBuffer(Player player, String factionName, double buffer, SimplePromise promise) {
         final ServerFaction faction = manager.getServerFactionByName(factionName);
 
         if (faction == null) {
@@ -404,8 +404,28 @@ public final class FactionManageHandler {
             return;
         }
 
-        faction.setBuffer(buffer);
-        Logger.print(player.getName() + " updated buffer radius for " + faction.getName() + " to " + buffer);
+        faction.setClaimBuffer(buffer);
+        Logger.print(player.getName() + " updated claim buffer radius for " + faction.getName() + " to " + buffer);
+        promise.success();
+    }
+
+    /**
+     * Sets the build buffer radius for a Server Faction
+     * @param player Player
+     * @param factionName Faction Name
+     * @param buffer Buffer Radius
+     * @param promise Promise
+     */
+    public void setBuildBuffer(Player player, String factionName, double buffer, SimplePromise promise) {
+        final ServerFaction faction = manager.getServerFactionByName(factionName);
+
+        if (faction == null) {
+            promise.failure("Faction not found");
+            return;
+        }
+
+        faction.setBuildBuffer(buffer);
+        Logger.print(player.getName() + " updated build buffer radius for " + faction.getName() + " to " + buffer);
         promise.success();
     }
 }

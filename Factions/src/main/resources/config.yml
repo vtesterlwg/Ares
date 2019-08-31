@@ -61,13 +61,15 @@ factions:
 # Buffers determine the distance (in blocks) you need to be from another factions claim when creating
 # a new claim.
 claims:
-  min-size: 10
+  min-size: 8
   max-claims: 3
   block-value: 10.0
   refunded-percent: 0.75
   buffers:
     player: 16.0
-    server: 250.0
+    server:
+      claim: 250.0
+      build: 16
 
 # World location configuration
 # The values here dictate the radius on warzones

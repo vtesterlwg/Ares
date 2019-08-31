@@ -23,8 +23,10 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
     @Getter @Setter public PLocatable location;
     /** Flag to determine how this claim should behave **/
     @Getter @Setter public FactionFlag flag;
-    /** Buffer for this factions claims **/
-    @Getter @Setter public double buffer;
+    /** Buffer for claiming near this faction **/
+    @Getter @Setter public double claimBuffer;
+    /** Buffer for building near this faction **/
+    @Getter @Setter public double buildBuffer;
 
     public ServerFaction(Factions plugin) {
         this.plugin = plugin;
@@ -33,7 +35,8 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
         this.displayName = null;
         this.location = null;
         this.flag = null;
-        this.buffer = plugin.getFactionConfig().getDefaultServerClaimBuffer();
+        this.claimBuffer = plugin.getFactionConfig().getDefaultServerClaimBuffer();
+        this.buildBuffer = plugin.getFactionConfig().getDefaultServerBuildBuffer();
     }
 
     public ServerFaction(Factions plugin, String name) {
@@ -43,7 +46,8 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
         this.displayName = name;
         this.location = null;
         this.flag = FactionFlag.SAFEZONE;
-        this.buffer = plugin.getFactionConfig().getDefaultServerClaimBuffer();
+        this.claimBuffer = plugin.getFactionConfig().getDefaultServerClaimBuffer();
+        this.buildBuffer = plugin.getFactionConfig().getDefaultServerBuildBuffer();
     }
 
     @Override
@@ -51,8 +55,8 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
         this.uniqueId = (UUID)document.get("id");
         this.name = document.getString("name");
 
-        this.displayName = (document.get("displayName") != null) ?
-                ChatColor.translateAlternateColorCodes('&', document.getString("displayName")) : name;
+        this.displayName = (document.get("display_name") != null) ?
+                ChatColor.translateAlternateColorCodes('&', document.getString("display_name")) : name;
 
         this.location = (document.get("location") != null) ?
                 new PLocatable().fromDocument(document.get("location", Document.class)) : null;
@@ -60,7 +64,9 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
         this.flag = (document.get("flag") != null) ?
                 FactionFlag.valueOf(document.getString("flag")) : null;
 
-        this.buffer = document.getDouble("buffer");
+        this.claimBuffer = document.getDouble("claim_buffer");
+
+        this.buildBuffer = document.getDouble("build_buffer");
 
         return this;
     }
@@ -70,10 +76,11 @@ public final class ServerFaction implements Faction, MongoDocument<ServerFaction
         return new Document()
                 .append("id", uniqueId)
                 .append("name", name)
-                .append("displayName", displayName)
+                .append("display_name", displayName)
                 .append("location", (location != null) ? location.toDocument() : null)
                 .append("flag", (flag != null) ? flag.toString() : null)
-                .append("buffer", buffer);
+                .append("claim_buffer", claimBuffer)
+                .append("build_buffer", buildBuffer);
     }
 
     @AllArgsConstructor

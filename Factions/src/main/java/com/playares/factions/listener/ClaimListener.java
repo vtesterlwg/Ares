@@ -49,7 +49,19 @@ public final class ClaimListener implements Listener {
 
     private void handlePlayerBlockMods(Player player, Block block, Cancellable event) {
         final DefinedClaim claim = plugin.getClaimManager().getClaimAt(new BLocatable(block));
+        final List<DefinedClaim> withinBuildBuffer = plugin.getClaimManager().getClaimsNearby(new PLocatable(player), true);
         final boolean admin = player.hasPermission("factions.admin");
+
+        if (claim == null && !withinBuildBuffer.isEmpty() && !admin) {
+            final DefinedClaim insideBuffer = withinBuildBuffer.get(0);
+            final ServerFaction bufferFaction = plugin.getFactionManager().getServerFactionById(insideBuffer.getOwnerId());
+
+            if (bufferFaction != null) {
+                player.sendMessage(ChatColor.RED + "You are too close to " + ChatColor.RESET + bufferFaction.getDisplayName());
+                event.setCancelled(true);
+                return;
+            }
+        }
 
         if (claim == null) {
             return;
@@ -151,6 +163,7 @@ public final class ClaimListener implements Listener {
 
         for (Block affected : event.getBlocks()) {
             final DefinedClaim affectedClaim = plugin.getClaimManager().getClaimAt(new BLocatable(affected));
+            final List<DefinedClaim> affectedBuildBuffers = plugin.getClaimManager().getClaimsNearby(new BLocatable(affected), true);
 
             if (pistonClaim == null && affectedClaim != null) {
                 event.setCancelled(true);
@@ -163,6 +176,11 @@ public final class ClaimListener implements Listener {
             }
 
             else if (pistonClaim != null && !pistonClaim.getUniqueId().equals(affectedClaim.getUniqueId())) {
+                event.setCancelled(true);
+                return;
+            }
+
+            else if (!affectedBuildBuffers.isEmpty()) {
                 event.setCancelled(true);
                 return;
             }
@@ -176,6 +194,7 @@ public final class ClaimListener implements Listener {
 
         for (Block affected : event.getBlocks()) {
             final DefinedClaim affectedClaim = plugin.getClaimManager().getClaimAt(new BLocatable(affected));
+            final List<DefinedClaim> affectedBuildBuffers = plugin.getClaimManager().getClaimsNearby(new BLocatable(affected), true);
 
             if (pistonClaim == null && affectedClaim != null) {
                 event.setCancelled(true);
@@ -188,6 +207,11 @@ public final class ClaimListener implements Listener {
             }
 
             else if (pistonClaim != null && !pistonClaim.getUniqueId().equals(affectedClaim.getUniqueId())) {
+                event.setCancelled(true);
+                return;
+            }
+
+            else if (!affectedBuildBuffers.isEmpty()) {
                 event.setCancelled(true);
                 return;
             }
@@ -343,8 +367,9 @@ public final class ClaimListener implements Listener {
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
         final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new BLocatable(event.getBlock()));
+        final List<DefinedClaim> withinBuildBuffer = plugin.getClaimManager().getClaimsNearby(new BLocatable(event.getBlock()), true);
 
-        if (inside != null) {
+        if (inside != null || !withinBuildBuffer.isEmpty()) {
             event.setCancelled(true);
         }
     }

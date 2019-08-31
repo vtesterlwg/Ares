@@ -165,7 +165,7 @@ public final class DefinedClaimBuilder {
             }
 
             for (BLocatable perimeter : claim.getPerimeter(64)) {
-                for (DefinedClaim nearby : plugin.getClaimManager().getClaimsNearby(perimeter)) {
+                for (DefinedClaim nearby : plugin.getClaimManager().getClaimsNearby(perimeter, false)) {
                     if (!nearby.getOwnerId().equals(owner.getUniqueId())) {
                         new Scheduler(plugin).sync(() -> promise.failure("Claim is too close to an existing claim")).run();
                         return;
