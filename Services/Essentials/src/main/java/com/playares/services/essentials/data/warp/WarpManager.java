@@ -15,6 +15,8 @@ public final class WarpManager {
     public WarpManager(AresPlugin plugin) {
         this.plugin = plugin;
         this.warps = Sets.newConcurrentHashSet();
+
+        plugin.registerListener(new WarpSignListener(this));
     }
 
     public void load() {
