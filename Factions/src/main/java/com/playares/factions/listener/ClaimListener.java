@@ -27,6 +27,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
@@ -308,6 +309,10 @@ public final class ClaimListener implements Listener {
 
         final LivingEntity entity = (LivingEntity)event.getEntity();
         final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new PLocatable(entity));
+
+        if (entity instanceof Monster) {
+            return;
+        }
 
         if (inside != null) {
             final ServerFaction faction = plugin.getFactionManager().getServerFactionById(inside.getOwnerId());
