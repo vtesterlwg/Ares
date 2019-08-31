@@ -7,6 +7,7 @@ import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.lobby.command.ReloadCommand;
 import com.playares.lobby.command.SpawnCommand;
+import com.playares.lobby.items.LeaveQueueItem;
 import com.playares.lobby.items.ServerSelectorItem;
 import com.playares.lobby.listener.PlayerListener;
 import com.playares.lobby.nameplate.NameplateManager;
@@ -109,6 +110,7 @@ public final class Lobby extends AresPlugin {
             return;
         }
 
+        customItemService.registerNewItem(new LeaveQueueItem(this));
         customItemService.registerNewItem(new ServerSelectorItem(this));
     }
 }

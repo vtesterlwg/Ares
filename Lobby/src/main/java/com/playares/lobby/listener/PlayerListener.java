@@ -4,9 +4,7 @@ import com.playares.commons.bukkit.event.PlayerBigMoveEvent;
 import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.lobby.Lobby;
-import com.playares.lobby.items.ServerSelectorItem;
 import com.playares.lobby.util.LobbyUtils;
-import com.playares.services.customitems.CustomItemService;
 import com.playares.services.ranks.RankService;
 import lombok.Getter;
 import org.bukkit.*;
@@ -43,7 +41,7 @@ public final class PlayerListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final CustomItemService customItemService = (CustomItemService)getPlugin().getService(CustomItemService.class);
+
         final RankService rankService = (RankService)getPlugin().getService(RankService.class);
 
         event.setJoinMessage(null);
@@ -54,12 +52,10 @@ public final class PlayerListener implements Listener {
         player.setWalkSpeed(0.4F);
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
+        player.setGameMode(GameMode.SURVIVAL);
 
         Players.sendTablist(getPlugin().getProtocol(), player, ChatColor.DARK_RED + "" + ChatColor.BOLD + "Ares Network", ChatColor.AQUA + "playares.net");
-
-        if (customItemService != null) {
-            customItemService.getItem(ServerSelectorItem.class).ifPresent(selector -> player.getInventory().setItem(4, selector.getItem()));
-        }
+        LobbyUtils.giveStandardItems(plugin, player);
 
         if (rankService != null && player.hasPermission("lobby.premium")) {
             Bukkit.broadcastMessage(rankService.formatName(player) + ChatColor.YELLOW + " has joined the lobby");

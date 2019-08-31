@@ -6,7 +6,9 @@ import com.playares.commons.bukkit.menu.ClickableItem;
 import com.playares.commons.bukkit.menu.Menu;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.lobby.Lobby;
+import com.playares.lobby.items.LeaveQueueItem;
 import com.playares.lobby.queue.ServerQueue;
+import com.playares.services.customitems.CustomItemService;
 import com.playares.services.deathban.DeathbanService;
 import com.playares.services.deathban.dao.DeathbanDAO;
 import com.playares.services.deathban.data.Deathban;
@@ -36,6 +38,7 @@ public final class SelectorMenu extends Menu {
 
     private void update() {
         final UUID uniqueId = player.getUniqueId();
+        final CustomItemService customItemService = (CustomItemService)plugin.getService(CustomItemService.class);
         final Server factions = lobby.getQueueManager().getServerQueues().keySet().stream().filter(server -> server.getType() != null && server.getType().equals(Server.Type.FACTION)).findFirst().orElse(null);
         final Server development = lobby.getQueueManager().getServerQueues().keySet().stream().filter(server -> server.getType() != null && server.getType().equals(Server.Type.DEV)).findFirst().orElse(null);
         final Server arena = lobby.getQueueManager().getServerQueues().keySet().stream().filter(server -> server.getType() != null && server.getType().equals(Server.Type.ARENA)).findFirst().orElse(null);
@@ -91,6 +94,10 @@ public final class SelectorMenu extends Menu {
                     player.sendMessage("Adding you to the " + factions.getDisplayName() + ChatColor.RESET + " queue...");
                     player.sendMessage(ChatColor.AQUA + "You are now " + ChatColor.YELLOW + "#" + queue.getPosition(player.getUniqueId()) + ChatColor.AQUA + " in queue to join " + factions.getDisplayName());
                     player.closeInventory();
+
+                    if (customItemService != null) {
+                        customItemService.getItem(LeaveQueueItem.class).ifPresent(item -> player.getInventory().setItemInMainHand(item.getItem()));
+                    }
                 }).run();
             }).run()));
         }
@@ -125,6 +132,10 @@ public final class SelectorMenu extends Menu {
                 }
 
                 player.closeInventory();
+
+                if (customItemService != null) {
+                    customItemService.getItem(LeaveQueueItem.class).ifPresent(item -> player.getInventory().setItemInMainHand(item.getItem()));
+                }
 
                 development.send(player);
             }));
@@ -170,6 +181,10 @@ public final class SelectorMenu extends Menu {
                 player.sendMessage("Adding you to the " + arena.getDisplayName() + ChatColor.RESET + " queue...");
                 player.sendMessage(ChatColor.AQUA + "You are now " + ChatColor.YELLOW + "#" + queue.getPosition(player.getUniqueId()) + ChatColor.AQUA + " in queue to join " + arena.getDisplayName());
                 player.closeInventory();
+
+                if (customItemService != null) {
+                    customItemService.getItem(LeaveQueueItem.class).ifPresent(item -> player.getInventory().setItemInMainHand(item.getItem()));
+                }
             }));
         }
     }

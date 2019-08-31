@@ -40,6 +40,8 @@ public final class ServerSelectorItem implements CustomItem {
     }
 
     public Runnable getRightClick(Player who) {
-        return () -> plugin.getSelectorManager().getHandler().openMenu(who);
+        return () -> {
+            plugin.getSelectorManager().getHandler().openMenu(who);
+        };
     }
 }

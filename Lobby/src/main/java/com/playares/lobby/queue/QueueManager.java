@@ -37,4 +37,8 @@ public final class QueueManager {
     public ServerQueue getQueue(Server server) {
         return serverQueues.get(server);
     }
+
+    public ServerQueue getQueue(Player player) {
+        return serverQueues.values().stream().filter(queue -> queue.getPlayer(player.getUniqueId()) != null).findFirst().orElse(null);
+    }
 }
