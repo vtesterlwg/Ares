@@ -63,6 +63,11 @@ public final class EventsManager {
             Logger.warn("Cleared event repository while reloading " + getAddon().getName());
         }
 
+        if (config.get("events") == null) {
+            Logger.warn("No events found");
+            return;
+        }
+
         for (String name : config.getConfigurationSection("events").getKeys(false)) {
             final String path = "events." + name + ".";
             final UUID ownerId = (config.get(path + "owner-id") != null) ? UUID.fromString(config.getString(path + "owner-id")) : null;
