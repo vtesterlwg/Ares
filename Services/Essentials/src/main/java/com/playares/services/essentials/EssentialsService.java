@@ -43,6 +43,7 @@ public final class EssentialsService implements AresService {
         this.vanishManager = new VanishManager();
         this.vanishHandler = new VanishHandler(this);
 
+        essentialsConfig.load();
         kitManager.load();
         warpManager.load();
 
@@ -123,6 +124,7 @@ public final class EssentialsService implements AresService {
 
     @Override
     public void reload() {
+        essentialsConfig.load();
         kitManager.load();
         warpManager.load();
     }
