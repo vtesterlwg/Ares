@@ -77,7 +77,7 @@ public final class ShieldListener implements Listener {
         }
 
         new Scheduler(plugin).async(() -> {
-            final List<DefinedClaim> claims = plugin.getClaimManager().getClaimsNearby(new PLocatable(player), 5);
+            final List<DefinedClaim> claims = plugin.getClaimManager().getClaimsNearby(new PLocatable(player), 10);
 
             // No nearby claims, but existing shield blocks from last update must now be removed
             if (claims.isEmpty() && !profile.getShields().isEmpty()) {
@@ -88,7 +88,7 @@ public final class ShieldListener implements Listener {
             // Player has existing shields
             // Here we are checking if they are out of reach of old shield blocks and hiding them if so
             if (!profile.getShields().isEmpty()) {
-                final Set<Shield> shields = profile.getShields().stream().filter(shield -> shield.getLocation().distance(location) > 5.0).collect(Collectors.toSet());
+                final Set<Shield> shields = profile.getShields().stream().filter(shield -> shield.getLocation().distance(location) > 10.0).collect(Collectors.toSet());
 
                 if (!shields.isEmpty()) {
                     shields.forEach(Shield::hide);
@@ -124,7 +124,7 @@ public final class ShieldListener implements Listener {
 
                             perimeters.addAll(claim.getPerimeter(rounded)
                                     .stream()
-                                    .filter(b -> b.distance(location) <= 5.0)
+                                    .filter(b -> b.distance(location) <= 10.0)
                                     .filter(b ->
                                             b.getBukkit().getType().equals(Material.AIR) ||
                                             b.getBukkit().getType().equals(Material.WATER))
@@ -167,7 +167,7 @@ public final class ShieldListener implements Listener {
 
                             perimeters.addAll(claim.getPerimeter(rounded)
                                     .stream()
-                                    .filter(b -> b.distance(location) <= 5.0)
+                                    .filter(b -> b.distance(location) <= 10.0)
                                     .filter(b -> b.getBukkit().getType().equals(Material.AIR) || b.getBukkit().getType().equals(Material.WATER))
                                     .collect(Collectors.toList()));
                         }
