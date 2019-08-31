@@ -137,19 +137,20 @@ public final class DefinedClaimBuilder {
             return;
         }
 
+        final DefinedClaim claim = new DefinedClaim(plugin, owner, cornerA, cornerB);
+
+        for (BLocatable perimeter : claim.getPerimeter(64)) {
+            final WorldLocation location = plugin.getClaimManager().getWorldLocationManager().getWorldLocation(perimeter);
+
+            if (!location.equals(WorldLocation.OVERWORLD_WILDERNESS) && !(owner instanceof ServerFaction)) {
+                promise.failure("Claims can not be in the WarZone");
+                return;
+            }
+        }
+
         new Scheduler(plugin).async(() -> {
-            final DefinedClaim claim = new DefinedClaim(plugin, owner, cornerA, cornerB);
             final List<DefinedClaim> existingClaims = plugin.getClaimManager().getClaimsByOwner(owner);
             boolean isTouchingExisting = existingClaims.isEmpty() || owner instanceof ServerFaction;
-
-            for (BLocatable perimeter : claim.getPerimeter(64)) {
-                final WorldLocation location = plugin.getClaimManager().getWorldLocationManager().getWorldLocation(perimeter);
-
-                if (!location.equals(WorldLocation.OVERWORLD_WILDERNESS) && !(owner instanceof ServerFaction)) {
-                    new Scheduler(plugin).sync(() -> promise.failure("Claims can not be in the WarZone")).run();
-                    return;
-                }
-            }
 
             if (claim.getLxW()[0] < plugin.getFactionConfig().getClaimMinSize() || claim.getLxW()[1] < plugin.getFactionConfig().getClaimMinSize()) {
                 new Scheduler(plugin).sync(() -> promise.failure("Claim must be at least " + plugin.getFactionConfig().getClaimMinSize() + "x" + plugin.getFactionConfig().getClaimMinSize())).run();
