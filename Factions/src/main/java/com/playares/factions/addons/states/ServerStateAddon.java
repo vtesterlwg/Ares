@@ -10,6 +10,7 @@ import com.playares.factions.addons.spawnpoints.SpawnpointAddon;
 import com.playares.factions.addons.spawnpoints.data.Spawnpoint;
 import com.playares.factions.addons.states.command.ServerStateCommand;
 import com.playares.factions.addons.states.data.ServerState;
+import com.playares.factions.addons.states.listener.EOTWListener;
 import com.playares.factions.claims.dao.ClaimDAO;
 import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.claims.subclaims.dao.SubclaimDAO;
@@ -70,6 +71,7 @@ public final class ServerStateAddon implements Addon {
     @Override
     public void start() {
         getPlugin().registerCommand(new ServerStateCommand(this));
+        getPlugin().registerListener(new EOTWListener(this));
 
         performStateChange(currentState);
     }
@@ -153,7 +155,7 @@ public final class ServerStateAddon implements Addon {
                             setPhase2GracePeriod(false);
 
                             Bukkit.getOnlinePlayers().forEach(player -> {
-                                if (!player.getWorld().equals(spawn.getBukkit().getWorld())) {
+                                if (!player.getWorld().equals(spawn.getBukkit().getWorld()) && !player.hasPermission("factions.serverstates.bypass")) {
                                     player.setHealth(0.0);
                                 }
                             });
