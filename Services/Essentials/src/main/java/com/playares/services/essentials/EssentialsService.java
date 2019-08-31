@@ -43,6 +43,9 @@ public final class EssentialsService implements AresService {
         this.vanishManager = new VanishManager();
         this.vanishHandler = new VanishHandler(this);
 
+        kitManager.load();
+        warpManager.load();
+
         getOwner().getCommandManager().getCommandCompletions().registerAsyncCompletion("potions", c -> {
             final List<String> potions = Lists.newArrayList();
 
