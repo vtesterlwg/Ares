@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
+import com.playares.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.services.humbug.HumbugService;
 import com.playares.services.humbug.features.HumbugModule;
@@ -284,6 +285,33 @@ public final class KitLimits implements HumbugModule, Listener {
                     return;
                 }
             }
+        }
+    }
+
+    @EventHandler
+    public void onLingeringSplash(PlayerLingeringSplashPlayerEvent event) {
+        if (!isEnabled()) {
+            return;
+        }
+
+        final PotionLimit limit = getPotionLimit(event.getCloud().getBasePotionData().getType().getEffectType());
+
+        if (limit == null) {
+            return;
+        }
+
+        if (limit.isDisabled()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!limit.isAmplifiable() && event.getCloud().getBasePotionData().isUpgraded()) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!limit.isExtendable() && event.getCloud().getBasePotionData().isExtended()) {
+            event.setCancelled(true);
         }
     }
 
