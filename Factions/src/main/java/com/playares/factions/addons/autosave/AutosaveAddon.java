@@ -46,6 +46,7 @@ public final class AutosaveAddon implements Addon {
             plugin.getFactionManager().saveFactions(true);
             plugin.getPlayerManager().savePlayers(true);
             plugin.getClaimManager().saveClaims(true);
+            plugin.getSubclaimManager().saveSubclaims(true);
 
             Logger.print("Autosave completed");
         }).repeat(interval * 20L, interval * 20L).run();
