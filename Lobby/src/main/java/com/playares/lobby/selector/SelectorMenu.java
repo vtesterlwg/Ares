@@ -124,7 +124,6 @@ public final class SelectorMenu extends Menu {
                     return;
                 }
 
-                player.sendMessage(ChatColor.RESET + "Now sending you to " + development.getDisplayName() + ChatColor.RESET + "...");
                 player.closeInventory();
 
                 development.send(player);
