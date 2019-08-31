@@ -289,28 +289,18 @@ public final class LoggerAddon implements Addon, Listener {
         final FactionPlayer profile = plugin.getPlayerManager().getPlayer(player.getUniqueId());
         final DeathbanService deathbanService = (DeathbanService)getPlugin().getService(DeathbanService.class);
 
-        if (!isEnabled()) {
-            return;
-        }
+        if (
+                !isEnabled() ||
+                profile == null ||
+                profile.isSafelogging() ||
+                player.hasPermission("factions.mod") ||
+                player.hasPermission("factions.admin") ||
+                !player.getGameMode().equals(GameMode.SURVIVAL) ||
+                player.getHealth() <= 0.0 ||
+                player.isDead()) {
 
-        if (profile == null) {
             return;
-        }
 
-        if (profile.isSafelogging()) {
-            return;
-        }
-
-        if (player.hasPermission("factions.mod") || player.hasPermission("factions.admin")) {
-            return;
-        }
-
-        if (!player.getGameMode().equals(GameMode.SURVIVAL)) {
-            return;
-        }
-
-        if (player.getHealth() <= 0.0 || player.isDead()) {
-            return;
         }
 
         if (profile.getCurrentClaim() != null) {
@@ -492,7 +482,7 @@ public final class LoggerAddon implements Addon, Listener {
                 logger.getBukkitEntity().getChunk().getChunkKey() == chunk.getChunkKey()).findAny().ifPresent(found -> event.setCancelled(true));
     }
 
-    @EventHandler (priority = EventPriority.HIGH)
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void onClassConsume(ConsumeClassItemEvent event) {
         if (!isEnabled()) {
             return;

@@ -96,7 +96,7 @@ public final class ClaimListener implements Listener {
         handlePlayerBlockMods(event.getPlayer(), event.getBlockClicked(), event);
     }
 
-    @EventHandler (priority = EventPriority.HIGHEST)
+    @EventHandler (priority = EventPriority.HIGH)
     public void onConsume(ConsumeClassItemEvent event) {
         final Player player = event.getPlayer();
         final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new PLocatable(player));
