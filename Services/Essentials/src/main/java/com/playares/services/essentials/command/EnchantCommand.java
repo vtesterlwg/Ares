@@ -6,6 +6,7 @@ import co.aikar.commands.annotation.*;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.remap.RemappedEnchantment;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,7 +26,7 @@ public final class EnchantCommand extends BaseCommand {
             return;
         }
 
-        if (hand == null) {
+        if (hand == null || hand.getType().equals(Material.AIR)) {
             player.sendMessage(ChatColor.RED + "You are not holding an item in your main hand");
             return;
         }
