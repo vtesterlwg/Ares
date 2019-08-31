@@ -39,7 +39,6 @@ public final class ClassManager {
         if (!classes.isEmpty()) {
             classes.clear();
             Logger.warn("Cleared classes while reloading " + getService().getName());
-            return;
         }
 
         for (String className : config.getConfigurationSection("classes").getKeys(false)) {
