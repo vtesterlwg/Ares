@@ -54,11 +54,22 @@ public final class PlayerManager {
         this.playerRepository = Sets.newConcurrentHashSet();
 
         this.actionBarUpdated = new Scheduler(plugin).async(() -> playerRepository.forEach(profile -> {
-            List<String> hudElements = null;
+            List<String> hudElements = Lists.newArrayList();
 
+            // Player Timers
+            if (!profile.getTimers().isEmpty()) {
+                for (PlayerTimer timer : profile.getTimers().stream().filter(timer -> !timer.isExpired() && timer.getType().isRender()).collect(Collectors.toList())) {
+                    hudElements.add(timer.getType().getDisplayName() + " " + ChatColor.RED + (timer.getType().isDecimal() ? Time.convertToDecimal(timer.getRemaining()) : Time.convertToHHMMSS(timer.getRemaining())));
+                }
+            }
+
+            // Restarts are not part of the typical HUD elements
+            if (restartService != null && restartService.isInProgress()) {
+                hudElements.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Server Restart" + " " + ChatColor.RED + Time.convertToHHMMSS(restartService.getTimeUntilReboot()));
+            }
+
+            // Event Timers
             if (eventAddon != null && !eventAddon.getManager().getActiveEvents().isEmpty()) {
-                hudElements = Lists.newArrayList();
-
                 for (AresEvent event : eventAddon.getManager().getActiveEvents()) {
                     final StringBuilder eventElement = new StringBuilder();
 
@@ -88,26 +99,7 @@ public final class PlayerManager {
                 }
             }
 
-            // Restarts are not part of the typical HUD elements
-            if (restartService != null && restartService.isInProgress()) {
-                if (hudElements == null) {
-                    hudElements = Lists.newArrayList();
-                }
-
-                hudElements.add(ChatColor.DARK_RED + "" + ChatColor.BOLD + "Server Restart" + " " + ChatColor.RED + Time.convertToHHMMSS(restartService.getTimeUntilReboot()));
-            }
-
-            if (!profile.getTimers().isEmpty()) {
-                for (PlayerTimer timer : profile.getTimers().stream().filter(timer -> !timer.isExpired() && timer.getType().isRender()).collect(Collectors.toList())) {
-                    if (hudElements == null) {
-                        hudElements = Lists.newArrayList();
-                    }
-
-                    hudElements.add(timer.getType().getDisplayName() + " " + ChatColor.RED + (timer.getType().isDecimal() ? Time.convertToDecimal(timer.getRemaining()) : Time.convertToHHMMSS(timer.getRemaining())));
-                }
-            }
-
-            if (hudElements != null && !hudElements.isEmpty()) {
+            if (!hudElements.isEmpty()) {
                 profile.sendActionBar(Joiner.on(ChatColor.RESET + " " + ChatColor.RESET + " ").join(hudElements));
             }
         })).repeat(0L, 1L).run();
