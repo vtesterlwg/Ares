@@ -360,8 +360,9 @@ public final class ClaimListener implements Listener {
 
         for (Block block : event.blockList()) {
             final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new BLocatable(block));
+            final List<DefinedClaim> insideBuildBuffer = plugin.getClaimManager().getClaimsNearby(new BLocatable(block), true);
 
-            if (inside != null) {
+            if (inside != null || !insideBuildBuffer.isEmpty()) {
                 toRemove.add(block);
             }
         }
@@ -372,9 +373,9 @@ public final class ClaimListener implements Listener {
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
         final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new BLocatable(event.getBlock()));
-        final List<DefinedClaim> withinBuildBuffer = plugin.getClaimManager().getClaimsNearby(new BLocatable(event.getBlock()), true);
+        final List<DefinedClaim> insideBuildBuffer = plugin.getClaimManager().getClaimsNearby(new BLocatable(event.getBlock()), true);
 
-        if (inside != null || !withinBuildBuffer.isEmpty()) {
+        if (inside != null || !insideBuildBuffer.isEmpty()) {
             event.setCancelled(true);
         }
     }
