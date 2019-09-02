@@ -1,6 +1,21 @@
-# Database connect URI, use 'mongodb://localhost' for default connection
+# # # # # # # # # # # # # # # # # # # # # # # #
+# |     |  | | | | |  | | | | |  | | | | | |
+# |     |  |          |          |         |
+# | | | |  |          | | | |    | | | | | |
+# |     |  |          |          |       |
+# |     |  | | | | |  |          |        |
+# By Johnzeh (johnsama) # # # # # # # # # # # #
+
+# MongoDB Connect URI
+# Use 'mongodb://localhost' for default connection
 database: 'mongodb://localhost'
 
+# Server Sync Service Configuration
+# Bungee-name: Name set in the bungeecord config.yml file
+# Display-name: Name used for messages, GUIs
+# Description: Works similar to server MOTD in GUIs
+# Type: Server category, supports the following: FACTION, LOBBY, DEV, ARENA, HG, MZ, BUNKERS
+# Premium-allocated-slots: Number used to determine when the queue should only allow premium players in
 server-data:
   bungee-name: 'hcfr'
   display-name: '&6HCFRevival'
@@ -8,13 +23,17 @@ server-data:
   type: 'FACTION'
   premium-allocated-slots: 350
 
-# Autosaves Factions, Players and Claims at a set interval
+# Autosave Addon Configuration
+# Enabling this feature will automatically save all Factions, Claims, Players and Subclaims to database at the provided interval (in seconds)
 autosave:
   enabled: true
   interval: 900
 
-# Server State, Controls how certain aspects of the server should work depending on the state
-# Allowed states: SOTW, NORMAL, EOTWPHASE1, EOTWPHASE2
+# Server State Addon Configuration
+# Allowed States: SOTW, NORMAL, EOTW_PHASE_1, EOTW_PHASE_2
+# EOTW Radius: Final radius of the world-border. Example: 100 is X: 50 Z: 50
+# EOTW Rate: Rate (in seconds) at which the world border should shrink to the EOTW Radius
+# EOTW Phase 2 Grace Period: Time (in seconds) before the Phase 2 Grace Period should end
 server-state:
   current: 'NORMAL'
   eotw:
@@ -22,7 +41,7 @@ server-state:
     rate: 14400
     phase-two-grace-period: 300
 
-# Factions configuration, here's what most of it does:
+# Factions configuration
 # Member-cap: Max members faction can have
 # Reinvites: Re-invites new factions receive upon creation and Palace being captured
 # Home-height-cap: Max Y height home can be set at
@@ -95,30 +114,6 @@ timers:
   faction:
     freeze: 3600
     rally: 10
-
-# Lives configuration
-# If disabled, players will not be able to revive themselves and will be forced to wait out deathbans
-# If a rank is not listed in the Ranks area, they will not receive lives upon logging in to a new map
-lives:
-  enabled: true
-  ranks:
-    Basic: 2
-    Premium: 6
-    Ultra: 10
-    Partner: 10
-
-# Deathban configuration
-# If disabled, players will respawn normally
-# The durations are in seconds
-deathbans:
-  enabled: true
-  durations:
-    sotw:
-      min: 300
-      max: 3600
-    normal:
-      min: 300
-      max: 86400
 
 # Crowbar configuration
 crowbars:

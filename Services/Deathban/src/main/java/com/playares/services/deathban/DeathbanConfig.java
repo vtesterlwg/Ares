@@ -19,6 +19,7 @@ public final class DeathbanConfig {
 
     void loadValues() {
         final YamlConfiguration config = service.getOwner().getConfig("deathbans");
+
         this.deathbanEnforced = config.getBoolean("enforce-deathbans");
         this.normalMaxDeathban = config.getInt("deathban-durations.NORMAL");
         this.sotwMaxDeathban = config.getInt("deathban-durations.SOTW");
