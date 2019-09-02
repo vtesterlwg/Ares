@@ -389,7 +389,7 @@ public final class CombatListener implements Listener {
         if (faction != null) {
             final MemberDeathEvent memberDeathEvent = new MemberDeathEvent(logger.getOwner(), logger.getOwnerUsername(), faction, new PLocatable(living), 1.0, plugin.getFactionConfig().getTimerFreeze());
             Bukkit.getPluginManager().callEvent(memberDeathEvent);
-            faction.setDeathsTilRaidable(faction.getDeathsTilRaidable() - memberDeathEvent.getSubtractedDTR());
+            faction.updateDTR(faction.getDeathsTilRaidable() - memberDeathEvent.getSubtractedDTR());
             faction.addTimer(new DTRFreezeTimer(faction, memberDeathEvent.getFreezeDuration()));
         }
 
@@ -443,7 +443,7 @@ public final class CombatListener implements Listener {
         if (faction != null) {
             final MemberDeathEvent memberDeathEvent = new MemberDeathEvent(player.getUniqueId(), player.getName(), faction, new PLocatable(player), 1.0, plugin.getFactionConfig().getTimerFreeze());
             Bukkit.getPluginManager().callEvent(memberDeathEvent);
-            faction.setDeathsTilRaidable(faction.getDeathsTilRaidable() - memberDeathEvent.getSubtractedDTR());
+            faction.updateDTR(faction.getDeathsTilRaidable() - memberDeathEvent.getSubtractedDTR());
 
             if (serverStateAddon != null && (serverStateAddon.getCurrentState().equals(ServerState.SOTW) || serverStateAddon.getCurrentState().equals(ServerState.NORMAL))) {
                 faction.addTimer(new DTRFreezeTimer(faction, memberDeathEvent.getFreezeDuration()));

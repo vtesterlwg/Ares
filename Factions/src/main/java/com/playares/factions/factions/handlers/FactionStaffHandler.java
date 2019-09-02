@@ -94,7 +94,7 @@ public final class FactionStaffHandler {
             return;
         }
 
-        faction.setDeathsTilRaidable(dtr);
+        faction.updateDTR(dtr);
         faction.sendMessage(ChatColor.GOLD + "Your DTR has been updated to " + ChatColor.YELLOW + String.format("%.2f", dtr));
 
         Logger.print(player.getName() + " updated " + faction.getName() + "'s DTR to " + dtr);

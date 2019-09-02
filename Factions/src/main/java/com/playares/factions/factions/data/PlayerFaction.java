@@ -120,11 +120,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
 
         double newDTR = getDeathsTilRaidable() + 0.01;
 
-        if (newDTR > getMaxDTR()) {
-            newDTR = getMaxDTR();
-        }
-
-        setDeathsTilRaidable(newDTR);
+        updateDTR(newDTR);
 
         if (getDeathsTilRaidable() >= getMaxDTR()) {
             new Scheduler(plugin).sync(() -> sendMessage(ChatColor.GREEN + "Your faction is now at max DTR")).run();
@@ -356,6 +352,22 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         final BossTimer timer = new BossTimer(plugin, text, BarColor.BLUE, BarStyle.SEGMENTED_10, BossTimer.BossTimerDuration.TEN_SECONDS);
         getOnlineMembers().forEach(online -> timer.addPlayer(Bukkit.getPlayer(online.getUniqueId())));
         timer.start();
+    }
+
+    /**
+     * Updates the deaths until raid-able
+     * @param dtr DTR
+     */
+    public void updateDTR(double dtr) {
+        if (dtr < -0.99) {
+            dtr = -0.99;
+        }
+
+        if (dtr > getMaxDTR()) {
+            dtr = getMaxDTR();
+        }
+
+        setDeathsTilRaidable(dtr);
     }
 
     /**
