@@ -41,11 +41,13 @@ import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
 
 import java.util.List;
 
@@ -205,6 +207,86 @@ public final class CombatListener implements Listener {
 
         if (attackerFaction != null && attackerFaction.getMember(attacked.getUniqueId()) != null) {
             attacker.sendMessage(ChatColor.RED + "PvP is disabled between " + ChatColor.RESET + "Faction Members");
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onEntityCombustByEntity(EntityCombustByEntityEvent event) {
+        if (!(event.getCombuster() instanceof Projectile) || !(event.getEntity() instanceof Player)) {
+            return;
+        }
+
+        final Player attacked = (Player)event.getEntity();
+        final Projectile projectile = (Projectile)event.getCombuster();
+        final ProjectileSource source = projectile.getShooter();
+
+        if (!(source instanceof Player)) {
+            return;
+        }
+
+        final Player attacker = (Player)source;
+
+        if (attacker.getUniqueId().equals(attacked.getUniqueId())) {
+            return;
+        }
+
+        final FactionPlayer attackerProfile = plugin.getPlayerManager().getPlayer(attacker.getUniqueId());
+        final FactionPlayer attackedProfile = plugin.getPlayerManager().getPlayer(attacked.getUniqueId());
+
+        if (attackerProfile == null) {
+            Logger.error("Attacker profile could not be found for " + attacker.getName());
+        }
+
+        if (attackedProfile == null) {
+            Logger.error("Attacked profile could not be found for " + attacked.getName());
+        }
+
+        if (attackerProfile == null || attackedProfile == null) {
+            return;
+        }
+
+        if (attackerProfile.hasTimer(PlayerTimer.PlayerTimerType.PROTECTION)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (attackedProfile.hasTimer(PlayerTimer.PlayerTimerType.PROTECTION)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (attackerProfile.getCurrentClaim() != null) {
+            final DefinedClaim claim = attackerProfile.getCurrentClaim();
+            final Faction owner = plugin.getFactionManager().getFactionById(claim.getOwnerId());
+
+            if (owner instanceof ServerFaction) {
+                final ServerFaction sf = (ServerFaction)owner;
+
+                if (sf.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+        }
+
+        if (attackedProfile.getCurrentClaim() != null) {
+            final DefinedClaim claim = attackedProfile.getCurrentClaim();
+            final Faction owner = plugin.getFactionManager().getFactionById(claim.getOwnerId());
+
+            if (owner instanceof ServerFaction) {
+                final ServerFaction sf = (ServerFaction)owner;
+
+                if (sf.getFlag().equals(ServerFaction.FactionFlag.SAFEZONE)) {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
+        }
+
+        final PlayerFaction attackerFaction = plugin.getFactionManager().getFactionByPlayer(attacker.getUniqueId());
+
+        if (attackerFaction != null && attackerFaction.getMember(attacked.getUniqueId()) != null) {
             event.setCancelled(true);
         }
     }
