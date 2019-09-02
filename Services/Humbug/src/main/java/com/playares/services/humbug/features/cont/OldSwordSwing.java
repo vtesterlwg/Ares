@@ -186,6 +186,10 @@ public final class OldSwordSwing implements HumbugModule, Listener {
             return;
         }
 
+        if (!event.getType().equals(PlayerDamagePlayerEvent.DamageType.PHYSICAL)) {
+            return;
+        }
+
         final Player damager = event.getDamager();
         final Player damaged = event.getDamaged();
         final ItemStack hand = damager.getInventory().getItemInMainHand();
