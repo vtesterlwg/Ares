@@ -129,7 +129,7 @@ public final class FactionDisbandHandler {
 
                 if (bukkitMember != null) {
                     pf.unregister(bukkitMember);
-                    bukkitMember.setScoreboard(Bukkit.getScoreboardManager().getMainScoreboard());
+                    bukkitMember.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
                 }
             });
 
@@ -183,6 +183,8 @@ public final class FactionDisbandHandler {
             promise.failure("You must leave " + faction.getName() + "'s claims before leaving the faction");
             return;
         }
+
+        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 
         faction.unregister(player);
         faction.getMembers().remove(faction.getMember(player.getUniqueId()));
@@ -255,9 +257,7 @@ public final class FactionDisbandHandler {
 
             faction.sendMessage(ChatColor.YELLOW + kickedProfile.getUsername() + ChatColor.GOLD + " has been " + ChatColor.RED + "kicked" + ChatColor.GOLD + " from the faction by " + ChatColor.YELLOW + player.getName());
             faction.getMembers().remove(kicked);
-
             Logger.print(player.getName() + " kicked " + kickedProfile.getUsername() + " from " + faction.getName());
-
             promise.success();
         });
     }
