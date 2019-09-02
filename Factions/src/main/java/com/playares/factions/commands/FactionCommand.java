@@ -55,7 +55,7 @@ public final class FactionCommand extends BaseCommand {
         });
     }
 
-    @Subcommand("accept")
+    @Subcommand("accept|join")
     @Description("Accept an invitation")
     @Syntax("<factionName/playerName>")
     public void onAccept(Player player, String name) {
