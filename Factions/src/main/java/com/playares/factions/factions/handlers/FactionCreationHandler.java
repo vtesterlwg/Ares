@@ -7,6 +7,7 @@ import com.playares.factions.factions.data.ServerFaction;
 import com.playares.factions.factions.manager.FactionManager;
 import com.playares.factions.players.data.FactionPlayer;
 import com.playares.services.profiles.ProfileService;
+import com.playares.services.ranks.RankService;
 import lombok.Getter;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -30,6 +31,7 @@ public final class FactionCreationHandler {
      */
     public void createFaction(Player player, String name, SimplePromise promise) {
         final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+        final RankService rankService = (RankService)getManager().getPlugin().getService(RankService.class);
 
         if (!name.matches("^[A-Za-z0-9_.]+$")) {
             promise.failure("Faction names must only contain characters A-Z, 0-9");
@@ -75,6 +77,10 @@ public final class FactionCreationHandler {
 
         manager.getFactionRepository().add(faction);
 
+        if (rankService != null) {
+            Bukkit.broadcastMessage(ChatColor.BLUE + faction.getName() + ChatColor.YELLOW + " has been " + ChatColor.GREEN + "created" + ChatColor.YELLOW + " by " + ChatColor.RESET + rankService.formatName(player));
+        }
+
         Logger.print(player.getName() + " created faction " + name);
 
         promise.success();
@@ -112,8 +118,15 @@ public final class FactionCreationHandler {
             return;
         }
 
+        final RankService rankService = (RankService)getManager().getPlugin().getService(RankService.class);
         final ServerFaction faction = new ServerFaction(manager.getPlugin(), name);
+
         manager.getFactionRepository().add(faction);
+
+        if (rankService != null) {
+            Bukkit.broadcastMessage(ChatColor.BLUE + faction.getName() + ChatColor.YELLOW + " has been " + ChatColor.GREEN + "created" + ChatColor.YELLOW + " by " + ChatColor.RESET + rankService.formatName(player));
+        }
+
         Logger.print(player.getName() + " created server-faction " + faction.getName());
         promise.success();
     }

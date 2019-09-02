@@ -12,6 +12,7 @@ import com.playares.factions.factions.data.PlayerFaction;
 import com.playares.factions.factions.manager.FactionManager;
 import com.playares.factions.players.data.FactionPlayer;
 import com.playares.services.profiles.ProfileService;
+import com.playares.services.ranks.RankService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,6 +34,7 @@ public final class FactionDisbandHandler {
      * @param promise Promise
      */
     public void disband(Player player, SimplePromise promise) {
+        final RankService rankService = (RankService)getManager().getPlugin().getService(RankService.class);
         final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
         final boolean admin = player.hasPermission("factions.admin");
@@ -84,6 +86,11 @@ public final class FactionDisbandHandler {
             new Scheduler(manager.getPlugin()).sync(() -> {
                 faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.RED + " disbanded the faction");
                 profile.setBalance(profile.getBalance() + faction.getBalance());
+
+                if (rankService != null) {
+                    Bukkit.broadcastMessage(ChatColor.BLUE + faction.getName() + ChatColor.YELLOW + " has been " + ChatColor.RED + "disbanded" + ChatColor.YELLOW + " by " + ChatColor.RESET + rankService.formatName(player));
+                }
+
                 Logger.print(player.getName() + " disbanded " + faction.getName());
                 promise.success();
             }).run();
@@ -97,6 +104,7 @@ public final class FactionDisbandHandler {
      * @param promise Promise
      */
     public void disband(Player player, String name, SimplePromise promise) {
+        final RankService rankService = (RankService)getManager().getPlugin().getService(RankService.class);
         final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
         final Faction faction = manager.getFactionByName(name);
 
@@ -143,6 +151,10 @@ public final class FactionDisbandHandler {
             FactionDAO.deleteFaction(manager.getPlugin().getMongo(), faction);
 
             new Scheduler(manager.getPlugin()).sync(() -> {
+                if (rankService != null) {
+                    Bukkit.broadcastMessage(ChatColor.BLUE + faction.getName() + ChatColor.YELLOW + " has been " + ChatColor.RED + "disbanded" + ChatColor.YELLOW + " by " + ChatColor.RESET + rankService.formatName(player));
+                }
+
                 Logger.print(player.getName() + " disbanded " + faction.getName());
                 promise.success();
             }).run();
