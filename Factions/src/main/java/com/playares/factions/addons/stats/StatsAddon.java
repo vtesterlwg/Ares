@@ -2,6 +2,7 @@ package com.playares.factions.addons.stats;
 
 import com.playares.factions.Factions;
 import com.playares.factions.addons.Addon;
+import com.playares.factions.addons.stats.listener.StatisticListener;
 import com.playares.factions.addons.stats.lore.TrackableItemListener;
 import lombok.Getter;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -32,6 +33,7 @@ public final class StatsAddon implements Addon {
     public void start() {
         trackableListener = new TrackableItemListener();
         plugin.registerListener(trackableListener);
+        plugin.registerListener(new StatisticListener(this));
     }
 
     @Override
