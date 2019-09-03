@@ -35,6 +35,7 @@ public final class HumbugService implements AresService {
         registerHumbugModule(new MobStacking(this));
         registerHumbugModule(new KitLimits(this));
         registerHumbugModule(new Knockback(this));
+        registerHumbugModule(new AntiAttributes(this));
 
         modules.forEach(module -> {
             module.loadValues();

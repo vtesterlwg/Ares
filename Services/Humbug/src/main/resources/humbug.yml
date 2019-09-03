@@ -1,3 +1,7 @@
+# Enabling this hides player attributes from mods such as Damage Indicators or Hacked Clients
+anti-attributes:
+    enabled: true
+
 # Enabling Old Potions reverts Health, Strength and Regeneration potions back to pre-1.6 values
 oldpotions:
     enabled: false
