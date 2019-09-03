@@ -45,13 +45,17 @@ public final class AntiAttributes implements HumbugModule {
     public void start() {
         humbug.getOwner().getProtocol().addPacketListener(new PacketAdapter(getHumbug().getOwner(), PacketType.Play.Server.ENTITY_EFFECT) {
             @Override
-            public void onPacketReceiving(PacketEvent event) {
+            public void onPacketSending(PacketEvent event) {
                 if (!isEnabled()) {
                     return;
                 }
 
                 final PacketContainer packet = event.getPacket();
                 final StructureModifier<Integer> ints = packet.getIntegers();
+
+                if (event.getPlayer() == null) {
+                    return;
+                }
 
                 if (event.getPlayer().hasPermission("humbug.bypass")) {
                     return;
@@ -69,7 +73,7 @@ public final class AntiAttributes implements HumbugModule {
         /* HIDES ENTITY METADATA SUCH AS ARMOR */
         humbug.getOwner().getProtocol().addPacketListener(new PacketAdapter(getHumbug().getOwner(), PacketType.Play.Server.ENTITY_METADATA) {
             @Override
-            public void onPacketReceiving(PacketEvent event) {
+            public void onPacketSending(PacketEvent event) {
                 if (!isEnabled()) {
                     return;
                 }
@@ -79,6 +83,10 @@ public final class AntiAttributes implements HumbugModule {
                 final Entity entity = packet.getEntityModifier(event).read(0);
                 final StructureModifier<List<WrappedWatchableObject>> modifier = packet.getWatchableCollectionModifier();
                 final List<WrappedWatchableObject> read = modifier.read(0);
+
+                if (player == null || entity == null) {
+                    return;
+                }
 
                 if (event.getPlayer().hasPermission("humbug.bypass")) {
                     return;
