@@ -1,22 +1,20 @@
 package com.playares.factions.addons.events.event;
 
-import com.playares.factions.addons.events.data.type.koth.KOTHEvent;
+import com.playares.factions.addons.events.data.type.AresEvent;
 import com.playares.factions.factions.data.PlayerFaction;
 import lombok.Getter;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-public final class KOTHTickEvent extends Event {
+public final class EventCaptureEvent extends Event {
     @Getter public static final HandlerList handlerList = new HandlerList();
 
-    @Getter public final KOTHEvent event;
+    @Getter public final AresEvent event;
+    @Getter public final PlayerFaction faction;
 
-    public KOTHTickEvent(KOTHEvent event) {
+    public EventCaptureEvent(AresEvent event, PlayerFaction faction) {
         this.event = event;
-    }
-
-    public PlayerFaction getCapturer() {
-        return event.getSession().getCapturingFaction();
+        this.faction = faction;
     }
 
     @Override
