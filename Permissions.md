@@ -24,6 +24,7 @@ essentials.weather - Change the weather
 essentials.broadcast - Broadcast messages to the server
 essentials.kits - Access kits
 essentials.invsee - View players inventories
+essentials.warp - Warps
 
 punishments.ban - Ban a player
 punishments.tempban - Tempban a player
