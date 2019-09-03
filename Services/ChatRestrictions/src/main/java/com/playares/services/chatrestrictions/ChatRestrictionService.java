@@ -86,7 +86,7 @@ public final class ChatRestrictionService implements AresService, Listener {
             return;
         }
 
-        if (!player.hasPermission("chatrestrict.bypass.cooldown") && recentChatters.contains(player.getUniqueId())) {
+        if (isChatCooldownsEnabled() && !player.hasPermission("chatrestrict.bypass.cooldown") && recentChatters.contains(player.getUniqueId())) {
             player.sendMessage(ChatColor.RED + "Non-premium players can only talk in chat every " + ChatColor.YELLOW + chatCooldown + " seconds" + ChatColor.RED + ". Purchase a rank at " + ChatColor.AQUA +
                     "https://store.playares.com" + ChatColor.RED + " to bypass this restriction");
 
@@ -94,7 +94,7 @@ public final class ChatRestrictionService implements AresService, Listener {
             return;
         }
 
-        if (!player.hasPermission("chatrestrict.bypass.links")) {
+        if (isWhitelistedLinksEnabled() && !player.hasPermission("chatrestrict.bypass.links")) {
             for (String str : split) {
                 if (isBlacklistedLink(str)) {
 
