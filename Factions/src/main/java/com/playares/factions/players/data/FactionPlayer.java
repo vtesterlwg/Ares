@@ -7,6 +7,7 @@ import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.bukkit.location.BLocatable;
 import com.playares.commons.bukkit.util.Players;
 import com.playares.factions.Factions;
+import com.playares.factions.addons.stats.container.PlayerStatisticHolder;
 import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.claims.pillars.ClaimPillar;
 import com.playares.factions.claims.pillars.MapPillar;
@@ -36,8 +37,6 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     @Getter public UUID uniqueId;
     /** Player Username **/
     @Getter @Setter public String username;
-    /** Economy Balance **/
-    @Getter @Setter public double balance;
     /** If true the player should not spawn a Combat Logger **/
     @Getter @Setter public boolean safelogging;
     /** If true the player should be reset upon connecting **/
@@ -52,12 +51,13 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
     @Getter public Set<Pillar> pillars;
     /** Contains all shield blocks being rendered to the player **/
     @Getter public Set<Shield> shields;
+    /** Contains all statistics info for this player **/
+    @Getter public PlayerStatisticHolder statistics;
 
     public FactionPlayer(Factions plugin) {
         this.plugin = plugin;
         this.uniqueId = null;
         this.username = null;
-        this.balance = 0.0;
         this.safelogging = false;
         this.resetOnJoin = false;
         this.faction = null;
@@ -65,13 +65,13 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.shields = Sets.newConcurrentHashSet();
+        this.statistics = new PlayerStatisticHolder(null);
     }
 
     public FactionPlayer(Factions plugin, Player player) {
         this.plugin = plugin;
         this.uniqueId = player.getUniqueId();
         this.username = player.getName();
-        this.balance = 0.0; // TODO: Get from economyconfig
         this.safelogging = false;
         this.resetOnJoin = false;
         this.faction = null;
@@ -79,13 +79,13 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.shields = Sets.newConcurrentHashSet();
+        this.statistics = new PlayerStatisticHolder(player.getUniqueId());
     }
 
     public FactionPlayer(Factions plugin, UUID uniqueId, String username) {
         this.plugin = plugin;
         this.uniqueId = uniqueId;
         this.username = username;
-        this.balance = 0.0;
         this.safelogging = false;
         this.resetOnJoin = false;
         this.faction = null;
@@ -93,6 +93,7 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         this.timers = Sets.newConcurrentHashSet();
         this.pillars = Sets.newHashSet();
         this.shields = Sets.newConcurrentHashSet();
+        this.statistics = new PlayerStatisticHolder(uniqueId);
     }
 
     /**
@@ -351,8 +352,8 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
 
         this.uniqueId = (UUID)document.get("id");
         this.username = document.getString("username");
-        this.balance = document.getDouble("balance");
         this.resetOnJoin = document.getBoolean("reset");
+        this.statistics = new PlayerStatisticHolder(uniqueId).fromDocument(document.get("statistics", Document.class));
         this.faction = null;
 
         // Load timers
@@ -402,8 +403,8 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
         return new Document()
                 .append("id", uniqueId)
                 .append("username", username)
-                .append("balance", balance)
                 .append("reset", resetOnJoin)
-                .append("timers", convertedTimers);
+                .append("timers", convertedTimers)
+                .append("statistics", statistics.toDocument());
     }
 }

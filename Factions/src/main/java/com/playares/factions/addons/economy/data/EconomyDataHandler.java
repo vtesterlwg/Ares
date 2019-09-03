@@ -55,6 +55,10 @@ public final class EconomyDataHandler {
         });
     }
 
+    public void savePlayer(EconomyPlayer player) {
+        new Scheduler(getAddon().getPlugin()).async(() -> EconomyDAO.savePlayer(getAddon().getPlugin().getMongo(), player)).run();
+    }
+
     public void getBalance(UUID uniqueId, Promise<Double> promise) {
         getOrCreatePlayer(uniqueId, economyPlayer -> promise.ready(economyPlayer.getBalance()));
     }

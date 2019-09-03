@@ -2,10 +2,10 @@ package com.playares.factions.factions.handlers;
 
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.logger.Logger;
+import com.playares.factions.addons.economy.EconomyAddon;
 import com.playares.factions.factions.data.PlayerFaction;
 import com.playares.factions.factions.data.ServerFaction;
 import com.playares.factions.factions.manager.FactionManager;
-import com.playares.factions.players.data.FactionPlayer;
 import com.playares.services.profiles.ProfileService;
 import com.playares.services.ranks.RankService;
 import lombok.Getter;
@@ -30,8 +30,8 @@ public final class FactionCreationHandler {
      * @param promise Promise
      */
     public void createFaction(Player player, String name, SimplePromise promise) {
-        final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
         final RankService rankService = (RankService)getManager().getPlugin().getService(RankService.class);
+        final EconomyAddon economyAddon = (EconomyAddon)getManager().getPlugin().getAddonManager().getAddon(EconomyAddon.class);
 
         if (!name.matches("^[A-Za-z0-9_.]+$")) {
             promise.failure("Faction names must only contain characters A-Z, 0-9");
@@ -65,8 +65,13 @@ public final class FactionCreationHandler {
 
         final PlayerFaction faction = new PlayerFaction(manager.getPlugin(), name);
 
-        if (profile != null && profile.getBalance() > 0.0) {
-            faction.setBalance(profile.getBalance());
+        if (economyAddon != null) {
+            economyAddon.getHandler().getOrCreatePlayer(player.getUniqueId(), economyPlayer -> {
+                faction.setBalance(economyPlayer.getBalance());
+                economyPlayer.setBalance(0.0);
+                economyAddon.getHandler().savePlayer(economyPlayer);
+                player.sendMessage(ChatColor.GRAY + "Transferred your player balance to the faction balance");
+            });
         }
 
         faction.addMember(player.getUniqueId(), PlayerFaction.FactionRank.LEADER);

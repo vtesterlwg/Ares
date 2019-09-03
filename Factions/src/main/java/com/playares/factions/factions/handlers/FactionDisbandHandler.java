@@ -4,6 +4,7 @@ import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.location.PLocatable;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Scheduler;
+import com.playares.factions.addons.economy.EconomyAddon;
 import com.playares.factions.claims.dao.ClaimDAO;
 import com.playares.factions.claims.data.DefinedClaim;
 import com.playares.factions.factions.dao.FactionDAO;
@@ -35,6 +36,7 @@ public final class FactionDisbandHandler {
      */
     public void disband(Player player, SimplePromise promise) {
         final RankService rankService = (RankService)getManager().getPlugin().getService(RankService.class);
+        final EconomyAddon economyAddon = (EconomyAddon)getManager().getPlugin().getAddonManager().getAddon(EconomyAddon.class);
         final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
         final PlayerFaction faction = manager.getFactionByPlayer(player.getUniqueId());
         final boolean admin = player.hasPermission("factions.admin");
@@ -85,7 +87,14 @@ public final class FactionDisbandHandler {
 
             new Scheduler(manager.getPlugin()).sync(() -> {
                 faction.sendMessage(ChatColor.DARK_GREEN + player.getName() + ChatColor.RED + " disbanded the faction");
-                profile.setBalance(profile.getBalance() + faction.getBalance());
+
+                if (economyAddon != null) {
+                    economyAddon.getHandler().getOrCreatePlayer(profile.getUniqueId(), economyPlayer -> {
+                        economyPlayer.add(faction.getBalance());
+                        player.sendMessage(ChatColor.GRAY + "Faction balance has been transferred back to your player balance");
+                        economyAddon.getHandler().savePlayer(economyPlayer);
+                    });
+                }
 
                 if (rankService != null) {
                     Bukkit.broadcastMessage(ChatColor.BLUE + faction.getName() + ChatColor.YELLOW + " has been " + ChatColor.RED + "disbanded" + ChatColor.YELLOW + " by " + ChatColor.RESET + rankService.formatName(player));
@@ -105,6 +114,7 @@ public final class FactionDisbandHandler {
      */
     public void disband(Player player, String name, SimplePromise promise) {
         final RankService rankService = (RankService)getManager().getPlugin().getService(RankService.class);
+        final EconomyAddon economyAddon = (EconomyAddon)getManager().getPlugin().getAddonManager().getAddon(EconomyAddon.class);
         final FactionPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
         final Faction faction = manager.getFactionByName(name);
 
@@ -125,7 +135,14 @@ public final class FactionDisbandHandler {
             final PlayerFaction pf = (PlayerFaction)faction;
 
             claims.forEach(claim -> pf.setBalance(pf.getBalance() + claim.getValue()));
-            profile.setBalance(profile.getBalance() + pf.getBalance());
+
+            if (economyAddon != null) {
+                economyAddon.getHandler().getOrCreatePlayer(player.getUniqueId(), economyPlayer -> {
+                    economyPlayer.add(pf.getBalance());
+                    player.sendMessage(ChatColor.GRAY + "Faction balance has been transferred back to your player balance");
+                    economyAddon.getHandler().savePlayer(economyPlayer);
+                });
+            }
 
             pf.getOnlineMembers().forEach(member -> {
                 final Player bukkitMember = Bukkit.getPlayer(member.getUniqueId());
