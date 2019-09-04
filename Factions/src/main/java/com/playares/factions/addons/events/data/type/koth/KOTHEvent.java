@@ -9,6 +9,7 @@ import com.playares.factions.addons.events.data.region.CaptureRegion;
 import com.playares.factions.addons.events.data.schedule.EventSchedule;
 import com.playares.factions.addons.events.data.session.KOTHSession;
 import com.playares.factions.addons.events.data.type.AresEvent;
+import com.playares.factions.addons.events.event.EventCaptureEvent;
 import com.playares.factions.factions.data.PlayerFaction;
 import lombok.Getter;
 import lombok.Setter;
@@ -92,5 +93,8 @@ public class KOTHEvent implements AresEvent {
         });
 
         getAddon().getLootManager().fillCaptureChest(this);
+
+        final EventCaptureEvent captureEvent = new EventCaptureEvent(this, faction);
+        Bukkit.getPluginManager().callEvent(captureEvent);
     }
 }
