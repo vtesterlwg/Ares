@@ -109,6 +109,7 @@ public final class AntiGrief implements HumbugModule, Listener {
         }
 
         player.sendMessage(ChatColor.RED + "Spawners can not be broken");
+        event.setCancelled(true);
     }
 
     @EventHandler (priority = EventPriority.HIGHEST)
