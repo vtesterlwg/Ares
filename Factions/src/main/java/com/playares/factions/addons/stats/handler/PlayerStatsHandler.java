@@ -88,6 +88,7 @@ public final class PlayerStatsHandler {
 
         final ItemStack dragonIcon = new ItemBuilder()
                 .setMaterial(Material.SKULL_ITEM)
+                .setName(ChatColor.LIGHT_PURPLE + "Slain Bosses")
                 .setData((short)5)
                 .addLore(dragonLore)
                 .build();
