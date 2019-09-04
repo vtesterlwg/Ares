@@ -49,7 +49,7 @@ public final class PlayerStatsHandler {
         oresLore.add(ChatColor.BLUE + "Lapis" + ChatColor.RESET + ": " + profile.getStatistics().getMinedLapis());
         oresLore.add(ChatColor.GOLD + "Gold" + ChatColor.RESET + ": " + profile.getStatistics().getMinedGold());
         oresLore.add(ChatColor.AQUA + "Diamond" + ChatColor.RESET + ": " + profile.getStatistics().getMinedDiamond());
-        oresLore.add(ChatColor.GREEN + "Emerald" + ChatColor.RESET + ": " + profile.getStatistics().getMinedDiamond());
+        oresLore.add(ChatColor.GREEN + "Emerald" + ChatColor.RESET + ": " + profile.getStatistics().getMinedEmerald());
 
         final double killDeathRatio = (profile.getStatistics().getDeaths() > 0) ? (double)profile.getStatistics().getKills() / (double)profile.getStatistics().getDeaths() : profile.getStatistics().getKills();
         combatLore.add(ChatColor.DARK_RED + "Kills" + ChatColor.RESET + ": " + profile.getStatistics().getKills());

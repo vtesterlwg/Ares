@@ -74,7 +74,8 @@ public final class StatisticListener implements Listener {
             return;
         }
 
-        if (!block.getType().equals(Material.COAL_ORE) && !block.getType().equals(Material.IRON_ORE) && !block.getType().equals(Material.REDSTONE_ORE)
+        if (
+                !block.getType().equals(Material.COAL_ORE) && !block.getType().equals(Material.IRON_ORE) && !block.getType().equals(Material.REDSTONE_ORE)
                 && !block.getType().equals(Material.LAPIS_ORE) && !block.getType().equals(Material.GOLD_ORE) && !block.getType().equals(Material.DIAMOND_ORE)
                 && !block.getType().equals(Material.EMERALD_ORE)) {
 
