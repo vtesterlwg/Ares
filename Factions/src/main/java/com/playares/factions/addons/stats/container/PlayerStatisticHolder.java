@@ -14,6 +14,7 @@ public final class PlayerStatisticHolder implements MongoDocument<PlayerStatisti
     @Getter @Setter public int deaths;
     @Getter @Setter public int bardTotalAffected;
     @Getter @Setter public double archerLongestShot;
+    @Getter @Setter public int rogueBackstabs;
     @Getter @Setter public int kothCaptures;
     @Getter @Setter public int palaceCaptures;
     @Getter @Setter public int minedCoal;
@@ -33,6 +34,7 @@ public final class PlayerStatisticHolder implements MongoDocument<PlayerStatisti
         this.deaths = 0;
         this.bardTotalAffected = 0;
         this.archerLongestShot = 0.0;
+        this.rogueBackstabs = 0;
         this.kothCaptures = 0;
         this.palaceCaptures = 0;
         this.minedCoal = 0;
@@ -57,6 +59,10 @@ public final class PlayerStatisticHolder implements MongoDocument<PlayerStatisti
 
     public void addBardTotalAffected(int amt) {
         setBardTotalAffected(bardTotalAffected + amt);
+    }
+
+    public void addRogueBackstab() {
+        setRogueBackstabs(rogueBackstabs + 1);
     }
 
     public void addKothCapture() {
@@ -109,20 +115,21 @@ public final class PlayerStatisticHolder implements MongoDocument<PlayerStatisti
 
     @Override
     public PlayerStatisticHolder fromDocument(Document document) {
-        this.kills = document.getInteger("kills");
-        this.deaths = document.getInteger("deaths");
-        this.bardTotalAffected = document.getInteger("bard_total_affected");
+        this.kills = document.getInteger("kills", 0);
+        this.deaths = document.getInteger("deaths", 0);
+        this.bardTotalAffected = document.getInteger("bard_total_affected", 0);
         this.archerLongestShot = document.getDouble("archer_longest_shot");
-        this.kothCaptures = document.getInteger("koth_captures");
-        this.palaceCaptures = document.getInteger("palace_captures");
-        this.minedCoal = document.getInteger("mined_coal");
-        this.minedIron = document.getInteger("mined_iron");
-        this.minedRedstone = document.getInteger("mined_redstone");
-        this.minedLapis = document.getInteger("mined_lapis");
-        this.minedGold = document.getInteger("mined_gold");
-        this.minedDiamond = document.getInteger("mined_diamond");
-        this.minedEmerald = document.getInteger("mined_emerald");
-        this.slainDragons = document.getInteger("slain_dragons");
+        this.rogueBackstabs = document.getInteger("rogue_backstabs", 0);
+        this.kothCaptures = document.getInteger("koth_captures", 0);
+        this.palaceCaptures = document.getInteger("palace_captures", 0);
+        this.minedCoal = document.getInteger("mined_coal", 0);
+        this.minedIron = document.getInteger("mined_iron", 0);
+        this.minedRedstone = document.getInteger("mined_redstone", 0);
+        this.minedLapis = document.getInteger("mined_lapis", 0);
+        this.minedGold = document.getInteger("mined_gold", 0);
+        this.minedDiamond = document.getInteger("mined_diamond", 0);
+        this.minedEmerald = document.getInteger("mined_emerald", 0);
+        this.slainDragons = document.getInteger("slain_dragons", 0);
         this.timePlayed = document.getLong("time_played");
 
         return this;
@@ -136,6 +143,7 @@ public final class PlayerStatisticHolder implements MongoDocument<PlayerStatisti
                 .append("deaths", deaths)
                 .append("bard_total_affected", bardTotalAffected)
                 .append("archer_longest_shot", archerLongestShot)
+                .append("rogue_backstabs", rogueBackstabs)
                 .append("koth_captures", kothCaptures)
                 .append("palace_captures", palaceCaptures)
                 .append("mined_coal", minedCoal)

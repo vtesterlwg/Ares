@@ -1,6 +1,7 @@
 package com.playares.factions.addons.stats.listener;
 
 import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
+import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.addons.events.data.type.AresEvent;
 import com.playares.factions.addons.events.data.type.koth.KOTHEvent;
 import com.playares.factions.addons.events.data.type.koth.PalaceEvent;
@@ -14,11 +15,15 @@ import com.playares.services.playerclasses.data.ClassConsumable;
 import com.playares.services.playerclasses.data.cont.ArcherClass;
 import com.playares.services.playerclasses.data.cont.BardClass;
 import com.playares.services.playerclasses.event.ConsumeClassItemEvent;
+import com.playares.services.playerclasses.event.RogueBackstabEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -29,6 +34,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.ItemStack;
 
 @AllArgsConstructor
 public final class StatisticListener implements Listener {
@@ -56,7 +62,51 @@ public final class StatisticListener implements Listener {
      */
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
+        final Player player = event.getPlayer();
+        final Block block = event.getBlock();
+        final ItemStack hand = player.getInventory().getItemInMainHand();
 
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (hand == null || block == null) {
+            return;
+        }
+
+        if (!block.getType().equals(Material.COAL_ORE) && !block.getType().equals(Material.IRON_ORE) && !block.getType().equals(Material.REDSTONE_ORE)
+                && !block.getType().equals(Material.LAPIS_ORE) && !block.getType().equals(Material.GOLD_ORE) && !block.getType().equals(Material.DIAMOND_ORE)
+                && !block.getType().equals(Material.EMERALD_ORE)) {
+
+            return;
+
+        }
+
+        if (hand.containsEnchantment(Enchantment.SILK_TOUCH) && !(block.getType().equals(Material.IRON_ORE) || block.getType().equals(Material.GOLD_ORE))) {
+            return;
+        }
+
+        final FactionPlayer profile = getAddon().getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            return;
+        }
+
+        if (block.getType().equals(Material.COAL_ORE)) {
+            profile.getStatistics().addMinedCoal(block.getDrops(hand).size());
+        } else if (block.getType().equals(Material.IRON_ORE)) {
+            profile.getStatistics().addMinedIron();
+        } else if (block.getType().equals(Material.REDSTONE_ORE)) {
+            profile.getStatistics().addMinedRedstone(block.getDrops(hand).size());
+        } else if (block.getType().equals(Material.LAPIS_ORE)) {
+            profile.getStatistics().addMinedLapis(block.getDrops(hand).size());
+        } else if (block.getType().equals(Material.GOLD_ORE)) {
+            profile.getStatistics().addMinedGold();
+        } else if (block.getType().equals(Material.DIAMOND_ORE)) {
+            profile.getStatistics().addMinedDiamond(block.getDrops(hand).size());
+        } else if (block.getType().equals(Material.EMERALD_ORE)) {
+            profile.getStatistics().addMinedEmerald(block.getDrops(hand).size());
+        }
     }
 
     /**
@@ -211,5 +261,22 @@ public final class StatisticListener implements Listener {
             player.sendMessage(ChatColor.BLUE + "" + ChatColor.BOLD + "New Record!" + ChatColor.RESET + " "
             + ChatColor.GRAY + "Your new record for longest Archer shot is " + ChatColor.AQUA + String.format("%.2f", distance) + ChatColor.GRAY + " blocks!");
         }
+    }
+
+    @EventHandler (priority = EventPriority.MONITOR)
+    public void onRogueBackstab(RogueBackstabEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final FactionPlayer profile = getAddon().getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (profile == null) {
+            Logger.warn("Failed to obtain " + player.getName() + "'s Faction Player while adding Rogue Backstab Statistic");
+            return;
+        }
+
+        profile.getStatistics().addRogueBackstab();
     }
 }

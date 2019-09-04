@@ -61,7 +61,7 @@ public final class TrackableItemListener implements Listener {
             return;
         }
 
-        if (hand.containsEnchantment(Enchantment.SILK_TOUCH)) {
+        if (hand.containsEnchantment(Enchantment.SILK_TOUCH) && !(block.getType().equals(Material.IRON_ORE) || block.getType().equals(Material.GOLD_ORE))) {
             return;
         }
 
