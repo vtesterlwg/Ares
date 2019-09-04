@@ -342,7 +342,17 @@ public final class FactionPlayer implements MongoDocument<FactionPlayer> {
             return null;
         }
 
-        return shields.stream().filter(shield -> shield.getLocation().distance(location) < 1.0).findFirst().orElse(null);
+        return shields
+                .stream()
+                .filter(shield ->
+
+                        shield.getLocation().getX() == location.getX() &&
+                        shield.getLocation().getY() == location.getY() &&
+                        shield.getLocation().getZ() == location.getZ() &&
+                        shield.getLocation().getWorldName().equals(location.getWorldName()))
+
+                .findFirst()
+                .orElse(null);
     }
 
     @SuppressWarnings("unchecked")
