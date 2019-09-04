@@ -229,8 +229,14 @@ public final class ClassListener implements Listener {
 
         final Player attacker = event.getDamager();
         final Player attacked = event.getDamaged();
-        final Vector attackerDirection = event.getDamager().getLocation().getDirection();
-        final Vector attackedDirection = event.getDamaged().getLocation().getDirection();
+        final Location attackerLocation = attacker.getLocation();
+        final Location attackedLocation = attacked.getLocation();
+
+        attackerLocation.setPitch(0F);
+        attackedLocation.setPitch(0F);
+
+        final Vector attackerDirection = attackerLocation.getDirection();
+        final Vector attackedDirection = attackedLocation.getDirection();
         final double dot = attackerDirection.dot(attackedDirection);
         final UUID attackerUUID = attacker.getUniqueId();
 
