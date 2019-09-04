@@ -510,10 +510,13 @@ public final class CombatListener implements Listener {
         }
 
         final Player player = event.getEntity();
-        final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(player.getUniqueId());
         final Player killer = player.getKiller();
+        final FactionPlayer playerProfile = getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+        final FactionPlayer killerProfile = (killer != null) ? getPlugin().getPlayerManager().getPlayer(killer.getUniqueId()) : null;
+        final PlayerFaction faction = plugin.getFactionManager().getFactionByPlayer(player.getUniqueId());
         final EntityDamageEvent.DamageCause reason = player.getLastDamageCause().getCause();
         final String rip = ChatColor.RED + "RIP: " + ChatColor.RESET;
+        final String playerName = (playerProfile != null) ? player.getName() + ChatColor.DARK_RED + "[" + ChatColor.YELLOW + playerProfile.getStatistics().getKills() + ChatColor.DARK_RED + "]" + ChatColor.RESET : player.getName();
         final DeathbanService deathbanService = (DeathbanService)getPlugin().getService(DeathbanService.class);
         final ServerStateAddon serverStateAddon = (ServerStateAddon)getPlugin().getAddonManager().getAddon(ServerStateAddon.class);
 
@@ -541,9 +544,10 @@ public final class CombatListener implements Listener {
 
             if (fallDistance <= 1.0) {
                 if (killer != null) {
-                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " slain by " + ChatColor.GOLD + killer.getName());
+                    final String killerName = (killerProfile != null) ? killer.getName() + ChatColor.DARK_RED + "[" + ChatColor.YELLOW + killerProfile.getStatistics().getKills() + ChatColor.DARK_RED + "]" + ChatColor.RESET : killer.getName();
+                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " slain by " + ChatColor.GOLD + killerName);
                 } else {
-                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " died");
+                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " died");
                 }
 
                 return;
@@ -561,9 +565,7 @@ public final class CombatListener implements Listener {
                 if (damager != null) {
                     if (damager instanceof LivingEntity) {
                         final LivingEntity entityKiller = (LivingEntity)damager;
-
-                        Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " slain by a " + ChatColor.GOLD + WordUtils.capitalize(entityKiller.getType().name().toLowerCase().replace("_", " ")));
-
+                        Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " slain by a " + ChatColor.GOLD + WordUtils.capitalize(entityKiller.getType().name().toLowerCase().replace("_", " ")));
                         return;
                     }
 
@@ -574,7 +576,7 @@ public final class CombatListener implements Listener {
                             final LivingEntity entityKiller = (LivingEntity)projectile.getShooter();
                             final String distance = String.format("%.2f", player.getLocation().distance(entityKiller.getLocation()));
 
-                            Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " was shot and killed by a " +
+                            Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " was shot and killed by a " +
                                     ChatColor.GOLD + WordUtils.capitalize(entityKiller.getType().name().toLowerCase().replace("_", " ")) +
                                     ChatColor.RED + " from a distance of " + ChatColor.BLUE + distance + " blocks");
 
@@ -586,6 +588,7 @@ public final class CombatListener implements Listener {
         }
 
         if (killer != null) {
+            final String killerName = (killerProfile != null) ? killer.getName() + ChatColor.DARK_RED + "[" + ChatColor.YELLOW + killerProfile.getStatistics().getKills() + ChatColor.DARK_RED + "]" + ChatColor.RESET : killer.getName();
             final String distance = String.format("%.2f", player.getLocation().distance(killer.getLocation()));
             final StringBuilder usingBuilder = new StringBuilder();
 
@@ -606,7 +609,7 @@ public final class CombatListener implements Listener {
                 case DRAGON_BREATH:
                 case MELTING:
                 case HOT_FLOOR: {
-                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " burned to death thanks to " + ChatColor.GOLD + killer.getName());
+                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " burned to death thanks to " + ChatColor.GOLD + killerName);
                     break;
                 }
                 case MAGIC:
@@ -615,26 +618,26 @@ public final class CombatListener implements Listener {
                 case POISON:
                 case LIGHTNING:
                 case THORNS: {
-                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " died by magic thanks to " + ChatColor.GOLD + killer.getName());
+                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " died by magic thanks to " + ChatColor.GOLD + killerName);
                     break;
                 }
                 case CRAMMING:
                 case DROWNING:
                 case SUFFOCATION: {
-                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " ran out of air thanks to " + ChatColor.GOLD + killer.getName()); break;
+                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " ran out of air thanks to " + ChatColor.GOLD + killerName); break;
                 }
                 case ENTITY_EXPLOSION:
                 case BLOCK_EXPLOSION: {
-                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " blew up thanks to " + ChatColor.GOLD + killer.getName());
+                    Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " blew up thanks to " + ChatColor.GOLD + killerName);
                     break;
                 }
-                case PROJECTILE: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " was shot and killed by " + ChatColor.GOLD + killer.getName() + ChatColor.RED + " from a distance of " + ChatColor.BLUE + distance + " blocks"); break;
-                case FALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " fell " + ChatColor.BLUE + Math.round(player.getFallDistance()) + " blocks" + ChatColor.RED + " to their death thanks to " + ChatColor.GOLD + killer.getName()); break;
-                case VOID: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + " slipped and fell in to the void thanks to " + ChatColor.GOLD + killer.getName()); break;
-                case FLY_INTO_WALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " hit a wall going too fast thanks to " + ChatColor.GOLD + killer.getName()); break;
-                case WITHER: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " withered away thanks to " + ChatColor.GOLD + killer.getName()); break;
-                case STARVATION: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " starved to death thanks to " + ChatColor.GOLD + killer.getName()); break;
-                default: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " slain by " + ChatColor.GOLD + killer.getName() + using);
+                case PROJECTILE: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " was shot and killed by " + ChatColor.GOLD + killerName + ChatColor.RED + " from a distance of " + ChatColor.BLUE + distance + " blocks"); break;
+                case FALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " fell " + ChatColor.BLUE + Math.round(player.getFallDistance()) + " blocks" + ChatColor.RED + " to their death thanks to " + ChatColor.GOLD + killerName); break;
+                case VOID: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + " slipped and fell in to the void thanks to " + ChatColor.GOLD + killerName); break;
+                case FLY_INTO_WALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " hit a wall going too fast thanks to " + ChatColor.GOLD + killerName); break;
+                case WITHER: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " withered away thanks to " + ChatColor.GOLD + killerName); break;
+                case STARVATION: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " starved to death thanks to " + ChatColor.GOLD + killerName); break;
+                default: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " slain by " + ChatColor.GOLD + killerName + using);
             }
 
             return;
@@ -647,18 +650,18 @@ public final class CombatListener implements Listener {
             case FIRE:
             case DRAGON_BREATH:
             case FIRE_TICK: {
-                Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " burned to death");
+                Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " burned to death");
                 break;
             }
             case BLOCK_EXPLOSION:
             case ENTITY_EXPLOSION: {
-                Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " blew up");
+                Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " blew up");
                 break;
             }
             case SUFFOCATION:
             case DROWNING:
             case CRAMMING: {
-                Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " ran out of air");
+                Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " ran out of air");
                 break;
             }
             case POISON:
@@ -666,18 +669,18 @@ public final class CombatListener implements Listener {
             case THORNS:
             case CUSTOM:
             case MAGIC: {
-                Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " died by magic");
+                Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " died by magic");
                 break;
             }
-            case FALLING_BLOCK: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " died from a heavy block falling on their head"); break;
-            case STARVATION: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " starved to death"); break;
-            case WITHER: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " withered away"); break;
-            case FLY_INTO_WALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " hit a wall going too fast"); break;
-            case VOID: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " slipped and fell in to the void"); break;
-            case FALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " fell " + ChatColor.BLUE + Math.round(player.getFallDistance()) + " blocks" + ChatColor.RED + " to their death"); break;
-            case CONTACT: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " was too close to a cactus"); break;
-            case LIGHTNING: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " was struck by lightning"); break;
-            default: Bukkit.broadcastMessage(rip + ChatColor.GOLD + player.getName() + ChatColor.RED + " died");
+            case FALLING_BLOCK: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " died from a heavy block falling on their head"); break;
+            case STARVATION: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " starved to death"); break;
+            case WITHER: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " withered away"); break;
+            case FLY_INTO_WALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " hit a wall going too fast"); break;
+            case VOID: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " slipped and fell in to the void"); break;
+            case FALL: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " fell " + ChatColor.BLUE + Math.round(player.getFallDistance()) + " blocks" + ChatColor.RED + " to their death"); break;
+            case CONTACT: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " was too close to a cactus"); break;
+            case LIGHTNING: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " was struck by lightning"); break;
+            default: Bukkit.broadcastMessage(rip + ChatColor.GOLD + playerName + ChatColor.RED + " died");
         }
     }
 }
