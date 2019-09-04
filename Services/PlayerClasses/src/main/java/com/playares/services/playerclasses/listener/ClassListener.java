@@ -3,15 +3,15 @@ package com.playares.services.playerclasses.listener;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.google.common.collect.Sets;
 import com.playares.commons.base.util.Time;
+import com.playares.commons.bukkit.event.PlayerDamagePlayerEvent;
+import com.playares.commons.bukkit.util.Players;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.services.playerclasses.PlayerClassService;
 import com.playares.services.playerclasses.data.Class;
 import com.playares.services.playerclasses.data.ClassConsumable;
 import com.playares.services.playerclasses.data.cont.ArcherClass;
-import com.playares.services.playerclasses.event.ConsumeClassItemEvent;
-import com.playares.services.playerclasses.event.PlayerClassDeactivateEvent;
-import com.playares.services.playerclasses.event.PlayerClassReadyEvent;
-import com.playares.services.playerclasses.event.PlayerClassUnreadyEvent;
+import com.playares.services.playerclasses.data.cont.RogueClass;
+import com.playares.services.playerclasses.event.*;
 import lombok.Getter;
 import org.apache.commons.lang.WordUtils;
 import org.bukkit.*;
@@ -24,6 +24,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import java.util.Set;
 import java.util.UUID;
@@ -199,5 +201,72 @@ public final class ClassListener implements Listener {
         }
 
         consumable.consume(player, event.getHand());
+    }
+
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void onPlayerDamagePlayer(PlayerDamagePlayerEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        final Player attacker = event.getDamager();
+        final Player attacked = event.getDamaged();
+        final Vector attackerDirection = event.getDamager().getLocation().getDirection();
+        final Vector attackedDirection = event.getDamaged().getLocation().getDirection();
+        final double dot = attackerDirection.dot(attackedDirection);
+        final UUID attackerUUID = attacker.getUniqueId();
+
+        if (attacker.getInventory().getItemInMainHand() == null || !attacker.getInventory().getItemInMainHand().getType().equals(Material.GOLD_SWORD)) {
+            return;
+        }
+
+        final Class playerClass = getService().getClassManager().getCurrentClass(attacker);
+
+        if (!(playerClass instanceof RogueClass)) {
+            return;
+        }
+
+        final RogueClass rogue = (RogueClass)playerClass;
+
+        if (rogue.hasBackstabCooldown(attacker)) {
+            final long timeUntilNextAttack = (rogue.getBackstabCooldowns().getOrDefault(attacker.getUniqueId(), 0L) - Time.now());
+            attacker.sendMessage(ChatColor.RED + "Backstab is locked for " + ChatColor.RED + "" + ChatColor.BOLD + Time.convertToDecimal(timeUntilNextAttack) + ChatColor.RED + "s");
+            return;
+        }
+
+        if (dot >= 0.825 && dot <= 1.0) {
+            final RogueBackstabEvent backstabEvent = new RogueBackstabEvent(attacker, attacked);
+            Bukkit.getPluginManager().callEvent(backstabEvent);
+
+            if (backstabEvent.isCancelled()) {
+                return;
+            }
+
+            final double newHealth = ((attacked.getHealth() - 2.0) > 0.0) ? attacked.getHealth() - 2.0 : 0.0;
+            attacked.setHealth(newHealth);
+            attacked.sendMessage(ChatColor.RED + "You have been " + ChatColor.DARK_RED + "" + ChatColor.BOLD + "BACKSTABBED!");
+
+            attacker.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+            Players.playSound(attacker, Sound.ENTITY_ITEM_BREAK);
+            attacked.getWorld().spawnParticle(Particle.HEART, attacked.getLocation().add(0, 1, 0), 4, 0.5, 0.5, 0.5, 0.5);
+
+            if (!attacked.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                attacker.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.RED + "backstabbed" + ChatColor.GOLD + " " + attacked.getName());
+            } else {
+                attacker.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.RED + "backstabbed" + ChatColor.GRAY + " ? ? ?");
+            }
+
+            final long nextBackstab = Time.now() + (rogue.getBackstabCooldown() * 1000L);
+            rogue.getBackstabCooldowns().put(attackerUUID, nextBackstab);
+
+            new Scheduler(getService().getOwner()).sync(() -> {
+                rogue.getBackstabCooldowns().remove(attackerUUID);
+
+                if (Bukkit.getPlayer(attackerUUID) != null) {
+                    Bukkit.getPlayer(attackerUUID).sendMessage(ChatColor.GREEN + rogue.getName() + " backstab is ready");
+                    Players.playSound(Bukkit.getPlayer(attackerUUID), Sound.BLOCK_NOTE_CHIME);
+                }
+            }).delay(rogue.getBackstabCooldown() * 20).run();
+        }
     }
 }

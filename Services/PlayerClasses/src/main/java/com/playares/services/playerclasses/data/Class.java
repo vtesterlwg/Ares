@@ -32,6 +32,11 @@ public abstract class Class {
     public abstract Material getRequiredBoots();
 
     public void activate(Player player) {
+        if (!hasArmorRequirements(player)) {
+            player.sendMessage(ChatColor.RED + "You no longer meet the armor requirements for " + getName());
+            return;
+        }
+
         player.sendMessage(ChatColor.GOLD + "Class Activated" + ChatColor.YELLOW + ": " + ChatColor.BLUE + getName());
         player.sendMessage(ChatColor.GRAY + getDescription());
 

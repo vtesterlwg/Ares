@@ -15,6 +15,7 @@ classes:
         application: 'INDIVIDUAL'
   rogue:
     warmup: 30
+    backstab-cooldown: 2
     passive:
       SPEED: 4
       JUMP: 2

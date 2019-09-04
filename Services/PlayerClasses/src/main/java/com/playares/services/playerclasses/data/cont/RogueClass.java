@@ -7,15 +7,27 @@ import com.playares.services.playerclasses.data.Class;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
+
+import java.util.Map;
+import java.util.UUID;
 
 public final class RogueClass extends Class {
     @Getter @Setter public int warmup;
+    @Getter @Setter public int backstabCooldown;
+    @Getter public final Map<UUID, Long> backstabCooldowns;
 
-    public RogueClass(int warmup) {
+    public RogueClass(int warmup, int backstabCooldown) {
         this.warmup = warmup;
         this.activePlayers = Sets.newConcurrentHashSet();
         this.passiveEffects = Maps.newHashMap();
         this.consumables = Lists.newArrayList();
+        this.backstabCooldown = backstabCooldown;
+        this.backstabCooldowns = Maps.newConcurrentMap();
+    }
+
+    public boolean hasBackstabCooldown(Player player) {
+        return backstabCooldowns.containsKey(player.getUniqueId());
     }
 
     @Override

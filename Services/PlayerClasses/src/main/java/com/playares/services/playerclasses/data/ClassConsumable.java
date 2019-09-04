@@ -62,6 +62,7 @@ public final class ClassConsumable {
         final UUID playerUUID = player.getUniqueId();
         final ItemStack item = player.getInventory().getItem(slot);
         final ConsumeClassItemEvent consumeEvent = new ConsumeClassItemEvent(player, this);
+        final Class playerClass = getService().getClassManager().getCurrentClass(player);
 
         Bukkit.getPluginManager().callEvent(consumeEvent);
 
@@ -82,6 +83,7 @@ public final class ClassConsumable {
 
         if (!applicationType.equals(ConsumableApplicationType.ENEMY_ONLY)) {
             final PotionEffect existing = (player.hasPotionEffect(effectType) ? player.getPotionEffect(effectType) : null);
+            final boolean wasExistingClassPassive = playerClass.getPassiveEffects().keySet().contains(effectType);
 
             if (player.hasPotionEffect(effectType)) {
                 player.removePotionEffect(effectType);
@@ -92,7 +94,13 @@ public final class ClassConsumable {
                     (effectAmplifier + 1) + ChatColor.LIGHT_PURPLE + " for " + ChatColor.AQUA + duration + " seconds");
 
             if (existing != null) {
-                new Scheduler(getService().getOwner()).sync(() -> player.addPotionEffect(existing)).delay(duration * 20).run();
+                new Scheduler(getService().getOwner()).sync(() -> {
+                    if (wasExistingClassPassive && !playerClass.getActivePlayers().contains(playerUUID)) {
+                        return;
+                    }
+
+                    player.addPotionEffect(existing);
+                }).delay(duration * 20).run();
             }
         }
 
@@ -133,7 +141,9 @@ public final class ClassConsumable {
             final Player affectedPlayer = Bukkit.getPlayer(uuid);
 
             if (affectedPlayer != null) {
+                final Class affectedPlayerClass = getService().getClassManager().getCurrentClass(affectedPlayer);
                 final PotionEffect affectedExisting = (affectedPlayer.hasPotionEffect(effectType) ? affectedPlayer.getPotionEffect(effectType) : null);
+                final boolean wasExistingClassPassive = (affectedPlayerClass != null && affectedPlayerClass.getPassiveEffects().keySet().contains(effectType));
 
                 if (affectedPlayer.hasPotionEffect(effectType)) {
                     affectedPlayer.removePotionEffect(effectType);
@@ -151,7 +161,13 @@ public final class ClassConsumable {
                 }
 
                 if (affectedExisting != null) {
-                    new Scheduler(getService().getOwner()).sync(() -> affectedPlayer.addPotionEffect(affectedExisting)).delay(duration * 20).run();
+                    new Scheduler(getService().getOwner()).sync(() -> {
+                        if (wasExistingClassPassive && !affectedPlayerClass.getActivePlayers().contains(uuid)) {
+                            return;
+                        }
+
+                        affectedPlayer.addPotionEffect(affectedExisting);
+                    }).delay(duration * 20).run();
                 }
             }
         });
