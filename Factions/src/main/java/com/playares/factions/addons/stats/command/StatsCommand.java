@@ -36,7 +36,17 @@ public final class StatsCommand extends BaseCommand {
     @Subcommand("faction|f")
     @CommandCompletion("@playerfactions")
     public void onFaction(Player player, String name) {
-        player.sendMessage("Coming soon!");
+        addon.getFactionHandler().view(player, name, new FailablePromise<Menu>() {
+            @Override
+            public void success(@Nonnull Menu menu) {
+                menu.open();
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
     }
 
     @Subcommand("player|p")

@@ -88,25 +88,80 @@ public final class StatisticListener implements Listener {
         }
 
         final FactionPlayer profile = getAddon().getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+        final PlayerFaction faction = getAddon().getPlugin().getFactionManager().getFactionByPlayer(player.getUniqueId());
 
         if (profile == null) {
             return;
         }
 
+        final int drops = block.getDrops(hand).size();
+
         if (block.getType().equals(Material.COAL_ORE)) {
-            profile.getStatistics().addMinedCoal(block.getDrops(hand).size());
-        } else if (block.getType().equals(Material.IRON_ORE)) {
+            profile.getStatistics().addMinedCoal(drops);
+
+            if (faction != null) {
+                faction.getStatistics().addMinedCoal(drops);
+            }
+
+            return;
+        }
+
+        if (block.getType().equals(Material.IRON_ORE)) {
             profile.getStatistics().addMinedIron();
-        } else if (block.getType().equals(Material.REDSTONE_ORE)) {
-            profile.getStatistics().addMinedRedstone(block.getDrops(hand).size());
-        } else if (block.getType().equals(Material.LAPIS_ORE)) {
-            profile.getStatistics().addMinedLapis(block.getDrops(hand).size());
-        } else if (block.getType().equals(Material.GOLD_ORE)) {
+
+            if (faction != null) {
+                faction.getStatistics().addMinedIron();
+            }
+
+            return;
+        }
+
+        if (block.getType().equals(Material.REDSTONE_ORE)) {
+            profile.getStatistics().addMinedRedstone(drops);
+
+            if (faction != null) {
+                faction.getStatistics().addMinedRedstone(drops);
+            }
+
+            return;
+        }
+
+        if (block.getType().equals(Material.LAPIS_ORE)) {
+            profile.getStatistics().addMinedLapis(drops);
+
+            if (faction != null) {
+                faction.getStatistics().addMinedLapis(drops);
+            }
+
+            return;
+        }
+
+        if (block.getType().equals(Material.GOLD_ORE)) {
             profile.getStatistics().addMinedGold();
-        } else if (block.getType().equals(Material.DIAMOND_ORE)) {
-            profile.getStatistics().addMinedDiamond(block.getDrops(hand).size());
-        } else if (block.getType().equals(Material.EMERALD_ORE)) {
-            profile.getStatistics().addMinedEmerald(block.getDrops(hand).size());
+
+            if (faction != null) {
+                faction.getStatistics().addMinedGold();
+            }
+
+            return;
+        }
+
+        if (block.getType().equals(Material.DIAMOND_ORE)) {
+            profile.getStatistics().addMinedDiamond(drops);
+
+            if (faction != null) {
+                faction.getStatistics().addMinedDiamond(drops);
+            }
+
+            return;
+        }
+
+        if (block.getType().equals(Material.EMERALD_ORE)) {
+            profile.getStatistics().addMinedEmerald(drops);
+
+            if (faction != null) {
+                faction.getStatistics().addMinedEmerald(drops);
+            }
         }
     }
 
@@ -127,11 +182,11 @@ public final class StatisticListener implements Listener {
             return;
         }
 
-        // TODO: Add dragon kill to faction stats
-
         final PlayerFaction faction = getAddon().getPlugin().getFactionManager().getFactionByPlayer(killer.getUniqueId());
 
         if (faction != null) {
+            faction.getStatistics().addDragonKill();
+
             faction.getOnlineMembers().forEach(profile -> {
                 final Player player = Bukkit.getPlayer(profile.getUniqueId());
                 final FactionPlayer factionPlayer = getAddon().getPlugin().getPlayerManager().getPlayer(profile.getUniqueId());
@@ -160,6 +215,16 @@ public final class StatisticListener implements Listener {
         final Player killed = event.getEntity();
         final Player killer = killed.getKiller();
         final FactionPlayer killedProfile = getAddon().getPlugin().getPlayerManager().getPlayer(killed.getUniqueId());
+        final PlayerFaction killerFaction = (killer != null) ? getAddon().getPlugin().getFactionManager().getFactionByPlayer(killer.getUniqueId()) : null;
+        final PlayerFaction killedFaction = getAddon().getPlugin().getFactionManager().getFactionByPlayer(killed.getUniqueId());
+
+        if (killerFaction != null) {
+            killerFaction.getStatistics().addKill();
+        }
+
+        if (killedFaction != null) {
+            killedFaction.getStatistics().addDeath();
+        }
 
         if (killedProfile != null) {
             killedProfile.getStatistics().addDeath();
@@ -183,7 +248,13 @@ public final class StatisticListener implements Listener {
         final PlayerFaction faction = event.getFaction();
         final AresEvent aresEvent = event.getEvent();
 
-        // TODO: Add to faction stats
+        if (aresEvent instanceof KOTHEvent) {
+            if (aresEvent instanceof PalaceEvent) {
+                faction.getStatistics().addPalaceCapture();
+            } else {
+                faction.getStatistics().addKothCapture();
+            }
+        }
 
         faction.getOnlineMembers().forEach(member -> {
             final FactionPlayer profile = getAddon().getPlugin().getPlayerManager().getPlayer(member.getUniqueId());
@@ -264,6 +335,10 @@ public final class StatisticListener implements Listener {
         }
     }
 
+    /**
+     * Sets rogue backstab count
+     * @param event Ares RogueBackstabEvent
+     */
     @EventHandler (priority = EventPriority.MONITOR)
     public void onRogueBackstab(RogueBackstabEvent event) {
         if (event.isCancelled()) {

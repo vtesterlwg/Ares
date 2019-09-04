@@ -272,6 +272,21 @@ public final class FactionDisplayHandler {
         viewer.sendMessage(spacer + ChatColor.GOLD + "Re-invites" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getReinvites());
         viewer.sendMessage(spacer + ChatColor.GOLD + "Online" + ChatColor.YELLOW + ": " + ChatColor.BLUE + pf.getOnlineMembers().size() + ChatColor.YELLOW + " / " + ChatColor.BLUE + pf.getMembers().size());
 
+        viewer.sendMessage(new ComponentBuilder(" ")
+                .color(net.md_5.bungee.api.ChatColor.RESET)
+                .append(" ")
+                .color(net.md_5.bungee.api.ChatColor.RESET)
+                .append(" - ")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .append("Statistics")
+                .color(net.md_5.bungee.api.ChatColor.GOLD)
+                .append(": ")
+                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                .append("[Click Here]")
+                .color(net.md_5.bungee.api.ChatColor.BLUE)
+                .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/stats f " + pf.getName()))
+                .create());
+
         new Scheduler(manager.getPlugin()).async(() -> {
             final Map<PlayerFaction.FactionRank, List<String>> namesByRank = Maps.newHashMap();
 

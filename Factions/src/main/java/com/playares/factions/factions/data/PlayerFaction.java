@@ -10,6 +10,7 @@ import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.timer.BossTimer;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.Factions;
+import com.playares.factions.addons.stats.container.FactionStatisticHolder;
 import com.playares.factions.timers.FactionTimer;
 import com.playares.factions.timers.cont.faction.DTRFreezeTimer;
 import lombok.AllArgsConstructor;
@@ -64,6 +65,8 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
     @Getter @Setter public long nextTick;
     /** Prevents rally from being spammed */
     @Getter @Setter public long lastRallyUpdate;
+    /** Contains the factions statistics **/
+    @Getter public FactionStatisticHolder statistics;
 
     public PlayerFaction(Factions plugin) {
         this.plugin = plugin;
@@ -81,6 +84,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.timers = Sets.newConcurrentHashSet();
         this.scoreboard = null;
         this.nextTick = (Time.now() + (plugin.getFactionConfig().getFactionTickInterval() * 1000L));
+        this.statistics = null;
 
         configureScoreboard();
     }
@@ -101,6 +105,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.timers = Sets.newConcurrentHashSet();
         this.scoreboard = null;
         this.nextTick = (Time.now() + (plugin.getFactionConfig().getFactionTickInterval() * 1000L));
+        this.statistics = new FactionStatisticHolder(uniqueId);
 
         configureScoreboard();
     }
@@ -457,6 +462,7 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
         this.balance = document.getDouble("balance");
         this.deathsTilRaidable = document.getDouble("dtr");
         this.reinvites = document.getInteger("reinvites");
+        this.statistics = (document.get("statistics") != null) ? new FactionStatisticHolder(uniqueId).fromDocument(document.get("statistics", Document.class)) : new FactionStatisticHolder(uniqueId);
 
         convertedMembers.keySet().forEach(memberId -> {
             final UUID id = UUID.fromString(memberId);
@@ -504,7 +510,8 @@ public final class PlayerFaction implements Faction, MongoDocument<PlayerFaction
                 .append("members", convertedMembers)
                 .append("pendingInvites", pendingInvites)
                 .append("memberHistory", memberHistory)
-                .append("timers", convertedTimers);
+                .append("timers", convertedTimers)
+                .append("statistics", statistics.toDocument());
     }
 
     @AllArgsConstructor

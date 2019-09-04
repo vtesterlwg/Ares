@@ -3,6 +3,7 @@ package com.playares.factions.addons.stats;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.Addon;
 import com.playares.factions.addons.stats.command.StatsCommand;
+import com.playares.factions.addons.stats.handler.FactionStatsHandler;
 import com.playares.factions.addons.stats.handler.PlayerStatsHandler;
 import com.playares.factions.addons.stats.listener.StatisticListener;
 import com.playares.factions.addons.stats.lore.TrackableItemListener;
@@ -15,6 +16,7 @@ public final class StatsAddon implements Addon {
     @Getter public final Factions plugin;
     @Getter public boolean enabled;
     @Getter public PlayerStatsHandler playerHandler;
+    @Getter public FactionStatsHandler factionHandler;
 
     private TrackableItemListener trackableListener;
 
@@ -36,6 +38,7 @@ public final class StatsAddon implements Addon {
     @Override
     public void start() {
         playerHandler = new PlayerStatsHandler(this);
+        factionHandler = new FactionStatsHandler(this);
 
         getPlugin().registerCommand(new StatsCommand(this));
 
