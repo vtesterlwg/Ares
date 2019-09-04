@@ -140,9 +140,27 @@ public final class ClassListener implements Listener {
 
         event.setDamage(finalDamage);
 
-        player.sendMessage(ChatColor.YELLOW + "[" + ChatColor.BLUE + "Archer" + ChatColor.YELLOW + " w/ " + ChatColor.BLUE + "Range" + ChatColor.YELLOW +
+        final double healthPre = ((LivingEntity) damaged).getHealth();
+
+        if (damaged instanceof Player) {
+            final Player playerDamaged = (Player)damaged;
+            playerDamaged.sendMessage(ChatColor.RED + "You have been shot by an " + ChatColor.DARK_RED + "" + ChatColor.BOLD + "ARCHER!");
+        }
+
+        new Scheduler(getService().getOwner()).sync(() -> {
+            final double healthPost = ((LivingEntity) damaged).getHealth();
+            final double diff = (healthPre - healthPost) / 2;
+            final String name = ((LivingEntity)damaged).hasPotionEffect(PotionEffectType.INVISIBILITY) ? ChatColor.GRAY + "? ? ?" : ChatColor.GOLD + damaged.getName();
+
+            player.sendMessage(ChatColor.YELLOW + "Your arrow has" + ChatColor.RED + " pierced " + name +
+                    ChatColor.YELLOW + " from a distance of " + ChatColor.BLUE + String.format("%.2f", distance) + " blocks " +
+                    ChatColor.YELLOW + "(" + ChatColor.RED + String.format("%.2f", diff) + " ❤" + ChatColor.YELLOW + ")");
+        }).delay(1L).run();
+
+        // Old HCF Format
+        /* player.sendMessage(ChatColor.YELLOW + "[" + ChatColor.BLUE + "Archer" + ChatColor.YELLOW + " w/ " + ChatColor.BLUE + "Range" + ChatColor.YELLOW +
                 "(" + ChatColor.RED + String.format("%.2f", distance) + ChatColor.YELLOW + ")]: Damage Increase (" + ChatColor.RED + String.format("%.2f", damage) + ChatColor.YELLOW + " => " +
-                ChatColor.BLUE + String.format("%.2f", finalDamage) + ChatColor.YELLOW + ")");
+                ChatColor.BLUE + String.format("%.2f", finalDamage) + ChatColor.YELLOW + ")"); */
     }
 
     @EventHandler
