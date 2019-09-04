@@ -15,14 +15,16 @@ import java.util.UUID;
 public final class RogueClass extends Class {
     @Getter @Setter public int warmup;
     @Getter @Setter public int backstabCooldown;
+    @Getter @Setter public double backstabDamage;
     @Getter public final Map<UUID, Long> backstabCooldowns;
 
-    public RogueClass(int warmup, int backstabCooldown) {
+    public RogueClass(int warmup, int backstabCooldown, double backstabDamage) {
         this.warmup = warmup;
         this.activePlayers = Sets.newConcurrentHashSet();
         this.passiveEffects = Maps.newHashMap();
         this.consumables = Lists.newArrayList();
         this.backstabCooldown = backstabCooldown;
+        this.backstabDamage = backstabDamage;
         this.backstabCooldowns = Maps.newConcurrentMap();
     }
 

@@ -216,6 +216,10 @@ public final class ClassListener implements Listener {
         final double dot = attackerDirection.dot(attackedDirection);
         final UUID attackerUUID = attacker.getUniqueId();
 
+        if (attacked.getHealth() <= 0.0 || attacked.isDead() || (attacked.getHealth() - event.getDamage()) <= 0.0) {
+            return;
+        }
+
         if (attacker.getInventory().getItemInMainHand() == null || !attacker.getInventory().getItemInMainHand().getType().equals(Material.GOLD_SWORD)) {
             return;
         }
@@ -242,31 +246,37 @@ public final class ClassListener implements Listener {
                 return;
             }
 
-            final double newHealth = ((attacked.getHealth() - 2.0) > 0.0) ? attacked.getHealth() - 2.0 : 0.0;
-            attacked.setHealth(newHealth);
-            attacked.sendMessage(ChatColor.RED + "You have been " + ChatColor.DARK_RED + "" + ChatColor.BOLD + "BACKSTABBED!");
-
-            attacker.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
-            Players.playSound(attacker, Sound.ENTITY_ITEM_BREAK);
-            attacked.getWorld().spawnParticle(Particle.HEART, attacked.getLocation().add(0, 1, 0), 4, 0.5, 0.5, 0.5, 0.5);
-
-            if (!attacked.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
-                attacker.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.RED + "backstabbed" + ChatColor.GOLD + " " + attacked.getName());
-            } else {
-                attacker.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.RED + "backstabbed" + ChatColor.GRAY + " ? ? ?");
-            }
-
-            final long nextBackstab = Time.now() + (rogue.getBackstabCooldown() * 1000L);
-            rogue.getBackstabCooldowns().put(attackerUUID, nextBackstab);
-
             new Scheduler(getService().getOwner()).sync(() -> {
-                rogue.getBackstabCooldowns().remove(attackerUUID);
-
-                if (Bukkit.getPlayer(attackerUUID) != null) {
-                    Bukkit.getPlayer(attackerUUID).sendMessage(ChatColor.GREEN + rogue.getName() + " backstab is ready");
-                    Players.playSound(Bukkit.getPlayer(attackerUUID), Sound.BLOCK_NOTE_CHIME);
+                if (attacked.isDead() || attacked.getHealth() <= 0.0) {
+                    return;
                 }
-            }).delay(rogue.getBackstabCooldown() * 20).run();
+
+                final double newHealth = ((attacked.getHealth() - rogue.getBackstabDamage()) > 0.0) ? attacked.getHealth() - rogue.getBackstabDamage() : 0.0;
+                attacked.setHealth(newHealth);
+                attacked.sendMessage(ChatColor.RED + "You have been " + ChatColor.DARK_RED + "" + ChatColor.BOLD + "BACKSTABBED!");
+
+                attacker.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
+                Players.playSound(attacker, Sound.ENTITY_ITEM_BREAK);
+                attacked.getWorld().spawnParticle(Particle.HEART, attacked.getLocation().add(0, 1, 0), 5, 0.8, 0.8, 0.8, 0.8);
+
+                if (!attacked.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+                    attacker.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.RED + "backstabbed" + ChatColor.GOLD + " " + attacked.getName());
+                } else {
+                    attacker.sendMessage(ChatColor.YELLOW + "You have " + ChatColor.RED + "backstabbed" + ChatColor.GRAY + " ? ? ?");
+                }
+
+                final long nextBackstab = Time.now() + (rogue.getBackstabCooldown() * 1000L);
+                rogue.getBackstabCooldowns().put(attackerUUID, nextBackstab);
+
+                new Scheduler(getService().getOwner()).sync(() -> {
+                    rogue.getBackstabCooldowns().remove(attackerUUID);
+
+                    if (Bukkit.getPlayer(attackerUUID) != null) {
+                        Bukkit.getPlayer(attackerUUID).sendMessage(ChatColor.GREEN + rogue.getName() + " backstab is ready");
+                        Players.playSound(Bukkit.getPlayer(attackerUUID), Sound.BLOCK_NOTE_CHIME);
+                    }
+                }).delay(rogue.getBackstabCooldown() * 20).run();
+            }).run();
         }
     }
 }

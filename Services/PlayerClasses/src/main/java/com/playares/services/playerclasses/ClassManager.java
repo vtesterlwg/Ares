@@ -59,9 +59,10 @@ public final class ClassManager {
 
                 Logger.print("Bard values (Range: " + range + ")");
             } else if (className.equalsIgnoreCase("rogue")) {
-                final int backstabCooldown = config.getInt("classes." + className + ".backstab-cooldown");
+                final int backstabCooldown = config.getInt("classes." + className + ".backstab.cooldown");
+                final double backstabDamage = config.getDouble("classes." + className + ".backstab.damage");
 
-                playerClass = new RogueClass(warmup, backstabCooldown);
+                playerClass = new RogueClass(warmup, backstabCooldown, backstabDamage);
 
                 Logger.print("Rogue values (Backstab Cooldown: " + backstabCooldown + ")");
             } else if (className.equalsIgnoreCase("miner")) {
