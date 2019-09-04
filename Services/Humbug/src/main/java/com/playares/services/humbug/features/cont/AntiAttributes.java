@@ -51,15 +51,12 @@ public final class AntiAttributes implements HumbugModule {
                 }
 
                 final PacketContainer packet = event.getPacket();
-                final StructureModifier<Integer> ints = packet.getIntegers();
-
-                if (event.getPlayer() == null) {
-                    return;
-                }
 
                 if (event.getPlayer().hasPermission("humbug.bypass")) {
                     return;
                 }
+
+                final StructureModifier<Integer> ints = packet.getIntegers();
 
                 if (event.getPlayer().getEntityId() == ints.read(0)) {
                     return;
@@ -70,7 +67,7 @@ public final class AntiAttributes implements HumbugModule {
             }
         });
 
-        /* HIDES ENTITY METADATA SUCH AS ARMOR */
+        /* HIDES ENTITY METADATA SUCH AS ARMOR AND HEALTH */
         humbug.getOwner().getProtocol().addPacketListener(new PacketAdapter(getHumbug().getOwner(), PacketType.Play.Server.ENTITY_METADATA) {
             @Override
             public void onPacketSending(PacketEvent event) {
@@ -80,21 +77,18 @@ public final class AntiAttributes implements HumbugModule {
 
                 final PacketContainer packet = event.getPacket();
                 final Player player = event.getPlayer();
+
+                if (player.hasPermission("humbug.bypass")) {
+                    return;
+                }
+
                 final Entity entity = packet.getEntityModifier(event).read(0);
                 final StructureModifier<List<WrappedWatchableObject>> modifier = packet.getWatchableCollectionModifier();
                 final List<WrappedWatchableObject> read = modifier.read(0);
 
-                if (player == null || entity == null) {
-                    return;
-                }
-
-                if (event.getPlayer().hasPermission("humbug.bypass")) {
-                    return;
-                }
-
                 if (
-                        player.getUniqueId().equals(entity.getUniqueId()) ||
                         !(entity instanceof LivingEntity) ||
+                        player.getUniqueId().equals(entity.getUniqueId()) ||
                         entity instanceof EnderDragon ||
                         entity instanceof Wither ||
                         entity.getPassengers().contains(player)) {
@@ -103,15 +97,13 @@ public final class AntiAttributes implements HumbugModule {
 
                 }
 
-                for (WrappedWatchableObject object : read) {
-                    if (object.getIndex() != 7) {
-                        continue;
-                    }
+                for (WrappedWatchableObject obj : read) {
+                    if (obj.getIndex() == 7) {
+                        final float value = (float)obj.getValue();
 
-                    final float value = (float)object.getValue();
-
-                    if (value > 0) {
-                        object.setValue(1f);
+                        if (value > 0) {
+                            obj.setValue(1f);
+                        }
                     }
                 }
             }
