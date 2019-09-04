@@ -58,6 +58,30 @@ public final class CombatListener implements Listener {
         this.plugin = plugin;
     }
 
+    private int getDeathbanDuration(FactionPlayer profile) {
+        final DeathbanService deathbanService = (DeathbanService)getPlugin().getService(DeathbanService.class);
+        final ServerStateAddon serverStateAddon = (ServerStateAddon)getPlugin().getAddonManager().getAddon(ServerStateAddon.class);
+        final int playtimeSeconds = (int)(profile.getStatistics().getTimePlayed() / 1000);
+
+        if (deathbanService == null || serverStateAddon == null) {
+            return 60;
+        }
+
+        if (playtimeSeconds < deathbanService.getConfiguration().getMinDeathbanDuration()) {
+            return deathbanService.getConfiguration().getMinDeathbanDuration();
+        }
+
+        if (serverStateAddon.getCurrentState().equals(ServerState.SOTW) && playtimeSeconds > deathbanService.getConfiguration().getSotwMaxDeathban()) {
+            return deathbanService.getConfiguration().getSotwMaxDeathban();
+        }
+
+        if (playtimeSeconds > deathbanService.getConfiguration().getNormalMaxDeathban()) {
+            return deathbanService.getConfiguration().getNormalMaxDeathban();
+        }
+
+        return deathbanService.getConfiguration().getMinDeathbanDuration();
+    }
+
     @EventHandler (priority = EventPriority.LOW)
     public void onClassConsume(ConsumeClassItemEvent event) {
         final PlayerClassService classService = (PlayerClassService)getPlugin().getService(PlayerClassService.class);
@@ -460,6 +484,11 @@ public final class CombatListener implements Listener {
 
         if (event.getKiller() != null) {
             final Player killer = event.getKiller();
+            final FactionPlayer killerProfile = getPlugin().getPlayerManager().getPlayer(killer.getUniqueId());
+
+            if (killerProfile != null) {
+                killerProfile.getStatistics().addKill();
+            }
 
             Bukkit.broadcastMessage(ChatColor.RED + "RIP: " + ChatColor.DARK_RED + "(Combat-Logger) " + ChatColor.GOLD + logger.getOwnerUsername() +
                     ChatColor.RED + " slain by " + ChatColor.GOLD + killer.getName());
@@ -478,14 +507,17 @@ public final class CombatListener implements Listener {
         logger.getBukkitEntity().getWorld().strikeLightningEffect(logger.getBukkitEntity().getLocation());
         Bukkit.getOnlinePlayers().forEach(listener -> Players.playSound(listener, Sound.ENTITY_LIGHTNING_THUNDER));
 
-        if (deathbanService != null && serverStateAddon != null && deathbanService.getConfiguration().isDeathbanEnforced()) {
-            final boolean permanent = (serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_1) || serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_2));
-            deathbanService.deathban(logger.getOwner(), 30, permanent); // TODO: Make dynamic
-        }
-
         new Scheduler(getPlugin()).async(() -> {
             final FactionPlayer factionPlayer = getPlugin().getPlayerManager().loadPlayer(logger.getOwner(), logger.getOwnerUsername());
+
             factionPlayer.setResetOnJoin(true);
+            factionPlayer.getStatistics().addDeath();
+
+            if (deathbanService != null && serverStateAddon != null && deathbanService.getConfiguration().isDeathbanEnforced()) {
+                final boolean permanent = (serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_1) || serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_2));
+                new Scheduler(getPlugin()).sync(() -> deathbanService.deathban(logger.getOwner(), getDeathbanDuration(factionPlayer), permanent)).run();
+            }
+
             PlayerDAO.savePlayer(getPlugin().getMongo(), factionPlayer);
         }).run();
     }
@@ -520,9 +552,9 @@ public final class CombatListener implements Listener {
         final DeathbanService deathbanService = (DeathbanService)getPlugin().getService(DeathbanService.class);
         final ServerStateAddon serverStateAddon = (ServerStateAddon)getPlugin().getAddonManager().getAddon(ServerStateAddon.class);
 
-        if (deathbanService != null && serverStateAddon != null) {
+        if (deathbanService != null && serverStateAddon != null && playerProfile != null) {
             final boolean permanent = (serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_1) || serverStateAddon.getCurrentState().equals(ServerState.EOTW_PHASE_2));
-            deathbanService.deathban(player.getUniqueId(), 30, permanent);
+            deathbanService.deathban(player.getUniqueId(), getDeathbanDuration(playerProfile), permanent);
         }
 
         if (faction != null) {
