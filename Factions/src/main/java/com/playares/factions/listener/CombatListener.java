@@ -105,7 +105,7 @@ public final class CombatListener implements Listener {
 
         if (event.getConsumable().getApplicationType().equals(ClassConsumable.ConsumableApplicationType.ENEMY_ONLY)) {
             final List<Player> enemies = FactionUtils.getNearbyEnemies(plugin, player, bard.getRange());
-            enemies.forEach(enemy -> event.getAffectedPlayers().put(enemy.getUniqueId(), true));
+            enemies.forEach(enemy -> event.getAffectedPlayers().put(enemy.getUniqueId(), false));
         }
     }
 
