@@ -68,7 +68,12 @@ public final class AntiGlitch implements HumbugModule, Listener {
         }
 
         if (event.getTo().getBlock() != null &&
-                (event.getTo().getBlock().getType().name().contains("FENCE") || event.getTo().getBlock().getType().name().contains("PANE"))) {
+
+                        (event.getTo().getBlock().getType().name().contains("FENCE") ||
+                        event.getTo().getBlock().getType().name().contains("PANE") ||
+                        event.getTo().getBlock().getType().equals(Material.THIN_GLASS)) ||
+                        event.getTo().getBlock().getType().equals(Material.COBBLE_WALL) ||
+                        event.getTo().getBlock().getType().name().contains("FENCE_GATE")) {
 
             return;
 
