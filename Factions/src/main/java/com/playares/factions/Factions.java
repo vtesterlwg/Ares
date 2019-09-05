@@ -9,6 +9,7 @@ import com.playares.factions.addons.AddonManager;
 import com.playares.factions.claims.manager.ClaimManager;
 import com.playares.factions.claims.subclaims.manager.SubclaimManager;
 import com.playares.factions.commands.FactionCommand;
+import com.playares.factions.commands.MapCommand;
 import com.playares.factions.commands.PvPCommand;
 import com.playares.factions.commands.TimerCommand;
 import com.playares.factions.factions.manager.FactionManager;
@@ -87,6 +88,7 @@ public final class Factions extends AresPlugin {
         registerCommand(new FactionCommand(this));
         registerCommand(new TimerCommand(this));
         registerCommand(new PvPCommand(this));
+        registerCommand(new MapCommand(this));
 
         // Register Services
         registerService(new CustomEventService(this));
