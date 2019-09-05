@@ -26,6 +26,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -372,6 +373,10 @@ public final class ClaimListener implements Listener {
 
     @EventHandler
     public void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        if (event.getEntity() instanceof FallingBlock) {
+            return;
+        }
+
         final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new BLocatable(event.getBlock()));
         final List<DefinedClaim> insideBuildBuffer = plugin.getClaimManager().getClaimsNearby(new BLocatable(event.getBlock()), true);
 
