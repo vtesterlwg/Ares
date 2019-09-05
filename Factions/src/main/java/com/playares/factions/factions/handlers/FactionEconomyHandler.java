@@ -127,7 +127,7 @@ public final class FactionEconomyHandler {
         }
 
         addon.getHandler().getOrCreatePlayer(player.getUniqueId(), economyPlayer -> {
-            if (economyPlayer.getBalance() <= amount) {
+            if (economyPlayer.getBalance() < amount) {
                 promise.failure("Insufficient funds");
                 return;
             }
