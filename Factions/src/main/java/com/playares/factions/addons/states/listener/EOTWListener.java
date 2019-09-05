@@ -4,6 +4,8 @@ import com.google.common.collect.Sets;
 import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.factions.addons.states.ServerStateAddon;
 import com.playares.factions.addons.states.data.ServerState;
+import com.playares.factions.players.data.FactionPlayer;
+import com.playares.services.serversync.ServerSyncService;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -56,6 +58,22 @@ public final class EOTWListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
+        final FactionPlayer profile = getAddon().getPlugin().getPlayerManager().getPlayer(player.getUniqueId());
+
+        if (!player.hasPermission("factions.serverstates.bypass") && (profile == null || (profile.getStatistics().getTimePlayed() / 1000L) <= 60)
+                && (getAddon().getCurrentState().equals(ServerState.EOTW_PHASE_1) || getAddon().getCurrentState().equals(ServerState.EOTW_PHASE_2))) {
+
+            final ServerSyncService serverSyncService = (ServerSyncService)getAddon().getPlugin().getService(ServerSyncService.class);
+
+            if (serverSyncService != null) {
+                player.sendMessage(ChatColor.RED + "The final phase of the End of the World has begun. You may play again next map!");
+                serverSyncService.sendToLobby(player);
+                return;
+            } else {
+                player.kickPlayer(ChatColor.RED + "The final phase of the End of the World has begun. You may play again next map!");
+            }
+
+        }
 
         if (!player.getWorld().getEnvironment().equals(World.Environment.NORMAL) &&
         addon.getCurrentState().equals(ServerState.EOTW_PHASE_2) &&
