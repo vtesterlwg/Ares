@@ -37,6 +37,16 @@ public enum RemappedEffect {
 
     @Getter public final PotionEffectType type;
 
+    public static RemappedEffect getEffectByBukkit(PotionEffectType type) {
+        for (RemappedEffect value : values()) {
+            if (value.getType().equals(type)) {
+                return value;
+            }
+        }
+
+        return null;
+    }
+
     public static PotionEffectType getEffectTypeByName(String name) {
         for (RemappedEffect value : values()) {
             final String userFriendlyName = value.name().toLowerCase().replace("_", "");
