@@ -39,7 +39,7 @@ public final class RogueClass extends Class {
 
     @Override
     public String getDescription() {
-        return "Grants you the highest mobility of any class. Great for catching Archers and Bards or traveling the map quickly.";
+        return "Grants you the ability to backstab players with Gold Swords.";
     }
 
     @Override
