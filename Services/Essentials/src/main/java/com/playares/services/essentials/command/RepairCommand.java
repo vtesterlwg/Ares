@@ -10,10 +10,9 @@ import org.bukkit.inventory.ItemStack;
 
 @CommandAlias("repair")
 public final class RepairCommand extends BaseCommand {
-    @Subcommand("hand|h")
-    @CommandPermission("essentials.repair")
+    @CommandAlias("repair")
     @Description("Repair the item in your hand")
-    @Syntax("hand")
+    @CommandPermission("essentials.repair")
     public void onRepairHand(Player player) {
         final ItemStack hand = player.getInventory().getItemInMainHand();
 
@@ -28,11 +27,9 @@ public final class RepairCommand extends BaseCommand {
     }
 
     @Subcommand("armor|a")
+    @Description("Repair")
     @CommandPermission("essentials.repair")
-    @Description("Repair your armor")
-    @Syntax("armor")
     public void onRepairArmor(Player player) {
-
         for (ItemStack armor : player.getInventory().getArmorContents()) {
             if (armor == null) {
                 return;
