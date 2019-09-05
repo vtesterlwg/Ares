@@ -50,7 +50,7 @@ public final class WarpCommand extends BaseCommand {
     }
 
     @CommandAlias("setwarp")
-    @CommandPermission("essentials.warp.create")
+    @CommandPermission("essentials.warp")
     @Description("Create a new warp at your location")
     @Syntax("<name>")
     public void onSetWarp(Player player, String name) {
@@ -68,7 +68,7 @@ public final class WarpCommand extends BaseCommand {
     }
 
     @CommandAlias("delwarp")
-    @CommandPermission("essentials.warp.delete")
+    @CommandPermission("essentials.warp")
     @CommandCompletion("@warps")
     @Description("Delete a warp by name")
     @Syntax("<name>")
