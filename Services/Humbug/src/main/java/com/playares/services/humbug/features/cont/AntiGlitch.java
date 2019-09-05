@@ -16,9 +16,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 public final class AntiGlitch implements HumbugModule, Listener {
@@ -55,6 +58,32 @@ public final class AntiGlitch implements HumbugModule, Listener {
         PlayerTeleportEvent.getHandlerList().unregister(this);
         PlayerBigMoveEvent.getHandlerList().unregister(this);
         PlayerToggleFlightEvent.getHandlerList().unregister(this);
+    }
+
+    @EventHandler (priority = EventPriority.HIGHEST)
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (!isEnabled() || !isDisablePearlClipping() || event.isCancelled()) {
+            return;
+        }
+
+        final Action action = event.getAction();
+        final ItemStack item = event.getItem();
+
+        if (item == null || !item.getType().equals(Material.ENDER_PEARL)) {
+            return;
+        }
+
+        if (action.equals(Action.RIGHT_CLICK_AIR)) {
+            return;
+        }
+
+        final Block clickedBlock = event.getClickedBlock();
+
+        if (clickedBlock != null && clickedBlock.getType().equals(Material.STRING)) {
+            return;
+        }
+
+        event.setCancelled(true);
     }
 
     @EventHandler (priority = EventPriority.HIGHEST)
