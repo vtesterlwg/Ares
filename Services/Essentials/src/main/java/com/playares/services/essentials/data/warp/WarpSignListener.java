@@ -27,7 +27,7 @@ public final class WarpSignListener implements Listener {
             return;
         }
 
-        if (!player.hasPermission("essentials.warps")) {
+        if (!player.hasPermission("essentials.warp")) {
             return;
         }
 
