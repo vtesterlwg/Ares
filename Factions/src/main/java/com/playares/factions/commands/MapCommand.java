@@ -1,8 +1,10 @@
 package com.playares.factions.commands;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
+import co.aikar.commands.annotation.HelpCommand;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.playares.commons.bukkit.item.ItemBuilder;
@@ -193,5 +195,10 @@ public final class MapCommand extends BaseCommand {
         }));
 
         menu.open();
+    }
+
+    @HelpCommand
+    public void onHelp(Player player, CommandHelp help) {
+        help.showHelp();
     }
 }
