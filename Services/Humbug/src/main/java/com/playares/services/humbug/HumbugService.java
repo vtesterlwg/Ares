@@ -1,6 +1,6 @@
 package com.playares.services.humbug;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.Maps;
 import com.playares.commons.bukkit.AresPlugin;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.service.AresService;
@@ -8,36 +8,35 @@ import com.playares.services.humbug.features.HumbugModule;
 import com.playares.services.humbug.features.cont.*;
 import lombok.Getter;
 
-import java.util.Set;
+import java.util.Map;
 
 public final class HumbugService implements AresService {
     @Getter public final AresPlugin owner;
-    @Getter protected Set<HumbugModule> modules;
+    @Getter protected Map<Class<? extends HumbugModule>, HumbugModule> modules;
 
     public HumbugService(AresPlugin owner) {
         this.owner = owner;
-        this.modules = Sets.newHashSet();
+        this.modules = Maps.newHashMap();
     }
 
     public void start() {
-        registerHumbugModule(new OldPotions(this));
-        registerHumbugModule(new OldItemVelocity(this));
-        registerHumbugModule(new AntiGrief(this));
-        registerHumbugModule(new OldSwordSwing(this));
-        registerHumbugModule(new MemeItems(this));
-        registerHumbugModule(new AntiGlitch(this));
-        registerHumbugModule(new XPBonuses(this));
-        registerHumbugModule(new CustomRecipes(this));
-        registerHumbugModule(new CustomRecipes(this));
-        registerHumbugModule(new OldRegen(this));
-        registerHumbugModule(new OldItemValues(this));
-        registerHumbugModule(new Elevators(this));
-        registerHumbugModule(new MobStacking(this));
-        registerHumbugModule(new KitLimits(this));
-        registerHumbugModule(new Knockback(this));
-        registerHumbugModule(new AntiAttributes(this));
+        registerHumbugModule(OldPotions.class, new OldPotions(this));
+        registerHumbugModule(OldItemVelocity.class, new OldItemVelocity(this));
+        registerHumbugModule(AntiGrief.class, new AntiGrief(this));
+        registerHumbugModule(OldSwordSwing.class, new OldSwordSwing(this));
+        registerHumbugModule(MemeItems.class, new MemeItems(this));
+        registerHumbugModule(AntiGlitch.class, new AntiGlitch(this));
+        registerHumbugModule(XPBonuses.class, new XPBonuses(this));
+        registerHumbugModule(CustomRecipes.class, new CustomRecipes(this));
+        registerHumbugModule(OldRegen.class, new OldRegen(this));
+        registerHumbugModule(OldItemVelocity.class, new OldItemValues(this));
+        registerHumbugModule(Elevators.class, new Elevators(this));
+        registerHumbugModule(MobStacking.class, new MobStacking(this));
+        registerHumbugModule(KitLimits.class, new KitLimits(this));
+        registerHumbugModule(Knockback.class, new Knockback(this));
+        registerHumbugModule(AntiAttributes.class, new AntiAttributes(this));
 
-        modules.forEach(module -> {
+        modules.values().forEach(module -> {
             module.loadValues();
 
             if (module.isEnabled()) {
@@ -48,19 +47,23 @@ public final class HumbugService implements AresService {
     }
 
     public void stop() {
-        this.modules.forEach(HumbugModule::stop);
+        modules.values().forEach(HumbugModule::stop);
     }
 
     @Override
     public void reload() {
-        modules.forEach(HumbugModule::loadValues);
+        modules.values().forEach(HumbugModule::loadValues);
     }
 
     public String getName() {
         return "Humbug";
     }
 
-    public void registerHumbugModule(HumbugModule module) {
-        this.modules.add(module);
+    public void registerHumbugModule(Class<? extends HumbugModule> clazz, HumbugModule module) {
+        modules.put(clazz, module);
+    }
+
+    public HumbugModule getModule(Class<? extends HumbugModule> clazz) {
+        return getModules().get(clazz);
     }
 }
