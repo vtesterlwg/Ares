@@ -65,11 +65,6 @@ public final class StatsCommand extends BaseCommand {
         });
     }
 
-    @Subcommand("server|s")
-    public void onServer(Player player) {
-        player.sendMessage("Coming soon!");
-    }
-
     @HelpCommand
     @Description("How to use the Stats Command")
     public void onHelp(Player player, CommandHelp help) {
