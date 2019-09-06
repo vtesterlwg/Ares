@@ -134,6 +134,27 @@ public final class KitLimits implements HumbugModule, Listener {
         return enchantLimits.stream().filter(e -> e.getType().equals(type)).findFirst().orElse(null);
     }
 
+    public ImmutableMap<Enchantment, Integer> getEnabledEnchantments() {
+        final Map<Enchantment, Integer> result = Maps.newHashMap();
+
+        for (Enchantment enchantment : Enchantment.values()) {
+            final EnchantLimit limit = getEnchantLimit(enchantment);
+
+            if (limit != null) {
+                if (limit.isDisabled()) {
+                    continue;
+                }
+
+                result.put(enchantment, limit.getMaxLevel());
+                continue;
+            }
+
+            result.put(enchantment, enchantment.getMaxLevel());
+        }
+
+        return ImmutableMap.copyOf(result);
+    }
+
     public void updateEnchantments(Player player, ItemStack item) {
         if (item.getEnchantments().isEmpty()) {
             return;
