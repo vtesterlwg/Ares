@@ -23,6 +23,7 @@ anti-grief:
 old-item-velocity:
     enabled: true
     pearl-velocity: 1.4
+    potions: 0.5
 
 # Enabling Old Sword Swinging removes the attack cooldowns and fixes the swing animation by manipulating packets
 # When this feature is enabled, held item durability will <italic>sometimes</italic> be broken

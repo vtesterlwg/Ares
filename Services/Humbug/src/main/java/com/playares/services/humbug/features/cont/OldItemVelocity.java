@@ -17,8 +17,7 @@ public final class OldItemVelocity implements HumbugModule, Listener {
     @Getter public final HumbugService humbug;
     @Getter @Setter public boolean enabled;
     @Getter @Setter public double pearlVelocity;
-    @Getter @Setter public double potionForwardVelocity;
-    @Getter @Setter public double potionUpwardVelocity;
+    @Getter @Setter public double potionVelocity;
 
     public OldItemVelocity(HumbugService humbug) {
         this.humbug = humbug;
@@ -29,6 +28,7 @@ public final class OldItemVelocity implements HumbugModule, Listener {
         final YamlConfiguration config = getHumbug().getOwner().getConfig("humbug");
         this.enabled = config.getBoolean("old-item-velocity.enabled");
         this.pearlVelocity = config.getDouble("old-item-velocity.pearl-velocity");
+        this.potionVelocity = config.getDouble("old-item-velocity.potions");
     }
 
     @Override
@@ -38,7 +38,7 @@ public final class OldItemVelocity implements HumbugModule, Listener {
 
     @Override
     public void start() {
-        this.humbug.getOwner().registerListener(this);
+        humbug.getOwner().registerListener(this);
     }
 
     @Override
@@ -66,10 +66,7 @@ public final class OldItemVelocity implements HumbugModule, Listener {
         }
 
         if (projectile instanceof ThrownPotion) {
-            //projectile.setVelocity(player.getLocation().getDirection().normalize().multiply(projectile.getVelocity().length()));
-            projectile.setVelocity(player.getLocation().getDirection().normalize().multiply(projectile.getVelocity().length()));
+            projectile.setVelocity(player.getLocation().getDirection().normalize().multiply(potionVelocity));
         }
-
-        projectile.setVelocity(player.getLocation().getDirection().normalize().multiply(projectile.getVelocity().length()));
     }
 }

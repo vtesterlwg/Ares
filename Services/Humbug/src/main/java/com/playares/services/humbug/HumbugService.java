@@ -29,7 +29,7 @@ public final class HumbugService implements AresService {
         registerHumbugModule(XPBonuses.class, new XPBonuses(this));
         registerHumbugModule(CustomRecipes.class, new CustomRecipes(this));
         registerHumbugModule(OldRegen.class, new OldRegen(this));
-        registerHumbugModule(OldItemVelocity.class, new OldItemValues(this));
+        registerHumbugModule(OldItemValues.class, new OldItemValues(this));
         registerHumbugModule(Elevators.class, new Elevators(this));
         registerHumbugModule(MobStacking.class, new MobStacking(this));
         registerHumbugModule(KitLimits.class, new KitLimits(this));
@@ -38,11 +38,8 @@ public final class HumbugService implements AresService {
 
         modules.values().forEach(module -> {
             module.loadValues();
-
-            if (module.isEnabled()) {
-                module.start();
-                Logger.print("Humbug: Started module '" + module.getName() + "'");
-            }
+            module.start();
+            Logger.print("Humbug: Started module '" + module.getName() + "'");
         });
     }
 
