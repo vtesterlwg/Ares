@@ -76,7 +76,7 @@ public final class OldRegen implements HumbugModule, Listener {
 
         final float exhaustion = player.getExhaustion();
 
-        new Scheduler(getHumbug().getOwner()).sync(() -> player.setExhaustion(exhaustion + 3)).delay(1L).run();
+        new Scheduler(getHumbug().getOwner()).sync(() -> player.setExhaustion(exhaustion + 2)).delay(1L).run();
     }
 
     private double clamp(double value, double min, double max){
