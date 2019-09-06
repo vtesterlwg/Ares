@@ -28,6 +28,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Comparator;
 import java.util.List;
 
 @AllArgsConstructor
@@ -81,21 +82,26 @@ public final class MapCommand extends BaseCommand {
             final KitLimits kitLimits = (KitLimits)humbugService.getModule(KitLimits.class);
 
             if (kitLimits != null) {
-                for (KitLimits.EnchantLimit enchantLimit : kitLimits.getEnchantLimits()) {
-                    enchantLore.add(ChatColor.GOLD + WordUtils.capitalize(enchantLimit.getType().getName().replace("_", " ").toLowerCase()));
-                    enchantLore.add(ChatColor.YELLOW + "Max Level" + ChatColor.RESET + ": " + enchantLimit.getMaxLevel() + ChatColor.YELLOW + ", " + ChatColor.YELLOW + "Status" + ChatColor.RESET + ": " + (enchantLimit.isDisabled() ? ChatColor.RED + "Disabled" : ChatColor.GREEN + "Enabled"));
-                    enchantLore.add(ChatColor.RESET + " ");
+                final List<KitLimits.EnchantLimit> enchantLimits = Lists.newArrayList(kitLimits.getEnchantLimits());
+                final List<KitLimits.PotionLimit> potionLimits = Lists.newArrayList(kitLimits.getPotionLimits());
+
+                enchantLimits.sort(Comparator.comparing(KitLimits.EnchantLimit::isDisabled));
+                potionLimits.sort(Comparator.comparing(KitLimits.PotionLimit::isDisabled));
+
+                for (KitLimits.EnchantLimit enchantLimit : enchantLimits) {
+                    final int maxLevel = enchantLimit.getMaxLevel();
+                    final boolean disabled = enchantLimit.isDisabled();
+                    enchantLore.add(ChatColor.GOLD + WordUtils.capitalize(enchantLimit.getType().getName().replace("_", " ").toLowerCase()) + ChatColor.RESET + ": " + (disabled ? ChatColor.RED + "Disabled" : maxLevel));
                 }
 
                 for (KitLimits.PotionLimit potionLimit : kitLimits.getPotionLimits()) {
-                    potionLore.add(ChatColor.GOLD + WordUtils.capitalize(potionLimit.getType().getName().replace("_", " ").toLowerCase()));
+                    final boolean disabled = potionLimit.isDisabled();
+                    final boolean amplifiable = potionLimit.isAmplifiable();
+                    final boolean extendable = potionLimit.isExtendable();
 
-                    potionLore.add(
-                            ChatColor.YELLOW + "Disabled" + ChatColor.RED + ": " + (potionLimit.isDisabled() ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No") +
-                            ChatColor.YELLOW + ", " + ChatColor.YELLOW + "Amplifiable" + ChatColor.RESET + ": " + (potionLimit.isAmplifiable() ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No") +
-                            ChatColor.YELLOW + ", " + ChatColor.YELLOW + "Extendable" + ChatColor.RESET + ": " + (potionLimit.isExtendable() ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No"));
-
-                    potionLore.add(ChatColor.RESET + " ");
+                    potionLore.add(ChatColor.GOLD + WordUtils.capitalize(potionLimit.getType().getName().replace("_", " ").toLowerCase()) + ChatColor.RESET + ": " +
+                            (disabled ? ChatColor.RED + "Disabled" : "Amplifiable: " + (amplifiable ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No") +
+                                    ChatColor.RESET + ", Extendable: " + (extendable ? ChatColor.GREEN + "Yes" : ChatColor.RED + "No")));
                 }
             }
         }
