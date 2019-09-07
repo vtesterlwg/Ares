@@ -1,10 +1,12 @@
 package com.playares.arena.item;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.playares.arena.Arenas;
 import com.playares.arena.player.ArenaPlayer;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.item.custom.CustomItem;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,12 +17,9 @@ import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 public final class CreateTeamItem implements CustomItem {
     @Getter public final Arenas plugin;
-
-    public CreateTeamItem(Arenas plugin) {
-        this.plugin = plugin;
-    }
 
     @Override
     public Material getMaterial() {
@@ -34,17 +33,12 @@ public final class CreateTeamItem implements CustomItem {
 
     @Override
     public List<String> getLore() {
-        final List<String> lore = Lists.newArrayList();
-
-        lore.add(ChatColor.AQUA + "Right-click while holding this item");
-        lore.add(ChatColor.AQUA + "to create a new team!");
-
-        return lore;
+        return Lists.newArrayList();
     }
 
     @Override
     public Map<Enchantment, Integer> getEnchantments() {
-        return null;
+        return Maps.newHashMap();
     }
 
     @Override

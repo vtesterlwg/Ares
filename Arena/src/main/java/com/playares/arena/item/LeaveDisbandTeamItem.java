@@ -1,6 +1,7 @@
 package com.playares.arena.item;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.playares.arena.Arenas;
 import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.team.Team;
@@ -35,17 +36,12 @@ public final class LeaveDisbandTeamItem implements CustomItem {
 
     @Override
     public List<String> getLore() {
-        final List<String> lore = Lists.newArrayList();
-
-        lore.add(ChatColor.YELLOW + "Right-click while holding this item");
-        lore.add(ChatColor.YELLOW + "to leave/disband your team");
-
-        return lore;
+        return Lists.newArrayList();
     }
 
     @Override
     public Map<Enchantment, Integer> getEnchantments() {
-        return null;
+        return Maps.newHashMap();
     }
 
     @Override

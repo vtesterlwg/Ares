@@ -22,7 +22,7 @@ public final class TeamHandler {
             return;
         }
 
-        final Team team = new Team(player);
+        final Team team = new Team(manager.getPlugin(), player);
         manager.getTeams().add(team);
 
         promise.success();

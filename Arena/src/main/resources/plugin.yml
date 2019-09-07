@@ -1,4 +1,4 @@
 name: Arena
-main: Arenas
+main: com.playares.arena.Arenas
 version: 1.12.2
 depend: [ProtocolLib]

@@ -49,7 +49,7 @@ public final class PlayerConnectionListener implements Listener {
 
         plugin.getPlayerManager().getHandler().giveItems(player);
 
-        new Scheduler(plugin).sync(() -> bukkitPlayer.sendTitle(new Title(ChatColor.GOLD + "Welcome to the Arena!", ChatColor.DARK_RED + "Good Luck and Have fun!", 20, 60, 20))).delay(10L).run();
+        new Scheduler(plugin).sync(() -> bukkitPlayer.sendTitle(new Title(ChatColor.DARK_RED + "Welcome to the Ares Arena!", ChatColor.DARK_AQUA + "Good Luck and Have Fun!", 20, 60, 20))).delay(10L).run();
     }
 
     @EventHandler
@@ -62,9 +62,19 @@ public final class PlayerConnectionListener implements Listener {
             return;
         }
 
-        final Team team = plugin.getTeamManager().getTeam(player);
+        if (player.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
+            // TODO: Determine if their match should end
+            player.setStatus(ArenaPlayer.PlayerStatus.INGAME_DEAD);
+        }
 
-        // TODO: Kill player in match, Update teams
+        final Team team = plugin.getTeamManager().getTeam(player);
+        team.sendMessage(ChatColor.AQUA + player.getUsername() + ChatColor.YELLOW + " has " + ChatColor.RED + "left" + ChatColor.YELLOW + " the team");
+
+        if (team.isLeader(bukkitPlayer.getUniqueId())) {
+            team.transferLeadership();
+        } else {
+            team.getMembers().remove(player);
+        }
 
         plugin.getPlayerManager().getPlayers().remove(player);
     }

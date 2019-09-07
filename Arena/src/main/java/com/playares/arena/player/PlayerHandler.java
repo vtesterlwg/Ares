@@ -1,8 +1,7 @@
 package com.playares.arena.player;
 
 import com.google.common.base.Preconditions;
-import com.playares.arena.item.CreateTeamItem;
-import com.playares.arena.item.LeaveDisbandTeamItem;
+import com.playares.arena.item.*;
 import com.playares.arena.team.Team;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Players;
@@ -36,10 +35,13 @@ public final class PlayerHandler {
         bukkitPlayer.getInventory().setArmorContents(null);
 
         if (team != null) {
-            customItemService.getItem(LeaveDisbandTeamItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(4, item.getItem()));
+            customItemService.getItem(LeaveDisbandTeamItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(2, item.getItem()));
+            customItemService.getItem(OtherTeamItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(6, item.getItem()));
             return;
         }
 
+        customItemService.getItem(UnrankedQueueItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(0, item.getItem()));
+        customItemService.getItem(RankedQueueItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(1, item.getItem()));
         customItemService.getItem(CreateTeamItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(4, item.getItem()));
     }
 }

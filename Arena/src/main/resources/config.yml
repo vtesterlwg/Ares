@@ -1,3 +1,13 @@
+database: 'mongodb://localhost'
+
+server-sync:
+  id: 1
+  bungee-name: 'arena'
+  display-name: '&9Arena'
+  description: '&7Arena Description'
+  type: 'ARENA'
+  premium-allocated-slots: 200
+
 limits:
   team-size: 30
 

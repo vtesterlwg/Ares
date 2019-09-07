@@ -36,6 +36,11 @@
                                     <include>com.playares:Humbug</include>
                                     <include>com.playares:Punishments</include>
                                     <include>com.playares:Classes</include>
+                                    <include>com.playares:AutomatedRestarts</include>
+                                    <include>com.playares:ChatRestrictions</include>
+                                    <include>com.playares:PlayerClasses</include>
+                                    <include>com.playares:ServerSync</include>
+                                    <include>com.playares:Tips</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -148,7 +153,39 @@
             <scope>compile</scope>
         </dependency>
 
+        <!-- Ares Automated Restart Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>AutomatedRestarts</artifactId>
+            <version>1.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+
         <!-- Ares Custom Item Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>ChatRestrictions</artifactId>
+            <version>1.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Player Classes Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>PlayerClasses</artifactId>
+            <version>1.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Server Sync Service -->
+        <dependency>
+            <groupId>com.playares</groupId>
+            <artifactId>ServerSync</artifactId>
+            <version>1.12.2</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Ares Server Sync Service -->
         <dependency>
             <groupId>com.playares</groupId>
             <artifactId>CustomItems</artifactId>
