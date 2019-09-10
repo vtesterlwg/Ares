@@ -104,7 +104,7 @@ public final class FactionDisplayHandler {
         Collections.reverse(factions);
 
         int finishPos = page * 10;
-        int startPos = finishPos - 9;
+        int startPos = finishPos - 10;
 
         if (startPos > factions.size()) {
             promise.failure("Page does not exist");
@@ -125,16 +125,16 @@ public final class FactionDisplayHandler {
                 continue;
             }
 
-            viewer.sendMessage(new ComponentBuilder("" + i)
+            viewer.sendMessage(new ComponentBuilder("" + (i + 1))
             .color(net.md_5.bungee.api.ChatColor.GOLD)
             .append(".")
             .color(net.md_5.bungee.api.ChatColor.YELLOW)
             .append(" " + faction.getName())
             .color(net.md_5.bungee.api.ChatColor.BLUE)
-            .append(" | " + faction.getOnlineMembers().size() + " online | " + String.format("%.2f", faction.getDeathsTilRaidable()) + "DTR")
+            .append(" (" + faction.getOnlineMembers().size() + "/" + faction.getMembers().size() + ") ")
             .color(net.md_5.bungee.api.ChatColor.GRAY)
-            .append(" [MORE INFO]")
-            .color(net.md_5.bungee.api.ChatColor.AQUA)
+            .append(String.format("%.2f", faction.getDeathsTilRaidable()) + "/" + String.format("%.2f", faction.getMaxDTR()) + " DTR")
+            .color(net.md_5.bungee.api.ChatColor.GRAY)
             .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/f who " + faction.getName()))
             .create());
         }
