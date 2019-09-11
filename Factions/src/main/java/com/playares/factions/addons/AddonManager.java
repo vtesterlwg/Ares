@@ -4,6 +4,7 @@ import com.google.common.collect.Maps;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.factions.Factions;
 import com.playares.factions.addons.autosave.AutosaveAddon;
+import com.playares.factions.addons.boosts.BoostAddon;
 import com.playares.factions.addons.crowbars.CrowbarAddon;
 import com.playares.factions.addons.economy.EconomyAddon;
 import com.playares.factions.addons.events.EventsAddon;
@@ -33,6 +34,7 @@ public final class AddonManager {
         registerAddon(new LoggerAddon(plugin));
         registerAddon(new SpawnpointAddon(plugin));
         registerAddon(new CrowbarAddon(plugin));
+        registerAddon(new BoostAddon(plugin));
     }
 
     public void startAddons() {
