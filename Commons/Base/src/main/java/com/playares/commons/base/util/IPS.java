@@ -1,5 +1,7 @@
 package com.playares.commons.base.util;
 
+import java.util.regex.Pattern;
+
 public final class IPS {
     /**
      * Converts an IP-Address to an Integer
@@ -7,16 +9,14 @@ public final class IPS {
      * @return IP-Address as Integer
      */
     public static int toInt(String address) {
-        final String formatted = address
-                .replace(".", "")
-                .replace("/", "")
-                .replace(":", "");
+        int result = 0;
 
-        try {
-            return Integer.parseInt(formatted);
-        } catch (NumberFormatException ex) {
-            return 0;
+        for(String part : address.split(Pattern.quote("."))) {
+            result = result << 8;
+            result |= Integer.parseInt(part);
         }
+
+        return result;
     }
 
     private IPS() {
