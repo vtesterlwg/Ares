@@ -49,7 +49,7 @@ public final class Boost implements MongoDocument<Boost> {
 
     @AllArgsConstructor
     public enum BoostType {
-        ORES("Double Ore Spawnrates", "Increase the spawnrates for Gold, Diamond and Emerald ores", Material.DIAMOND_ORE),
+        ORES("Double Ore Drops", "Increase the drop rates for mined ores", Material.DIAMOND_ORE),
         DROPS("Double Mob Loot Drops", "Increase the spawnrates for mob loot drops", Material.ENDER_PEARL),
         EXP("Double EXP Drops", "Increase the amount of dropped experience orbs", Material.EXP_BOTTLE);
 
