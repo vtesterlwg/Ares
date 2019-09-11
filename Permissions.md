@@ -35,6 +35,7 @@ punishments.unban - Unban a player
 punishments.unblacklist - Unblacklist a player
 punishments.unmute - Unmute a player
 punishments.view - View punishment messages as they happen
+punishments.alts - Lookup alt accounts
 
 proxyessentials.notifications - Receive join/leave notifications
 proxyessentials.staffchat - Enter/leave & view staff chat

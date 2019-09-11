@@ -21,11 +21,13 @@ public final class PunishmentService implements AresService, Listener {
     @Getter public final AresPlugin owner;
     @Getter protected final PunishmentHandler punishmentHandler;
     @Getter protected final PunishmentManager punishmentManager;
+    @Getter protected final AltsHandler altsHandler;
 
     public PunishmentService(AresPlugin owner) {
         this.owner = owner;
         this.punishmentHandler = new PunishmentHandler(this);
         this.punishmentManager = new PunishmentManager(this);
+        this.altsHandler = new AltsHandler(this);
     }
 
     public void start() {
@@ -36,6 +38,7 @@ public final class PunishmentService implements AresService, Listener {
         registerCommand(new UnbanCommand(this));
         registerCommand(new UnmuteCommand(this));
         registerCommand(new UnblacklistCommand(this));
+        registerCommand(new AltsCommand(this));
     }
 
     public void stop() {
