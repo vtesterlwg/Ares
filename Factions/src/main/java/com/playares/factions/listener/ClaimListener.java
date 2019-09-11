@@ -37,6 +37,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.*;
+import org.bukkit.event.world.PortalCreateEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -216,6 +217,32 @@ public final class ClaimListener implements Listener {
             else if (!affectedBuildBuffers.isEmpty()) {
                 event.setCancelled(true);
                 return;
+            }
+        }
+    }
+
+    @EventHandler
+    public void onPortalCreate(PortalCreateEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        final List<Block> blocks = event.getBlocks();
+
+        if (!event.getReason().equals(PortalCreateEvent.CreateReason.OBC_DESTINATION)) {
+            return;
+        }
+
+        for (Block block : blocks) {
+            final DefinedClaim inside = plugin.getClaimManager().getClaimAt(new BLocatable(block));
+
+            if (inside != null) {
+                final ServerFaction serverFaction = plugin.getFactionManager().getServerFactionById(inside.getOwnerId());
+
+                if (serverFaction != null) {
+                    event.setCancelled(true);
+                    return;
+                }
             }
         }
     }
