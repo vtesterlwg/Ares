@@ -10,8 +10,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
 public final class StaffChatHandler implements Listener {
-    @Getter
-    public ProxyEssentialsService service;
+    @Getter public ProxyEssentialsService service;
 
     public StaffChatHandler(ProxyEssentialsService service) {
         this.service = service;

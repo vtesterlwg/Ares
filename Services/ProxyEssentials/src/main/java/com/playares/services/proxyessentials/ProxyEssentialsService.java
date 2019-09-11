@@ -15,8 +15,10 @@ import com.playares.services.proxyessentials.request.RequestManager;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
+import net.md_5.bungee.api.event.ServerSwitchEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -42,17 +44,17 @@ public final class ProxyEssentialsService implements AresService, Listener {
         registerCommand(new ReportCommand(this));
         registerCommand(new StaffChatCommand(this));
 
-        this.reportManager = new ReportManager();
-        this.reportHandler = new ReportHandler(this);
-        this.requestManager = new RequestManager();
-        this.requestHandler = new RequestHandler(this);
-        this.staffChatManager = new StaffChatManager();
-        this.staffChatHandler = new StaffChatHandler(this);
+        reportManager = new ReportManager();
+        reportHandler = new ReportHandler(this);
+        requestManager = new RequestManager();
+        requestHandler = new RequestHandler(this);
+        staffChatManager = new StaffChatManager();
+        staffChatHandler = new StaffChatHandler(this);
     }
 
     public void stop() {
-        this.reportManager.getRecentReports().clear();
-        this.requestManager.getRecentRequests().clear();
+        reportManager.getRecentReports().clear();
+        requestManager.getRecentRequests().clear();
     }
 
     public String getName() {
@@ -69,6 +71,19 @@ public final class ProxyEssentialsService implements AresService, Listener {
                     viewer.sendMessage(ChatColor.BLUE + "[" + ChatColor.DARK_AQUA + "Staff" + ChatColor.BLUE + "] " + ChatColor.AQUA +
                             player.getName() + ChatColor.GREEN + " joined " + ChatColor.AQUA + "the network");
                 }
+            });
+        }
+    }
+
+    @EventHandler
+    public void onServerChange(ServerSwitchEvent event) {
+        final ProxiedPlayer player = event.getPlayer();
+        final Server server = player.getServer();
+
+        if (player.hasPermission("proxyessentials.notifications")) {
+            getProxy().getProxy().getPlayers().forEach(viewer -> {
+                viewer.sendMessage(ChatColor.BLUE + "[" + ChatColor.DARK_AQUA + "Staff" + ChatColor.BLUE + "] " + ChatColor.AQUA +
+                        player.getName() + ChatColor.GOLD + " switched" + ChatColor.AQUA + " to " + ChatColor.RESET + server.getInfo().getName());
             });
         }
     }

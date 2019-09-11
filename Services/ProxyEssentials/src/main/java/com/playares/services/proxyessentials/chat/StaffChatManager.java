@@ -8,8 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 public final class StaffChatManager {
-    @Getter
-    public final Set<UUID> staffChat;
+    @Getter public final Set<UUID> staffChat;
 
     public StaffChatManager() {
         this.staffChat = Sets.newConcurrentHashSet();
