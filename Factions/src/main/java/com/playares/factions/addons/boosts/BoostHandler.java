@@ -109,7 +109,7 @@ public final class BoostHandler {
                 getAddon().setActiveBoost(new ActiveBoost(boost, username, boost.getDuration()));
 
                 addon.setCompletionTask(new Scheduler(getAddon().getPlugin()).sync(() -> {
-                    Bukkit.broadcastMessage(ChatColor.GOLD + addon.getActiveBoost().getUsername() + "'s " + ChatColor.RED + " server boost has finished");
+                    Bukkit.broadcastMessage(ChatColor.GOLD + addon.getActiveBoost().getUsername() + "'s " + ChatColor.RED + "server boost has finished");
                     addon.setActiveBoost(null);
                 }).delay(boost.getDuration() * 20).run());
 
