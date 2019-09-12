@@ -11,6 +11,7 @@ import com.playares.factions.addons.events.EventsAddon;
 import com.playares.factions.addons.loggers.LoggerAddon;
 import com.playares.factions.addons.mining.MiningAddon;
 import com.playares.factions.addons.spawnpoints.SpawnpointAddon;
+import com.playares.factions.addons.staff.StaffAddon;
 import com.playares.factions.addons.states.ServerStateAddon;
 import com.playares.factions.addons.stats.StatsAddon;
 import lombok.Getter;
@@ -35,6 +36,7 @@ public final class AddonManager {
         registerAddon(new SpawnpointAddon(plugin));
         registerAddon(new CrowbarAddon(plugin));
         registerAddon(new BoostAddon(plugin));
+        registerAddon(new StaffAddon(plugin));
     }
 
     public void startAddons() {
