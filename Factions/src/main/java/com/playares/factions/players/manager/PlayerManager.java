@@ -21,6 +21,7 @@ import com.playares.factions.players.handlers.PlayerTimerHandler;
 import com.playares.factions.timers.PlayerTimer;
 import com.playares.factions.timers.cont.player.ProtectionTimer;
 import com.playares.services.automatedrestarts.AutomatedRestartService;
+import com.playares.services.essentials.EssentialsService;
 import lombok.Getter;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
@@ -47,6 +48,7 @@ public final class PlayerManager {
     @Getter public final BukkitTask tabUpdater;
 
     public PlayerManager(Factions plugin) {
+        final EssentialsService essentialsService = (EssentialsService)plugin.getService(EssentialsService.class);
         final AutomatedRestartService restartService = (AutomatedRestartService)plugin.getService(AutomatedRestartService.class);
         final EventsAddon eventAddon = (EventsAddon)plugin.getAddonManager().getAddon(EventsAddon.class);
         this.plugin = plugin;
@@ -61,6 +63,10 @@ public final class PlayerManager {
                 for (PlayerTimer timer : profile.getTimers().stream().filter(timer -> !timer.isExpired() && timer.getType().isRender()).collect(Collectors.toList())) {
                     hudElements.add(timer.getType().getDisplayName() + " " + ChatColor.RED + (timer.getType().isDecimal() ? Time.convertToDecimal(timer.getRemaining()) : Time.convertToHHMMSS(timer.getRemaining())));
                 }
+            }
+
+            if (essentialsService != null && essentialsService.getVanishManager().isVanished(profile.getPlayer())) {
+                hudElements.add(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Vanished");
             }
 
             // Restarts are not part of the typical HUD elements
