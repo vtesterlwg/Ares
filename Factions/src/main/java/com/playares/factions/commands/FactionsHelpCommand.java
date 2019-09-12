@@ -39,7 +39,7 @@ public final class FactionsHelpCommand extends BaseCommand {
         player.sendMessage(new ComponentBuilder("/boosts")
         .color(ChatColor.GOLD).bold(true)
         .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/boosts"))
-        .append(" Access your global server boosts").color(ChatColor.GRAY)
+        .append(" Access your global server boosts").color(ChatColor.GRAY).bold(false)
         .create());
 
         player.sendMessage(ChatColor.GOLD + "" + ChatColor.BOLD + "/lives" + ChatColor.GRAY + " View your lives");
