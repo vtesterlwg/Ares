@@ -101,4 +101,20 @@ public final class FactionStaffHandler {
 
         promise.success();
     }
+
+    public void updateReinvites(Player player, String name, int reinvites, SimplePromise promise) {
+        final PlayerFaction faction = manager.getPlayerFactionByName(name);
+
+        if (faction == null) {
+            promise.failure("Faction not found");
+            return;
+        }
+
+        faction.setReinvites(reinvites);
+        faction.sendMessage(ChatColor.GOLD + "Your reinvites have been updated to " + ChatColor.YELLOW + reinvites);
+
+        Logger.print(player.getName() + " updated " + faction.getName() + "'s Reinvites to " + reinvites);
+
+        promise.success();
+    }
 }

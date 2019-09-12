@@ -765,6 +765,24 @@ public final class FactionCommand extends BaseCommand {
         });
     }
 
+    @Subcommand("setreinvite|setreinv|sri")
+    @Description("Update a Player Faction's Reinvites")
+    @CommandPermission("factions.reinvites.others")
+    @Syntax("<faction> <reinvites>")
+    public void onSetReinvites(Player player, String faction, int reinvites) {
+        plugin.getFactionManager().getStaffHandler().updateReinvites(player, faction, reinvites, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "Faction reinvites have been updated");
+            }
+
+            @Override
+            public void failure(@Nonnull String reason) {
+                player.sendMessage(ChatColor.RED + reason);
+            }
+        });
+    }
+
     @Subcommand("reload")
     @Description("Reload plugin configuration")
     @CommandPermission("factions.reload")

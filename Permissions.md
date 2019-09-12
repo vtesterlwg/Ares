@@ -77,6 +77,7 @@ factions.serverstates.bypass - Bypass EOTW Limitations
 factions.events.admin - Access event functions
 factions.events.palace.restock - Access the restock palace command
 factions.events.palace.chests - Access the create/delete commands for Palace chests
+factions.reinvites.others - Set the reinvites for other factions
 
 autoreboot.schedule - Schedule reboot
 autoreboot.start - Start reboot process
