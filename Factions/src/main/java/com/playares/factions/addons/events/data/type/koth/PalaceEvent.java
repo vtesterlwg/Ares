@@ -59,6 +59,10 @@ public final class PalaceEvent extends KOTHEvent {
         return unlockTime <= Time.now();
     }
 
+    public PlayerFaction getOwner() {
+        return (ownerId != null) ? addon.getPlugin().getFactionManager().getPlayerFactionById(ownerId) : null;
+    }
+
     public void stock() {
         lootChests.forEach(chest -> addon.getLootManager().fillPalaceChest(chest));
         Bukkit.broadcastMessage(EventsAddon.PREFIX + displayName + ChatColor.GREEN + " has been restocked");
