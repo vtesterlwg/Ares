@@ -140,6 +140,7 @@ public final class EventsManager {
                     eventRepository.add(koth);
                 } else {
                     final Map<PalaceLootTier, Long> unlockTimes = Maps.newHashMap();
+                    final UUID owner = (config.getString(path + "owner") != null) ? UUID.fromString(config.getString(path + "owner")) : null;
 
                     for (PalaceLootTier tier : PalaceLootTier.values()) {
                         long unlockTime = config.getLong(path + "loot-unlock-times." + tier.name());
@@ -147,6 +148,8 @@ public final class EventsManager {
                     }
 
                     final PalaceEvent palace = new PalaceEvent(addon, ownerId, name, displayName, schedule, captureChest, cornerA, cornerB, ticketsNeeded, timerDuration);
+
+                    palace.setOwningFaction(owner);
                     palace.getLootTierUnlockTimes().putAll(unlockTimes);
 
                     eventRepository.add(palace);
@@ -185,6 +188,7 @@ public final class EventsManager {
             final PalaceEvent palace = (PalaceEvent)event;
 
             config.set(path + ".type", EventType.KOTH_PALACE.name());
+            config.set(path + ".owner", palace.getOwningFaction().toString());
 
             // We save the loot-tier unlock times to 0L by default
             for (PalaceLootTier tier : palace.getLootTierUnlockTimes().keySet()) {
