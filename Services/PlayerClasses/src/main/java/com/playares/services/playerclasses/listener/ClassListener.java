@@ -228,6 +228,15 @@ public final class ClassListener implements Listener {
 
         final Player attacker = event.getDamager();
         final Player attacked = event.getDamaged();
+
+        if (!event.getType().equals(PlayerDamagePlayerEvent.DamageType.PHYSICAL)) {
+            return;
+        }
+
+        if (attacker.getUniqueId().equals(attacked.getUniqueId())) {
+            return;
+        }
+
         final Location attackerLocation = attacker.getLocation();
         final Location attackedLocation = attacked.getLocation();
 
