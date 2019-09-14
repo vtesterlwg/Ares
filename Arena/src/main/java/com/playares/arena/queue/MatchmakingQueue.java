@@ -26,9 +26,13 @@ public final class MatchmakingQueue {
 
     @AllArgsConstructor
     public enum QueueType {
-        NO_DEBUFF("No Debuff", Material.DIAMOND_SWORD, 1), DEBUFF("Debuff", Material.DIAMOND_SWORD, 3), ARCHER("Archer", Material.BOW, 5), HCF("HCF", Material.GOLD_HELMET, 7);
+        NO_DEBUFF("No Debuff", 16, Material.DIAMOND_SWORD, 1),
+        DEBUFF("Debuff", 16, Material.DIAMOND_SWORD, 3),
+        ARCHER("Archer", 16, Material.BOW, 5),
+        HCF("HCF", 16, Material.GOLD_HELMET, 7);
 
         @Getter public final String displayName;
+        @Getter public final int enderpearlCooldown;
         @Getter public final Material icon;
         @Getter public final int iconPosition;
     }

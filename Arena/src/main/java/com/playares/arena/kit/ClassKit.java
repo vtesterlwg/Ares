@@ -1,7 +1,6 @@
 package com.playares.arena.kit;
 
 import com.playares.arena.Arenas;
-import com.playares.commons.bukkit.util.Scheduler;
 import com.playares.services.playerclasses.data.Class;
 import lombok.Getter;
 import org.bukkit.entity.Player;
@@ -18,7 +17,5 @@ public final class ClassKit extends Kit {
     @Override
     public void giveKit(Player player) {
         super.giveKit(player);
-
-        new Scheduler(getPlugin()).sync(() -> attachedClass.activate(player)).delay(1L).run();
     }
 }

@@ -94,6 +94,7 @@ public final class QueueManager {
                     if (match instanceof UnrankedMatch) {
                         final UnrankedMatch unrankedMatch = (UnrankedMatch)match;
                         unrankedMatch.start();
+                        plugin.getMatchManager().getMatches().add(unrankedMatch);
                     }
                 }
 

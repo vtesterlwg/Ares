@@ -2,8 +2,10 @@ package com.playares.arena.player;
 
 import com.google.common.collect.Sets;
 import com.playares.arena.Arenas;
+import com.playares.commons.bukkit.util.Scheduler;
 import lombok.Getter;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Set;
 import java.util.UUID;
@@ -12,11 +14,13 @@ public final class PlayerManager {
     @Getter public final Arenas plugin;
     @Getter public final PlayerHandler handler;
     @Getter public final Set<ArenaPlayer> players;
+    @Getter public BukkitTask playerUpdaterTask;
 
     public PlayerManager(Arenas plugin) {
         this.plugin = plugin;
         this.handler = new PlayerHandler(this);
         this.players = Sets.newConcurrentHashSet();
+        this.playerUpdaterTask = new Scheduler(plugin).async(() -> players.forEach(ArenaPlayer::update)).repeat(0L, 1L).run();
     }
 
     public ArenaPlayer getPlayer(Player bukkitPlayer) {

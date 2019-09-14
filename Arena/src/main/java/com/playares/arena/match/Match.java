@@ -1,10 +1,12 @@
 package com.playares.arena.match;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.playares.arena.Arenas;
 import com.playares.arena.arena.data.Arena;
 import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.queue.MatchmakingQueue;
+import com.playares.arena.report.PlayerReport;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,6 +24,7 @@ public abstract class Match {
     @Getter public Scoreboard scoreboardB;
     @Getter public Scoreboard spectatorScoreboard;
     @Getter public final Set<ArenaPlayer> spectators;
+    @Getter public final Set<PlayerReport> playerReports;
     @Getter public final MatchmakingQueue queue;
     @Getter public final Arena arena;
     @Getter public final boolean ranked;
@@ -30,6 +33,7 @@ public abstract class Match {
         this.plugin = plugin;
         this.uniqueId = UUID.randomUUID();
         this.spectators = Sets.newConcurrentHashSet();
+        this.playerReports = Sets.newHashSet();
         this.queue = queue;
         this.arena = arena;
         this.ranked = ranked;
@@ -38,6 +42,16 @@ public abstract class Match {
         this.spectatorScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
 
         setupScoreboards();
+    }
+
+    public abstract ImmutableList<ArenaPlayer> getPlayers();
+
+    public PlayerReport getReport(ArenaPlayer player) {
+        return playerReports.stream().filter(report -> report.getPlayer().equals(player)).findFirst().orElse(null);
+    }
+
+    public PlayerReport getReport(UUID playerUUID) {
+        return playerReports.stream().filter(report -> report.getPlayer().getUniqueId().equals(playerUUID)).findFirst().orElse(null);
     }
 
     public void addSpectator(Player player) {

@@ -16,14 +16,12 @@ public class Kit {
     @Getter public final String name;
     @Getter public final ItemStack[] contents;
     @Getter public final ItemStack[] armor;
-    @Getter public final int enderpearlCooldown;
 
     public Kit(Arenas plugin, String name, ItemStack[] contents, ItemStack[] armor) {
         this.plugin = plugin;
         this.name = name;
         this.contents = contents;
         this.armor = armor;
-        this.enderpearlCooldown = 16;
     }
 
     public Kit(Arenas plugin, String name, ItemStack[] contents, ItemStack[] armor, int enderpearlCooldown) {
@@ -31,7 +29,6 @@ public class Kit {
         this.name = name;
         this.contents = contents;
         this.armor = armor;
-        this.enderpearlCooldown = enderpearlCooldown;
     }
 
     public void giveKit(Player player) {
@@ -60,7 +57,6 @@ public class Kit {
 
         config.set("kits." + getName() + ".contents", contents);
         config.set("kits." + getName() + ".armor", armor);
-        config.set("kits." + getName() + ".enderpearl-cooldown", enderpearlCooldown);
 
         if (this instanceof ClassKit) {
             final ClassKit classKit = (ClassKit)this;

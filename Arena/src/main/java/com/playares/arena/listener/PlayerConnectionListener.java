@@ -62,18 +62,21 @@ public final class PlayerConnectionListener implements Listener {
             return;
         }
 
+        final Team team = plugin.getTeamManager().getTeam(player);
+
         if (player.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
             // TODO: Determine if their match should end
             player.setStatus(ArenaPlayer.PlayerStatus.INGAME_DEAD);
         }
 
-        final Team team = plugin.getTeamManager().getTeam(player);
-        team.sendMessage(ChatColor.AQUA + player.getUsername() + ChatColor.YELLOW + " has " + ChatColor.RED + "left" + ChatColor.YELLOW + " the team");
+        if (team != null) {
+            team.sendMessage(ChatColor.AQUA + player.getUsername() + ChatColor.YELLOW + " has " + ChatColor.RED + "left" + ChatColor.YELLOW + " the team");
 
-        if (team.isLeader(bukkitPlayer.getUniqueId())) {
-            team.transferLeadership();
-        } else {
-            team.getMembers().remove(player);
+            if (team.isLeader(bukkitPlayer.getUniqueId())) {
+                team.transferLeadership();
+            } else {
+                team.getMembers().remove(player);
+            }
         }
 
         plugin.getPlayerManager().getPlayers().remove(player);

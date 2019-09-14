@@ -8,8 +8,11 @@ import com.playares.arena.command.KitCommand;
 import com.playares.arena.command.TeamCommand;
 import com.playares.arena.item.*;
 import com.playares.arena.kit.KitManager;
+import com.playares.arena.listener.CombatListener;
 import com.playares.arena.listener.KitListener;
 import com.playares.arena.listener.PlayerConnectionListener;
+import com.playares.arena.listener.ReportListener;
+import com.playares.arena.match.MatchManager;
 import com.playares.arena.player.PlayerManager;
 import com.playares.arena.queue.QueueManager;
 import com.playares.arena.team.TeamManager;
@@ -38,6 +41,7 @@ public final class Arenas extends AresPlugin {
     @Getter public TeamManager teamManager;
     @Getter public KitManager kitManager;
     @Getter public QueueManager queueManager;
+    @Getter public MatchManager matchManager;
 
     @Override
     public void onEnable() {
@@ -49,6 +53,7 @@ public final class Arenas extends AresPlugin {
         teamManager = new TeamManager(this);
         kitManager = new KitManager(this);
         queueManager = new QueueManager(this);
+        matchManager = new MatchManager(this);
 
         final PaperCommandManager commandManager = new PaperCommandManager(this);
         registerCommandManager(commandManager);
@@ -60,6 +65,8 @@ public final class Arenas extends AresPlugin {
 
         registerListener(new PlayerConnectionListener(this));
         registerListener(new KitListener(this));
+        registerListener(new CombatListener(this));
+        registerListener(new ReportListener(this));
 
         registerCommand(new ArenaCommand(this));
         registerCommand(new TeamCommand(this));
