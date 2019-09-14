@@ -138,4 +138,8 @@ public final class ClassManager {
     public Class getClassByArmor(Player player) {
         return classes.stream().filter(playerClass -> playerClass.hasArmorRequirements(player)).findFirst().orElse(null);
     }
+
+    public Class getClassByName(String name) {
+        return classes.stream().filter(playerClass -> playerClass.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+    }
 }
