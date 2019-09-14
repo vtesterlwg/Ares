@@ -4,9 +4,11 @@ import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.playares.arena.arena.ArenaManager;
 import com.playares.arena.command.ArenaCommand;
+import com.playares.arena.command.KitCommand;
 import com.playares.arena.command.TeamCommand;
 import com.playares.arena.item.*;
 import com.playares.arena.kit.KitManager;
+import com.playares.arena.listener.KitListener;
 import com.playares.arena.listener.PlayerConnectionListener;
 import com.playares.arena.player.PlayerManager;
 import com.playares.arena.queue.QueueManager;
@@ -57,9 +59,11 @@ public final class Arenas extends AresPlugin {
         getMongo().openConnection();
 
         registerListener(new PlayerConnectionListener(this));
+        registerListener(new KitListener(this));
 
         registerCommand(new ArenaCommand(this));
         registerCommand(new TeamCommand(this));
+        registerCommand(new KitCommand(this));
 
         registerService(new AutomatedRestartService(this, 86400));
         registerService(new ChatRestrictionService(this));
@@ -90,11 +94,14 @@ public final class Arenas extends AresPlugin {
             customItemService.registerNewItem(new RankedQueueItem(this));
             customItemService.registerNewItem(new UnrankedQueueItem(this));
             customItemService.registerNewItem(new OtherTeamItem(this));
+            customItemService.registerNewItem(new LeaveQueueItem(this));
         } else {
             Logger.error("Failed to obtain Custom Item Service!");
         }
 
+        kitManager.load();
         arenaManager.load();
+        queueManager.load();
     }
 
     @Override

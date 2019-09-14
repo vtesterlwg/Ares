@@ -1,0 +1,12 @@
+queues:
+  NO_DEBUFF:
+    - 'nodebuff'
+  DEBUFF:
+    - 'debuff'
+  ARCHER:
+    - 'archer'
+  HCF:
+    - 'nodebuff'
+    - 'archer'
+    - 'bard'
+    - 'rogue'

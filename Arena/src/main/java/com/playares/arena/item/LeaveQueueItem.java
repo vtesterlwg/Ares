@@ -3,6 +3,8 @@ package com.playares.arena.item;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.playares.arena.Arenas;
+import com.playares.arena.player.ArenaPlayer;
+import com.playares.arena.queue.SearchingPlayer;
 import com.playares.commons.bukkit.item.custom.CustomItem;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,17 +17,17 @@ import java.util.List;
 import java.util.Map;
 
 @AllArgsConstructor
-public final class UnrankedQueueItem implements CustomItem {
+public final class LeaveQueueItem implements CustomItem {
     @Getter public final Arenas plugin;
 
     @Override
     public Material getMaterial() {
-        return Material.IRON_SWORD;
+        return Material.BARRIER;
     }
 
     @Override
     public String getName() {
-        return ChatColor.YELLOW + "Unranked Queue";
+        return ChatColor.RED + "Leave Queue";
     }
 
     @Override
@@ -40,6 +42,21 @@ public final class UnrankedQueueItem implements CustomItem {
 
     @Override
     public Runnable getRightClick(Player who) {
-        return () -> plugin.getQueueManager().getHandler().openUnrankedQueueSelector(who);
+        return () -> {
+            final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(who);
+
+            if (profile == null) {
+                return;
+            }
+
+            final SearchingPlayer current = plugin.getQueueManager().getCurrentSearch(who);
+
+            if (current != null) {
+                plugin.getQueueManager().getSearchingPlayers().remove(current);
+                who.sendMessage(ChatColor.RED + "Left Queue: " + ChatColor.RESET + current.getQueueType().getDisplayName());
+            }
+
+            plugin.getPlayerManager().getHandler().giveItems(profile);
+        };
     }
 }

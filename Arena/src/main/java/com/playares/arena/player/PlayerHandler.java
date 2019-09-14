@@ -2,6 +2,7 @@ package com.playares.arena.player;
 
 import com.google.common.base.Preconditions;
 import com.playares.arena.item.*;
+import com.playares.arena.queue.SearchingPlayer;
 import com.playares.arena.team.Team;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Players;
@@ -21,6 +22,7 @@ public final class PlayerHandler {
 
         final Player bukkitPlayer = player.getPlayer();
         final Team team = manager.getPlugin().getTeamManager().getTeam(player);
+        final SearchingPlayer search = manager.getPlugin().getQueueManager().getCurrentSearch(player.getPlayer());
         final CustomItemService customItemService = (CustomItemService)manager.getPlugin().getService(CustomItemService.class);
 
         if (customItemService == null) {
@@ -37,6 +39,11 @@ public final class PlayerHandler {
         if (team != null) {
             customItemService.getItem(LeaveDisbandTeamItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(2, item.getItem()));
             customItemService.getItem(OtherTeamItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(6, item.getItem()));
+            return;
+        }
+
+        if (search != null) {
+            customItemService.getItem(LeaveQueueItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(4, item.getItem()));
             return;
         }
 

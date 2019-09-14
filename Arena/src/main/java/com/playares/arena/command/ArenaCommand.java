@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 
+// TODO: Arena delete command
 @AllArgsConstructor
 @CommandAlias("arena")
 public final class ArenaCommand extends BaseCommand {
