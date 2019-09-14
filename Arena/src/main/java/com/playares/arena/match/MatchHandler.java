@@ -13,10 +13,23 @@ public final class MatchHandler {
     }
 
     public void finish(Match match) {
+        match.getPlugin().getReportManager().getHandler().printReports(match);
+
         if (match instanceof UnrankedMatch) {
             final UnrankedMatch unrankedMatch = (UnrankedMatch)match;
 
             // TODO: Print aftermatch report, store reports in match
+
+            if (unrankedMatch.getWinner() != null) {
+                if (unrankedMatch.getWinner().equals(unrankedMatch.getPlayerA())) {
+                    unrankedMatch.getPlayerA().getActiveReport().pullInventory();
+                } else {
+                    unrankedMatch.getPlayerB().getActiveReport().pullInventory();
+                }
+            }
+
+            manager.getPlugin().getReportManager().addReport(unrankedMatch.getPlayerA().getActiveReport());
+            manager.getPlugin().getReportManager().addReport(unrankedMatch.getPlayerB().getActiveReport());
 
             unrankedMatch.getPlayers().forEach(player -> {
                 player.addTimer(new MatchEndingTimer(manager.getPlugin(), player.getUniqueId(), 3));

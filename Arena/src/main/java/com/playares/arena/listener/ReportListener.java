@@ -59,7 +59,6 @@ public final class ReportListener implements Listener {
         final Match match = event.getMatch();
 
         if (profile != null && profile.getActiveReport() != null) {
-            profile.getActiveReport().pullInventory();
             profile.getActiveReport().setHealth(0.0);
             profile.getActiveReport().setFood(player.getFoodLevel());
 

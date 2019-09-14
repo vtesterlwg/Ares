@@ -80,6 +80,7 @@ public final class CombatListener implements Listener {
             event.setCancelled(true);
 
             profile.setStatus(ArenaPlayer.PlayerStatus.INGAME_DEAD);
+            profile.getActiveReport().pullInventory();
 
             if (match instanceof TeamMatch) {
                 // TODO: Hide player from both teams
@@ -108,17 +109,48 @@ public final class CombatListener implements Listener {
             final ChatColor playerColor = (unrankedMatch.getPlayerA().equals(plugin.getPlayerManager().getPlayer(player)) ? ChatColor.YELLOW : ChatColor.AQUA);
             final ChatColor killerColor = (unrankedMatch.getPlayerA().equals(plugin.getPlayerManager().getPlayer(player)) ? ChatColor.AQUA : ChatColor.YELLOW);
 
-            player.sendMessage(ChatColor.GREEN + player.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.RED + killer.getName());
-            killer.sendMessage(ChatColor.RED + player.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.GREEN + killer.getName());
+            if (killer != null) {
 
-            unrankedMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendMessage(playerColor + player.getName() + ChatColor.GRAY + " has been slain by " + killerColor + killer.getName()));
+                player.sendMessage(ChatColor.GREEN + player.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.RED + killer.getName());
+                killer.sendMessage(ChatColor.RED + player.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.GREEN + killer.getName());
+                unrankedMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendMessage(playerColor + player.getName() + ChatColor.GRAY + " has been slain by " + killerColor + killer.getName()));
 
-            if (winner != null) {
-                player.sendTitle(new Title("", ChatColor.RED + killer.getName() + ChatColor.GOLD + " Wins!"));
-                killer.sendTitle(new Title("", ChatColor.GREEN + "You Win!"));
-                unrankedMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendMessage(killerColor + killer.getName() + ChatColor.GOLD + " Wins!"));
+                if (winner != null) {
+                    player.sendTitle(new Title("", ChatColor.RED + killer.getName() + ChatColor.GOLD + " Wins!"));
+                    killer.sendTitle(new Title("", ChatColor.GREEN + "You Win!"));
+                    unrankedMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendMessage(killerColor + killer.getName() + ChatColor.GOLD + " Wins!"));
 
-                plugin.getMatchManager().getHandler().finish(match);
+                    plugin.getMatchManager().getHandler().finish(match);
+                }
+            }
+
+            else {
+                player.sendMessage(ChatColor.GREEN + player.getName() + ChatColor.GRAY + " died");
+                unrankedMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendMessage(playerColor + player.getName() + ChatColor.GRAY + " died"));
+
+                if (unrankedMatch.getPlayerA().getUniqueId().equals(player.getUniqueId())) {
+                    unrankedMatch.getPlayerB().getPlayer().sendMessage(ChatColor.RED + player.getName() + ChatColor.GRAY + " died");
+
+                    if (winner != null) {
+                        player.sendTitle(new Title("", ChatColor.RED + unrankedMatch.getPlayerB().getUsername() + ChatColor.GOLD + " Wins!"));
+
+                        unrankedMatch.getPlayerB().getPlayer().sendTitle(new Title("", ChatColor.GREEN + "You Win!"));
+                        unrankedMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendMessage(killerColor + unrankedMatch.getPlayerB().getUsername() + ChatColor.GOLD + " Wins!"));
+
+                        plugin.getMatchManager().getHandler().finish(match);
+                    }
+                } else {
+                    unrankedMatch.getPlayerA().getPlayer().sendMessage(ChatColor.RED + player.getName() + ChatColor.GRAY + " died");
+
+                    if (winner != null) {
+                        player.sendTitle(new Title("", ChatColor.RED + unrankedMatch.getPlayerA().getUsername() + ChatColor.GOLD + " Wins!"));
+
+                        unrankedMatch.getPlayerA().getPlayer().sendTitle(new Title("", ChatColor.GREEN + "You Win!"));
+                        unrankedMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendMessage(killerColor + unrankedMatch.getPlayerA().getUsername() + ChatColor.GOLD + " Wins!"));
+
+                        plugin.getMatchManager().getHandler().finish(match);
+                    }
+                }
             }
 
             return;
