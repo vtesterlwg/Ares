@@ -28,9 +28,13 @@ public final class MatchEndingTimer extends PlayerTimer {
                 return;
             }
 
+            player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+
             profile.setStatus(ArenaPlayer.PlayerStatus.LOBBY);
             profile.getTimers().clear();
+
             plugin.getPlayerManager().getHandler().giveItems(profile);
+
             // TODO: Teleport back to lobby
         }).run();
     }
