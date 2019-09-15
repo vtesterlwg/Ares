@@ -8,14 +8,12 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 
 @AllArgsConstructor
 public final class ArenaListener implements Listener {
@@ -56,16 +54,6 @@ public final class ArenaListener implements Listener {
         }
 
         final Player player = (Player)event.getEntity();
-        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
-
-        if (profile == null || !profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
-            event.setCancelled(true);
-        }
-    }
-
-    @EventHandler (priority = EventPriority.LOW)
-    public void onPlayerVelocity(PlayerVelocityEvent event) {
-        final Player player = event.getPlayer();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
 
         if (profile == null || !profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {

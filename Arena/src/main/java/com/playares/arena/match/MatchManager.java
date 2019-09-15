@@ -23,6 +23,10 @@ public final class MatchManager {
         return matches.stream().filter(match -> match.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
     }
 
+    public Match getSpectatingMatch(ArenaPlayer player) {
+        return matches.stream().filter(match -> match.getSpectators().contains(player)).findFirst().orElse(null);
+    }
+
     public Match getMatchByPlayer(ArenaPlayer player) {
         for (Match match : matches) {
             if (match instanceof UnrankedMatch) {

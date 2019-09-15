@@ -1,5 +1,6 @@
 package com.playares.arena.match;
 
+import com.destroystokyo.paper.Title;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import com.playares.arena.Arenas;
@@ -8,8 +9,10 @@ import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.queue.MatchmakingQueue;
 import com.playares.arena.report.PlayerReport;
 import lombok.Getter;
+import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
@@ -46,6 +49,18 @@ public abstract class Match {
 
     public abstract ImmutableList<ArenaPlayer> getPlayers();
 
+    public void sendMessage(BaseComponent message) {
+        getPlayers().forEach(player -> player.getPlayer().sendMessage(message));
+    }
+
+    public void sendMessage(String message) {
+        getPlayers().forEach(player -> player.getPlayer().sendMessage(message));
+    }
+
+    public void sendTitle(String header, String footer) {
+        getPlayers().forEach(player -> player.getPlayer().sendTitle(new Title(header, footer)));
+    }
+
     public PlayerReport getReport(ArenaPlayer player) {
         return playerReports.stream().filter(report -> report.getPlayer().equals(player)).findFirst().orElse(null);
     }
@@ -62,9 +77,22 @@ public abstract class Match {
             return;
         }
 
+        getPlayers().forEach(otherPlayer -> {
+            if (otherPlayer.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
+                otherPlayer.getPlayer().hidePlayer(plugin, player);
+            }
+        });
+
+        sendMessage(ChatColor.AQUA + player.getName() + ChatColor.YELLOW + " is now spectating");
+
         spectators.add(profile);
         profile.setStatus(ArenaPlayer.PlayerStatus.SPECTATING);
         arena.teleportToSpectatorSpawnpoint(player);
+
+        addToSpectatorScoreboard(player);
+
+        plugin.getPlayerManager().getHandler().giveItems(profile);
+        player.setGameMode(GameMode.CREATIVE);
     }
 
     public void addToScoreboardA(Player player) {

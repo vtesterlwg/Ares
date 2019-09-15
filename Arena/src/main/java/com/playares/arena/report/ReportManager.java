@@ -22,7 +22,7 @@ public final class ReportManager {
 
     public void addReport(Report report) {
         reports.add(report);
-        new Scheduler(getPlugin()).sync(() -> reports.remove(report)).delay(30 * 20L).run();
+        new Scheduler(getPlugin()).sync(() -> reports.remove(report)).delay(300 * 20L).run();
     }
 
     public Report getReportById(UUID uniqueId) {

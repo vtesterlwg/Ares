@@ -6,6 +6,7 @@ import com.playares.arena.timer.PlayerTimer;
 import com.playares.commons.bukkit.util.Scheduler;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -29,11 +30,14 @@ public final class MatchEndingTimer extends PlayerTimer {
             }
 
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+            player.setGameMode(GameMode.SURVIVAL);
 
             profile.setStatus(ArenaPlayer.PlayerStatus.LOBBY);
             profile.getTimers().clear();
 
             plugin.getPlayerManager().getHandler().giveItems(profile);
+
+            Bukkit.getOnlinePlayers().forEach(online -> online.showPlayer(plugin, player));
 
             // TODO: Teleport back to lobby
         }).run();

@@ -1,6 +1,5 @@
 package com.playares.arena.match;
 
-import com.destroystokyo.paper.Title;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
 import com.playares.arena.Arenas;
@@ -11,7 +10,6 @@ import com.playares.arena.queue.MatchmakingQueue;
 import com.playares.arena.report.PlayerReport;
 import com.playares.arena.timer.cont.MatchStartingTimer;
 import lombok.Getter;
-import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -46,18 +44,6 @@ public final class UnrankedMatch extends Match {
         playerB.getPlayer().hidePlayer(plugin, player);
 
         player.sendMessage(ChatColor.YELLOW + "You are now spectating " + ChatColor.AQUA + playerA.getUsername() + ChatColor.YELLOW + " vs. " + ChatColor.AQUA + playerB.getUsername());
-    }
-
-    public void sendMessage(BaseComponent message) {
-        getPlayers().forEach(player -> player.getPlayer().sendMessage(message));
-    }
-
-    public void sendMessage(String message) {
-        getPlayers().forEach(player -> player.getPlayer().sendMessage(message));
-    }
-
-    public void sendTitle(String header, String footer) {
-        getPlayers().forEach(player -> player.getPlayer().sendTitle(new Title(header, footer)));
     }
 
     public void start() {

@@ -36,6 +36,11 @@ public final class PlayerHandler {
         bukkitPlayer.getInventory().clear();
         bukkitPlayer.getInventory().setArmorContents(null);
 
+        if (player.getStatus().equals(ArenaPlayer.PlayerStatus.SPECTATING)) {
+            customItemService.getItem(LeaveSpectatorItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(4, item.getItem()));
+            return;
+        }
+
         if (team != null) {
             customItemService.getItem(LeaveDisbandTeamItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(2, item.getItem()));
             customItemService.getItem(OtherTeamItem.class).ifPresent(item -> bukkitPlayer.getInventory().setItem(6, item.getItem()));

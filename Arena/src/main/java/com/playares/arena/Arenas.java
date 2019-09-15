@@ -3,10 +3,7 @@ package com.playares.arena;
 import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.playares.arena.arena.ArenaManager;
-import com.playares.arena.command.ArenaCommand;
-import com.playares.arena.command.KitCommand;
-import com.playares.arena.command.ReportCommand;
-import com.playares.arena.command.TeamCommand;
+import com.playares.arena.command.*;
 import com.playares.arena.item.*;
 import com.playares.arena.kit.KitManager;
 import com.playares.arena.listener.*;
@@ -14,6 +11,7 @@ import com.playares.arena.match.MatchManager;
 import com.playares.arena.player.PlayerManager;
 import com.playares.arena.queue.QueueManager;
 import com.playares.arena.report.ReportManager;
+import com.playares.arena.spectate.SpectateManager;
 import com.playares.arena.team.TeamManager;
 import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bukkit.AresPlugin;
@@ -42,6 +40,7 @@ public final class Arenas extends AresPlugin {
     @Getter public QueueManager queueManager;
     @Getter public MatchManager matchManager;
     @Getter public ReportManager reportManager;
+    @Getter public SpectateManager spectateManager;
 
     @Override
     public void onEnable() {
@@ -55,6 +54,7 @@ public final class Arenas extends AresPlugin {
         queueManager = new QueueManager(this);
         matchManager = new MatchManager(this);
         reportManager = new ReportManager(this);
+        spectateManager = new SpectateManager(this);
 
         final PaperCommandManager commandManager = new PaperCommandManager(this);
         registerCommandManager(commandManager);
@@ -74,6 +74,7 @@ public final class Arenas extends AresPlugin {
         registerCommand(new TeamCommand(this));
         registerCommand(new KitCommand(this));
         registerCommand(new ReportCommand(this));
+        registerCommand(new SpectateCommand(this));
 
         registerService(new AutomatedRestartService(this, 86400));
         registerService(new ChatRestrictionService(this));
@@ -105,6 +106,7 @@ public final class Arenas extends AresPlugin {
             customItemService.registerNewItem(new UnrankedQueueItem(this));
             customItemService.registerNewItem(new OtherTeamItem(this));
             customItemService.registerNewItem(new LeaveQueueItem(this));
+            customItemService.registerNewItem(new LeaveSpectatorItem(this));
         } else {
             Logger.error("Failed to obtain Custom Item Service!");
         }
