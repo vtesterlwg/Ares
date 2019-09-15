@@ -22,8 +22,8 @@ public final class MatchHandler {
 
             if (unrankedMatch.isRanked()) { // yeah fucked up I get it ok???
                 final RankedMatch rankedMatch = (RankedMatch)unrankedMatch;
-                final float probabilityA = (1.0F * 1.0F / (1 + 1.0F * (float)(Math.pow(10, 1.0F * (rankedMatch.getRatingA() - rankedMatch.getRatingB()) / 400))));
-                final float probabilityB = (1.0F * 1.0F / (1 + 1.0F * (float)(Math.pow(10, 1.0F * (rankedMatch.getRatingB() - rankedMatch.getRatingA()) / 400))));
+                final float probabilityA = (1.0F * 1.0F / (1 + 1.0F * (float)(Math.pow(10, 1.0F * (rankedMatch.getRatingB() - rankedMatch.getRatingA()) / 400))));
+                final float probabilityB = (1.0F * 1.0F / (1 + 1.0F * (float)(Math.pow(10, 1.0F * (rankedMatch.getRatingA() - rankedMatch.getRatingB()) / 400))));
                 int newRatingA;
                 int newRatingB;
 
