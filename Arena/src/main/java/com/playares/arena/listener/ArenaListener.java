@@ -8,6 +8,7 @@ import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -90,7 +91,7 @@ public final class ArenaListener implements Listener {
         event.setCancelled(true);
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.MONITOR)
     public void onInventoryClick(InventoryClickEvent event) {
         if (event.isCancelled()) {
             return;
@@ -102,6 +103,10 @@ public final class ArenaListener implements Listener {
 
         final Player player = (Player)event.getWhoClicked();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
+
+        if (!event.getClickedInventory().equals(player.getInventory())) {
+            return;
+        }
 
         if (profile == null) {
             event.setCancelled(true);
