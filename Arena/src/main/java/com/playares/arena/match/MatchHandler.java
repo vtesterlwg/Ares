@@ -86,6 +86,8 @@ public final class MatchHandler {
             }
 
             teamMatch.getPlayers().forEach(player -> {
+                manager.getPlugin().getReportManager().addReport(player.getActiveReport());
+
                 player.addTimer(new MatchEndingTimer(manager.getPlugin(), player.getUniqueId(), 3));
                 player.setStatus(ArenaPlayer.PlayerStatus.SPECTATING);
 

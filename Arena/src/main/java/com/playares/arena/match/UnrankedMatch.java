@@ -58,6 +58,7 @@ public class UnrankedMatch extends Match {
             player.getPlayer().getInventory().clear();
             player.setStatus(ArenaPlayer.PlayerStatus.INGAME);
             player.setActiveReport(new PlayerReport(player));
+            player.getActiveReport().setMatchId(uniqueId);
         });
 
         arena.teleportToSpawnpointA(playerA.getPlayer());

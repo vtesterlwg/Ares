@@ -50,7 +50,7 @@ public abstract class Match {
 
     public abstract ImmutableList<ArenaPlayer> getPlayers();
 
-    public void sendMessage(BaseComponent message) {
+    public void sendMessage(BaseComponent[] message) {
         getPlayers().forEach(player -> player.getPlayer().sendMessage(message));
     }
 

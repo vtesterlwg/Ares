@@ -32,4 +32,14 @@ public final class ReportManager {
     public PlayerReport getReportByPlayer(ArenaPlayer player) {
         return (PlayerReport)reports.stream().filter(report -> report instanceof PlayerReport).filter(playerReport -> ((PlayerReport) playerReport).getPlayer().equals(player)).findFirst().orElse(null);
     }
+
+    public PlayerReport getReportByPlayer(ArenaPlayer player, UUID matchId) {
+        return (PlayerReport)reports
+                .stream()
+                .filter(report -> report instanceof PlayerReport)
+                .filter(playerReport -> ((PlayerReport)playerReport).getPlayer().equals(player))
+                .filter(matchReport -> ((PlayerReport) matchReport).getMatchId().equals(matchId))
+                .findFirst()
+                .orElse(null);
+    }
 }

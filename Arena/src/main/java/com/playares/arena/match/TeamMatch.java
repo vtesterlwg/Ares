@@ -70,6 +70,7 @@ public final class TeamMatch extends Match {
             player.getPlayer().getInventory().clear();
             player.setStatus(ArenaPlayer.PlayerStatus.INGAME);
             player.setActiveReport(new PlayerReport(player));
+            player.getActiveReport().setMatchId(getUniqueId());
         });
 
         getTeamA().getAvailableMembers().forEach(member -> {

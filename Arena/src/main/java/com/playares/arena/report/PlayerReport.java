@@ -12,6 +12,7 @@ import java.util.UUID;
 
 public final class PlayerReport implements Report {
     @Getter public final UUID uniqueId;
+    @Getter @Setter public UUID matchId;
     @Getter public final ArenaPlayer player;
     @Getter public ItemStack[] contents;
     @Getter public ItemStack[] armor;
@@ -24,6 +25,7 @@ public final class PlayerReport implements Report {
 
     public PlayerReport(ArenaPlayer player) {
         this.uniqueId = UUID.randomUUID();
+        this.matchId = null;
         this.player = player;
         this.contents = player.getPlayer().getInventory().getContents();
         this.armor = player.getPlayer().getInventory().getArmorContents();
