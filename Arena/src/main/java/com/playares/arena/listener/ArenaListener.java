@@ -14,6 +14,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 @AllArgsConstructor
 public final class ArenaListener implements Listener {
@@ -38,6 +42,16 @@ public final class ArenaListener implements Listener {
     }
 
     @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        event.setJoinMessage(null);
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        event.setQuitMessage(null);
+    }
+
+    @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
         handleBlockMods(event.getPlayer(), event);
     }
@@ -57,6 +71,7 @@ public final class ArenaListener implements Listener {
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
 
         if (profile == null || !profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
+            player.setFoodLevel(20);
             event.setCancelled(true);
         }
     }
@@ -73,5 +88,65 @@ public final class ArenaListener implements Listener {
         }
 
         event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInventoryClick(InventoryClickEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (!(event.getWhoClicked() instanceof Player)) {
+            return;
+        }
+
+        final Player player = (Player)event.getWhoClicked();
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
+
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
+            return;
+        }
+
+        if (profile.getStatus().equals(ArenaPlayer.PlayerStatus.SPECTATING) || profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME_DEAD)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!player.hasPermission("arena.admin")) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerDropItem(PlayerDropItemEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
+
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
+            return;
+        }
+
+        if (profile.getStatus().equals(ArenaPlayer.PlayerStatus.SPECTATING) || profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME_DEAD)) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!player.hasPermission("arena.admin")) {
+            event.setCancelled(true);
+        }
     }
 }
