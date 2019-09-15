@@ -13,10 +13,18 @@ public final class RankedData {
     }
 
     public int getMinAcceptedRating() {
+        if ((rating - margin) <= 0) {
+            return 0;
+        }
+
         return rating - margin;
     }
 
     public int getMaxAcceptedRating() {
+        if ((rating + margin) >= 5000) {
+            return 5000;
+        }
+
         return rating + margin;
     }
 

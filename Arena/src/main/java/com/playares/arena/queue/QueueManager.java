@@ -12,6 +12,7 @@ import com.playares.arena.match.UnrankedMatch;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Scheduler;
 import lombok.Getter;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitTask;
@@ -92,6 +93,13 @@ public final class QueueManager {
                     }
 
                     if (match == null) {
+                        if (search.isRanked()) {
+                            search.getRankedData().setMargin(search.getRankedData().getMargin() + 50);
+
+                            search.getPlayer().getPlayer().sendMessage(ChatColor.YELLOW + "You are searching for a " + ChatColor.RED + "ranked" + ChatColor.GOLD + " " + search.getQueueType().getDisplayName() + ChatColor.YELLOW + " match " +
+                                    ChatColor.GOLD + "(" + ChatColor.GREEN + search.getRankedData().getMinAcceptedRating() + ChatColor.YELLOW + "-" + ChatColor.GREEN + search.getRankedData().getMaxAcceptedRating() + ChatColor.GOLD + ")");
+                        }
+
                         continue;
                     }
 
@@ -118,7 +126,7 @@ public final class QueueManager {
 
                 searchingPlayers.removeAll(toRemove);
             }
-        }).repeat(3 * 20L, 3 * 20L).run();
+        }).repeat(5 * 20L, 5 * 20L).run();
     }
 
     public void load() {

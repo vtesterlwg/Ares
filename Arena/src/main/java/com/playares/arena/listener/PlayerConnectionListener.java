@@ -4,6 +4,7 @@ import com.destroystokyo.paper.Title;
 import com.playares.arena.Arenas;
 import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.player.ArenaPlayerDAO;
+import com.playares.arena.queue.SearchingPlayer;
 import com.playares.arena.team.Team;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Scheduler;
@@ -69,6 +70,14 @@ public final class PlayerConnectionListener implements Listener {
 
         new Scheduler(plugin).async(() -> ArenaPlayerDAO.saveRankedData(plugin.getMongo(), player)).run();
 
+        // Removing player from searches
+        final SearchingPlayer search = plugin.getQueueManager().getCurrentSearch(bukkitPlayer);
+
+        if (search != null) {
+            plugin.getQueueManager().getSearchingPlayers().remove(search);
+        }
+
+        // Removing from team
         final Team team = plugin.getTeamManager().getTeam(player);
 
         if (player.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
@@ -85,6 +94,7 @@ public final class PlayerConnectionListener implements Listener {
             }
         }
 
+        // Removing player profile
         plugin.getPlayerManager().getPlayers().remove(player);
     }
 }
