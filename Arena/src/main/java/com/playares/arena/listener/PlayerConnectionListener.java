@@ -54,7 +54,7 @@ public final class PlayerConnectionListener implements Listener {
         plugin.getPlayerManager().getHandler().giveItems(player);
         plugin.getSpawnManager().getHandler().teleport(bukkitPlayer);
 
-        new Scheduler(plugin).sync(() -> bukkitPlayer.sendTitle(new Title(ChatColor.DARK_RED + "Welcome to the Ares Arena!", ChatColor.DARK_AQUA + "Good Luck and Have Fun!", 20, 60, 20))).delay(10L).run();
+        new Scheduler(plugin).sync(() -> bukkitPlayer.sendTitle(new Title("", ChatColor.GOLD + "Welcome to the Ares Arena!", 20, 60, 20))).delay(10L).run();
     }
 
     @EventHandler (priority = EventPriority.MONITOR)
