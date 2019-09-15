@@ -9,6 +9,7 @@ import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.queue.MatchmakingQueue;
 import com.playares.arena.report.PlayerReport;
 import lombok.Getter;
+import lombok.Setter;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -30,7 +31,7 @@ public abstract class Match {
     @Getter public final Set<PlayerReport> playerReports;
     @Getter public final MatchmakingQueue queue;
     @Getter public final Arena arena;
-    @Getter public final boolean ranked;
+    @Getter @Setter public boolean ranked;
 
     public Match(Arenas plugin, MatchmakingQueue queue, Arena arena, boolean ranked) {
         this.plugin = plugin;

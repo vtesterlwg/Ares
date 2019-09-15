@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
 
 import java.util.List;
 
-public final class UnrankedMatch extends Match {
+public class UnrankedMatch extends Match {
     @Getter public final ArenaPlayer playerA;
     @Getter public final ArenaPlayer playerB;
 
@@ -66,8 +66,6 @@ public final class UnrankedMatch extends Match {
         addToScoreboardA(playerA.getPlayer());
         addToScoreboardB(playerB.getPlayer());
 
-        sendMessage(ChatColor.YELLOW + "Unranked " + ChatColor.GOLD + getQueue().getQueueType().getDisplayName() + ChatColor.YELLOW + ": " + ChatColor.AQUA + playerA.getUsername() + ChatColor.YELLOW + " vs. " + ChatColor.AQUA + playerB.getUsername());
-
         if (queue.getAllowedKits().isEmpty()) {
             sendMessage(ChatColor.RED + "Failed to find any kits for this queue type");
             return;
@@ -77,10 +75,10 @@ public final class UnrankedMatch extends Match {
             playerA.getPlayer().getInventory().addItem(kit.getBook());
             playerB.getPlayer().getInventory().addItem(kit.getBook());
         }
-    }
 
-    public boolean shouldFinish() {
-        return !(playerA.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME) && playerB.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME));
+        if (!ranked) {
+            sendMessage(ChatColor.YELLOW + "Unranked " + ChatColor.GOLD + getQueue().getQueueType().getDisplayName() + ChatColor.YELLOW + ": " + ChatColor.AQUA + playerA.getUsername() + ChatColor.YELLOW + " vs. " + ChatColor.AQUA + playerB.getUsername());
+        }
     }
 
     public ArenaPlayer getWinner() {

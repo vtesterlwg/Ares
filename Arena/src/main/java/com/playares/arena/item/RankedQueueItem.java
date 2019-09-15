@@ -40,8 +40,6 @@ public final class RankedQueueItem implements CustomItem {
 
     @Override
     public Runnable getRightClick(Player who) {
-        return () -> {
-
-        };
+        return () -> plugin.getQueueManager().getHandler().openRankedQueueSelector(who);
     }
 }

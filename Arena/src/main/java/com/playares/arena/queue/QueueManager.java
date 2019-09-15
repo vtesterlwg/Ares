@@ -7,6 +7,7 @@ import com.playares.arena.Arenas;
 import com.playares.arena.arena.data.Arena;
 import com.playares.arena.kit.Kit;
 import com.playares.arena.match.Match;
+import com.playares.arena.match.RankedMatch;
 import com.playares.arena.match.UnrankedMatch;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Scheduler;
@@ -66,6 +67,13 @@ public final class QueueManager {
                         }
 
                         if (search.isRanked() && otherPlayer.isRanked() && search.getRankedData().isAccepted(otherPlayer.getRankedData().getRating())) {
+                            final Arena arena = plugin.getArenaManager().obtainArena();
+
+                            if (arena == null) {
+                                continue;
+                            }
+
+                            match = new RankedMatch(plugin, queue, arena, otherPlayer.getPlayer(), search.getPlayer());
                             matchedPlayer = otherPlayer;
                             break;
                         }
@@ -76,7 +84,6 @@ public final class QueueManager {
                             if (arena == null) {
                                 continue;
                             }
-
 
                             match = new UnrankedMatch(plugin, queue, arena, otherPlayer.getPlayer(), search.getPlayer());
                             matchedPlayer = otherPlayer;
@@ -93,8 +100,15 @@ public final class QueueManager {
 
                     if (match instanceof UnrankedMatch) {
                         final UnrankedMatch unrankedMatch = (UnrankedMatch)match;
-                        unrankedMatch.start();
-                        plugin.getMatchManager().getMatches().add(unrankedMatch);
+
+                        if (unrankedMatch.isRanked()) {
+                            final RankedMatch rankedMatch = (RankedMatch)unrankedMatch;
+                            rankedMatch.start();
+                            plugin.getMatchManager().getMatches().add(rankedMatch);
+                        } else {
+                            unrankedMatch.start();
+                            plugin.getMatchManager().getMatches().add(unrankedMatch);
+                        }
                     }
                 }
 

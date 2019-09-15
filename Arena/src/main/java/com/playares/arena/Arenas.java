@@ -122,6 +122,8 @@ public final class Arenas extends AresPlugin {
 
     @Override
     public void onDisable() {
+        playerManager.save(true);
+
         stopServices();
 
         if (getMongo() != null) {

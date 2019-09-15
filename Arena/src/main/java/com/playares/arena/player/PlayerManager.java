@@ -23,6 +23,17 @@ public final class PlayerManager {
         this.playerUpdaterTask = new Scheduler(plugin).async(() -> players.forEach(ArenaPlayer::update)).repeat(0L, 1L).run();
     }
 
+    public void save(boolean blocking) {
+        if (blocking) {
+            players.forEach(player -> ArenaPlayerDAO.saveRankedData(plugin.getMongo(), player));
+            return;
+        }
+
+        new Scheduler(plugin).async(() -> {
+            players.forEach(player -> ArenaPlayerDAO.saveRankedData(plugin.getMongo(), player));
+        }).run();
+    }
+
     public ArenaPlayer getPlayer(Player bukkitPlayer) {
         return players.stream().filter(player -> player.getUniqueId().equals(bukkitPlayer.getUniqueId())).findFirst().orElse(null);
     }

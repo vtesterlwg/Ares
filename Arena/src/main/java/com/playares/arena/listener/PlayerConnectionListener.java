@@ -3,6 +3,7 @@ package com.playares.arena.listener;
 import com.destroystokyo.paper.Title;
 import com.playares.arena.Arenas;
 import com.playares.arena.player.ArenaPlayer;
+import com.playares.arena.player.ArenaPlayerDAO;
 import com.playares.arena.team.Team;
 import com.playares.commons.bukkit.logger.Logger;
 import com.playares.commons.bukkit.util.Scheduler;
@@ -36,6 +37,8 @@ public final class PlayerConnectionListener implements Listener {
         }
 
         plugin.getPlayerManager().getPlayers().add(player);
+
+        new Scheduler(plugin).async(() -> ArenaPlayerDAO.getRankedData(plugin.getMongo(), player)).run();
     }
 
     @EventHandler
@@ -63,10 +66,11 @@ public final class PlayerConnectionListener implements Listener {
             return;
         }
 
+        new Scheduler(plugin).async(() -> ArenaPlayerDAO.saveRankedData(plugin.getMongo(), player)).run();
+
         final Team team = plugin.getTeamManager().getTeam(player);
 
         if (player.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
-            // TODO: Determine if their match should end
             player.setStatus(ArenaPlayer.PlayerStatus.INGAME_DEAD);
         }
 
