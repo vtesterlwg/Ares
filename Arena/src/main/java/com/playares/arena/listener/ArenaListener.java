@@ -104,7 +104,7 @@ public final class ArenaListener implements Listener {
         final Player player = (Player)event.getWhoClicked();
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
 
-        if (!event.getClickedInventory().equals(player.getInventory())) {
+        if (event.getClickedInventory() == null || !event.getClickedInventory().equals(player.getInventory())) {
             return;
         }
 

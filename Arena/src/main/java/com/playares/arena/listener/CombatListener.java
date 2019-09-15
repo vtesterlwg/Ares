@@ -65,7 +65,7 @@ public final class CombatListener implements Listener {
 
         final Team attackerTeam = plugin.getTeamManager().getTeam(attackerProfile);
 
-        if (attackerTeam != null && !attackerTeam.getMembers().contains(attackedProfile)) {
+        if (attackerTeam != null && attackerTeam.getMembers().contains(attackedProfile)) {
             event.setCancelled(true);
         }
     }
@@ -146,9 +146,11 @@ public final class CombatListener implements Listener {
             profile.getActiveReport().pullInventory();
 
             if (match instanceof TeamMatch) {
-                // TODO: Hide player from both teams
-
                 for (ItemStack contents : player.getInventory().getContents()) {
+                    if (contents == null) {
+                        continue;
+                    }
+
                     player.getWorld().dropItemNaturally(player.getLocation(), contents);
                 }
             }
@@ -165,6 +167,7 @@ public final class CombatListener implements Listener {
         final Player player = event.getPlayer();
         final Player killer = event.getKiller();
         final Match match = event.getMatch();
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
 
         // Reset slain player to full health
         Players.resetHealth(player);
@@ -237,10 +240,56 @@ public final class CombatListener implements Listener {
 
         else if (match instanceof TeamMatch) {
             final TeamMatch teamMatch = (TeamMatch)match;
+            final ChatColor playerColor = (teamMatch.getTeamA().getMembers().contains(plugin.getPlayerManager().getPlayer(player)) ? ChatColor.YELLOW : ChatColor.AQUA);
+            final ChatColor killerColor = (teamMatch.getTeamA().getMembers().contains(plugin.getPlayerManager().getPlayer(player)) ? ChatColor.AQUA : ChatColor.YELLOW);
             final Team winner = teamMatch.getWinner();
+            final Team slainTeam = (teamMatch.getTeamA().getMembers().contains(plugin.getPlayerManager().getPlayer(player)) ? teamMatch.getTeamA() : teamMatch.getTeamB());
+            final Team killerTeam = (teamMatch.getTeamA().getMembers().contains(plugin.getPlayerManager().getPlayer(player)) ? teamMatch.getTeamB() : teamMatch.getTeamA());
 
-            if (winner != null) {
-                plugin.getMatchManager().getHandler().finish(match);
+            if (killer != null) {
+                slainTeam.sendMessage(ChatColor.GREEN + player.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.RED + killer.getName());
+                killerTeam.sendMessage(ChatColor.RED + player.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.GREEN + killer.getName());
+                teamMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendMessage(playerColor + player.getName() + ChatColor.GRAY + " has been slain by " + killerColor + killer.getName()));
+
+                if (winner != null) {
+                    slainTeam.sendTitle(new Title("", ChatColor.RED + "Team " + killer.getName() + ChatColor.GOLD + " Wins!"));
+                    killerTeam.sendTitle(new Title("", ChatColor.GREEN + "You Win!"));
+
+                    teamMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendTitle(new Title("", killerColor + killer.getName() + ChatColor.GOLD + " Wins!")));
+
+                    plugin.getMatchManager().getHandler().finish(teamMatch);
+                }
+            }
+
+            else {
+                slainTeam.sendMessage(ChatColor.GREEN + player.getName() + ChatColor.GRAY + " died");
+                teamMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendMessage(playerColor + player.getName() + ChatColor.GRAY + " died"));
+
+                if (teamMatch.getTeamA().getMembers().contains(profile)) {
+                    teamMatch.getTeamA().sendMessage(ChatColor.GREEN + player.getName() + ChatColor.GRAY + " died");
+                    teamMatch.getTeamB().sendMessage(ChatColor.RED + player.getName() + ChatColor.GRAY + " died");
+
+                    if (winner != null) {
+                        teamMatch.getTeamA().sendTitle(new Title("", ChatColor.RED + "Team " + teamMatch.getTeamB().getLeader().getUsername() + ChatColor.GOLD + " Wins!"));
+                        teamMatch.getTeamB().sendTitle(new Title("", ChatColor.GREEN + "You Win!"));
+                        teamMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendTitle(new Title("", killerColor + "Team " + teamMatch.getTeamB().getLeader().getUsername() + ChatColor.GOLD + " Wins!")));
+
+                        plugin.getMatchManager().getHandler().finish(teamMatch);
+                    }
+                }
+
+                else {
+                    teamMatch.getTeamB().sendMessage(ChatColor.GREEN + player.getName() + ChatColor.GRAY + " died");
+                    teamMatch.getTeamA().sendMessage(ChatColor.RED + player.getName() + ChatColor.GRAY + " died");
+
+                    if (winner != null) {
+                        teamMatch.getTeamB().sendTitle(new Title("", ChatColor.RED + "Team " + teamMatch.getTeamA().getLeader().getUsername() + ChatColor.GOLD + " Wins!"));
+                        teamMatch.getTeamA().sendTitle(new Title("", ChatColor.GREEN + "You Win!"));
+                        teamMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendTitle(new Title("", killerColor + "Team " + teamMatch.getTeamA().getLeader().getUsername() + ChatColor.GOLD + " Wins!")));
+
+                        plugin.getMatchManager().getHandler().finish(teamMatch);
+                    }
+                }
             }
         }
     }

@@ -74,8 +74,29 @@ public final class MatchHandler {
                 match.getArena().setInUse(false);
                 manager.getMatches().remove(match);
             }).delay(3 * 20L).run();
+        }
 
-            return;
+        else if (match instanceof TeamMatch) {
+            final TeamMatch teamMatch = (TeamMatch)match;
+
+            if (teamMatch.getWinner() != null) {
+                teamMatch.getWinner().getMembers().forEach(member -> member.getActiveReport().pullInventory());
+            }
+
+            teamMatch.getPlayers().forEach(player -> {
+                player.addTimer(new MatchEndingTimer(manager.getPlugin(), player.getUniqueId(), 3));
+                player.setStatus(ArenaPlayer.PlayerStatus.SPECTATING);
+
+                Bukkit.getOnlinePlayers().forEach(online -> {
+                    online.showPlayer(match.getPlugin(), player.getPlayer());
+                    player.getPlayer().showPlayer(match.getPlugin(), online);
+                });
+
+                new Scheduler(getManager().getPlugin()).sync(() -> {
+                    match.getArena().setInUse(false);
+                    manager.getMatches().remove(match);
+                }).run();
+            });
         }
     }
 }

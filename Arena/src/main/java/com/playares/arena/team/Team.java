@@ -1,5 +1,6 @@
 package com.playares.arena.team;
 
+import com.destroystokyo.paper.Title;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
@@ -52,6 +53,10 @@ public final class Team {
 
     public void sendMessage(TextComponent message) {
         getAvailableMembers().forEach(member -> member.getPlayer().sendMessage(message));
+    }
+
+    public void sendTitle(Title title) {
+        getAvailableMembers().forEach(member -> member.getPlayer().sendTitle(title));
     }
 
     public void teleport(Location location) {

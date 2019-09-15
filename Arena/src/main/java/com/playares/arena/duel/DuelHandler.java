@@ -2,6 +2,7 @@ package com.playares.arena.duel;
 
 import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.queue.MatchmakingQueue;
+import com.playares.arena.team.Team;
 import com.playares.commons.base.promise.SimplePromise;
 import com.playares.commons.bukkit.menu.ClickableItem;
 import com.playares.commons.bukkit.menu.Menu;
@@ -35,6 +36,19 @@ public final class DuelHandler {
 
         if (otherProfile == null) {
             promise.failure("Player not found");
+            return;
+        }
+
+        final Team team = manager.getPlugin().getTeamManager().getTeam(profile);
+        final Team otherTeam = manager.getPlugin().getTeamManager().getTeam(otherProfile);
+
+        if (team != null) {
+            promise.failure("You can not send a duel while you are on a team");
+            return;
+        }
+
+        if (otherTeam != null) {
+            promise.failure("This player is in a team");
             return;
         }
 
@@ -101,6 +115,9 @@ public final class DuelHandler {
             return;
         }
 
+        final Team selfTeam = manager.getPlugin().getTeamManager().getTeam(self);
+        final Team acceptingTeam = manager.getPlugin().getTeamManager().getTeam(accepting);
+
         if (!self.getStatus().equals(ArenaPlayer.PlayerStatus.LOBBY)) {
             promise.failure("You are not in the lobby");
             return;
@@ -108,6 +125,16 @@ public final class DuelHandler {
 
         if (!accepting.getStatus().equals(ArenaPlayer.PlayerStatus.LOBBY)) {
             promise.failure(accepting.getUsername() + " is not in the lobby");
+            return;
+        }
+
+        if (selfTeam != null) {
+            promise.failure("You can not accept a duel request while you are on a team");
+            return;
+        }
+
+        if (acceptingTeam != null) {
+            promise.failure(accepting.getUsername() + " is now on a team");
             return;
         }
 
@@ -123,6 +150,44 @@ public final class DuelHandler {
     }
 
     public void acceptTeam(Player player, String acceptingUsername, SimplePromise promise) {
+        final ArenaPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player);
 
+        if (profile == null) {
+            promise.failure("Failed to obtain your profile");
+            return;
+        }
+
+        final Team team = manager.getPlugin().getTeamManager().getTeam(profile);
+        final Team accepting = manager.getPlugin().getTeamManager().getTeam(acceptingUsername);
+
+        if (team == null) {
+            promise.failure("You are not on a team");
+            return;
+        }
+
+        if (accepting == null) {
+            promise.failure("Team not found");
+            return;
+        }
+
+        final TeamDuelRequest request = manager.getAcceptedTeamDuelRequest(player, acceptingUsername);
+
+        if (request == null) {
+            promise.failure("Your team does not have a pending request from Team " + accepting.getLeader().getUsername());
+            return;
+        }
+
+        if (!request.getRequesting().getStatus().equals(Team.TeamStatus.LOBBY)) {
+            promise.failure("Team is no longer in the lobby");
+            return;
+        }
+
+        if (!request.getRequested().getStatus().equals(Team.TeamStatus.LOBBY)) {
+            promise.failure("Your team is not in the lobby");
+            return;
+        }
+
+        request.accept();
+        promise.success();
     }
 }

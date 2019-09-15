@@ -83,6 +83,7 @@ public final class Arenas extends AresPlugin {
         registerCommand(new SpectateCommand(this));
         registerCommand(new DuelCommand(this));
         registerCommand(new SpawnCommand(this));
+        registerCommand(new TeamDuelCommand(this));
 
         registerService(new AutomatedRestartService(this, 86400));
         registerService(new ChatRestrictionService(this));

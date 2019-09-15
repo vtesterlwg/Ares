@@ -58,6 +58,14 @@ public final class DuelManager {
                 .orElse(null);
     }
 
+    public TeamDuelRequest getPendingDuelRequest(Team team, String username) {
+        return getTeamDuelRequests()
+                .stream()
+                .filter(duelRequest -> duelRequest.getRequesting().getUniqueId().equals(team.getUniqueId()) && duelRequest.getRequested().getLeader().getUsername().equalsIgnoreCase(username))
+                .findFirst()
+                .orElse(null);
+    }
+
     public PlayerDuelRequest getAcceptedPlayerDuelRequest(Player accepter, String accepting) {
         return getPlayerDuelRequests()
                 .stream()
@@ -76,7 +84,7 @@ public final class DuelManager {
 
         return getTeamDuelRequests()
                 .stream()
-                .filter(teamRequest -> teamRequest.getRequested().getUniqueId().equals(acceptingTeam.getUniqueId()) && teamRequest.getRequesting().getUniqueId().equals(team.getUniqueId()))
+                .filter(teamRequest -> teamRequest.getRequested().getUniqueId().equals(team.getUniqueId()) && teamRequest.getRequesting().getUniqueId().equals(acceptingTeam.getUniqueId()))
                 .findFirst()
                 .orElse(null);
     }

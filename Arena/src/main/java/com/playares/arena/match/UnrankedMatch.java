@@ -48,17 +48,14 @@ public class UnrankedMatch extends Match {
     }
 
     public void start() {
-        getPlayers().forEach(player -> player.addTimer(new MatchStartingTimer(player.getUniqueId(), 5)));
+        getPlayers().forEach(player -> {
+            player.addTimer(new MatchStartingTimer(player.getUniqueId(), 5));
 
-        Players.resetHealth(playerA.getPlayer());
-        playerA.getPlayer().getInventory().clear();
-        playerA.setStatus(ArenaPlayer.PlayerStatus.INGAME);
-        playerA.setActiveReport(new PlayerReport(playerA));
-
-        Players.resetHealth(playerB.getPlayer());
-        playerB.getPlayer().getInventory().clear();
-        playerB.setStatus(ArenaPlayer.PlayerStatus.INGAME);
-        playerB.setActiveReport(new PlayerReport(playerB));
+            Players.resetHealth(player.getPlayer());
+            player.getPlayer().getInventory().clear();
+            player.setStatus(ArenaPlayer.PlayerStatus.INGAME);
+            player.setActiveReport(new PlayerReport(player));
+        });
 
         arena.teleportToSpawnpointA(playerA.getPlayer());
         arena.teleportToSpawnpointB(playerB.getPlayer());
@@ -68,12 +65,11 @@ public class UnrankedMatch extends Match {
 
         if (queue.getAllowedKits().isEmpty()) {
             sendMessage(ChatColor.RED + "Failed to find any kits for this queue type");
-            return;
-        }
-
-        for (Kit kit : queue.getAllowedKits()) {
-            playerA.getPlayer().getInventory().addItem(kit.getBook());
-            playerB.getPlayer().getInventory().addItem(kit.getBook());
+        } else {
+            for (Kit kit : queue.getAllowedKits()) {
+                playerA.getPlayer().getInventory().addItem(kit.getBook());
+                playerB.getPlayer().getInventory().addItem(kit.getBook());
+            }
         }
 
         if (!ranked) {
