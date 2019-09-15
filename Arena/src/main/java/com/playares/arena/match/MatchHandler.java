@@ -1,6 +1,7 @@
 package com.playares.arena.match;
 
 import com.playares.arena.player.ArenaPlayer;
+import com.playares.arena.team.Team;
 import com.playares.arena.timer.cont.MatchEndingTimer;
 import com.playares.commons.bukkit.util.Scheduler;
 import lombok.Getter;
@@ -80,7 +81,8 @@ public final class MatchHandler {
             final TeamMatch teamMatch = (TeamMatch)match;
 
             if (teamMatch.getWinner() != null) {
-                teamMatch.getWinner().getMembers().forEach(member -> member.getActiveReport().pullInventory());
+                teamMatch.getWinner().getMembers().stream().filter(member -> member.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)).forEach(member ->
+                        member.getActiveReport().pullInventory());
             }
 
             teamMatch.getPlayers().forEach(player -> {
@@ -93,9 +95,13 @@ public final class MatchHandler {
                 });
 
                 new Scheduler(getManager().getPlugin()).sync(() -> {
-                    match.getArena().setInUse(false);
+                    teamMatch.getTeamA().setStatus(Team.TeamStatus.LOBBY);
+                    teamMatch.getTeamB().setStatus(Team.TeamStatus.LOBBY);
+
+                    teamMatch.getArena().setInUse(false);
+
                     manager.getMatches().remove(match);
-                }).run();
+                }).delay(3 * 20L).run();
             });
         }
     }

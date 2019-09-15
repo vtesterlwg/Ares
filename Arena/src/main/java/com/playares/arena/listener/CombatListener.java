@@ -19,6 +19,7 @@ import net.minecraft.server.v1_12_R1.EntityLightning;
 import net.minecraft.server.v1_12_R1.PacketPlayOutSpawnEntityWeather;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.EnderPearl;
@@ -146,6 +147,13 @@ public final class CombatListener implements Listener {
             profile.getActiveReport().pullInventory();
 
             if (match instanceof TeamMatch) {
+                final TeamMatch teamMatch = (TeamMatch)match;
+
+                player.setGameMode(GameMode.CREATIVE);
+
+                teamMatch.getAlivePlayers().forEach(alive -> alive.getPlayer().hidePlayer(plugin, player));
+                Bukkit.getOnlinePlayers().forEach(online -> player.showPlayer(plugin, online));
+
                 for (ItemStack contents : player.getInventory().getContents()) {
                     if (contents == null) {
                         continue;

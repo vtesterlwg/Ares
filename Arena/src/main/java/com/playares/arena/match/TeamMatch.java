@@ -82,6 +82,9 @@ public final class TeamMatch extends Match {
             addToScoreboardB(member.getPlayer());
         });
 
+        teamA.setStatus(Team.TeamStatus.IN_GAME);
+        teamB.setStatus(Team.TeamStatus.IN_GAME);
+
         if (queue.getAllowedKits().isEmpty()) {
             sendMessage(ChatColor.RED + "Failed to find any kits for this queue type");
         } else {

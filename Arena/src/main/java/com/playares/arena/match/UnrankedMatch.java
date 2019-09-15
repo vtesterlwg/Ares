@@ -12,6 +12,7 @@ import com.playares.arena.timer.cont.MatchStartingTimer;
 import com.playares.commons.bukkit.util.Players;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 
 import java.util.List;
@@ -52,6 +53,8 @@ public class UnrankedMatch extends Match {
             player.addTimer(new MatchStartingTimer(player.getUniqueId(), 5));
 
             Players.resetHealth(player.getPlayer());
+
+            player.getPlayer().setGameMode(GameMode.SURVIVAL);
             player.getPlayer().getInventory().clear();
             player.setStatus(ArenaPlayer.PlayerStatus.INGAME);
             player.setActiveReport(new PlayerReport(player));
