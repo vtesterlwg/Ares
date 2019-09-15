@@ -4,11 +4,37 @@ import com.playares.arena.player.ArenaPlayer;
 import com.playares.commons.base.promise.SimplePromise;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 @AllArgsConstructor
 public final class DuelHandler {
     @Getter public final DuelManager manager;
+
+    public void openDuelMenu(Player player, String username, SimplePromise promise) {
+        final Player otherPlayer = Bukkit.getPlayer(username);
+
+        if (otherPlayer == null) {
+            promise.failure("Player not found");
+            return;
+        }
+
+        final ArenaPlayer otherProfile = manager.getPlugin().getPlayerManager().getPlayer(otherPlayer);
+
+        if (otherProfile == null) {
+            promise.failure("Player not found");
+            return;
+        }
+
+        if (!otherProfile.getStatus().equals(ArenaPlayer.PlayerStatus.LOBBY)) {
+            promise.failure(otherPlayer.getName() + " is not in the lobby");
+            return;
+        }
+
+        // TODO: Get existing duel request
+
+        //final Menu menu = new Menu(manager.getPlugin(), player, "Duel " +)
+    }
 
     public void acceptDuel(Player player, String acceptingUsername, SimplePromise promise) {
         final ArenaPlayer self = manager.getPlugin().getPlayerManager().getPlayer(player);

@@ -10,6 +10,7 @@ import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -52,7 +53,7 @@ public final class PlayerConnectionListener implements Listener {
         new Scheduler(plugin).sync(() -> bukkitPlayer.sendTitle(new Title(ChatColor.DARK_RED + "Welcome to the Ares Arena!", ChatColor.DARK_AQUA + "Good Luck and Have Fun!", 20, 60, 20))).delay(10L).run();
     }
 
-    @EventHandler
+    @EventHandler (priority = EventPriority.MONITOR)
     public void onPlayerQuit(PlayerQuitEvent event) {
         final Player bukkitPlayer = event.getPlayer();
         final ArenaPlayer player = plugin.getPlayerManager().getPlayer(bukkitPlayer);

@@ -30,6 +30,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 @AllArgsConstructor
@@ -83,6 +84,34 @@ public final class CombatListener implements Listener {
         if (profile != null && !profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
             event.setCancelled(true);
         }
+    }
+
+    @EventHandler (priority = EventPriority.LOWEST)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        final Player player = event.getPlayer();
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
+
+        if (profile == null) {
+            return;
+        }
+
+        final Match match = plugin.getMatchManager().getMatchByPlayer(profile);
+
+        if (match == null) {
+            return;
+        }
+
+        profile.setStatus(ArenaPlayer.PlayerStatus.INGAME_DEAD);
+        profile.getActiveReport().pullInventory();
+
+        if (match instanceof TeamMatch) {
+            for (ItemStack contents : player.getInventory().getContents()) {
+                player.getWorld().dropItemNaturally(player.getLocation(), contents);
+            }
+        }
+
+        final ArenaPlayerDeathEvent deathEvent = new ArenaPlayerDeathEvent(player, null, match);
+        Bukkit.getPluginManager().callEvent(deathEvent);
     }
 
     @EventHandler (priority = EventPriority.MONITOR)
