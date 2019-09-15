@@ -9,6 +9,7 @@ import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.queue.MatchmakingQueue;
 import com.playares.arena.report.PlayerReport;
 import com.playares.arena.timer.cont.MatchStartingTimer;
+import com.playares.commons.bukkit.util.Players;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -49,9 +50,13 @@ public final class UnrankedMatch extends Match {
     public void start() {
         getPlayers().forEach(player -> player.addTimer(new MatchStartingTimer(player.getUniqueId(), 5)));
 
+        Players.resetHealth(playerA.getPlayer());
+        playerA.getPlayer().getInventory().clear();
         playerA.setStatus(ArenaPlayer.PlayerStatus.INGAME);
         playerA.setActiveReport(new PlayerReport(playerA));
 
+        Players.resetHealth(playerB.getPlayer());
+        playerB.getPlayer().getInventory().clear();
         playerB.setStatus(ArenaPlayer.PlayerStatus.INGAME);
         playerB.setActiveReport(new PlayerReport(playerB));
 

@@ -100,17 +100,6 @@ public abstract class Match {
             setupScoreboards();
         }
 
-        /*
-        spectator scoreboard:
-        add to team a
-
-        scoreboard a:
-        add to friendly
-
-        scoreboard b:
-        add to enemy
-         */
-
         final Team friendly = scoreboardA.getTeam("friendly");
         final Team enemy = scoreboardB.getTeam("enemy");
         final Team specTeamA = spectatorScoreboard.getTeam("a");

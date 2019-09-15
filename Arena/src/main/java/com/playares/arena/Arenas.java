@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.playares.arena.arena.ArenaManager;
 import com.playares.arena.command.*;
+import com.playares.arena.duel.DuelManager;
 import com.playares.arena.item.*;
 import com.playares.arena.kit.KitManager;
 import com.playares.arena.listener.*;
@@ -41,6 +42,7 @@ public final class Arenas extends AresPlugin {
     @Getter public MatchManager matchManager;
     @Getter public ReportManager reportManager;
     @Getter public SpectateManager spectateManager;
+    @Getter public DuelManager duelManager;
 
     @Override
     public void onEnable() {
@@ -55,6 +57,7 @@ public final class Arenas extends AresPlugin {
         matchManager = new MatchManager(this);
         reportManager = new ReportManager(this);
         spectateManager = new SpectateManager(this);
+        duelManager = new DuelManager(this);
 
         final PaperCommandManager commandManager = new PaperCommandManager(this);
         registerCommandManager(commandManager);
@@ -75,6 +78,7 @@ public final class Arenas extends AresPlugin {
         registerCommand(new KitCommand(this));
         registerCommand(new ReportCommand(this));
         registerCommand(new SpectateCommand(this));
+        registerCommand(new DuelCommand(this));
 
         registerService(new AutomatedRestartService(this, 86400));
         registerService(new ChatRestrictionService(this));

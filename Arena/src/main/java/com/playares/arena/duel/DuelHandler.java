@@ -1,10 +1,16 @@
 package com.playares.arena.duel;
 
 import com.playares.arena.player.ArenaPlayer;
+import com.playares.arena.queue.MatchmakingQueue;
 import com.playares.commons.base.promise.SimplePromise;
+import com.playares.commons.bukkit.menu.ClickableItem;
+import com.playares.commons.bukkit.menu.Menu;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 @AllArgsConstructor
@@ -12,10 +18,16 @@ public final class DuelHandler {
     @Getter public final DuelManager manager;
 
     public void openDuelMenu(Player player, String username, SimplePromise promise) {
+        final ArenaPlayer profile = manager.getPlugin().getPlayerManager().getPlayer(player);
         final Player otherPlayer = Bukkit.getPlayer(username);
 
         if (otherPlayer == null) {
             promise.failure("Player not found");
+            return;
+        }
+
+        if (otherPlayer.getUniqueId().equals(player.getUniqueId())) {
+            promise.failure("You can not duel yourself");
             return;
         }
 
@@ -31,9 +43,48 @@ public final class DuelHandler {
             return;
         }
 
-        // TODO: Get existing duel request
+        final PlayerDuelRequest existing = getManager().getPendingDuelRequest(player, username);
 
-        //final Menu menu = new Menu(manager.getPlugin(), player, "Duel " +)
+        if (existing != null) {
+            promise.failure(ChatColor.RED + "Please wait a moment before sending " + otherProfile.getUsername() + " another duel request");
+            return;
+        }
+
+        final Menu menu = new Menu(manager.getPlugin(), player, "Duel " + otherProfile.getUsername(), 1);
+
+        for (MatchmakingQueue queues : manager.getPlugin().getQueueManager().getMatchmakingQueues()) {
+            menu.addItem(new ClickableItem(queues.getIcon(), queues.getQueueType().getIconPosition(), click -> {
+                player.closeInventory();
+
+                final PlayerDuelRequest request = new PlayerDuelRequest(manager.getPlugin(), profile, otherProfile, queues.getQueueType());
+                manager.addRequest(request);
+
+                // You have challenged playerName to a No Debuff duel
+                // Awaiting their response...
+
+                player.sendMessage(" ");
+                player.sendMessage(ChatColor.YELLOW + "You have challenged " + ChatColor.AQUA + otherProfile.getUsername() + ChatColor.YELLOW + " to a " + ChatColor.GOLD + queues.getQueueType().getDisplayName() + ChatColor.YELLOW + " duel");
+                player.sendMessage(ChatColor.GRAY + "Awaiting their response...");
+                player.sendMessage(" ");
+
+                // johnsama has challenged you to a No Debuff duel! [Accept]
+                otherPlayer.sendMessage(
+                        new ComponentBuilder(player.getName())
+                                .color(net.md_5.bungee.api.ChatColor.AQUA)
+                                .append(" has challenged you to a ")
+                                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                                .append(queues.getQueueType().getDisplayName())
+                                .color(net.md_5.bungee.api.ChatColor.GOLD)
+                                .append(" duel!")
+                                .color(net.md_5.bungee.api.ChatColor.YELLOW)
+                                .append(" [Accept]")
+                                .color(net.md_5.bungee.api.ChatColor.GREEN)
+                                .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/duel accept " + player.getName()))
+                                .create());
+            }));
+        }
+
+        menu.open();
     }
 
     public void acceptDuel(Player player, String acceptingUsername, SimplePromise promise) {
@@ -60,7 +111,7 @@ public final class DuelHandler {
             return;
         }
 
-        final DuelRequest request = manager.getAcceptedPlayerDuelRequest(player, acceptingUsername);
+        final PlayerDuelRequest request = manager.getAcceptedPlayerDuelRequest(player, acceptingUsername);
 
         if (request == null) {
             promise.failure(accepting.getUsername() + " has not sent you a duel request");

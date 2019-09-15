@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import com.playares.arena.Arenas;
 import com.playares.arena.team.Team;
+import com.playares.commons.bukkit.util.Scheduler;
 import lombok.Getter;
 import org.bukkit.entity.Player;
 
@@ -18,6 +19,11 @@ public final class DuelManager {
         this.plugin = plugin;
         this.handler = new DuelHandler(this);
         this.requests = Sets.newConcurrentHashSet();
+    }
+
+    public void addRequest(DuelRequest request) {
+        requests.add(request);
+        new Scheduler(getPlugin()).sync(() -> requests.remove(request)).delay(plugin.getArenasConfig().getTimerChallengeExpire() * 20).run();
     }
 
     public ImmutableSet<PlayerDuelRequest> getPlayerDuelRequests() {
@@ -42,6 +48,14 @@ public final class DuelManager {
         }
 
         return ImmutableSet.copyOf(result);
+    }
+
+    public PlayerDuelRequest getPendingDuelRequest(Player player, String username) {
+        return getPlayerDuelRequests()
+                .stream()
+                .filter(duelRequest -> duelRequest.getRequesting().getUniqueId().equals(player.getUniqueId()) && duelRequest.getRequested().getUsername().equalsIgnoreCase(username))
+                .findFirst()
+                .orElse(null);
     }
 
     public PlayerDuelRequest getAcceptedPlayerDuelRequest(Player accepter, String accepting) {
