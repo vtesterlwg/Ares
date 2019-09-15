@@ -37,9 +37,10 @@ public final class MatchEndingTimer extends PlayerTimer {
 
             plugin.getPlayerManager().getHandler().giveItems(profile);
 
-            Bukkit.getOnlinePlayers().forEach(online -> online.showPlayer(plugin, player));
-
-            // TODO: Teleport back to lobby
+            Bukkit.getOnlinePlayers().forEach(online -> {
+                online.showPlayer(plugin, player);
+                plugin.getSpawnManager().getHandler().teleport(online);
+            });
         }).run();
     }
 }

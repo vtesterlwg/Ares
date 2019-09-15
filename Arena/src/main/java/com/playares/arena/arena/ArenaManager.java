@@ -39,6 +39,11 @@ public final class ArenaManager {
             Logger.warn("Clearing existing arenas from memory while reloading data");
         }
 
+        if (config.get("arenas") == null) {
+            Logger.error("Arenas.yml file was empty");
+            return;
+        }
+
         for (String arenaName : config.getConfigurationSection("arenas").getKeys(false)) {
             final String path = "arenas." + arenaName + ".";
             final String displayName = ChatColor.translateAlternateColorCodes('&', config.getString(path + "display-name"));

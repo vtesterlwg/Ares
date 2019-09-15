@@ -12,6 +12,7 @@ import com.playares.arena.match.MatchManager;
 import com.playares.arena.player.PlayerManager;
 import com.playares.arena.queue.QueueManager;
 import com.playares.arena.report.ReportManager;
+import com.playares.arena.spawn.SpawnManager;
 import com.playares.arena.spectate.SpectateManager;
 import com.playares.arena.team.TeamManager;
 import com.playares.commons.base.connect.mongodb.MongoDB;
@@ -43,6 +44,7 @@ public final class Arenas extends AresPlugin {
     @Getter public ReportManager reportManager;
     @Getter public SpectateManager spectateManager;
     @Getter public DuelManager duelManager;
+    @Getter public SpawnManager spawnManager;
 
     @Override
     public void onEnable() {
@@ -58,6 +60,7 @@ public final class Arenas extends AresPlugin {
         reportManager = new ReportManager(this);
         spectateManager = new SpectateManager(this);
         duelManager = new DuelManager(this);
+        spawnManager = new SpawnManager(this);
 
         final PaperCommandManager commandManager = new PaperCommandManager(this);
         registerCommandManager(commandManager);
@@ -79,6 +82,7 @@ public final class Arenas extends AresPlugin {
         registerCommand(new ReportCommand(this));
         registerCommand(new SpectateCommand(this));
         registerCommand(new DuelCommand(this));
+        registerCommand(new SpawnCommand(this));
 
         registerService(new AutomatedRestartService(this, 86400));
         registerService(new ChatRestrictionService(this));
@@ -115,6 +119,7 @@ public final class Arenas extends AresPlugin {
             Logger.error("Failed to obtain Custom Item Service!");
         }
 
+        spawnManager.load();
         kitManager.load();
         arenaManager.load();
         queueManager.load();

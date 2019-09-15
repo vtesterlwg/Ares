@@ -170,7 +170,7 @@ public final class TeamHandler {
         .event(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/team join " + inviter.getUsername()))
         .create());
 
-        new Scheduler(manager.getPlugin()).sync(() -> team.getInvitations().remove(invited)).delay(30 * 20L).run(); // TODO: Make configurable
+        new Scheduler(manager.getPlugin()).sync(() -> team.getInvitations().remove(invited)).delay(manager.getPlugin().getArenasConfig().getTimerInviteExpire() * 20L).run();
 
         promise.success();
     }

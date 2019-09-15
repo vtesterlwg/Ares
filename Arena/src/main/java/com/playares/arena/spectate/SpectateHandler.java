@@ -78,7 +78,7 @@ public final class SpectateHandler {
         match.getPlugin().getPlayerManager().getHandler().giveItems(profile);
         match.getSpectators().remove(profile);
 
-        // TODO: Teleport to lobby
+        manager.getPlugin().getSpawnManager().getHandler().teleport(player);
 
         match.getPlayers().forEach(otherPlayer -> otherPlayer.getPlayer().showPlayer(manager.getPlugin(), player));
     }

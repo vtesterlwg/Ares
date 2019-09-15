@@ -28,11 +28,11 @@ public final class MatchHandler {
                 int newRatingB;
 
                 if (rankedMatch.getWinner() != null && rankedMatch.getWinner().equals(rankedMatch.getPlayerA())) {
-                    newRatingA = (int)(Math.round((rankedMatch.getRatingA() + 30 * (0 - probabilityA)) * 1000000.0 / 1000000.0));
-                    newRatingB = (int)(Math.round((rankedMatch.getRatingB() + 30 * (1 - probabilityB)) * 1000000.0 / 1000000.0));
-                } else {
                     newRatingA = (int)(Math.round((rankedMatch.getRatingA() + 30 * (1 - probabilityA)) * 1000000.0 / 1000000.0));
                     newRatingB = (int)(Math.round((rankedMatch.getRatingB() + 30 * (0 - probabilityB)) * 1000000.0 / 1000000.0));
+                } else {
+                    newRatingA = (int)(Math.round((rankedMatch.getRatingA() + 30 * (0 - probabilityA)) * 1000000.0 / 1000000.0));
+                    newRatingB = (int)(Math.round((rankedMatch.getRatingB() + 30 * (1 - probabilityB)) * 1000000.0 / 1000000.0));
                 }
 
                 final int diff = Math.abs(newRatingA - rankedMatch.getPlayerA().getRankedData().getRating(rankedMatch.getQueue().getQueueType()));
