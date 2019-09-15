@@ -9,10 +9,7 @@ import com.playares.arena.command.ReportCommand;
 import com.playares.arena.command.TeamCommand;
 import com.playares.arena.item.*;
 import com.playares.arena.kit.KitManager;
-import com.playares.arena.listener.CombatListener;
-import com.playares.arena.listener.KitListener;
-import com.playares.arena.listener.PlayerConnectionListener;
-import com.playares.arena.listener.ReportListener;
+import com.playares.arena.listener.*;
 import com.playares.arena.match.MatchManager;
 import com.playares.arena.player.PlayerManager;
 import com.playares.arena.queue.QueueManager;
@@ -71,6 +68,7 @@ public final class Arenas extends AresPlugin {
         registerListener(new KitListener(this));
         registerListener(new CombatListener(this));
         registerListener(new ReportListener(this));
+        registerListener(new ArenaListener(this));
 
         registerCommand(new ArenaCommand(this));
         registerCommand(new TeamCommand(this));
