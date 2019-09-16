@@ -16,6 +16,7 @@ public final class ArenaPlayerDAO {
         final Document existing;
 
         if (collection == null) {
+            player.getRankedData().setLoaded(true);
             return;
         }
 
@@ -23,6 +24,7 @@ public final class ArenaPlayerDAO {
         existing = iter.first();
 
         if (existing == null) {
+            player.getRankedData().setLoaded(true);
             return;
         }
 
