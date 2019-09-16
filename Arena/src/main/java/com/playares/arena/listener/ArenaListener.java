@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 @AllArgsConstructor
 public final class ArenaListener implements Listener {
@@ -151,6 +152,28 @@ public final class ArenaListener implements Listener {
         }
 
         if (!player.hasPermission("arena.admin")) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler (priority = EventPriority.HIGH)
+    public void onTeleport(PlayerTeleportEvent event) {
+        if (event.isCancelled()) {
+            return;
+        }
+
+        if (!event.getCause().equals(PlayerTeleportEvent.TeleportCause.ENDER_PEARL)) {
+            return;
+        }
+
+        final Player player = event.getPlayer();
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
+
+        if (profile == null) {
+            return;
+        }
+
+        if (!profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
             event.setCancelled(true);
         }
     }

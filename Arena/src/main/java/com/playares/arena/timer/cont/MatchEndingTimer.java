@@ -4,6 +4,7 @@ import com.playares.arena.Arenas;
 import com.playares.arena.player.ArenaPlayer;
 import com.playares.arena.timer.PlayerTimer;
 import com.playares.commons.bukkit.util.Scheduler;
+import com.playares.services.playerclasses.PlayerClassService;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -24,9 +25,14 @@ public final class MatchEndingTimer extends PlayerTimer {
         new Scheduler(plugin).sync(() -> {
             final Player player = Bukkit.getPlayer(owner);
             final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(owner);
+            final PlayerClassService playerClassService = (PlayerClassService)plugin.getService(PlayerClassService.class);
 
             if (player == null || profile == null) {
                 return;
+            }
+
+            if (playerClassService != null) {
+                playerClassService.getClassManager().getClasses().forEach(playerClass -> playerClass.getConsumables().forEach(consumable -> consumable.getPlayerCooldowns().remove(player.getUniqueId())));
             }
 
             player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
