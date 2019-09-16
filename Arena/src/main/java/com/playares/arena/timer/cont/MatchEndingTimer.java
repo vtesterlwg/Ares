@@ -36,11 +36,9 @@ public final class MatchEndingTimer extends PlayerTimer {
             profile.getTimers().clear();
 
             plugin.getPlayerManager().getHandler().giveItems(profile);
+            plugin.getSpawnManager().getHandler().teleport(player);
 
-            Bukkit.getOnlinePlayers().forEach(online -> {
-                online.showPlayer(plugin, player);
-                plugin.getSpawnManager().getHandler().teleport(online);
-            });
+            Bukkit.getOnlinePlayers().forEach(online -> online.showPlayer(plugin, player));
         }).run();
     }
 }
