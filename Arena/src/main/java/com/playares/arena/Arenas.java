@@ -75,6 +75,7 @@ public final class Arenas extends AresPlugin {
         registerListener(new CombatListener(this));
         registerListener(new ReportListener(this));
         registerListener(new ArenaListener(this));
+        registerListener(new ClassListener(this));
 
         registerCommand(new ArenaCommand(this));
         registerCommand(new TeamCommand(this));
