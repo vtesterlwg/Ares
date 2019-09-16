@@ -107,10 +107,9 @@ public final class ClassConsumable {
         playerCooldowns.put(player.getUniqueId(), (Time.now() + (cooldown * 1000L)));
 
         new Scheduler(getService().getOwner()).sync(() -> {
-            playerCooldowns.remove(playerUUID);
-
-            if (Bukkit.getPlayer(playerUUID) != null) {
+            if (playerCooldowns.containsKey(playerUUID) && Bukkit.getPlayer(playerUUID) != null) {
                 Bukkit.getPlayer(playerUUID).sendMessage(ChatColor.GREEN + WordUtils.capitalize(effectType.getName().toLowerCase().replace("_", " ")) + " has been unlocked");
+                playerCooldowns.remove(playerUUID);
             }
         }).delay(getCooldown() * 20).run();
 
