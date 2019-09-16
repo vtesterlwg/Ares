@@ -76,7 +76,9 @@ public final class ClassListener implements Listener {
 
         if (expectedClass != null) {
             if (actualClass != null) {
-                actualClass.deactivate(player);
+                final PlayerClassDeactivateEvent deactivateEvent = new PlayerClassDeactivateEvent(player, actualClass);
+                Bukkit.getPluginManager().callEvent(deactivateEvent);
+                actualClass.deactivate(player, deactivateEvent.isMessage());
             }
 
             final PlayerClassReadyEvent readyEvent = new PlayerClassReadyEvent(player, expectedClass);
@@ -88,7 +90,7 @@ public final class ClassListener implements Listener {
         if (actualClass != null) {
             final PlayerClassDeactivateEvent deactivateEvent = new PlayerClassDeactivateEvent(player, actualClass);
             Bukkit.getPluginManager().callEvent(deactivateEvent);
-            actualClass.deactivate(player, actualClass.getActivePlayers().contains(player.getUniqueId()));
+            actualClass.deactivate(player, deactivateEvent.isMessage(), actualClass.getActivePlayers().contains(player.getUniqueId()));
         } else {
             final PlayerClassUnreadyEvent unreadyEvent = new PlayerClassUnreadyEvent(player);
             Bukkit.getPluginManager().callEvent(unreadyEvent);

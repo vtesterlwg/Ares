@@ -53,16 +53,45 @@ public abstract class Class {
         activePlayers.add(player.getUniqueId());
     }
 
-    public void deactivate(Player player) {
-        player.sendMessage(ChatColor.GOLD + "Class Deactivated" + ChatColor.YELLOW + ": " + ChatColor.RED + getName());
+    public void activate(Player player, boolean message) {
+        if (!hasArmorRequirements(player)) {
+            player.sendMessage(ChatColor.RED + "You no longer meet the armor requirements for " + getName());
+            return;
+        }
+
+        if (message) {
+            player.sendMessage(ChatColor.GOLD + "Class Activated" + ChatColor.YELLOW + ": " + ChatColor.BLUE + getName());
+            player.sendMessage(ChatColor.GRAY + getDescription());
+        }
+
+        passiveEffects.keySet().forEach(effectType -> {
+            final int amplifier = passiveEffects.get(effectType);
+
+            if (player.hasPotionEffect(effectType)) {
+                player.removePotionEffect(effectType);
+            }
+
+            player.addPotionEffect(new PotionEffect(effectType, Integer.MAX_VALUE, amplifier));
+        });
+
+        activePlayers.add(player.getUniqueId());
+    }
+
+    public void deactivate(Player player, boolean message) {
+        if (message) {
+            player.sendMessage(ChatColor.GOLD + "Class Deactivated" + ChatColor.YELLOW + ": " + ChatColor.RED + getName());
+        }
 
         passiveEffects.keySet().forEach(player::removePotionEffect);
 
         activePlayers.remove(player.getUniqueId());
     }
 
-    public void deactivate(Player player, boolean removeEffects) {
-        player.sendMessage(ChatColor.GOLD + "Class Deactivated" + ChatColor.YELLOW + ": " + ChatColor.RED + getName());
+    public void deactivate(Player player, boolean message, boolean removeEffects) {
+        if (message) {
+            player.sendMessage(ChatColor.GOLD + "Class Deactivated" + ChatColor.YELLOW + ": " + ChatColor.RED + getName());
+        }
+
         activePlayers.remove(player.getUniqueId());
 
         if (removeEffects) {
