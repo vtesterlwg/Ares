@@ -81,6 +81,10 @@ public final class TeamMenu extends Menu {
                     }
 
                     elements.add(new ClickableItem(icon, elements.size(), c1 -> {
+                        if (!team.isLeader(player.getUniqueId())) {
+                            return;
+                        }
+
                         player.closeInventory();
 
                         final TeamDuelRequest existing = plugin.getDuelManager().getPendingDuelRequest(duelingTeam, team.getLeader().getUsername());
