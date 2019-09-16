@@ -53,8 +53,12 @@ public final class MatchHandler {
             if (unrankedMatch.getWinner() != null) {
                 if (unrankedMatch.getWinner().equals(unrankedMatch.getPlayerA())) {
                     unrankedMatch.getPlayerA().getActiveReport().pullInventory();
+                    unrankedMatch.getPlayerA().getActiveReport().setHealth(unrankedMatch.getPlayerA().getPlayer().getHealth());
+                    unrankedMatch.getPlayerA().getActiveReport().setFood(unrankedMatch.getPlayerA().getPlayer().getFoodLevel());
                 } else {
                     unrankedMatch.getPlayerB().getActiveReport().pullInventory();
+                    unrankedMatch.getPlayerB().getActiveReport().setHealth(unrankedMatch.getPlayerB().getPlayer().getHealth());
+                    unrankedMatch.getPlayerB().getActiveReport().setFood(unrankedMatch.getPlayerB().getPlayer().getFoodLevel());
                 }
             }
 
@@ -83,6 +87,12 @@ public final class MatchHandler {
             if (teamMatch.getWinner() != null) {
                 teamMatch.getWinner().getMembers().stream().filter(member -> member.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)).forEach(member ->
                         member.getActiveReport().pullInventory());
+
+                teamMatch.getWinner().getMembers().stream().filter(member -> member.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)).forEach(member -> {
+                    member.getActiveReport().pullInventory();
+                    member.getActiveReport().setHealth(member.getPlayer().getHealth());
+                    member.getActiveReport().setFood(member.getPlayer().getFoodLevel());
+                });
             }
 
             teamMatch.getPlayers().forEach(player -> {
