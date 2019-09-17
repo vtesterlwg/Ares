@@ -16,6 +16,10 @@ public final class VanishManager {
     }
 
     public boolean isVanished(Player player) {
+        if (player == null) {
+            return false;
+        }
+
         return vanished.contains(player.getUniqueId());
     }
 
