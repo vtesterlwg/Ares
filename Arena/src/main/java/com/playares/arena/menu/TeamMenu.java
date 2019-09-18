@@ -81,7 +81,8 @@ public final class TeamMenu extends Menu {
                     }
 
                     elements.add(new ClickableItem(icon, elements.size(), c1 -> {
-                        if (!team.isLeader(player.getUniqueId())) {
+                        if (!duelingTeam.isLeader(player.getUniqueId())) {
+                            player.sendMessage(ChatColor.RED + "You must be the leader of the team to send a request");
                             return;
                         }
 
