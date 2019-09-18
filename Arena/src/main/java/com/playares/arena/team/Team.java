@@ -68,7 +68,7 @@ public final class Team {
     }
 
     public boolean isLeader(ArenaPlayer player) {
-        return getLeader().equals(player);
+        return getLeader().getUniqueId().equals(player.getUniqueId());
     }
 
     public boolean isLeader(UUID uniqueId) {
