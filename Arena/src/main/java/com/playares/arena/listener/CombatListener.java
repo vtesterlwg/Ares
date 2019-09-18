@@ -115,6 +115,40 @@ public final class CombatListener implements Listener {
         Bukkit.getPluginManager().callEvent(deathEvent);
     }
 
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        final Player player = event.getEntity();
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
+
+        event.setDeathMessage(null);
+        player.spigot().respawn();
+
+        if (profile == null) {
+            return;
+        }
+
+        final Match match = plugin.getMatchManager().getMatchByPlayer(profile);
+
+        if (match == null) {
+            return;
+        }
+
+        profile.setStatus(ArenaPlayer.PlayerStatus.INGAME_DEAD);
+        profile.getActiveReport().pullInventory();
+
+        if (match instanceof TeamMatch) {
+            final TeamMatch teamMatch = (TeamMatch)match;
+
+            player.setGameMode(GameMode.CREATIVE);
+
+            teamMatch.getAlivePlayers().forEach(alive -> alive.getPlayer().hidePlayer(plugin, player));
+            Bukkit.getOnlinePlayers().forEach(online -> player.showPlayer(plugin, online));
+        }
+
+        final ArenaPlayerDeathEvent deathEvent = new ArenaPlayerDeathEvent(player, player.getKiller(), match);
+        Bukkit.getPluginManager().callEvent(deathEvent);
+    }
+
     @EventHandler (priority = EventPriority.MONITOR)
     public void onEntityDamage(EntityDamageEvent event) {
         if (event.isCancelled()) {
