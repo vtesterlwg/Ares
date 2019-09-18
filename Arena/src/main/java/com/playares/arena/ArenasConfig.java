@@ -33,6 +33,7 @@ public final class ArenasConfig {
         serverId = config.getInt("server-sync.id");
         bungeeName = config.getString("server-sync.bungee-name");
         displayName = config.getString("server-sync.display-name");
+        description = config.getString("server-sync.description");
         serverType = Server.Type.valueOf(config.getString("server-sync.type"));
         premiumAllocatedSlots = config.getInt("server-sync.premium-allocated-slots");
 
