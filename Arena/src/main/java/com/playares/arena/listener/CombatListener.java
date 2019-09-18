@@ -38,9 +38,20 @@ import org.bukkit.inventory.ItemStack;
 public final class CombatListener implements Listener {
     @Getter public final Arenas plugin;
 
-    @EventHandler
-    public void onPlayerDeath(PlayerDeathEvent event) {
-        event.setDeathMessage(null);
+    @EventHandler (priority = EventPriority.HIGH)
+    public void onEntityDamagePrevention(EntityDamageEvent event) {
+        final Entity entity = event.getEntity();
+
+        if (!(entity instanceof Player)) {
+            return;
+        }
+
+        final Player player = (Player)entity;
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
+
+        if (profile != null && !profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
+            event.setCancelled(true);
+        }
     }
 
     @EventHandler (priority = EventPriority.HIGHEST)
@@ -64,25 +75,14 @@ public final class CombatListener implements Listener {
             return;
         }
 
-        final Team attackerTeam = plugin.getTeamManager().getTeam(attackerProfile);
-
-        if (attackerTeam != null && attackerTeam.getMembers().contains(attackedProfile)) {
+        if (attackerProfile.hasTimer(PlayerTimer.PlayerTimerType.MATCH_STARTING) || attackedProfile.hasTimer(PlayerTimer.PlayerTimerType.MATCH_STARTING)) {
             event.setCancelled(true);
-        }
-    }
-
-    @EventHandler (priority = EventPriority.HIGH)
-    public void onEntityDamagePrevention(EntityDamageEvent event) {
-        final Entity entity = event.getEntity();
-
-        if (!(entity instanceof Player)) {
             return;
         }
 
-        final Player player = (Player)entity;
-        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
+        final Team attackerTeam = plugin.getTeamManager().getTeam(attackerProfile);
 
-        if (profile != null && !profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
+        if (attackerTeam != null && attackerTeam.getMembers().contains(attackedProfile)) {
             event.setCancelled(true);
         }
     }
@@ -131,6 +131,10 @@ public final class CombatListener implements Listener {
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
 
         if (profile == null) {
+            return;
+        }
+
+        if (!profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
             return;
         }
 
