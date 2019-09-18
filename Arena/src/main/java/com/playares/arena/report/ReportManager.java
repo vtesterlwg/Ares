@@ -21,6 +21,10 @@ public final class ReportManager {
     }
 
     public void addReport(Report report) {
+        if (report == null) {
+            return;
+        }
+
         reports.add(report);
         new Scheduler(getPlugin()).sync(() -> reports.remove(report)).delay(300 * 20L).run();
     }
