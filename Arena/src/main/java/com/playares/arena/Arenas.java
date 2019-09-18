@@ -68,6 +68,8 @@ public final class Arenas extends AresPlugin {
         registerMongo(new MongoDB(arenasConfig.getDatabaseURI()));
         registerProtocol(ProtocolLibrary.getProtocolManager());
 
+        getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+
         getMongo().openConnection();
 
         registerListener(new PlayerConnectionListener(this));
