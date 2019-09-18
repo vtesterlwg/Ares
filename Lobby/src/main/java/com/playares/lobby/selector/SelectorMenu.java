@@ -120,7 +120,7 @@ public final class SelectorMenu extends Menu {
             lore.add(ChatColor.GREEN + "Click to join!");
 
             final ItemStack icon = new ItemBuilder()
-                    .setMaterial(Material.DIAMOND_HELMET)
+                    .setMaterial(Material.BOOK_AND_QUILL)
                     .setName(development.getDisplayName())
                     .addLore(lore)
                     .build();
@@ -161,7 +161,7 @@ public final class SelectorMenu extends Menu {
             lore.add(ChatColor.GREEN + "Click to join!");
 
             final ItemStack icon = new ItemBuilder()
-                    .setMaterial(Material.DIAMOND_HELMET)
+                    .setMaterial(Material.DIAMOND_SWORD)
                     .setName(arena.getDisplayName())
                     .addLore(lore)
                     .build();
