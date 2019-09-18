@@ -39,9 +39,7 @@ public final class ArenaCommand extends BaseCommand {
     public void onSet(Player player) {
         plugin.getArenaManager().getBuilderManager().getHandler().set(player, new SimplePromise() {
             @Override
-            public void success() {
-                player.sendMessage(ChatColor.GREEN + "Arena has been created");
-            }
+            public void success() {}
 
             @Override
             public void failure(@Nonnull String reason) {

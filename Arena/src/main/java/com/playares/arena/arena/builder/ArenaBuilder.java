@@ -49,7 +49,7 @@ public final class ArenaBuilder {
 
     void setSpawnB(PLocatable location) {
         this.spawnB = location;
-        getPlayer().sendMessage(ChatColor.GREEN + "Arena spawn 'A' has been set");
+        getPlayer().sendMessage(ChatColor.GREEN + "Arena spawn 'B' has been set");
         setCurrentState(ArenaBuilderState.SET_B);
     }
 

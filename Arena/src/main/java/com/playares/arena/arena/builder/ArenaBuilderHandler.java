@@ -63,6 +63,7 @@ public final class ArenaBuilderHandler {
             final Arena arena = builder.build();
             arena.save();
             getBuilderManager().getManager().getArenas().add(arena);
+            getBuilderManager().getBuilders().remove(builder);
 
             Logger.print(player.getName() + " has finished creating the arena: " + arena.getName());
 
