@@ -124,8 +124,6 @@ public final class OldSwordSwing implements HumbugModule, Listener {
                     if (!damager.isOnGround() && damager.getVelocity().getY() < 0) {
                         init *= 1.25;
                         critical = true;
-
-                        damaged.getLocation().getWorld().spawnParticle(Particle.CRIT, damaged.getLocation().add(0, 1.0, 0), 8, 0.1, 0.1, 0.1, 0.5);
                     }
 
                     attackQueue.add(new QueuedAttack(damager, damaged, init, critical));
@@ -198,6 +196,10 @@ public final class OldSwordSwing implements HumbugModule, Listener {
             return;
         }
 
+        if (!damager.isOnGround() && damager.getVelocity().getY() < 0) {
+            damaged.getLocation().getWorld().spawnParticle(Particle.CRIT, damaged.getLocation().add(0, 1.0, 0), 8, 0.1, 0.1, 0.1, 0.5);
+        }
+
         if (hand != null && hand.hasItemMeta() && hand.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
             damaged.setFireTicks(80 * hand.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
         }
@@ -227,7 +229,11 @@ public final class OldSwordSwing implements HumbugModule, Listener {
             return;
         }
 
-        if (hand != null && hand.hasItemMeta() && hand.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT)) {
+        if (!damager.isOnGround() && damager.getVelocity().getY() < 0 && entity instanceof LivingEntity) {
+            entity.getLocation().getWorld().spawnParticle(Particle.CRIT, entity.getLocation().add(0, 1.0, 0), 8, 0.1, 0.1, 0.1, 0.5);
+        }
+
+        if (hand != null && hand.hasItemMeta() && hand.getItemMeta().hasEnchant(Enchantment.FIRE_ASPECT) && entity instanceof LivingEntity) {
             entity.setFireTicks(80 * hand.getItemMeta().getEnchantLevel(Enchantment.FIRE_ASPECT));
         }
     }
