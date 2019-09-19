@@ -95,6 +95,10 @@ public final class OldSwordSwing implements HumbugModule, Listener {
                     return;
                 }
 
+                if (packet == null || packet.getEntityUseActions() == null || packet.getEntityUseActions().read(0) == null) {
+                    return;
+                }
+
                 if (!packet.getEntityUseActions().read(0).equals(EnumWrappers.EntityUseAction.ATTACK)) {
                     return;
                 }
