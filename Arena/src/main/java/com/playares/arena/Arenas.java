@@ -63,6 +63,7 @@ public final class Arenas extends AresPlugin {
         spawnManager = new SpawnManager(this);
 
         final PaperCommandManager commandManager = new PaperCommandManager(this);
+        commandManager.enableUnstableAPI("help");
         registerCommandManager(commandManager);
 
         registerMongo(new MongoDB(arenasConfig.getDatabaseURI()));

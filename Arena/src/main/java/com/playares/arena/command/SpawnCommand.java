@@ -1,10 +1,8 @@
 package com.playares.arena.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Values;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.playares.arena.Arenas;
 import com.playares.commons.base.promise.SimplePromise;
 import lombok.AllArgsConstructor;
@@ -41,5 +39,10 @@ public final class SpawnCommand extends BaseCommand {
     @Description("Update the spawn location")
     public void onSpawnSet(Player player, @Values("set") String set) {
         plugin.getSpawnManager().getHandler().update(player);
+    }
+
+    @HelpCommand
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

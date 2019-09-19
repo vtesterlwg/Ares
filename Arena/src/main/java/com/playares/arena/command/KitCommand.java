@@ -1,10 +1,8 @@
 package com.playares.arena.command;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.annotation.CommandAlias;
-import co.aikar.commands.annotation.CommandPermission;
-import co.aikar.commands.annotation.Description;
-import co.aikar.commands.annotation.Subcommand;
+import co.aikar.commands.CommandHelp;
+import co.aikar.commands.annotation.*;
 import com.playares.arena.Arenas;
 import com.playares.commons.base.promise.SimplePromise;
 import lombok.AllArgsConstructor;
@@ -34,5 +32,10 @@ public final class KitCommand extends BaseCommand {
                 player.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @HelpCommand
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

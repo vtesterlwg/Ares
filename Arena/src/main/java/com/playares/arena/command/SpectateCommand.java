@@ -1,8 +1,10 @@
 package com.playares.arena.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.CommandCompletion;
+import co.aikar.commands.annotation.HelpCommand;
 import com.playares.arena.Arenas;
 import com.playares.commons.base.promise.SimplePromise;
 import lombok.AllArgsConstructor;
@@ -30,5 +32,10 @@ public final class SpectateCommand extends BaseCommand {
                 spectator.sendMessage(ChatColor.RED + reason);
             }
         });
+    }
+
+    @HelpCommand
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }

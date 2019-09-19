@@ -1,8 +1,10 @@
 package com.playares.arena.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
+import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Subcommand;
 import com.playares.arena.Arenas;
 import com.playares.arena.team.Team;
@@ -65,5 +67,10 @@ public final class ReportCommand extends BaseCommand {
         }
 
         plugin.getReportManager().getHandler().openTeamReports(player, matchId, team);
+    }
+
+    @HelpCommand
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
     }
 }
