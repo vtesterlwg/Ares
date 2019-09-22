@@ -74,7 +74,7 @@ public final class OldSwordSwing implements HumbugModule, Listener {
             while (attackQueue.size() > 0) {
                 final QueuedAttack attack = attackQueue.remove();
                 attack.getAttacked().damage(attack.getDamage(), attack.getAttacker());
-                attack.getAttacked().setNoDamageTicks(hitDelayTicks);
+                //attack.getAttacked().setNoDamageTicks(hitDelayTicks);
             }
         }).repeat(0L, 1L).run();
 
