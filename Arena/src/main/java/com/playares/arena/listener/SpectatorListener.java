@@ -3,6 +3,8 @@ package com.playares.arena.listener;
 import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.playares.arena.Arenas;
 import com.playares.arena.player.ArenaPlayer;
+import com.playares.commons.bukkit.event.PlayerLingeringSplashPlayerEvent;
+import com.playares.commons.bukkit.event.PlayerSplashPlayerEvent;
 import lombok.Getter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -59,6 +61,40 @@ public final class SpectatorListener implements Listener {
         final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
 
         if (profile == null || !profile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPotionSplash(PlayerSplashPlayerEvent event) {
+        final Player damaged = event.getDamaged();
+        final Player damager = event.getDamager();
+        final ArenaPlayer damagedProfile = plugin.getPlayerManager().getPlayer(damaged);
+        final ArenaPlayer damagerProfile = plugin.getPlayerManager().getPlayer(damager);
+
+        if (damagedProfile == null || damagerProfile == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!damagerProfile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME) || !damagedProfile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onLingeringSplash(PlayerLingeringSplashPlayerEvent event) {
+        final Player damaged = event.getDamaged();
+        final Player damager = event.getDamager();
+        final ArenaPlayer damagedProfile = plugin.getPlayerManager().getPlayer(damaged);
+        final ArenaPlayer damagerProfile = plugin.getPlayerManager().getPlayer(damager);
+
+        if (damagedProfile == null || damagerProfile == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!damagerProfile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME) || !damagedProfile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
             event.setCancelled(true);
         }
     }
