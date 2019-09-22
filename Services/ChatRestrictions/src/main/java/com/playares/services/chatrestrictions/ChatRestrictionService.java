@@ -18,11 +18,7 @@ import org.bukkit.event.Listener;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Adds chat restrictions for players who do not meet the proper permission levels
- */
 public final class ChatRestrictionService implements AresService, Listener {
-    /** Owning Plugin **/
     @Getter public final AresPlugin owner;
     /** If true, chat cooldowns are enforced **/
     @Getter @Setter public boolean chatCooldownsEnabled;
@@ -39,7 +35,7 @@ public final class ChatRestrictionService implements AresService, Listener {
         this.owner = owner;
         this.recentChatters = Lists.newArrayList();
         this.whitelistedLinks = Lists.newArrayList();
-        this.chatCooldown = 5;
+        this.chatCooldown = 3;
     }
 
     private void load() {
