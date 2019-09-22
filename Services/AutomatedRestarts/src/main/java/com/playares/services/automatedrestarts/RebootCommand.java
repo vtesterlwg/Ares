@@ -14,7 +14,7 @@ import javax.annotation.Nonnull;
 public final class RebootCommand extends BaseCommand {
     @Getter public final AutomatedRestartService service;
 
-    public RebootCommand(AutomatedRestartService service) {
+    RebootCommand(AutomatedRestartService service) {
         this.service = service;
     }
 
