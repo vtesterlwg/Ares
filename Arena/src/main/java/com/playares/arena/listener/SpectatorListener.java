@@ -11,6 +11,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.inventory.ItemStack;
 
 public final class SpectatorListener implements Listener {
@@ -95,6 +97,36 @@ public final class SpectatorListener implements Listener {
         }
 
         if (!damagerProfile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME) || !damagedProfile.getStatus().equals(ArenaPlayer.PlayerStatus.INGAME)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerEmptyBucket(PlayerBucketEmptyEvent event) {
+        final Player player = event.getPlayer();
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
+
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!player.hasPermission("arena.admin") || !profile.getStatus().equals(ArenaPlayer.PlayerStatus.LOBBY)) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onPlayerFillBucket(PlayerBucketFillEvent event) {
+        final Player player = event.getPlayer();
+        final ArenaPlayer profile = plugin.getPlayerManager().getPlayer(player);
+
+        if (profile == null) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!player.hasPermission("arena.admin") || !profile.getStatus().equals(ArenaPlayer.PlayerStatus.LOBBY)) {
             event.setCancelled(true);
         }
     }
