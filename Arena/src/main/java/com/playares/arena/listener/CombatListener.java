@@ -218,11 +218,16 @@ public final class CombatListener implements Listener {
         // Reset slain player to full health
         Players.resetHealth(player);
 
-        // Lighting effect
-        match.getPlayers().forEach(lightingViewer -> {
-            ((CraftPlayer)lightingViewer.getPlayer()).getHandle().playerConnection.sendPacket(new PacketPlayOutSpawnEntityWeather(new EntityLightning(((CraftPlayer)player).getHandle().getWorld(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), false)));
-            Players.playSound(lightingViewer.getPlayer(), Sound.ENTITY_LIGHTNING_THUNDER);
-        });
+        for (ArenaPlayer lightingViewer : match.getPlayers()) {
+            final Player lightningPlayer = lightingViewer.getPlayer();
+
+            if (lightningPlayer == null) {
+                continue;
+            }
+
+            ((CraftPlayer)lightningPlayer).getHandle().playerConnection.sendPacket(new PacketPlayOutSpawnEntityWeather(new EntityLightning(((CraftPlayer)player).getHandle().getWorld(), player.getLocation().getX(), player.getLocation().getY(), player.getLocation().getZ(), false)));
+            Players.playSound(lightningPlayer, Sound.ENTITY_LIGHTNING_THUNDER);
+        }
 
         if (match instanceof UnrankedMatch) {
             final UnrankedMatch unrankedMatch = (UnrankedMatch)match;
