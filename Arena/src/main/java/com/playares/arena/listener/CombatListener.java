@@ -107,6 +107,10 @@ public final class CombatListener implements Listener {
 
         if (match instanceof TeamMatch) {
             for (ItemStack contents : player.getInventory().getContents()) {
+                if (contents == null) {
+                    continue;
+                }
+
                 player.getWorld().dropItemNaturally(player.getLocation(), contents);
             }
         }
