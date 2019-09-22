@@ -51,15 +51,15 @@ public abstract class Match {
     public abstract ImmutableList<ArenaPlayer> getPlayers();
 
     public void sendMessage(BaseComponent[] message) {
-        getPlayers().forEach(player -> player.getPlayer().sendMessage(message));
+        getPlayers().stream().filter(player -> player.getPlayer() != null).forEach(player -> player.getPlayer().sendMessage(message));
     }
 
     public void sendMessage(String message) {
-        getPlayers().forEach(player -> player.getPlayer().sendMessage(message));
+        getPlayers().stream().filter(player -> player.getPlayer() != null).forEach(player -> player.getPlayer().sendMessage(message));
     }
 
     public void sendTitle(String header, String footer) {
-        getPlayers().forEach(player -> player.getPlayer().sendTitle(new Title(header, footer)));
+        getPlayers().stream().filter(player -> player.getPlayer() != null).forEach(player -> player.getPlayer().sendTitle(new Title(header, footer)));
     }
 
     public PlayerReport getReport(ArenaPlayer player) {
