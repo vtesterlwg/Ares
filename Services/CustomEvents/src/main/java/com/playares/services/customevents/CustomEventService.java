@@ -128,6 +128,7 @@ public final class CustomEventService implements AresService, Listener {
         }
 
         final Player player = (Player)potion.getShooter();
+        final List<LivingEntity> toRemove = Lists.newArrayList();
 
         for (LivingEntity entity : event.getAffectedEntities()) {
             if (!(entity instanceof Player)) {
@@ -140,10 +141,11 @@ public final class CustomEventService implements AresService, Listener {
             Bukkit.getPluginManager().callEvent(customEvent);
 
             if (customEvent.isCancelled()) {
-                event.setCancelled(true);
-                return;
+                toRemove.add(affected);
             }
         }
+
+        event.getAffectedEntities().removeAll(toRemove);
     }
 
     @EventHandler
