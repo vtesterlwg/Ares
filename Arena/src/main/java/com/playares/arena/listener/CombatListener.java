@@ -244,14 +244,13 @@ public final class CombatListener implements Listener {
                 // Send slain message
                 player.sendMessage(ChatColor.GREEN + player.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.RED + killer.getName());
                 killer.sendMessage(ChatColor.RED + player.getName() + ChatColor.GRAY + " has been slain by " + ChatColor.GREEN + killer.getName());
-                unrankedMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendMessage(playerColor + player.getName() + ChatColor.GRAY + " has been slain by " + killerColor + killer.getName()));
+                unrankedMatch.getSpectators().stream().filter(spectator -> spectator.getPlayer() != null).forEach(spectator -> spectator.getPlayer().sendMessage(playerColor + player.getName() + ChatColor.GRAY + " has been slain by " + killerColor + killer.getName()));
 
                 // There is a winner, end the match
                 if (winner != null) {
                     player.sendTitle(new Title("", ChatColor.RED + killer.getName() + ChatColor.GOLD + " Wins!"));
                     killer.sendTitle(new Title("", ChatColor.GREEN + "You Win!"));
-
-                    unrankedMatch.getSpectators().forEach(spectator -> spectator.getPlayer().sendTitle(new Title("", killerColor + killer.getName() + ChatColor.GOLD + " Wins!")));
+                    unrankedMatch.getSpectators().stream().filter(spectator -> spectator.getPlayer() != null).forEach(spectator -> spectator.getPlayer().sendTitle(new Title("", killerColor + killer.getName() + ChatColor.GOLD + " Wins!")));
 
                     plugin.getMatchManager().getHandler().finish(match);
                 }
