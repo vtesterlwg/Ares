@@ -1,0 +1,54 @@
+database: 'mongodb://localhost'
+
+server-data:
+  bungee-name: 'Civilizations'
+  display-name: '&9Civilizations'
+  description: 'Civ Description'
+  type: 'CIV'
+  premium-allocated-slots: 350
+
+auto-save:
+  enabled: true
+  interval: 900
+
+juke-alert:
+  enabled: true
+  radius: 16
+  alert-check-rate: 3
+  log-duration: 259200
+  mature: 900
+
+citadel:
+  reinforcements:
+    STONE:
+      durability: 50
+      mature: 3600
+    IRON:
+      durability: 300
+      mature: 10800
+    DIAMOND:
+      durability: 1000
+      mature: 43200
+
+networks:
+  values:
+    naming:
+      min: 3
+      max: 16
+    password:
+      min: 3
+      max: 32
+  max-per-player: 10
+  max-network-size: 100
+
+timers:
+  combat-tag:
+    attacker: 60
+    attacked: 30
+    login: 15
+    enderpearl: 15
+  enderpearl: 30
+  crapple: 10
+  gapple: 10800
+  totem: 604800
+  logout: 30

@@ -122,7 +122,14 @@ public final class Server implements MongoDocument<Server> {
 
     @AllArgsConstructor
     public enum Type {
-        FACTION("Factions"), ARENA("Arena"), DEV("Development"), HC("Hungecraft"), MZ("MineZ"), BUNKERS("Bunkers"), LOBBY("Lobby");
+        FACTION("Factions"),
+        CIV("Civilizations"),
+        ARENA("Arena"),
+        DEV("Development"),
+        HC("Hungercraft"),
+        MZ("MineZ"),
+        BUNKERS("Bunkers"),
+        LOBBY("Lobby");
         @Getter public final String displayName;
     }
 

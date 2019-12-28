@@ -1,0 +1,5 @@
+name: Civilizations
+main: com.playares.civilization.Civilizations
+version: 1.12.2
+author: johnsama
+depends: [ProtocolLib]

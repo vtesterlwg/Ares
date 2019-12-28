@@ -39,9 +39,59 @@ public final class SelectorMenu extends Menu {
     private void update() {
         final UUID uniqueId = player.getUniqueId();
         final CustomItemService customItemService = (CustomItemService)plugin.getService(CustomItemService.class);
+        final Server civilizations = lobby.getQueueManager().getServerQueues().keySet().stream().filter(server -> server.getType() != null && server.getType().equals(Server.Type.CIV)).findFirst().orElse(null);
         final Server factions = lobby.getQueueManager().getServerQueues().keySet().stream().filter(server -> server.getType() != null && server.getType().equals(Server.Type.FACTION)).findFirst().orElse(null);
         final Server development = lobby.getQueueManager().getServerQueues().keySet().stream().filter(server -> server.getType() != null && server.getType().equals(Server.Type.DEV)).findFirst().orElse(null);
         final Server arena = lobby.getQueueManager().getServerQueues().keySet().stream().filter(server -> server.getType() != null && server.getType().equals(Server.Type.ARENA)).findFirst().orElse(null);
+
+        if (civilizations != null) {
+            final ServerQueue queue = getLobby().getQueueManager().getQueue(civilizations);
+            final List<String> lore = Lists.newArrayList();
+
+            lore.add(ChatColor.STRIKETHROUGH + "------------------------------");
+            lore.add(civilizations.getDescription());
+            lore.add(ChatColor.STRIKETHROUGH + "------------------------------");
+
+            lore.add(ChatColor.GRAY + "Civilizations is a hardcore server");
+            lore.add(ChatColor.GRAY + "that is powered by player generated");
+            lore.add(ChatColor.GRAY + "conflicts and promotes the creation of");
+            lore.add(ChatColor.GRAY + "player-driven societies that must learn");
+            lore.add(ChatColor.GRAY + "to sustain in a difficult and unforgiving");
+            lore.add(ChatColor.GRAY + "environment.");
+            lore.add(ChatColor.RESET + " ");
+            lore.add(ChatColor.GOLD + "Status" + ChatColor.YELLOW + ": " + civilizations.getStatus().getDisplayName());
+            lore.add(ChatColor.GOLD + "Online" + ChatColor.YELLOW + ": " + civilizations.getOnlineCount());
+            lore.add(ChatColor.GOLD + "Queue" + ChatColor.YELLOW + ": " + queue.getQueue().size());
+            lore.add(ChatColor.RESET + " ");
+            lore.add(ChatColor.GREEN + "Click to join!");
+
+            final ItemStack icon = new ItemBuilder()
+                    .setMaterial(Material.DIAMOND_HELMET)
+                    .setName(civilizations.getDisplayName())
+                    .addLore(lore)
+                    .build();
+
+            addItem(new ClickableItem(icon, 0, click -> new Scheduler(getLobby()).async(() -> {
+                final RankService rankService = (RankService)getLobby().getService(RankService.class);
+                final Rank rank;
+
+                if (rankService != null) {
+                    rank = rankService.getHighestRank(player);
+                } else {
+                    rank = null;
+                }
+
+                queue.add(player.getUniqueId(), rank);
+
+                player.sendMessage("Adding you to the " + factions.getDisplayName() + ChatColor.RESET + " queue...");
+                player.sendMessage(ChatColor.AQUA + "You are now " + ChatColor.YELLOW + "#" + queue.getPosition(player.getUniqueId()) + ChatColor.AQUA + " in queue to join " + factions.getDisplayName());
+                player.closeInventory();
+
+                if (customItemService != null) {
+                    customItemService.getItem(LeaveQueueItem.class).ifPresent(item -> player.getInventory().setItemInMainHand(item.getItem()));
+                }
+            }).run()));
+        }
 
         if (factions != null) {
             final DeathbanService deathbanService = (DeathbanService)getLobby().getService(DeathbanService.class);
@@ -70,7 +120,7 @@ public final class SelectorMenu extends Menu {
                     .addLore(lore)
                     .build();
 
-            addItem(new ClickableItem(icon, 0, click -> new Scheduler(getLobby()).async(() -> {
+            addItem(new ClickableItem(icon, 1, click -> new Scheduler(getLobby()).async(() -> {
                 final Deathban deathban = DeathbanDAO.getDeathban(getLobby().getMongo(), uniqueId);
 
                 new Scheduler(getLobby()).sync(() -> {
@@ -125,7 +175,7 @@ public final class SelectorMenu extends Menu {
                     .addLore(lore)
                     .build();
 
-            addItem(new ClickableItem(icon, 1, click -> {
+            addItem(new ClickableItem(icon, 2, click -> {
                 if (!development.getStatus().equals(Server.Status.ONLINE) && !player.hasPermission("lobby.queue.bypasswhitelist")) {
                     player.sendMessage(development.getDisplayName() + ChatColor.RED + " can not be joined at this time");
                     return;
@@ -166,7 +216,7 @@ public final class SelectorMenu extends Menu {
                     .addLore(lore)
                     .build();
 
-            addItem(new ClickableItem(icon, 2, click -> {
+            addItem(new ClickableItem(icon, 3, click -> {
                 final RankService rankService = (RankService)getLobby().getService(RankService.class);
                 final Rank rank;
 

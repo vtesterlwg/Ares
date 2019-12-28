@@ -17,6 +17,7 @@
         <module>Arena</module>
         <module>Proxy</module>
         <module>MineZ</module>
+        <module>Civilization</module>
     </modules>
 
     <dependencies>
