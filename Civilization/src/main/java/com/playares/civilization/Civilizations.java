@@ -1,9 +1,12 @@
 package com.playares.civilization;
 
+import co.aikar.commands.PaperCommandManager;
+import com.comphenix.protocol.ProtocolLibrary;
 import com.playares.civilization.addons.AddonManager;
+import com.playares.civilization.networks.NetworkManager;
 import com.playares.civilization.players.PlayerManager;
+import com.playares.commons.base.connect.mongodb.MongoDB;
 import com.playares.commons.bukkit.AresPlugin;
-import com.playares.commons.bukkit.logger.Logger;
 import com.playares.services.automatedrestarts.AutomatedRestartService;
 import com.playares.services.chatrestrictions.ChatRestrictionService;
 import com.playares.services.customentity.CustomEntityService;
@@ -21,18 +24,32 @@ import lombok.Getter;
 
 public final class Civilizations extends AresPlugin {
     @Getter public CivConfig civConfig;
+    @Getter public NetworkManager networkManager;
     @Getter public PlayerManager playerManager;
     @Getter public AddonManager addonManager;
 
     @Override
     public void onEnable() {
         civConfig = new CivConfig(this);
+        networkManager = new NetworkManager(this);
         playerManager = new PlayerManager(this);
         addonManager = new AddonManager(this);
 
         civConfig.load();
 
-        // Register Services
+        // Database
+        registerMongo(new MongoDB(civConfig.getDatabaseURI()));
+        getMongo().openConnection();
+
+        // ProtocolLib
+        registerProtocol(ProtocolLibrary.getProtocolManager());
+
+        // Commands
+        final PaperCommandManager commandManager = new PaperCommandManager(this);
+        commandManager.enableUnstableAPI("help");
+        registerCommandManager(commandManager);
+
+        // Services
         registerService(new CustomEventService(this));
         registerService(new CustomItemService(this));
         registerService(new CustomEntityService(this));
@@ -55,9 +72,8 @@ public final class Civilizations extends AresPlugin {
 
         startServices();
 
+        // Addons
         addonManager.start();
-
-        registerItems();
     }
 
     @Override
@@ -71,16 +87,5 @@ public final class Civilizations extends AresPlugin {
         addonManager = null;
 
         stopServices();
-    }
-
-    private void registerItems() {
-        final CustomItemService service = (CustomItemService)getService(CustomItemService.class);
-
-        if (service == null) {
-            Logger.error("Failed to obtain Custom Item Service");
-            return;
-        }
-
-        // TODO: Register custom items here
     }
 }
