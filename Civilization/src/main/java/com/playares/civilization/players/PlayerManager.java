@@ -1,22 +1,37 @@
 package com.playares.civilization.players;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.mongodb.client.model.Filters;
+import com.playares.civilization.CivManager;
 import com.playares.civilization.Civilizations;
 import com.playares.commons.base.util.Time;
 import com.playares.commons.bukkit.logger.Logger;
 import lombok.Getter;
 
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public final class PlayerManager {
+public final class PlayerManager implements CivManager {
     @Getter public final Civilizations plugin;
     @Getter public final Set<CivPlayer> playerRepository;
 
     public PlayerManager(Civilizations plugin) {
         this.plugin = plugin;
         this.playerRepository = Sets.newConcurrentHashSet();
+    }
+
+    @Override
+    public String getName() {
+        return "Player Manager";
+    }
+
+    @Override
+    public List<String> getDebug() {
+        final List<String> debug = Lists.newArrayList();
+        debug.add("Loaded Profiles: " + playerRepository.size());
+        return debug;
     }
 
     public CivPlayer load(UUID uniqueId, String username) {
