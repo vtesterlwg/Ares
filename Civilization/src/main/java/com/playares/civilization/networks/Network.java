@@ -48,6 +48,20 @@ public final class Network implements MongoDocument<Network> {
         creatorProfile.permissions.put(NetworkPermission.ADMIN, true);
     }
 
+    public boolean isMember(Player player) {
+        return isMember(player.getUniqueId());
+    }
+
+    public boolean isMember(UUID uniqueId) {
+        for (NetworkProfile profile : members) {
+            if (profile.getUniqueId().equals(uniqueId)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public Network fromDocument(Document document) {
         this.uniqueId = (UUID)document.get("id");
