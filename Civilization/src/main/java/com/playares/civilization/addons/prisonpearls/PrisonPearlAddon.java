@@ -27,11 +27,11 @@ public final class PrisonPearlAddon implements CivAddon {
 
     @Override
     public void start() {
-
+        prisonPearlManager.load();
     }
 
     @Override
     public void stop() {
-
+        prisonPearlManager.saveAll();
     }
 }

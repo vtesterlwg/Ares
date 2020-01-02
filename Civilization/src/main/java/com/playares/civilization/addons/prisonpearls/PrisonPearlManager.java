@@ -4,6 +4,8 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.playares.civilization.CivManager;
 import com.playares.civilization.addons.prisonpearls.data.PrisonPearl;
+import com.playares.commons.base.util.Time;
+import com.playares.commons.bukkit.logger.Logger;
 import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -38,15 +40,22 @@ public final class PrisonPearlManager implements CivManager {
     }
 
     public void load() {
-
+        pearlRepository.addAll(PrisonPearlDAO.get(addon.getAddonManager().getPlugin()));
+        Logger.print("Loaded " + pearlRepository.size() + " Prison Pearls");
     }
 
     public void save(PrisonPearl pearl) {
-
+        PrisonPearlDAO.save(addon.getAddonManager().getPlugin(), pearl);
     }
 
     public void saveAll() {
+        final long start = Time.now();
+        Logger.warn("Preparing to save " + pearlRepository.size() + " Prison Pearls...");
 
+        PrisonPearlDAO.save(addon.getAddonManager().getPlugin(), pearlRepository);
+
+        final long finish = Time.now();
+        Logger.print("Finished saving " + pearlRepository.size() + " Prison Pearls. Duration: " + (finish - start) + "ms");
     }
 
     public PrisonPearl getPearlByPearlID(UUID uniqueId) {
