@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 
 public final class PrisonPearlListener implements Listener {
     @Getter public final PrisonPearlAddon addon;
@@ -41,4 +42,18 @@ public final class PrisonPearlListener implements Listener {
 
         // TODO: Send slain player to the end
     }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        final Player player = event.getPlayer();
+        final PrisonPearl pearl = addon.getPrisonPearlManager().getPearl(player);
+
+        if (pearl == null || pearl.isExpired()) {
+            return;
+        }
+
+        // TODO: Ensure player is in the end
+    }
+
+
 }
