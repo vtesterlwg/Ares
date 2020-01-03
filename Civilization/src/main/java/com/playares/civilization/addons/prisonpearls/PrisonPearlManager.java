@@ -88,7 +88,7 @@ public final class PrisonPearlManager implements CivManager {
         final List<String> lore = item.getItemMeta().getLore();
         String lastLine;
 
-        if (lore.isEmpty()) {
+        if (lore == null || lore.isEmpty()) {
             return null;
         }
 
