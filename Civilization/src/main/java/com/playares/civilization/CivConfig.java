@@ -26,6 +26,10 @@ public final class CivConfig {
     @Getter public boolean autosaveEnabled;
     @Getter public int autosaveInterval;
 
+    // MESSAGE RANGES
+    @Getter public double deathMessageRange;
+    @Getter public double chatMessageRange;
+
     public void load() {
         final YamlConfiguration config = plugin.getConfig("config");
 
@@ -37,5 +41,8 @@ public final class CivConfig {
         this.syncDescription = ChatColor.translateAlternateColorCodes('&', config.getString("server-data.description"));
         this.syncType = Server.Type.valueOf(config.getString("server-data.type"));
         this.syncPremiumAllocatedSlots = config.getInt("server-data.premium-allocated-slots");
+
+        this.deathMessageRange = config.getDouble("message-ranges.death-messages");
+        this.chatMessageRange = config.getDouble("message-ranges.chat");
     }
 }

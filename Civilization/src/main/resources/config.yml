@@ -52,3 +52,7 @@ timers:
   gapple: 10800
   totem: 604800
   logout: 30
+
+message-ranges:
+  death-messages: 500.0
+  chat: 1000.0
