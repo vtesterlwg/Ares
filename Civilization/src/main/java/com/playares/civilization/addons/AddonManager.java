@@ -2,6 +2,7 @@ package com.playares.civilization.addons;
 
 import com.google.common.collect.Maps;
 import com.playares.civilization.Civilizations;
+import com.playares.civilization.addons.prisonpearls.PrisonPearlAddon;
 import com.playares.commons.bukkit.logger.Logger;
 import lombok.Getter;
 
@@ -14,6 +15,8 @@ public final class AddonManager {
     public AddonManager(Civilizations plugin) {
         this.plugin = plugin;
         this.addons = Maps.newHashMap();
+
+        register(new PrisonPearlAddon(this));
     }
 
     /**
