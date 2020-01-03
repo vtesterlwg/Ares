@@ -96,7 +96,7 @@ public final class PrisonPearl implements CustomItem, MongoDocument<PrisonPearl>
     public List<String> getLore() {
         final List<String> lore = Lists.newArrayList();
 
-        lore.add(reason);
+        lore.add(ChatColor.RED + reason);
         lore.add(ChatColor.GRAY + Time.convertToDate(new Date(createdTime)));
         lore.add(ChatColor.RESET + " ");
         lore.add(ChatColor.GOLD + "Expires " + ChatColor.YELLOW + Time.convertToDate(new Date(expireTime)));
