@@ -22,11 +22,7 @@ public final class PrisonPearlHandler {
             return null;
         }
 
-        if (pearlItem.getAmount() <= 1) {
-            pearlItem.setType(Material.AIR);
-        } else {
-            pearlItem.setAmount(pearlItem.getAmount() - 1);
-        }
+        pearlItem.subtract();
 
         // TODO: Duration from config
 
