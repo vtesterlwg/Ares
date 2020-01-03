@@ -59,15 +59,15 @@ public final class PrisonPearlManager implements CivManager {
     }
 
     public PrisonPearl getPearlByPearlID(UUID uniqueId) {
-        return pearlRepository.stream().filter(pearl -> pearl.getUniqueId().equals(uniqueId)).findFirst().orElse(null);
+        return pearlRepository.stream().filter(pearl -> pearl.getUniqueId().equals(uniqueId) && !pearl.isExpired()).findFirst().orElse(null);
     }
 
     public PrisonPearl getPearlByPlayerID(UUID uniqueId) {
-        return pearlRepository.stream().filter(pearl -> pearl.getPlayerUniqueId().equals(uniqueId)).findFirst().orElse(null);
+        return pearlRepository.stream().filter(pearl -> pearl.getPlayerUniqueId().equals(uniqueId) && !pearl.isExpired()).findFirst().orElse(null);
     }
 
     public PrisonPearl getPearl(Player player) {
-        return pearlRepository.stream().filter(pearl -> pearl.getPlayerUniqueId().equals(player.getUniqueId())).findFirst().orElse(null);
+        return pearlRepository.stream().filter(pearl -> pearl.getPlayerUniqueId().equals(player.getUniqueId()) && !pearl.isExpired()).findFirst().orElse(null);
     }
 
     public PrisonPearl getPearl(ItemStack item) {
@@ -77,7 +77,7 @@ public final class PrisonPearlManager implements CivManager {
             return null;
         }
 
-        return pearlRepository.stream().filter(pearl -> pearl.getUniqueId().equals(pearlId)).findFirst().orElse(null);
+        return pearlRepository.stream().filter(pearl -> pearl.getUniqueId().equals(pearlId) && !pearl.isExpired()).findFirst().orElse(null);
     }
 
     public UUID getPearlID(ItemStack item) {
