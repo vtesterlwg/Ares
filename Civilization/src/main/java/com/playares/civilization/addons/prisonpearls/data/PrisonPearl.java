@@ -122,6 +122,7 @@ public final class PrisonPearl implements CustomItem, MongoDocument<PrisonPearl>
         this.expireTime = document.getLong("expire");
         this.reason = ChatColor.translateAlternateColorCodes('&', document.getString("reason"));
         this.expired = document.getBoolean("expired");
+        this.location = new PrisonPearlLocation().fromDocument(document.get("location", Document.class));
 
         return this;
     }
@@ -135,6 +136,7 @@ public final class PrisonPearl implements CustomItem, MongoDocument<PrisonPearl>
                 .append("created", createdTime)
                 .append("expire", expireTime)
                 .append("reason", reason)
-                .append("expired", expired);
+                .append("expired", expired)
+                .append("location", location.toDocument());
     }
 }
