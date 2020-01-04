@@ -1,8 +1,10 @@
 package com.playares.civilization.addons.prisonpearls.data;
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.playares.commons.base.connect.mongodb.MongoDocument;
 import com.playares.commons.base.util.Time;
+import com.playares.commons.bukkit.item.ItemBuilder;
 import com.playares.commons.bukkit.item.custom.CustomItem;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,6 +15,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.Date;
 import java.util.List;
@@ -89,19 +94,18 @@ public final class PrisonPearl implements CustomItem, MongoDocument<PrisonPearl>
 
     @Override
     public String getName() {
-        return ChatColor.DARK_PURPLE + playerUsername + " is held in this pearl";
+        return ChatColor.AQUA + playerUsername;
     }
 
     @Override
     public List<String> getLore() {
         final List<String> lore = Lists.newArrayList();
 
-        lore.add(ChatColor.RED + reason);
-        lore.add(ChatColor.GRAY + Time.convertToDate(new Date(createdTime)));
+        lore.add(ChatColor.GOLD + "Imprisoned" + ChatColor.YELLOW + ": " + ChatColor.GRAY + Time.convertToDate("MMM d, hh:mm:ss a z", new Date(createdTime)));
+        lore.add(ChatColor.GOLD + "Expires" + ChatColor.YELLOW + ": " + ChatColor.GRAY + Time.convertToDate("MMM d, hh:mm:ss a z", new Date(expireTime)));
+        lore.add(ChatColor.GOLD + "Reason" + ChatColor.YELLOW + ": " + ChatColor.GRAY + ChatColor.stripColor(reason));
         lore.add(ChatColor.RESET + " ");
-        lore.add(ChatColor.GOLD + "Expires " + ChatColor.YELLOW + Time.convertToDate(new Date(expireTime)));
-        lore.add(ChatColor.RESET + " ");
-        lore.add(ChatColor.GOLD + "Throw this pearl to free " + ChatColor.YELLOW + playerUsername);
+        lore.add(ChatColor.AQUA + "Throw" + ChatColor.YELLOW + " this pearl to free this player");
         lore.add(ChatColor.RESET + " ");
         lore.add(ChatColor.GRAY + "ID: " + uniqueId.toString());
 
@@ -110,7 +114,22 @@ public final class PrisonPearl implements CustomItem, MongoDocument<PrisonPearl>
 
     @Override
     public Map<Enchantment, Integer> getEnchantments() {
-        return null;
+        final Map<Enchantment, Integer> enchantments = Maps.newHashMap();
+        enchantments.put(Enchantment.PROTECTION_ENVIRONMENTAL, 1);
+        return enchantments;
+    }
+
+    @Override
+    public ItemStack getItem() {
+        final ItemStack item = new ItemBuilder().setMaterial(getMaterial()).setName(getName()).setData(getDurability()).addLore(getLore()).addEnchant(getEnchantments()).build();
+        final ItemMeta meta = item.getItemMeta();
+
+        meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+
+        item.setItemMeta(meta);
+
+        return item;
     }
 
     @Override
