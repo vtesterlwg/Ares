@@ -7,10 +7,12 @@ import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
+import org.bukkit.entity.EnderPearl;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
@@ -25,6 +27,9 @@ public final class PrisonPearlListener implements Listener {
     public void onDeath(PlayerDeathEvent event) {
         final Player player = event.getEntity();
         final Player killer = player.getKiller();
+
+        CivUtils.sendMessage(Bukkit.getOnlinePlayers(), event.getDeathMessage(), player.getLocation(), addon.getAddonManager().getPlugin().getCivConfig().getDeathMessageRange());
+        event.setDeathMessage(null);
 
         if (killer == null || player.getUniqueId().equals(killer.getUniqueId())) {
             return;
@@ -47,15 +52,11 @@ public final class PrisonPearlListener implements Listener {
 
         addon.getPrisonPearlManager().getPearlRepository().add(prisonPearl);
 
-        CivUtils.sendMessage(Bukkit.getOnlinePlayers(), event.getDeathMessage(), player.getLocation(), addon.getAddonManager().getPlugin().getCivConfig().getDeathMessageRange());
-
         CivUtils.sendMessage(
                 Bukkit.getOnlinePlayers(),
                 ChatColor.DARK_PURPLE + player.getName() + ChatColor.RED + " has been imprisoned by " + ChatColor.DARK_PURPLE + killer.getName(),
                 player.getLocation(),
                 addon.getAddonManager().getPlugin().getCivConfig().getDeathMessageRange());
-
-        event.setDeathMessage(null);
     }
 
     @EventHandler
